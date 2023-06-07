@@ -1,0 +1,10 @@
+{
+    "cSpell.words": [
+        "Bleu",
+        "Grigdim",
+        "ikiosk",
+        "mdns",
+        "zeroconf"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
+}
