@@ -20,7 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 const Home = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [discoveredServices, setDiscoveredServices] = useState(null);
+  const [discoveredServices, setDiscoveredServices] = useState([]);
   //   const [showWebView, setShowWebView] = useState(false);
   const [deviceUID, setDeviceUID] = useState(null);
   const [devicePlatform, setDevicePlatform] = useState(null);
@@ -97,49 +97,31 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 flex-column justify-evenly items-center">
-      <View className="bg-gray-400">
-        <Text className="text-black p-3 underline m-3 text-3xl">
+    <SafeAreaView className="flex-1 flex-column justify-center items-center">
+      <View className="bg-gray-400 my-5">
+        <Text className="text-black p-5 underline text-4xl">
           Discovered Services:
         </Text>
       </View>
-      {discoveredServices ? (
-        <ScrollView className="grow-1">
+      {discoveredServices !== null || discoveredServices !== [] ? (
+        <ScrollView>
           {discoveredServices.map((service, index) => (
             <View key={index}>
               <TouchableOpacity
                 onPress={() => setBoxAndRedirect(service)}
                 //   onPress={() => this.createServerConnection(service.host)}
 
-                className="my-1.5 px-2.5 py-1.5 bg-gray-400">
-                <Text
-                  style={{
-                    color: 'black',
-                    paddingVertical: 5,
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                    fontSize: 16,
-                  }}>
+                className="my-1.5 px-4 py-1.5 bg-gray-400">
+                <Text className="text-white py-1 text-lg text-center font-extrabold">
+                  {index + 1}
+                </Text>
+                <Text className="text-black py-1 underline text-base">
                   Device Name: {service.txt.device_name || service.txt.name}
                 </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    paddingVertical: 5,
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                    fontSize: 16,
-                  }}>
+                <Text className="text-black py-1 underline text-base">
                   Mac Address: {service.txt.name}
                 </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    paddingVertical: 5,
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                    fontSize: 16,
-                  }}>
+                <Text className="text-black py-1 underline text-base">
                   Host: {service.host}
                 </Text>
               </TouchableOpacity>
@@ -149,10 +131,14 @@ const Home = () => {
       ) : (
         <View>
           <TouchableOpacity
-            className="my-1.5 px-2.5 py-1.5 bg-gray-400"
+            className="my-1.5 px-4 py-2 bg-gray-400"
             onPress={() => setBoxAndRedirect(data)}>
-            <Text>Host Name: {data.fullName}</Text>
-            <Text>MacAddress: {data.txt.name}</Text>
+            <Text className="text-black py-1 underline text-base">
+              Host Name: {data.fullName}
+            </Text>
+            <Text className="text-black py-1 underline text-base">
+              MacAddress: {data.txt.name}
+            </Text>
           </TouchableOpacity>
         </View>
       )}
