@@ -3,8 +3,10 @@
         "Bleu",
         "Grigdim",
         "ikiosk",
+        "lightgray",
         "mdns",
         "zeroconf"
     ],
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
