@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
@@ -18,7 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 const Home = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [discoveredServices, setDiscoveredServices] = useState([]);
+  const [discoveredServices, setDiscoveredServices] = useState(null);
   //   const [showWebView, setShowWebView] = useState(false);
   const [deviceUID, setDeviceUID] = useState(null);
   const [devicePlatform, setDevicePlatform] = useState(null);
@@ -95,38 +97,21 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-      }}>
-      <Text
-        style={{
-          fontSize: 24,
-          margin: 20,
-          backgroundColor: 'lightgray',
-          color: 'black',
-          padding: 20,
-          textDecorationLine: 'underline',
-        }}>
-        Discovered Services:
-      </Text>
-
+    <SafeAreaView className="flex-1 flex-column justify-evenly items-center">
+      <View className="bg-gray-400">
+        <Text className="text-black p-3 underline m-3 text-3xl">
+          Discovered Services:
+        </Text>
+      </View>
       {discoveredServices ? (
-        <ScrollView>
+        <ScrollView className="grow-1">
           {discoveredServices.map((service, index) => (
             <View key={index}>
               <TouchableOpacity
                 onPress={() => setBoxAndRedirect(service)}
                 //   onPress={() => this.createServerConnection(service.host)}
-                style={{
-                  marginVertical: 5,
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                  backgroundColor: 'lightgray',
-                }}>
+
+                className="my-1.5 px-2.5 py-1.5 bg-gray-400">
                 <Text
                   style={{
                     color: 'black',
@@ -164,12 +149,7 @@ const Home = () => {
       ) : (
         <View>
           <TouchableOpacity
-            style={{
-              marginVertical: 5,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              backgroundColor: 'lightgray',
-            }}
+            className="my-1.5 px-2.5 py-1.5 bg-gray-400"
             onPress={() => setBoxAndRedirect(data)}>
             <Text>Host Name: {data.fullName}</Text>
             <Text>MacAddress: {data.txt.name}</Text>

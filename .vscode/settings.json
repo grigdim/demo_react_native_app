@@ -1,10 +1,15 @@
 {
     "cSpell.words": [
         "Bleu",
+        "darkgrey",
+        "Entypo",
         "Grigdim",
         "ikiosk",
         "lightgray",
         "mdns",
+        "nativewind",
+        "netinfo",
+        "tailwindcss",
         "zeroconf"
     ],
     "java.compile.nullAnalysis.mode": "automatic",

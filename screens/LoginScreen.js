@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   Text,
@@ -12,7 +14,7 @@ import {selectBox} from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/Entypo';
 
 const LoginScreen = () => {
-  const {container, title, input, button, buttonText, disabledButton} = style;
+  const {input, button, buttonText, disabledButton} = style;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,14 +45,9 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={container}>
-      <View>
-        <Icon
-          name="user"
-          size={50}
-          color="black"
-          style={{marginLeft: 'auto', marginRight: 'auto'}}
-        />
+    <SafeAreaView className="flex-1 justify-center">
+      <View className="justify-center items-center">
+        <Icon name="user" size={75} color="black" />
       </View>
       <View>
         <TextInput
@@ -61,8 +58,7 @@ const LoginScreen = () => {
           keyboardType="default"
           clearButtonMode={'always'}
         />
-      </View>
-      <View>
+
         <TextInput
           onChangeText={handleChangePassword}
           style={input}
@@ -70,6 +66,8 @@ const LoginScreen = () => {
           placeholderTextColor={'darkgrey'}
           secureTextEntry
         />
+      </View>
+      <View>
         <TouchableOpacity
           style={[button, isLoginDisabled && disabledButton]}
           onPress={handleLogin}
@@ -82,10 +80,6 @@ const LoginScreen = () => {
 };
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   title: {
     textAlign: 'center',
     fontSize: 50,

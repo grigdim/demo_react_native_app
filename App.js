@@ -1,5 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
-
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import HomeScreen from './screens/HomeScreen';
 import Home from './screens/Home';
@@ -8,6 +7,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-redux';
 import {store} from './store';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +27,7 @@ export default function App() {
             component={Home}
             options={{headerShown: false}}
           />
-          {/*          
+          {/*
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
