@@ -30,6 +30,7 @@ const Home = () => {
   const [deviceModel, setDeviceModel] = useState(null);
   const [deviceVersion, setDeviceVersion] = useState(null);
   const [socket, setSocket] = useState(null);
+  const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const data = {
     addresses: ['192.168.1.40'],
     fullName: '192.168.1.40._ikiosk._tcp',
@@ -61,6 +62,7 @@ const Home = () => {
         // console.log('Service found:', service);
       });
       zeroconf.on('resolved', service => {
+        setIsResolutionComplete(true);
         setDiscoveredServices(prevServices => {
           // Check if the service already exists in the state
           const serviceExists = prevServices.some(
@@ -91,37 +93,48 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(isResolutionComplete);
+  }, [isResolutionComplete]);
+
   const setBoxAndRedirect = async box => {
     dispatch(setBox(box));
     navigation.navigate('LoginScreen');
   };
 
   return (
-    <SafeAreaView className="flex-1 flex-column justify-center items-center">
-      <View className="bg-gray-400 my-5">
-        <Text className="text-black p-5 underline text-4xl">
+    <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-100">
+      <View className="bg-gray-200 my-5 rounded-2xl" style={{elevation: 50}}>
+        <Text className="text-black p-5 underline text-4xl text-center">
           Discovered Services:
         </Text>
       </View>
-      {discoveredServices !== null || discoveredServices !== [] ? (
-        <ScrollView>
+      {discoveredServices !== null && discoveredServices.length !== 0 ? (
+        <ScrollView className="mb-5">
           {discoveredServices.map((service, index) => (
-            <View key={index}>
-              <TouchableOpacity
-                onPress={() => setBoxAndRedirect(service)}
-                //   onPress={() => this.createServerConnection(service.host)}
-
-                className="my-1.5 px-4 py-1.5 bg-gray-400">
-                <Text className="text-white py-1 text-lg text-center font-extrabold">
+            <View
+              key={index}
+              className="m-2 py-1.5 px-2 bg-gray-200 justify-center rounded-2xl"
+              style={{elevation: 10}}>
+              <TouchableOpacity onPress={() => setBoxAndRedirect(service)}>
+                <Text
+                  className="text-white text-lg text-center font-extrabold"
+                  style={{textShadowColor: 'black', textShadowRadius: 25}}>
                   {index + 1}
                 </Text>
-                <Text className="text-black py-1 underline text-base">
+                <Text
+                  className="text-black py-1 text-center text-base underline"
+                  style={{}}>
                   Device Name: {service.txt.device_name || service.txt.name}
                 </Text>
-                <Text className="text-black py-1 underline text-base">
+                <Text
+                  className="text-black py-1 text-center text-base underline"
+                  style={{}}>
                   Mac Address: {service.txt.name}
                 </Text>
-                <Text className="text-black py-1 underline text-base">
+                <Text
+                  className="text-black py-1 text-center text-base underline"
+                  style={{}}>
                   Host: {service.host}
                 </Text>
               </TouchableOpacity>
@@ -129,18 +142,20 @@ const Home = () => {
           ))}
         </ScrollView>
       ) : (
-        <View>
-          <TouchableOpacity
-            className="my-1.5 px-4 py-2 bg-gray-400"
-            onPress={() => setBoxAndRedirect(data)}>
-            <Text className="text-black py-1 underline text-base">
-              Host Name: {data.fullName}
-            </Text>
-            <Text className="text-black py-1 underline text-base">
-              MacAddress: {data.txt.name}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        isResolutionComplete && (
+          <View
+            style={{elevation: 50}}
+            className="my-1.5 px-4 py-2 bg-gray-200 rounded-2xl">
+            <TouchableOpacity onPress={() => setBoxAndRedirect(data)}>
+              <Text className="text-black py-1 underline text-base">
+                Host Name: {data.fullName}
+              </Text>
+              <Text className="text-black py-1 underline text-base">
+                MacAddress: {data.txt.name}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )
       )}
     </SafeAreaView>
   );

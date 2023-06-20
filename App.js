@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import HomeScreen from './screens/HomeScreen';
+import StoreScreen from './screens/StoreScreen';
+import AuditScreen from './screens/AuditScreen';
 import Home from './screens/Home';
 import LoginScreen from './screens/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
@@ -27,16 +28,19 @@ export default function App() {
             component={Home}
             options={{headerShown: false}}
           />
-          {/*
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{headerShown: false}}
-        />
-      */}
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AuditScreen"
+            component={AuditScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="StoreScreen"
+            component={StoreScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
