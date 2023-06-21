@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,9 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {selectToken} from '../features/bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { selectToken } from '../features/bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StoresScreen = () => {
   const navigation = useNavigation();
@@ -40,10 +40,11 @@ const StoresScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.184:3000/bo/Invoices/FetchSalesDataServerSide',
+        'http://192.168.1.62:3000/bo/Invoices/FetchSalesDataServerSide',
         requestOptions,
       );
       const data = await response.json();
+      console.log(data);
       setStoresFromBoApi(data);
     }
     // end of request
@@ -62,14 +63,14 @@ const StoresScreen = () => {
         <View className="mb-20 mx-5">
           <View
             className="py-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
-            style={{elevation: 50}}>
+            style={{ elevation: 50 }}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
               Store data
             </Text>
           </View>
           <ScrollView
             className="divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{elevation: 50}}>
+            style={{ elevation: 50 }}>
             {storesFromBoApi?.CategoriesSalesDtos?.map(category => (
               <View className="p-2 bg-gray-200" key={category.CategoryId}>
                 <Text className="m-1 text-xl text-black">

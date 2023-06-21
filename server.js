@@ -69,8 +69,8 @@ const server = http.createServer((req, res) => {
     });
   } else if (req.method === 'GET') {
     console.log(req);
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-    // options.rejectUnauthorized = false;
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    options.rejectUnauthorized = false;
     options.method = req.method;
     options.path = req.url;
     // console.log(options.headers);
