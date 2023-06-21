@@ -41,7 +41,7 @@ const StoresScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.62:3000/bo/Invoices/FetchSalesDataServerSide',
+        'http://192.168.1.184:3000/bo/Invoices/FetchSalesDataServerSide',
         requestOptions,
       );
       const data = await response.json();

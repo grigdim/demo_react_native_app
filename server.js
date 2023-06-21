@@ -68,8 +68,8 @@ const server = http.createServer((req, res) => {
       proxyReq.end();
     });
   } else if (req.method === 'GET') {
-    console.log(req);
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    // console.log(req);
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     options.rejectUnauthorized = false;
     options.method = req.method;
     options.path = req.url;
