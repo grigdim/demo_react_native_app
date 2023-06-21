@@ -59,7 +59,7 @@ const StoresScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="mb-20">
+        <View className="mb-20 mx-5">
           <View
             className="py-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
             style={{elevation: 50}}>
@@ -72,31 +72,33 @@ const StoresScreen = () => {
             style={{elevation: 50}}>
             {storesFromBoApi?.CategoriesSalesDtos?.map(category => (
               <View className="p-2 bg-gray-200" key={category.CategoryId}>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Category Id: {category.CategoryId}
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Category Name: {category.CategoryName}
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Cost including vat: {category.CostInclVat} €
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Profit percentage: {category.ProfitPercentage} %
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Profit with vat: {category.ProfitWithVat} €
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Profit without vat: {category.ProfitWithoutVat} €
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Quantity: {category.QuantityTmx}
                 </Text>
-                <Text className="m-1 text-xl">
+                <Text className="m-1 text-xl text-black">
                   Turnover: {category.Turnover} €
                 </Text>
-                <Text className="m-1 text-xl">Vat: {category.Vat} %</Text>
+                <Text className="m-1 text-xl text-black">
+                  Vat: {category.Vat} %
+                </Text>
               </View>
             ))}
           </ScrollView>
