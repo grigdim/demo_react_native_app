@@ -7,6 +7,7 @@ import LoginScreen from './screens/LoginScreen';
 import TotalProfitScreen from './screens/TotalProfitScreen';
 import TurnoverScreen from './screens/TurnoverScreen';
 import ProductSalesScreen from './screens/ProductSalesScreen';
+import LineChartScreen from './screens/LineChartScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
@@ -34,6 +35,11 @@ export default function App() {
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LineChartScreen"
+            component={LineChartScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
