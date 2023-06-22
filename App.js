@@ -6,6 +6,7 @@ import Home from './screens/Home';
 import LoginScreen from './screens/LoginScreen';
 import TotalProfitScreen from './screens/TotalProfitScreen';
 import TurnoverScreen from './screens/TurnoverScreen';
+import ProductSalesScreen from './screens/ProductSalesScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
@@ -48,6 +49,11 @@ export default function App() {
           <Stack.Screen
             name="TurnoverScreen"
             component={TurnoverScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ProductSalesScreen"
+            component={ProductSalesScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

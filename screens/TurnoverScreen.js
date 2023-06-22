@@ -13,13 +13,13 @@ import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-const TotalProfitScreen = () => {
+const TurnoverScreen = () => {
     const navigation = useNavigation();
     const token = useSelector(selectToken);
     const [storesFromBoApi, setStoresFromBoApi] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const fetchTotalProfitDataFromBoApi = async () => {
+    const fetchTurnoverDataFromBoApi = async () => {
         setLoading(true);
         if (__DEV__ && token) {
             var myHeaders = new Headers();
@@ -32,7 +32,7 @@ const TotalProfitScreen = () => {
             };
 
             const response = await fetch(
-                'http://192.168.1.62:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&storesIds=1',
+                'http://192.168.1.69:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&storesIds=1',
                 requestOptions,
             );
             const data = await response.json();
@@ -44,7 +44,7 @@ const TotalProfitScreen = () => {
     };
 
     useEffect(() => {
-        fetchTotalProfitDataFromBoApi();
+        fetchTurnoverDataFromBoApi();
     }, []);
 
     return (
@@ -86,4 +86,4 @@ const TotalProfitScreen = () => {
     );
 };
 
-export default TotalProfitScreen;
+export default TurnoverScreen;
