@@ -6,10 +6,11 @@ import Home from './screens/Home';
 import LoginScreen from './screens/LoginScreen';
 import TotalProfitScreen from './screens/TotalProfitScreen';
 import TurnoverScreen from './screens/TurnoverScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import LineChartScreen from './screens/LineChartScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Provider} from 'react-redux';
+import {store} from './store';
 import {
   SafeAreaView,
   View,
@@ -28,32 +29,37 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="AuditScreen"
             component={AuditScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="StoreScreen"
             component={StoreScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="TurnoverScreen"
             component={TurnoverScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="TotalProfitScreen"
             component={TotalProfitScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LineChartScreen"
+            component={LineChartScreen}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       </Provider>

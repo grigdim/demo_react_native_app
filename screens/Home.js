@@ -16,6 +16,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {useDispatch} from 'react-redux';
 import {setBox} from '../features/bootstrap';
 import {useNavigation} from '@react-navigation/native';
+import {LineChart} from 'react-native-charts-wrapper';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -155,6 +156,9 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       )}
+      <TouchableOpacity onPress={() => navigation.navigate('LineChartScreen')}>
+        <Text>Line chart</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

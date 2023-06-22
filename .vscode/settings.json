@@ -2,7 +2,10 @@
     "cSpell.words": [
         "Bleu",
         "chainstore",
+        "Coef",
         "darkgrey",
+        "datetime",
+        "datetimepicker",
         "Dtos",
         "Entypo",
         "Grigdim",
@@ -12,6 +15,7 @@
         "mdns",
         "nativewind",
         "netinfo",
+        "reduxjs",
         "tailwindcss",
         "zeroconf"
     ],
