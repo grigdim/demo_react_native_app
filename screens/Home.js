@@ -156,8 +156,11 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       )}
-      <TouchableOpacity onPress={() => navigation.navigate('LineChartScreen')}>
-        <Text>Line chart</Text>
+      <TouchableOpacity
+        style={{elevation: 50}}
+        onPress={() => navigation.navigate('LineChartScreen')}
+        className="bg-teal-300 my-2 p-2 rounded-lg">
+        <Text className="text-white text-xl">Line chart</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
