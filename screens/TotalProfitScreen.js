@@ -61,7 +61,7 @@ const TotalProfitScreen = () => {
                         </Text>
                     </View>
                     <ScrollView
-                        className="divide-y-2 divide-cyan-400 rounded-2xl"
+                        className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
                         style={{ elevation: 50 }}>
                         {storesFromBoApi?.map(x => (
                             <View className="p-2 bg-gray-200" key={x.Level}>
