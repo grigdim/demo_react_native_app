@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -13,9 +13,10 @@ import Zeroconf from 'react-native-zeroconf';
 // import {WebView} from 'react-native-webview';
 import DeviceInfo from 'react-native-device-info';
 import NetInfo from '@react-native-community/netinfo';
-import { useDispatch } from 'react-redux';
-import { setBox } from '../features/bootstrap';
-import { useNavigation } from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setBox} from '../features/bootstrap';
+import {useNavigation} from '@react-navigation/native';
+import {LineChart} from 'react-native-charts-wrapper';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -104,7 +105,7 @@ const Home = () => {
 
   return (
     <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-100">
-      <View className="bg-gray-200 my-5 rounded-2xl" style={{ elevation: 50 }}>
+      <View className="bg-gray-200 my-5 rounded-2xl" style={{elevation: 50}}>
         <Text className="text-black p-5 underline text-4xl text-center">
           Discovered Services:
         </Text>
@@ -115,11 +116,11 @@ const Home = () => {
             <View
               key={index}
               className="m-2 py-1.5 px-2 bg-gray-200 justify-center rounded-2xl"
-              style={{ elevation: 10 }}>
+              style={{elevation: 10}}>
               <TouchableOpacity onPress={() => setBoxAndRedirect(service)}>
                 <Text
                   className="text-white text-lg text-center font-extrabold"
-                  style={{ textShadowColor: 'black', textShadowRadius: 25 }}>
+                  style={{textShadowColor: 'black', textShadowRadius: 25}}>
                   {index + 1}
                 </Text>
                 <Text
@@ -142,21 +143,22 @@ const Home = () => {
           ))}
         </ScrollView>
       ) : (
-        (
-          <View
-            style={{ elevation: 50 }}
-            className="my-1.5 px-4 py-2 bg-gray-200 rounded-2xl">
-            <TouchableOpacity onPress={() => setBoxAndRedirect(data)}>
-              <Text className="text-black py-1 underline text-base">
-                Host Name: {data.fullName}
-              </Text>
-              <Text className="text-black py-1 underline text-base">
-                MacAddress: {data.txt.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )
+        <View
+          style={{elevation: 50}}
+          className="my-1.5 px-4 py-2 bg-gray-200 rounded-2xl">
+          <TouchableOpacity onPress={() => setBoxAndRedirect(data)}>
+            <Text className="text-black py-1 underline text-base">
+              Host Name: {data.fullName}
+            </Text>
+            <Text className="text-black py-1 underline text-base">
+              MacAddress: {data.txt.name}
+            </Text>
+          </TouchableOpacity>
+        </View>
       )}
+      <TouchableOpacity onPress={() => navigation.navigate('LineChartScreen')}>
+        <Text>Line chart</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

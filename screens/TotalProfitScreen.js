@@ -1,38 +1,38 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    View,
-    Text,
-    SafeAreaView,
-    TouchableOpacity,
-    ScrollView,
-    ActivityIndicator,
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { selectToken } from '../features/bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {selectToken} from '../features/bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
 
 const TotalProfitScreen = () => {
-    const navigation = useNavigation();
-    const token = useSelector(selectToken);
-    const [storesFromBoApi, setStoresFromBoApi] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+  const token = useSelector(selectToken);
+  const [storesFromBoApi, setStoresFromBoApi] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const fetchTotalProfitDataFromBoApi = async () => {
-        setLoading(true);
-        if (__DEV__ && token) {
-            var myHeaders = new Headers();
-            myHeaders.append('Token', token);
-            myHeaders.append('Content-Type', 'application/json');
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow',
-            };
+  const fetchTotalProfitDataFromBoApi = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
 
             const response = await fetch(
-                'http://192.168.1.69:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&storesIds=1',
+                'http://192.168.1.62:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&storesIds=1',
                 requestOptions,
             );
             const data = await response.json();
@@ -43,9 +43,9 @@ const TotalProfitScreen = () => {
         setLoading(false);
     };
 
-    useEffect(() => {
-        fetchTotalProfitDataFromBoApi();
-    }, []);
+  useEffect(() => {
+    fetchTotalProfitDataFromBoApi();
+  }, []);
 
     return (
         <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
@@ -61,7 +61,7 @@ const TotalProfitScreen = () => {
                         </Text>
                     </View>
                     <ScrollView
-                        className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                        className="divide-y-2 divide-cyan-400 rounded-2xl"
                         style={{ elevation: 50 }}>
                         {storesFromBoApi?.map(x => (
                             <View className="p-2 bg-gray-200" key={x.Level}>
