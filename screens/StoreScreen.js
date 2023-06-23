@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -57,7 +57,7 @@ const StoresScreen = () => {
         redirect: 'follow',
         body: raw,
       };
-
+      console.log(raw);
       const response = await fetch(
         'http://192.168.1.184:3000/bo/Invoices/FetchSalesDataServerSide',
         requestOptions,
@@ -79,15 +79,15 @@ const StoresScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="w-8/12 justify-center mt-2">
+        <View className="w-10/12 justify-center mt-2">
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
               setOpen2(false);
               setStoresFromBoApi();
             }}
-            className="p-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
-            style={{elevation: 50}}>
+            className="p-2 my-5 border border-solid bg-gray-300 border-cyan-200 rounded-xl"
+            style={{elevation: 10}}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for data'}
             </Text>
@@ -151,13 +151,12 @@ const StoresScreen = () => {
               <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                 <Text className="text-center text-xl">Group By: </Text>
                 <Picker
-                  selectedValue={groupByDate}
                   style={{
-                    height: 50,
-                    width: '25%',
+                    width: '50%',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                   }}
+                  selectedValue={groupByDate}
                   onValueChange={(itemValue, itemIndex) =>
                     setGroupByDate(itemValue)
                   }>
@@ -192,7 +191,7 @@ const StoresScreen = () => {
 
           {storesFromBoApi && (
             <ScrollView
-              className="divide-y-2 divide-cyan-400 rounded-2xl"
+              className="divide-y-2 divide-cyan-400 mb-10"
               style={{elevation: 50}}>
               {storesFromBoApi.CategoriesSalesDtos?.map(category => (
                 <View className="p-2 bg-gray-200" key={category.CategoryId}>

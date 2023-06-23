@@ -104,7 +104,7 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-100">
+    <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-50">
       <View className="bg-gray-200 my-5 rounded-2xl" style={{elevation: 50}}>
         <Text className="text-black p-5 underline text-4xl text-center">
           Discovered Services:
