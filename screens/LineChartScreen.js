@@ -103,8 +103,4 @@ const LineChartScreen = () => {
   );
 };
 
-<<<<<<< HEAD
 export default LineChartScreen;
-=======
-export default LineChartScreen;
->>>>>>> d9a5f11ca06961f2daed60657cc7f88cc435c064
