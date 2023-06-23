@@ -29,7 +29,7 @@ const TurnoverScreen = () => {
   const [open2, setOpen2] = useState(false);
   const [date, setDate] = useState(new Date());
 
-  const fetchTotalProfitDataFromBoApi = async () => {
+  const fetchTurnoverDataFromBoApi = async () => {
     setLoading(true);
     if (__DEV__ && token) {
       var myHeaders = new Headers();
@@ -54,7 +54,7 @@ const TurnoverScreen = () => {
   };
 
   useEffect(() => {
-    // fetchTotalProfitDataFromBoApi();
+    // fetchTurnoverDataFromBoApi();
   }, []);
 
   return (
@@ -75,6 +75,7 @@ const TurnoverScreen = () => {
               {storesFromBoApi ? 'New search' : 'Search for turnover data'}
             </Text>
           </TouchableOpacity>
+
           {!storesFromBoApi ? (
             <View>
               <TouchableOpacity
@@ -116,7 +117,7 @@ const TurnoverScreen = () => {
                   date={date}
                   mode={'date'}
                   onConfirm={date => {
-                    setOpen(false);
+                    setOpen2(false);
                     setToDate(
                       date.toISOString().slice(0, 10).concat(' 23:59:59'),
                     );
@@ -133,7 +134,7 @@ const TurnoverScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                onPress={() => fetchTotalProfitDataFromBoApi()}>
+                onPress={() => fetchTurnoverDataFromBoApi()}>
                 <Text className="text-center text-lg text-white">Submit</Text>
               </TouchableOpacity>
             </View>

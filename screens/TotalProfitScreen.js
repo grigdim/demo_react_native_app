@@ -12,13 +12,19 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
+import DatePicker from 'react-native-date-picker';
 import {ip} from '@env';
 
 const TotalProfitScreen = () => {
   const navigation = useNavigation();
   const token = useSelector(selectToken);
-  const [storesFromBoApi, setStoresFromBoApi] = useState([]);
+  const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [date, setDate] = useState(new Date());
 
   const fetchTotalProfitDataFromBoApi = async () => {
     setLoading(true);
@@ -33,7 +39,7 @@ const TotalProfitScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&storesIds=1`,
+        `http://${ip}:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=${fromDate}&toDate=${toDate}&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();
@@ -45,7 +51,7 @@ const TotalProfitScreen = () => {
   };
 
   useEffect(() => {
-    fetchTotalProfitDataFromBoApi();
+    // fetchTotalProfitDataFromBoApi();
   }, []);
 
   return (
@@ -54,13 +60,93 @@ const TotalProfitScreen = () => {
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
         <View className="mb-20 mx-5">
-          <View
+
+        <TouchableOpacity
+            onPress={() => {
+              setOpen(false);
+              setOpen2(false);
+              setStoresFromBoApi();
+            }}
+            className="p-2 my-5 bg-gray-200 border border-solid border-green-200 rounded-xl"
+            style={{elevation: 50}}>
+            <Text className="text-green-400 text-center font-bold text-3xl">
+              {storesFromBoApi ? 'New search' : 'Search for total profit data'}
+            </Text>
+          </TouchableOpacity>
+
+          {!storesFromBoApi ? (
+            <View>
+              <TouchableOpacity
+                className="bg-cyan-300 rounded-xl my-2 p-2"
+                onPress={() => setOpen(true)}>
+                <Text className="text-center text-xl text-white">
+                  Select From Date
+                </Text>
+                <DatePicker
+                  modal
+                  open={open}
+                  date={date}
+                  mode={'date'}
+                  onConfirm={date => {
+                    setOpen2(false);
+                    setFromDate(
+                      date.toISOString().slice(0, 10).concat(' 00:00:00'),
+                    );
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                  }}
+                />
+                {fromDate !== '' && (
+                  <Text className="text-center text-xl text-white">
+                    {fromDate}
+                  </Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-blue-300 rounded-xl my-2 p-2"
+                onPress={() => setOpen2(true)}>
+                <Text className="text-center text-xl text-white">
+                  Select End Date
+                </Text>
+                <DatePicker
+                  modal
+                  open={open2}
+                  date={date}
+                  mode={'date'}
+                  onConfirm={date => {
+                    setOpen(false);
+                    setToDate(
+                      date.toISOString().slice(0, 10).concat(' 23:59:59'),
+                    );
+                  }}
+                  onCancel={() => {
+                    setOpen2(false);
+                  }}
+                />
+                {toDate !== '' && (
+                  <Text className="text-center text-xl text-white">
+                    {toDate}
+                  </Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                onPress={() => fetchTotalProfitDataFromBoApi()}>
+                <Text className="text-center text-lg text-white">Submit</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+
+          {/* <View
             className="py-2 my-5 bg-gray-200 border border-solid border-green-200 rounded-xl"
             style={{elevation: 50}}>
             <Text className="text-green-400 text-center font-bold text-3xl">
               Total Profit Data
             </Text>
-          </View>
+          </View> */}
+
+          {storesFromBoApi && (
           <ScrollView
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
             style={{elevation: 50}}>
@@ -79,6 +165,7 @@ const TotalProfitScreen = () => {
               </View>
             ))}
           </ScrollView>
+          )}
         </View>
       )}
     </SafeAreaView>
