@@ -118,7 +118,7 @@ const TurnoverScreen = () => {
                   date={date}
                   mode={'date'}
                   onConfirm={date => {
-                    setOpen(false);
+                    setOpen2(false);
                     setToDate(
                       date.toISOString().slice(0, 10).concat(' 23:59:59'),
                     );
