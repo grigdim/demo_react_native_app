@@ -59,7 +59,7 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.69:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&dateGroupBy=WEEK&storesIds=1&prodID=1',
+        `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&dateGroupBy=WEEK&storesIds=1&prodID=1`,
         requestOptions,
       );
       const data = await response.json();
@@ -83,7 +83,7 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.69:3000/bo/Invoices/GetProductsByCategoryServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&categoryId=1&storesIds=1',
+        `http://${ip}:3000/bo/Invoices/GetProductsByCategoryServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&categoryId=1&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();
