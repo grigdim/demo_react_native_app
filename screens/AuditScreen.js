@@ -28,9 +28,6 @@ const AuditScreen = () => {
       );
       const data = await response.json();
       setAudit(data);
-      console.log('====================================');
-      console.log(data);
-      console.log('====================================');
       setLoading(false);
     }
   };

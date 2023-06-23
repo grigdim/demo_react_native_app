@@ -57,7 +57,7 @@ const StoresScreen = () => {
         redirect: 'follow',
         body: raw,
       };
-      console.log(raw);
+
       const response = await fetch(
         'http://192.168.1.184:3000/bo/Invoices/FetchSalesDataServerSide',
         requestOptions,
