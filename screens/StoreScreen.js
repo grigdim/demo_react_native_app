@@ -18,6 +18,7 @@ import {selectToken} from '../features/bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
+import {ip} from '@env';
 
 const StoresScreen = () => {
   const navigation = useNavigation();
@@ -59,7 +60,7 @@ const StoresScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.69:3000/bo/Invoices/FetchSalesDataServerSide',
+        `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
         requestOptions,
       );
       const data = await response.json();

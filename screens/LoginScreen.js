@@ -120,12 +120,12 @@ const LoginScreen = () => {
         </View>
       ) : (
         <View>
-        <TouchableOpacity
+          <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('LineChartScreen');
             }}
-            style={{ elevation: 20 }}>
+            style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">
               Go to line chart screen
             </Text>
@@ -180,7 +180,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('ProductSalesScreen');
             }}
-            style={{ elevation: 20 }}>
+            style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">
               Go to product sales screen
             </Text>

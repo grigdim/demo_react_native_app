@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,10 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { selectToken } from '../features/bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {selectToken} from '../features/bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
+import {ip} from '@env';
 
 const ProductSalesScreen = () => {
   const navigation = useNavigation();
@@ -34,7 +35,7 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        'http://192.168.1.69:3000/bo/Invoices/GetProductSalesPropertiesServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&productId=1&groupByDate=WEEK&storesIds=1',
+        `http://${ip}:3000/bo/Invoices/GetProductSalesPropertiesServerSide?fromDate=2019-01-01 00:00:00&toDate=2019-01-31 23:59:59&productId=1&groupByDate=WEEK&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();
@@ -107,14 +108,14 @@ const ProductSalesScreen = () => {
         <View className="mb-20 mx-5">
           <View
             className="py-2 my-5 bg-gray-200 border border-solid border-purple-200 rounded-xl"
-            style={{ elevation: 50 }}>
+            style={{elevation: 50}}>
             <Text className="text-purple-400 text-center font-bold text-3xl">
               Product Sales Data
             </Text>
           </View>
           <ScrollView
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{ elevation: 50 }}>
+            style={{elevation: 50}}>
             {storesFromBoApi && (
               <View className="p-2 bg-gray-200">
                 <Text className="m-1 text-xl text-black">
@@ -154,9 +155,9 @@ const ProductSalesScreen = () => {
 
           <ScrollView
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{ elevation: 50 }}>
+            style={{elevation: 50}}>
             {stores2FromBoApi && (
-              <View style={{ marginTop: 15 }} className="p-2 bg-gray-200" >
+              <View style={{marginTop: 15}} className="p-2 bg-gray-200">
                 <Text className="m-1 text-3xl text-purple-500">
                   Product Details
                 </Text>
@@ -166,18 +167,16 @@ const ProductSalesScreen = () => {
                 <Text className="m-1 text-xl text-black">
                   Product Name: {stores2FromBoApi.ProductName}
                 </Text>
-                <Text className="m-1 text-xl text-black">
-                  (Returns Empty)
-                </Text>
+                <Text className="m-1 text-xl text-black">(Returns Empty)</Text>
               </View>
             )}
           </ScrollView>
 
           <ScrollView
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{ elevation: 50 }}>
+            style={{elevation: 50}}>
             {stores3FromBoApi && (
-              <View style={{ marginTop: 15 }} className="p-2 bg-gray-200" >
+              <View style={{marginTop: 15}} className="p-2 bg-gray-200">
                 <Text className="m-1 text-3xl text-purple-500">
                   Products By Category
                 </Text>
@@ -187,13 +186,10 @@ const ProductSalesScreen = () => {
                 <Text className="m-1 text-xl text-black">
                   Product Name: {stores3FromBoApi.ProductName}
                 </Text>
-                <Text className="m-1 text-xl text-black">
-                  (Returns Empty)
-                </Text>
+                <Text className="m-1 text-xl text-black">(Returns Empty)</Text>
               </View>
             )}
           </ScrollView>
-
         </View>
       )}
     </SafeAreaView>
