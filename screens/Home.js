@@ -104,7 +104,7 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-100">
+    <SafeAreaView className="flex-1 flex-column justify-center items-center bg-gray-50">
       <View className="bg-gray-200 my-5 rounded-2xl" style={{elevation: 50}}>
         <Text className="text-black p-5 underline text-4xl text-center">
           Discovered Services:
@@ -156,8 +156,11 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       )}
-      <TouchableOpacity onPress={() => navigation.navigate('LineChartScreen')}>
-        <Text>Line chart</Text>
+      <TouchableOpacity
+        style={{elevation: 50}}
+        onPress={() => navigation.navigate('LineChartScreen')}
+        className="bg-teal-300 my-2 p-2 rounded-lg">
+        <Text className="text-white text-xl">Line chart</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

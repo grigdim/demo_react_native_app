@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
@@ -21,29 +22,29 @@ import DeviceInfo from 'react-native-device-info';
 
 const LoginScreen = () => {
   const {input, button, buttonText, disabledButton} = style;
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [emulator, setEmulator] = useState(null);
+  const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
+  const [softKeys, setSoftKeys] = useState(null);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const box = useSelector(selectBox);
   const token = useSelector(selectToken);
 
-  const handleChangeUsername = inputText => {
-    setUsername(inputText);
+  const handleChangeEmail = inputText => {
+    setEmail(inputText);
   };
 
-  const handleChangePassword = inputText => {
-    setPassword(inputText);
-  };
+  // const handleChangePassword = inputText => {
+  //   setPassword(inputText);
+  // };
 
-  const isLoginDisabled =
-    username === '' ||
-    username === null ||
-    password === null ||
-    password === '';
+  const isLoginDisabled = email === '' || email === null;
+  // password === null ||
+  // password === '';
 
   const handleLogin = async () => {
     setLoading(true);
@@ -79,24 +80,25 @@ const LoginScreen = () => {
   }, [emulator]);
 
   return (
-    <SafeAreaView className="flex-1 justify-center">
+    <SafeAreaView className="flex-1 justify-center bg-gray-50">
       {loading ? (
         <ActivityIndicator color="#00CCBB" size="large" />
       ) : !token ? (
         <View>
           <View className="justify-center items-center">
-            <Icon name="user" size={50} color="#575757" />
+            <Icon name="user" size={50} color="rgb(59 130 246)" />
+            <Text className="text-blue-500">Hello Intaler</Text>
           </View>
           <View>
             <TextInput
-              onChangeText={handleChangeUsername}
+              onChangeText={handleChangeEmail}
               style={input}
-              placeholder="username"
+              placeholder="email"
               placeholderTextColor={'darkgrey'}
-              keyboardType="default"
+              keyboardType="email-address"
               clearButtonMode={'always'}
             />
-
+            {/*
             <TextInput
               onChangeText={handleChangePassword}
               style={input}
@@ -104,14 +106,15 @@ const LoginScreen = () => {
               placeholderTextColor={'darkgrey'}
               secureTextEntry
             />
+            */}
           </View>
           <View>
             <TouchableOpacity
               style={[button, isLoginDisabled && disabledButton]}
               onPress={handleLogin}
               disabled={isLoginDisabled}
-              className="rounded-2xl">
-              <Text style={buttonText}>Login</Text>
+              className="rounded-2xl bg-blue-500">
+              <Text style={buttonText}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -187,8 +190,7 @@ const LoginScreen = () => {
             className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
               dispatch(setToken(null));
-              setUsername(null);
-              setPassword(null);
+              setEmail(null);
             }}
             style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">

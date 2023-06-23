@@ -57,9 +57,11 @@ const AuditScreen = () => {
                 key={audit[0].Aud_ID}>
                 <Text className="m-1 text-xl">ID: {audit[0].Aud_ID}</Text>
                 <Text className="m-1 text-xl">
-                  Started: {audit[0].Aud_Started}
+                  Started: {new Date(audit[0].Aud_Started).toLocaleString()}
                 </Text>
-                <Text className="m-1 text-xl">Ended: {audit[0].Aud_Ended}</Text>
+                <Text className="m-1 text-xl">
+                  Ended: {new Date(audit[0].Aud_Ended).toLocaleString()}
+                </Text>
                 <Text className="m-1 text-xl">
                   Products Count: {audit[0].Aud_ProdsCount}
                 </Text>
