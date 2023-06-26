@@ -7,7 +7,7 @@ import {BarChart} from 'react-native-charts-wrapper';
 const BarChartScreen = () => {
   const [selectedEntry, setSelectedEntry] = useState();
   const [legend, setLegend] = useState({
-    enabled: true,
+    enabled: false,
     textSize: 14,
     form: 'SQUARE',
     formSize: 14,
@@ -56,6 +56,7 @@ const BarChartScreen = () => {
   });
   const [highlights, setHighlights] = useState([{x: 3}, {x: 6}]);
   const [xAxis, setXAxis] = useState({
+    textSize: 16,
     valueFormatter: [
       'Jan',
       'Feb',
@@ -88,7 +89,6 @@ const BarChartScreen = () => {
         style={{width: '100%', height: '100%'}}
         data={data}
         xAxis={xAxis}
-        xValues={barNames}
         animation={{durationX: 1000}}
         legend={legend}
         gridBackgroundColor={processColor('#ffffff')}

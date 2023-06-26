@@ -42,7 +42,7 @@ const StoresScreen = () => {
     form: 'SQUARE',
     formSize: 14,
     xEntrySpace: 10,
-    yEntrySpace: 5,
+    yEntrySpace: 0,
     formToTextSpace: 5,
     wordWrapEnabled: true,
     maxSizePercent: 0.5,
@@ -80,6 +80,7 @@ const StoresScreen = () => {
 
     granularityEnabled: true,
     granularity: 1,
+    textSize: 32,
   });
 
   const handleChangeSftId = inputText => {
@@ -146,7 +147,7 @@ const StoresScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <ScrollView className="w-10/12 mt-10">
+        <View className="w-10/12 mt-10">
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
@@ -159,7 +160,7 @@ const StoresScreen = () => {
               {storesFromBoApi ? 'New search' : 'Search for data'}
             </Text>
           </TouchableOpacity>
-          
+
           {!storesFromBoApi ? (
             <View>
               <TouchableOpacity
@@ -258,7 +259,7 @@ const StoresScreen = () => {
           ) : null}
 
           {storesFromBoApi && (
-            <View>
+            <ScrollView className="mb-10">
               <View
                 className="divide-y-2 divide-cyan-400 mb-20"
                 style={{elevation: 50}}>
@@ -297,7 +298,7 @@ const StoresScreen = () => {
                 })}
               </View>
               <BarChart
-                style={{width: 350, height: 450}}
+                style={{width: 350, height: 450, marginBottom: 10}}
                 data={barChartData}
                 xAxis={xAxis}
                 yAxis={{axisMinimum: 0}}
@@ -317,9 +318,9 @@ const StoresScreen = () => {
                   textSize: 16,
                 }}
               />
-            </View>
+            </ScrollView>
           )}
-        </ScrollView>
+        </View>
       )}
     </SafeAreaView>
   );

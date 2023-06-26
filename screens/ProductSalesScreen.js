@@ -1,6 +1,7 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,12 +12,12 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { selectToken } from '../features/bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {selectToken} from '../features/bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import { Picker } from '@react-native-picker/picker';
-import { ip } from '@env';
+import {Picker} from '@react-native-picker/picker';
+import {ip} from '@env';
 
 const ProductSalesScreen = () => {
   const navigation = useNavigation();
@@ -134,13 +135,13 @@ const ProductSalesScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
-      <ScrollView style={{ maxHeight: 1200, width: 600, padding: 20 }}
-        contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        // style={{maxHeight: 1200, width: 600, padding: 20}}
+        contentContainerStyle={{flexGrow: 1}}>
         {loading ? (
           <ActivityIndicator color="rgb(34 211 238)" size="large" />
         ) : (
           <View className="mb-20 mx-5">
-
             <TouchableOpacity
               onPress={() => {
                 setOpen(false);
@@ -148,7 +149,7 @@ const ProductSalesScreen = () => {
                 setStoresFromBoApi();
               }}
               className="p-2 my-5 border border-solid bg-gray-200 border-purple-200 rounded-xl"
-              style={{ elevation: 10 }}>
+              style={{elevation: 10}}>
               <Text className="text-purple-400 text-center font-bold text-3xl">
                 {storesFromBoApi ? 'New search' : 'Search for product sales'}
               </Text>
@@ -252,7 +253,7 @@ const ProductSalesScreen = () => {
             ) : null}
             <ScrollView
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ elevation: 50 }}>
+              style={{elevation: 50}}>
               {storesFromBoApi && (
                 <View className="p-2 bg-gray-200">
                   <Text className="m-1 text-xl text-black">
@@ -298,8 +299,7 @@ const ProductSalesScreen = () => {
                 setStores2FromBoApi();
               }}
               className="p-2 my-5 border border-solid bg-gray-200 border-purple-200 rounded-xl"
-              style={{ elevation: 10, marginTop: 85 }}
-            >
+              style={{elevation: 10, marginTop: 85}}>
               <Text className="text-green-400 text-center font-bold text-3xl">
                 {stores2FromBoApi ? 'New search' : 'Search for product details'}
               </Text>
@@ -392,9 +392,9 @@ const ProductSalesScreen = () => {
             {stores2FromBoApi && (
               <ScrollView
                 className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                style={{ elevation: 50 }}>
+                style={{elevation: 50}}>
                 {stores2FromBoApi && (
-                  <View style={{ marginTop: 15 }} className="p-2 bg-gray-200">
+                  <View style={{marginTop: 15}} className="p-2 bg-gray-200">
                     <Text className="m-1 text-3xl text-purple-500">
                       Product Details
                     </Text>
@@ -404,7 +404,9 @@ const ProductSalesScreen = () => {
                     <Text className="m-1 text-xl text-black">
                       Product Name: {stores2FromBoApi.ProductName}
                     </Text>
-                    <Text className="m-1 text-xl text-black">(Returns Empty)</Text>
+                    <Text className="m-1 text-xl text-black">
+                      (Returns Empty)
+                    </Text>
                   </View>
                 )}
               </ScrollView>
@@ -418,10 +420,11 @@ const ProductSalesScreen = () => {
                 setStores3FromBoApi();
               }}
               className="p-2 my-5 border border-solid bg-gray-200 border-purple-200 rounded-xl"
-              style={{ elevation: 10, marginTop: 85  }}
-            >
+              style={{elevation: 10, marginTop: 85}}>
               <Text className="text-orange-300 text-center font-bold text-3xl">
-                {stores3FromBoApi ? 'New search' : 'Search for product category data'}
+                {stores3FromBoApi
+                  ? 'New search'
+                  : 'Search for product category data'}
               </Text>
             </TouchableOpacity>
 
@@ -527,9 +530,9 @@ const ProductSalesScreen = () => {
             {stores3FromBoApi && (
               <ScrollView
                 className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                style={{ elevation: 50 }}>
+                style={{elevation: 50}}>
                 {stores3FromBoApi && (
-                  <View style={{ marginTop: 15 }} className="p-2 bg-gray-200">
+                  <View style={{marginTop: 15}} className="p-2 bg-gray-200">
                     <Text className="m-1 text-3xl text-purple-500">
                       Products By Category
                     </Text>
@@ -539,7 +542,9 @@ const ProductSalesScreen = () => {
                     <Text className="m-1 text-xl text-black">
                       Product Name: {stores3FromBoApi.ProductName}
                     </Text>
-                    <Text className="m-1 text-xl text-black">(Returns Empty)</Text>
+                    <Text className="m-1 text-xl text-black">
+                      (Returns Empty)
+                    </Text>
                   </View>
                 )}
               </ScrollView>
