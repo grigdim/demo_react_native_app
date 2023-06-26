@@ -42,10 +42,10 @@ const ProductSalesScreen = () => {
   const [date2, setDate2] = useState(new Date());
   const [date3, setDate3] = useState(new Date());
   const [groupByDate, setGroupByDate] = useState('WEEK');
-  const [groupByDate2, setGroupByDate2] = useState('WEEK');
-  const [groupByDate3, setGroupByDate3] = useState('WEEK');
+  const [groupByDate2, setGroupByDate2] = useState('DAY');
   const [productId, setProductId] = useState(1);
   const [categoryId, setCategoryId] = useState(1);
+  const [prodId, setProdId] = useState(1);
 
   const handleChangeProductId = inputText => {
     setProductId(inputText);
@@ -53,6 +53,10 @@ const ProductSalesScreen = () => {
 
   const handleChangeCategoryId = inputText => {
     setCategoryId(inputText);
+  };
+
+  const handleChangeProdId = inputText => {
+    setProdId(inputText);
   };
 
   const fetchProductSalesDataFromBoApi = async () => {
@@ -92,7 +96,7 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateA}&toDate=${toDateA}&groupByDate=${groupByDate2}&storesIds=1&prodID=1`,
+        `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateA}&toDate=${toDateA}&dateGroupBy=${groupByDate2}&storeIds=1&prodID=${prodId}`,
         requestOptions,
       );
       const data = await response.json();
@@ -381,6 +385,19 @@ const ProductSalesScreen = () => {
                     <Picker.Item label="YEAR" value="YEAR" />
                   </Picker>
                 </TouchableOpacity>
+                <View className="bg-gray-200 rounded-lg my-2 p-2">
+                  <Text className="text-center text-xl">Prod Id: </Text>
+                  <TextInput
+                    onChangeText={handleChangeProdId}
+                    style={styles.input}
+                    selectTextOnFocus
+                    placeholder="Prod Id"
+                    placeholderTextColor={'darkgrey'}
+                    keyboardType="number-pad"
+                    clearButtonMode={'always'}
+                    returnKeyType="done"
+                  />
+                </View>
                 <TouchableOpacity
                   className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                   onPress={() => fetchProductSalesDetailsDataFromBoApi()}>
@@ -487,25 +504,6 @@ const ProductSalesScreen = () => {
                 </TouchableOpacity>
 
                 {/* Details View */}
-                <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
-                  <Text className="text-center text-xl">Group By: </Text>
-                  <Picker
-                    style={{
-                      width: '50%',
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                    }}
-                    selectedValue={groupByDate3}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setGroupByDate3(itemValue)
-                    }>
-                    <Picker.Item label="HOUR" value="HOUR" />
-                    <Picker.Item label="DAY" value="DAY" />
-                    <Picker.Item label="WEEK" value="WEEK" />
-                    <Picker.Item label="MONTH" value="MONTH" />
-                    <Picker.Item label="YEAR" value="YEAR" />
-                  </Picker>
-                </TouchableOpacity>
                 <View className="bg-gray-200 rounded-lg my-2 p-2">
                   <Text className="text-center text-xl">Category Id: </Text>
                   <TextInput
