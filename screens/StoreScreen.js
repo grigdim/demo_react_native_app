@@ -93,6 +93,7 @@ const StoresScreen = () => {
               {storesFromBoApi ? 'New search' : 'Search for data'}
             </Text>
           </TouchableOpacity>
+          
           {!storesFromBoApi ? (
             <View>
               <TouchableOpacity
