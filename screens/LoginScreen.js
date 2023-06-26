@@ -130,6 +130,16 @@ const LoginScreen = () => {
               Go to line chart screen
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-gray-800 my-2 mx-auto p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('BarChartScreen');
+            }}
+            style={{elevation: 20}}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to bar chart screen
+            </Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"

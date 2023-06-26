@@ -1,15 +1,24 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import {View, Text, SafeAreaView, processColor, Dimensions} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {LineChart} from 'react-native-charts-wrapper';
+import {selectToken} from '../features/bootstrap';
+import {useSelector} from 'react-redux';
 
 const LineChartScreen = () => {
+  const token = useSelector(selectToken);
+  useEffect(() => {
+    console.log('====================================');
+    console.log(token);
+    console.log('====================================');
+  }, [token]);
+
   return (
     <SafeAreaView className="flex-1 justify-center align-center">
       <LineChart
         className="mx-auto"
-        style={{width: '75%', height: '90%'}}
+        style={{width: '75%', height: '50%'}}
         chartDescription={{
           text: 'Line Chart Demo',
           textColor: processColor('#f593f3'),

@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   TextInput,
   StyleSheet,
+  processColor,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
@@ -19,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
+import {BarChart} from 'react-native-charts-wrapper';
 
 const StoresScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +35,52 @@ const StoresScreen = () => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [date, setDate] = useState(new Date());
+
+  const [legend, setLegend] = useState({
+    enabled: false,
+    textSize: 14,
+    form: 'SQUARE',
+    formSize: 14,
+    xEntrySpace: 10,
+    yEntrySpace: 5,
+    formToTextSpace: 5,
+    wordWrapEnabled: true,
+    maxSizePercent: 0.5,
+  });
+  const [barChartData, setBarChartData] = useState({
+    dataSets: [
+      {
+        values: [],
+        label: 'Bar Chart',
+        config: {
+          color: processColor('teal'),
+          barShadowColor: processColor('lightgrey'),
+          highlightAlpha: 90,
+          highlightColor: processColor('red'),
+        },
+      },
+    ],
+    config: {
+      barWidth: 0.7,
+    },
+  });
+  const [highlights, setHighlights] = useState([{x: 3}, {x: 6}]);
+  const [xAxis, setXAxis] = useState({
+    valueFormatter: [
+      // 'Jan',
+      // 'Feb',
+      // 'Mar',
+      // 'Apr',
+      // 'May',
+      // 'Jun',
+      // 'Jul',
+      // 'Aug',
+      // 'Sep',
+    ],
+
+    granularityEnabled: true,
+    granularity: 1,
+  });
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
@@ -66,6 +114,24 @@ const StoresScreen = () => {
       const data = await response.json();
       console.log(data);
       setStoresFromBoApi(data);
+      data.CategoriesSalesDtos.map(category => {
+        setBarChartData(prevState => ({
+          ...prevState,
+          dataSets: [
+            {
+              ...prevState.dataSets[0],
+              values: [
+                ...prevState.dataSets[0].values,
+                {y: category.Turnover, marker: category.CategoryName},
+              ],
+            },
+          ],
+        }));
+        // setXAxis(prevState => ({
+        //   ...prevState,
+        //   valueFormatter: [...prevState.valueFormatter, category.CategoryName],
+        // }));
+      });
     }
     // end of request
     setLoading(false);
@@ -73,14 +139,14 @@ const StoresScreen = () => {
 
   useEffect(() => {
     // fetchDataFromBoApi();
-  }, []);
+  }, [xAxis]);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="w-10/12 justify-center mt-2">
+        <ScrollView className="w-10/12 mt-10">
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
@@ -192,43 +258,68 @@ const StoresScreen = () => {
           ) : null}
 
           {storesFromBoApi && (
-            <ScrollView
-              className="divide-y-2 divide-cyan-400 mb-10"
-              style={{elevation: 50}}>
-              {storesFromBoApi.CategoriesSalesDtos?.map(category => (
-                <View className="p-2 bg-gray-200" key={category.CategoryId}>
-                  <Text className="m-1 text-xl text-black">
-                    Category Id: {category.CategoryId}
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Category Name: {category.CategoryName}
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Cost including vat: {category.CostInclVat} €
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Profit percentage: {category.ProfitPercentage} %
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Profit with vat: {category.ProfitWithVat} €
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Profit without vat: {category.ProfitWithoutVat} €
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Quantity: {category.QuantityTmx}
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Turnover: {category.Turnover} €
-                  </Text>
-                  <Text className="m-1 text-xl text-black">
-                    Vat: {category.Vat} %
-                  </Text>
-                </View>
-              ))}
-            </ScrollView>
+            <View>
+              <View
+                className="divide-y-2 divide-cyan-400 mb-20"
+                style={{elevation: 50}}>
+                {storesFromBoApi.CategoriesSalesDtos?.map(category => {
+                  return (
+                    <View className="p-2 bg-gray-200" key={category.CategoryId}>
+                      <Text className="m-1 text-xl text-black">
+                        Category Id: {category.CategoryId}
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Category Name: {category.CategoryName}
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Cost including vat: {category.CostInclVat} €
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Profit percentage: {category.ProfitPercentage} %
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Profit with vat: {category.ProfitWithVat} €
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Profit without vat: {category.ProfitWithoutVat} €
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Quantity: {category.QuantityTmx}
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Turnover: {category.Turnover} €
+                      </Text>
+                      <Text className="m-1 text-xl text-black">
+                        Vat: {category.Vat} %
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+              <BarChart
+                style={{width: 350, height: 450}}
+                data={barChartData}
+                xAxis={xAxis}
+                yAxis={{axisMinimum: 0}}
+                animation={{durationX: 1000}}
+                legend={legend}
+                gridBackgroundColor={processColor('#ffffff')}
+                visibleRange={{x: {min: 5, max: 5}}}
+                drawBarShadow={false}
+                drawValueAboveBar
+                drawHighlightArrow
+                // onSelect={this.handleSelect.bind(this)}
+                highlights={highlights}
+                // onChange={event => console.log(event.nativeEvent)}
+                marker={{enabled: true}}
+                chartDescription={{
+                  text: 'Categories Sales Dtos',
+                  textSize: 16,
+                }}
+              />
+            </View>
           )}
-        </View>
+        </ScrollView>
       )}
     </SafeAreaView>
   );
