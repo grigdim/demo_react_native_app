@@ -20,11 +20,12 @@ const TotalProfitScreen = () => {
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate1, setFromDate1] = useState(new Date());
+  const [fromDate2, setFromDate2] = useState('');
+  const [toDate1, setToDate1] = useState(new Date());
+  const [toDate2, setToDate2] = useState('');
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [date, setDate] = useState(new Date());
 
   const fetchTotalProfitDataFromBoApi = async () => {
     setLoading(true);
@@ -85,11 +86,12 @@ const TotalProfitScreen = () => {
                 <DatePicker
                   modal
                   open={open}
-                  date={date}
+                  date={fromDate1}
                   mode={'date'}
                   onConfirm={date => {
                     setOpen2(false);
-                    setFromDate(
+                    setFromDate1(date);
+                    setFromDate2(
                       date.toISOString().slice(0, 10).concat(' 00:00:00'),
                     );
                   }}
@@ -97,9 +99,9 @@ const TotalProfitScreen = () => {
                     setOpen(false);
                   }}
                 />
-                {fromDate !== '' && (
+                {fromDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {fromDate}
+                    {fromDate2}
                   </Text>
                 )}
               </TouchableOpacity>
@@ -112,11 +114,12 @@ const TotalProfitScreen = () => {
                 <DatePicker
                   modal
                   open={open2}
-                  date={date}
+                  date={toDate1}
                   mode={'date'}
                   onConfirm={date => {
                     setOpen(false);
-                    setToDate(
+                    setToDate1(date);
+                    setToDate2(
                       date.toISOString().slice(0, 10).concat(' 23:59:59'),
                     );
                   }}
@@ -124,9 +127,9 @@ const TotalProfitScreen = () => {
                     setOpen2(false);
                   }}
                 />
-                {toDate !== '' && (
+                {toDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {toDate}
+                    {toDate2}
                   </Text>
                 )}
               </TouchableOpacity>

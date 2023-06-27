@@ -26,21 +26,16 @@ const ProductSalesScreen = () => {
   const [stores2FromBoApi, setStores2FromBoApi] = useState();
   const [stores3FromBoApi, setStores3FromBoApi] = useState();
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [fromDateA, setFromDateA] = useState('');
-  const [fromDateB, setFromDateB] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [toDateA, setToDateA] = useState('');
-  const [toDateB, setToDateB] = useState('');
+  const [fromDate1, setFromDate1] = useState(new Date());
+  const [fromDate2, setFromDate2] = useState('');
+  const [toDate1, setToDate1] = useState(new Date());
+  const [toDate2, setToDate2] = useState('');
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [openA, setOpenA] = useState(false);
   const [openA2, setOpenA2] = useState(false);
   const [openB, setOpenB] = useState(false);
   const [openB2, setOpenB2] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [date2, setDate2] = useState(new Date());
-  const [date3, setDate3] = useState(new Date());
   const [groupByDate, setGroupByDate] = useState('WEEK');
   const [groupByDate2, setGroupByDate2] = useState('DAY');
   const [productId, setProductId] = useState(1);
@@ -170,11 +165,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={open}
-                    date={date}
+                    date={fromDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpen(false);
-                      setFromDate(
+                      setFromDate1(date);
+                      setFromDate2(
                         date.toISOString().slice(0, 10).concat(' 00:00:00'),
                       );
                     }}
@@ -182,9 +178,9 @@ const ProductSalesScreen = () => {
                       setOpen(false);
                     }}
                   />
-                  {fromDate !== '' && (
+                  {fromDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {fromDate}
+                      {fromDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -197,11 +193,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={open2}
-                    date={date}
+                    date={toDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpen2(false);
-                      setToDate(
+                      setToDate1(date);
+                      setToDate2(
                         date.toISOString().slice(0, 10).concat(' 23:59:59'),
                       );
                     }}
@@ -209,9 +206,9 @@ const ProductSalesScreen = () => {
                       setOpen2(false);
                     }}
                   />
-                  {toDate !== '' && (
+                  {toDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {toDate}
+                      {toDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -321,11 +318,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={openA}
-                    date={date2}
+                    date={fromDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpenA(false);
-                      setFromDateA(
+                      setFromDate1(date);
+                      setFromDate2(
                         date.toISOString().slice(0, 10).concat(' 00:00:00'),
                       );
                     }}
@@ -333,9 +331,9 @@ const ProductSalesScreen = () => {
                       setOpenA(false);
                     }}
                   />
-                  {fromDateA !== '' && (
+                  {fromDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {fromDateA}
+                      {fromDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -348,11 +346,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={openA2}
-                    date={date2}
+                    date={toDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpenA2(false);
-                      setToDateA(
+                      setToDate1(date);
+                      setToDate2(
                         date.toISOString().slice(0, 10).concat(' 23:59:59'),
                       );
                     }}
@@ -360,9 +359,9 @@ const ProductSalesScreen = () => {
                       setOpenA2(false);
                     }}
                   />
-                  {toDateA !== '' && (
+                  {toDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {toDateA}
+                      {toDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -457,11 +456,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={openB}
-                    date={date3}
+                    date={fromDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpenB(false);
-                      setFromDateB(
+                      setFromDate1(date);
+                      setFromDate2(
                         date.toISOString().slice(0, 10).concat(' 00:00:00'),
                       );
                     }}
@@ -469,9 +469,9 @@ const ProductSalesScreen = () => {
                       setOpenB(false);
                     }}
                   />
-                  {fromDateB !== '' && (
+                  {fromDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {fromDateB}
+                      {fromDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -484,11 +484,12 @@ const ProductSalesScreen = () => {
                   <DatePicker
                     modal
                     open={openB2}
-                    date={date3}
+                    date={toDate1}
                     mode={'date'}
                     onConfirm={date => {
                       setOpenB2(false);
-                      setToDateB(
+                      setToDate1(date);
+                      setToDate2(
                         date.toISOString().slice(0, 10).concat(' 23:59:59'),
                       );
                     }}
@@ -496,9 +497,9 @@ const ProductSalesScreen = () => {
                       setOpenB2(false);
                     }}
                   />
-                  {toDateB !== '' && (
+                  {toDate2 !== '' && (
                     <Text className="text-center text-xl text-white">
-                      {toDateB}
+                      {toDate2}
                     </Text>
                   )}
                 </TouchableOpacity>
