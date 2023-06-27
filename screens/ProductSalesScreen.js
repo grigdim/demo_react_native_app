@@ -151,25 +151,27 @@ const ProductSalesScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <View>
-            <TouchableOpacity className="bg-green-400 rounded-lg my-2 p-2 justify-center align-center">
-              <Text className="text-center text-xl">Search by: </Text>
-              <Picker
-                style={{
-                  width: '85%',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
-                selectedValue={selectedLabel}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedLabel(itemValue);
-                }}>
-                <Picker.Item label="Product Sales Data" value="ProductSalesData" />
-                <Picker.Item label="Product Sales Details" value="ProductSalesDetails" />
-                <Picker.Item label="Product Sales Category Data" value="ProductSalesCategoryData" />
-              </Picker>
-            </TouchableOpacity>
-          </View>
+          {!storesFromBoApi && !stores2FromBoApi && !stores3FromBoApi ? (
+            <View>
+              <TouchableOpacity className="bg-green-400 rounded-lg my-2 p-2 justify-center align-center">
+                <Text className="text-center text-xl">Search by: </Text>
+                <Picker
+                  style={{
+                    width: '85%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                  }}
+                  selectedValue={selectedLabel}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedLabel(itemValue);
+                  }}>
+                  <Picker.Item label="Product Sales Data" value="ProductSalesData" />
+                  <Picker.Item label="Product Sales Details" value="ProductSalesDetails" />
+                  <Picker.Item label="Product Sales Category Data" value="ProductSalesCategoryData" />
+                </Picker>
+              </TouchableOpacity>
+            </View>
+          ) : null}
 
           {!storesFromBoApi && !stores2FromBoApi && !stores3FromBoApi ? (
             (() => {
@@ -482,9 +484,6 @@ const ProductSalesScreen = () => {
                         Quantity: {storesFromBoApi.Quantity}
                       </Text>
                       <Text className="m-1 text-xl text-black">
-                        Sales Product Chart: {storesFromBoApi.SalesProductChartDtos}
-                      </Text>
-                      <Text className="m-1 text-xl text-black">
                         Turnover with VAT: {storesFromBoApi.TurnOverWithVat}
                       </Text>
                       <Text className="m-1 text-xl text-black">
@@ -493,6 +492,40 @@ const ProductSalesScreen = () => {
                       <Text className="m-1 text-xl text-black">
                         VAT Total: {storesFromBoApi.VatTotal}
                       </Text>
+                      {storesFromBoApi.SalesProductChartDtos.length > 0 &&
+                        <View className="pt-4 m-1 text-xl text-black">
+                          <Text className="m-1 text-2xl text-purple-600">
+                            Sales Product Chart:
+                          </Text>
+                          {storesFromBoApi.SalesProductChartDtos?.map(x => {
+                            return (
+                              <View className="p-2 bg-gray-200" key={x.ProductId}>
+                                <Text className="m-1 text-xl text-black">
+                                  Date Part: {x.DatePart}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Product ID: {x.ProductId}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Profit with VAT: {x.ProfitWithVat}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Profit Without VAT: {x.ProfitWithoutVat}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Turnover with VAT: {x.TurnOverWithVat}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Turnover Without VAT: {x.TurnOverWithoutVat}
+                                </Text>
+                                <Text className="m-1 text-xl text-black">
+                                  Year: {x.Year}
+                                </Text>
+                              </View>
+                            );
+                          })}
+                        </View>}
+
                     </View>
                   </ScrollView>
                 );
