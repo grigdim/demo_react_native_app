@@ -170,7 +170,6 @@ const StoresScreen = () => {
               {storesFromBoApi ? 'New search' : 'Search for data'}
             </Text>
           </TouchableOpacity>
-
           {!storesFromBoApi ? (
             <View>
               <TouchableOpacity
@@ -233,7 +232,7 @@ const StoresScreen = () => {
                 <Text className="text-center text-xl">Group By: </Text>
                 <Picker
                   style={{
-                    width: '50%',
+                    width: 150,
                   }}
                   selectedValue={groupByDate}
                   onValueChange={(itemValue, itemIndex) =>
