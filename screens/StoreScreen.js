@@ -13,6 +13,7 @@ import {
   TextInput,
   StyleSheet,
   processColor,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
@@ -21,6 +22,13 @@ import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
 import {BarChart} from 'react-native-charts-wrapper';
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLabel,
+  VictoryAxis,
+} from 'victory-native';
 
 const StoresScreen = () => {
   const navigation = useNavigation();
@@ -36,6 +44,16 @@ const StoresScreen = () => {
   const [open2, setOpen2] = useState(false);
   const [date, setDate] = useState(new Date());
 
+  //config for victoryBar
+  const [victoryBarData, setVictoryBarData] = useState([
+    // {x: 1, y: 13000},
+    // {x: 2, y: 16500},
+    // {x: 3, y: 14250},
+    // {x: 4, y: 19000},
+  ]);
+  //end of victory bar
+  const {width, height} = Dimensions.get('screen');
+  //react-native-charts-wrapper
   const [legend, setLegend] = useState({
     enabled: false,
     textSize: 14,
@@ -66,22 +84,10 @@ const StoresScreen = () => {
   });
   const [highlights, setHighlights] = useState([{x: 3}, {x: 6}]);
   const [xAxis, setXAxis] = useState({
-    valueFormatter: [
-      // 'Jan',
-      // 'Feb',
-      // 'Mar',
-      // 'Apr',
-      // 'May',
-      // 'Jun',
-      // 'Jul',
-      // 'Aug',
-      // 'Sep',
-    ],
-
     granularityEnabled: true,
     granularity: 1,
-    textSize: 32,
   });
+  //end of react-native-charts-wrapper
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
@@ -128,6 +134,10 @@ const StoresScreen = () => {
             },
           ],
         }));
+        setVictoryBarData(prevState => [
+          ...prevState,
+          {y: category.Turnover, label: category.CategoryName},
+        ]);
         // setXAxis(prevState => ({
         //   ...prevState,
         //   valueFormatter: [...prevState.valueFormatter, category.CategoryName],
@@ -140,7 +150,10 @@ const StoresScreen = () => {
 
   useEffect(() => {
     // fetchDataFromBoApi();
-  }, [xAxis]);
+    console.log('====================================');
+    console.log(victoryBarData);
+    console.log('====================================');
+  }, [victoryBarData]);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
@@ -153,6 +166,7 @@ const StoresScreen = () => {
               setOpen(false);
               setOpen2(false);
               setStoresFromBoApi();
+              setVictoryBarData([]);
             }}
             className="p-2 my-5 border border-solid bg-gray-300 border-cyan-200 rounded-xl"
             style={{elevation: 10}}>
@@ -217,13 +231,11 @@ const StoresScreen = () => {
                   </Text>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+              <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center items-center">
                 <Text className="text-center text-xl">Group By: </Text>
                 <Picker
                   style={{
                     width: '50%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
                   }}
                   selectedValue={groupByDate}
                   onValueChange={(itemValue, itemIndex) =>
@@ -251,9 +263,9 @@ const StoresScreen = () => {
                 />
               </View>
               <TouchableOpacity
-                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                className="bg-gray-600 justify-center items-center my-2 p-2 rounded-lg"
                 onPress={() => fetchDataFromBoApi()}>
-                <Text className="text-center text-lg text-white">Submit</Text>
+                <Text className="text-lg text-white">Submit</Text>
               </TouchableOpacity>
             </View>
           ) : null}
@@ -261,7 +273,7 @@ const StoresScreen = () => {
           {storesFromBoApi && (
             <ScrollView className="mb-10">
               <View
-                className="divide-y-2 divide-cyan-400 mb-20"
+                className="divide-y-2 divide-cyan-400"
                 style={{elevation: 50}}>
                 {storesFromBoApi.CategoriesSalesDtos?.map(category => {
                   return (
@@ -298,7 +310,12 @@ const StoresScreen = () => {
                 })}
               </View>
               <BarChart
-                style={{width: 350, height: 450, marginBottom: 10}}
+                style={{
+                  width: 350,
+                  height: 450,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
                 data={barChartData}
                 xAxis={xAxis}
                 yAxis={{axisMinimum: 0}}
@@ -318,6 +335,35 @@ const StoresScreen = () => {
                   textSize: 16,
                 }}
               />
+              <View className="mb-20 flex-1 items-center ">
+                <Text>Categories Sales Dtos</Text>
+                <VictoryChart
+                  theme={VictoryTheme.material}
+                  height={height / 2}
+                  domainPadding={{y: 50}}
+                  width={width / 1.2}>
+                  <VictoryBar
+                    data={victoryBarData}
+                    style={{
+                      data: {fill: 'orange'},
+                    }}
+                    animate={{
+                      duration: 2000,
+                      onLoad: {duration: 1000},
+                    }}
+                    barRatio={0.8}
+                    labelComponent={
+                      <VictoryLabel
+                        angle={90}
+                        textAnchor="end"
+                        dy={7}
+                        dx={-5}
+                        style={{fill: 'teal'}}
+                      />
+                    }
+                  />
+                </VictoryChart>
+              </View>
             </ScrollView>
           )}
         </View>
