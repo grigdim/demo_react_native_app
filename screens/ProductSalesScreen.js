@@ -153,7 +153,7 @@ const ProductSalesScreen = () => {
 
           {!storesFromBoApi && !stores2FromBoApi && !stores3FromBoApi ? (
             <View>
-              <TouchableOpacity className="bg-green-400 rounded-lg my-2 p-2 justify-center align-center">
+              <TouchableOpacity className="bg-lime-400 rounded-lg my-2 p-2 justify-center align-center">
                 <Text className="text-center text-xl">Search by: </Text>
                 <Picker
                   style={{
