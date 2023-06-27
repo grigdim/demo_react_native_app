@@ -21,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 
 const LoginScreen = () => {
+  const {height, width} = Dimensions.get('screen');
   const {input, button, buttonText, disabledButton} = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -84,10 +85,15 @@ const LoginScreen = () => {
       {loading ? (
         <ActivityIndicator color="#00CCBB" size="large" />
       ) : !token ? (
-        <View>
-          <View className="justify-center items-center">
-            <Icon name="user" size={50} color="rgb(59 130 246)" />
-            <Text className="text-blue-500">Hello Intaler</Text>
+        <View className="flex-1 justify-center">
+          <View className="items-center">
+            <Icon
+              name="user"
+              size={75}
+              color="rgb(59 130 246)"
+              className="my-3"
+            />
+            <Text className="text-blue-500 text-3xl my-3">Hello Intaler!</Text>
           </View>
           <View>
             <TextInput
@@ -223,7 +229,7 @@ const style = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: '50%',
+    width: '75%',
     marginTop: 12,
     marginBottom: 12,
     marginLeft: 'auto',
@@ -235,7 +241,7 @@ const style = StyleSheet.create({
   },
   button: {
     height: 40,
-    width: '25%',
+    width: '50%',
     marginTop: 12,
     marginBottom: 12,
     marginLeft: 'auto',
