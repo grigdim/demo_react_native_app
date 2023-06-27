@@ -137,7 +137,7 @@ const ProductSalesScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="mb-20 mx-5">
+        <View className="w-10/12">
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
