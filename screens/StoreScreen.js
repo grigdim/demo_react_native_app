@@ -35,22 +35,18 @@ const StoresScreen = () => {
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate1, setFromDate1] = useState(new Date());
+  const [fromDate2, setFromDate2] = useState('');
+  const [toDate1, setToDate1] = useState(new Date());
+  const [toDate2, setToDate2] = useState('');
   const [sftId, setSftId] = useState(1);
   const [groupByDate, setGroupByDate] = useState('WEEK');
   const [storesIds, setStoresIds] = useState([1]);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [date, setDate] = useState(new Date());
 
   //config for victoryBar
-  const [victoryBarData, setVictoryBarData] = useState([
-    // {x: 1, y: 13000},
-    // {x: 2, y: 16500},
-    // {x: 3, y: 14250},
-    // {x: 4, y: 19000},
-  ]);
+  const [victoryBarData, setVictoryBarData] = useState([]);
   //end of victory bar
   const {width, height} = Dimensions.get('screen');
   //react-native-charts-wrapper
@@ -101,8 +97,8 @@ const StoresScreen = () => {
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
       var raw = JSON.stringify({
-        fromDate: fromDate,
-        toDate: toDate,
+        fromDate: fromDate2,
+        toDate: toDate2,
         sftId: sftId,
         groupByDate: groupByDate,
         storesIds: storesIds,
@@ -186,11 +182,12 @@ const StoresScreen = () => {
                 <DatePicker
                   modal
                   open={open}
-                  date={date}
+                  date={fromDate1}
                   mode={'date'}
                   onConfirm={date => {
                     setOpen(false);
-                    setFromDate(
+                    setFromDate1(date);
+                    setFromDate2(
                       date.toISOString().slice(0, 10).concat(' 00:00:00'),
                     );
                   }}
@@ -198,9 +195,9 @@ const StoresScreen = () => {
                     setOpen(false);
                   }}
                 />
-                {fromDate !== '' && (
+                {fromDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {fromDate}
+                    {fromDate2}
                   </Text>
                 )}
               </TouchableOpacity>
@@ -213,11 +210,12 @@ const StoresScreen = () => {
                 <DatePicker
                   modal
                   open={open2}
-                  date={date}
+                  date={toDate1}
                   mode={'date'}
                   onConfirm={date => {
                     setOpen2(false);
-                    setToDate(
+                    setToDate1(date);
+                    setToDate2(
                       date.toISOString().slice(0, 10).concat(' 23:59:59'),
                     );
                   }}
@@ -225,9 +223,9 @@ const StoresScreen = () => {
                     setOpen2(false);
                   }}
                 />
-                {toDate !== '' && (
+                {toDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {toDate}
+                    {toDate2}
                   </Text>
                 )}
               </TouchableOpacity>
@@ -309,39 +307,39 @@ const StoresScreen = () => {
                   );
                 })}
               </View>
-              <BarChart
-                style={{
-                  width: 350,
-                  height: 450,
-                  marginTop: 10,
-                  marginBottom: 10,
-                }}
-                data={barChartData}
-                xAxis={xAxis}
-                yAxis={{axisMinimum: 0}}
-                animation={{durationX: 1000}}
-                legend={legend}
-                gridBackgroundColor={processColor('#ffffff')}
-                visibleRange={{x: {min: 5, max: 5}}}
-                drawBarShadow={false}
-                drawValueAboveBar
-                drawHighlightArrow
-                // onSelect={this.handleSelect.bind(this)}
-                highlights={highlights}
-                // onChange={event => console.log(event.nativeEvent)}
-                marker={{enabled: true}}
-                chartDescription={{
-                  text: 'Categories Sales Dtos',
-                  textSize: 16,
-                }}
-              />
-              <View className="mb-20 flex-1 items-center ">
+              <View className="flex-1 justify-center items-center my-10 p-2">
+                <BarChart
+                  style={{
+                    width: width / 1.2,
+                    height: height / 1.5,
+                  }}
+                  data={barChartData}
+                  xAxis={xAxis}
+                  yAxis={{axisMinimum: 0}}
+                  animation={{durationX: 1000}}
+                  legend={legend}
+                  gridBackgroundColor={processColor('#ffffff')}
+                  visibleRange={{x: {min: 5, max: 5}}}
+                  drawBarShadow={false}
+                  drawValueAboveBar
+                  drawHighlightArrow
+                  // onSelect={this.handleSelect.bind(this)}
+                  highlights={highlights}
+                  // onChange={event => console.log(event.nativeEvent)}
+                  marker={{enabled: true}}
+                  chartDescription={{
+                    text: 'Categories Sales Dtos',
+                    textSize: 16,
+                  }}
+                />
+              </View>
+              <View className="mb-20 pt-2 flex-1 items-center">
                 <Text>Categories Sales Dtos</Text>
                 <VictoryChart
                   theme={VictoryTheme.material}
-                  height={height / 2}
+                  height={height / 1.5}
                   domainPadding={{y: 50}}
-                  width={width / 1.2}>
+                  width={width / 1.1}>
                   <VictoryBar
                     data={victoryBarData}
                     style={{
