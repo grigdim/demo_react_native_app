@@ -9,8 +9,9 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {selectBox} from '../features/bootstrap';
 import {selectToken} from '../features/bootstrap';
@@ -25,27 +26,61 @@ const LoginScreen = () => {
   const {input, button, buttonText, disabledButton} = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [vat, setVat] = useState('');
   const [loading, setLoading] = useState(false);
   const [emulator, setEmulator] = useState(null);
   const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
   const [softKeys, setSoftKeys] = useState(null);
+  const [login, setLogin] = useState(true);
+  const [registeredEmail, setRegisteredEmail] = useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const box = useSelector(selectBox);
   const token = useSelector(selectToken);
 
+  const inputRef = useRef(null);
+
   const handleChangeEmail = inputText => {
     setEmail(inputText);
   };
 
-  // const handleChangePassword = inputText => {
-  //   setPassword(inputText);
-  // };
+  const handleChangePassword = inputText => {
+    setPassword(inputText);
+  };
 
-  const isLoginDisabled = email === '' || email === null;
-  // password === null ||
-  // password === '';
+  const handleChangeVat = inputText => {
+    setVat(inputText);
+  };
+
+  const isEmailDisabled = email === '' || email === null;
+  const isPasswordDisabled = password === '' || password === null;
+  const isVatDisabled = vat === '' || vat === null;
+
+  const isValidEmail = () => {
+    const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+    return regex.test(email);
+  };
+
+  const handleCheckEmail = () => {
+    const valid = isValidEmail();
+    if (valid === true) {
+      email === 'dgrigoriadis@intale.com'
+        ? setRegisteredEmail(true)
+        : setRegisteredEmail(false);
+      setLogin(false);
+    } else {
+      Alert.alert('Warning', 'Please enter a valid email', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setEmail('');
+            inputRef.current.clear();
+          },
+        },
+      ]);
+    }
+  };
 
   const handleLogin = async () => {
     setLoading(true);
@@ -81,21 +116,21 @@ const LoginScreen = () => {
   }, [emulator]);
 
   return (
-    <SafeAreaView className="flex-1 justify-center bg-gray-50">
+    <SafeAreaView className="flex-1 justify-center items-center bg-gray-50">
       {loading ? (
         <ActivityIndicator color="#00CCBB" size="large" />
       ) : !token ? (
-        <View className="flex-1 justify-center">
-          <View className="items-center">
-            <Icon
-              name="user"
-              size={75}
-              color="rgb(59 130 246)"
-              className="my-3"
-            />
-            <Text className="text-blue-500 text-3xl my-3">Hello Intaler!</Text>
-          </View>
-          <View>
+        login ? (
+          <View className="flex-1 justify-center items-center space-y-6 w-10/12">
+            <View className="items-center">
+              <Icon
+                name="user"
+                size={75}
+                color="rgb(59 130 246)"
+                className=""
+              />
+              <Text className="text-blue-500 text-3xl">Hello Intaler!</Text>
+            </View>
             <TextInput
               onChangeText={handleChangeEmail}
               style={input}
@@ -103,27 +138,86 @@ const LoginScreen = () => {
               placeholderTextColor={'darkgrey'}
               keyboardType="email-address"
               clearButtonMode={'always'}
+              ref={inputRef}
             />
-            {/*
+            <TouchableOpacity
+              style={[isEmailDisabled && disabledButton]}
+              onPress={handleCheckEmail}
+              disabled={isEmailDisabled}
+              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+              <Text style={buttonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        ) : registeredEmail ? (
+          <View className="flex-1 justify-center space-y-10 items-center w-10/12">
+            <Text className="text-center text-xl font-bold">
+              A one-time password has been sent to your email. Please enter it
+              below.
+            </Text>
             <TextInput
               onChangeText={handleChangePassword}
               style={input}
               placeholder="password"
               placeholderTextColor={'darkgrey'}
+              clearButtonMode={'always'}
               secureTextEntry
             />
-            */}
+            <View className="flex-row items-center space-x-4">
+              <TouchableOpacity
+                onPress={() => {
+                  setEmail('');
+                  setRegisteredEmail(false);
+                  setLogin(true);
+                }}
+                className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>Back to login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[isPasswordDisabled && disabledButton]}
+                onPress={handleLogin}
+                disabled={isPasswordDisabled}
+                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View>
-            <TouchableOpacity
-              style={[button, isLoginDisabled && disabledButton]}
-              onPress={handleLogin}
-              disabled={isLoginDisabled}
-              className="rounded-2xl bg-blue-500">
-              <Text style={buttonText}>Submit</Text>
-            </TouchableOpacity>
+        ) : (
+          <View className="flex-1 justify-center space-y-10 items-center w-10/12">
+            <Text className="text-center text-xl font-bold">
+              Your email does not correspond to a registered VAT number. Please
+              insert a valid VAT number to go with your email.
+            </Text>
+            <TextInput
+              onChangeText={handleChangeVat}
+              style={input}
+              placeholder="VAT"
+              placeholderTextColor={'darkgrey'}
+              clearButtonMode={'always'}
+            />
+            <View className="flex-row items-center space-x-4">
+              <TouchableOpacity
+                onPress={() => {
+                  setEmail('');
+                  setVat('');
+                  setPassword('');
+                  setRegisteredEmail(false);
+                  setLogin(true);
+                }}
+                className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>Back to login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setRegisteredEmail(true);
+                }}
+                style={[isVatDisabled && disabledButton]}
+                disabled={isVatDisabled}
+                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )
       ) : (
         <View>
           <TouchableOpacity
@@ -206,7 +300,10 @@ const LoginScreen = () => {
             className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
               dispatch(setToken(null));
-              setEmail(null);
+              setPassword('');
+              setEmail('');
+              setVat('');
+              setLogin(true);
             }}
             style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">
@@ -230,10 +327,6 @@ const style = StyleSheet.create({
   input: {
     height: 40,
     width: '75%',
-    marginTop: 12,
-    marginBottom: 12,
-    marginLeft: 'auto',
-    marginRight: 'auto',
     borderWidth: 1,
     padding: 10,
     color: 'black',
@@ -243,10 +336,6 @@ const style = StyleSheet.create({
   button: {
     height: 40,
     width: '50%',
-    marginTop: 12,
-    marginBottom: 12,
-    marginLeft: 'auto',
-    marginRight: 'auto',
     backgroundColor: '#4287f5',
     justifyContent: 'center',
     alignItems: 'center',
