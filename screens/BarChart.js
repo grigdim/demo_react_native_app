@@ -1,21 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-unused-vars */
-import {View, Text, SafeAreaView, processColor} from 'react-native';
-import React, {useState} from 'react';
-import {BarChart} from 'react-native-charts-wrapper';
+import { View, Text, SafeAreaView, processColor } from 'react-native';
+import React, { useState } from 'react';
+import { BarChart } from 'react-native-charts-wrapper';
 
 const BarChartScreen = () => {
   const [selectedEntry, setSelectedEntry] = useState();
   const [selectedBarValue, setSelectedBarValue] = useState(null);
   const colorsArray = [
     'teal',
-    'blue',
     'orange',
     'green',
     'red',
+    'blue',
     'purple',
     'yellow',
     'pink',
+    'sienna',
+    'gold',
+    'magenta',
+    'crimson',
   ];
 
   const getRandomColor = () => {
@@ -61,18 +65,18 @@ const BarChartScreen = () => {
     dataSets: [
       {
         values: [
-          {y: 100, marker: 'a'},
-          {y: 105},
-          {y: 102},
-          {y: 110},
-          {y: 114},
-          {y: 109},
-          {y: 105},
-          {y: 99},
-          {y: 95},
-          {y: 81},
-          {y: 87},
-          {y: 85},
+          { y: 100, marker: 'a' },
+          { y: 105 },
+          { y: 102 },
+          { y: 110 },
+          { y: 114 },
+          { y: 109 },
+          { y: 105 },
+          { y: 99 },
+          { y: 95 },
+          { y: 81 },
+          { y: 87 },
+          { y: 85 },
         ],
         label: 'Intale Profit',
         config: {
@@ -90,12 +94,12 @@ const BarChartScreen = () => {
       barWidth: 0.7,
     },
   });
-  const [highlights, setHighlights] = useState([{x: 3}, {x: 6}]);
+  const [highlights, setHighlights] = useState([{ x: 3 }, { x: 6 }]);
   const markerConfig = {
     enabled: true,
-    markerColor: processColor('grey'),
-    textColor: processColor('white'),
-    textSize: 22,
+    markerColor: processColor('lightblue'),
+    textColor: processColor('midnightblue'),
+    textSize: 25,
     textStyle: {
       fontFamily: 'Arial',
       fontWeight: 'bold',
@@ -123,27 +127,16 @@ const BarChartScreen = () => {
     granularity: 1,
   });
 
-  // handleSelect(event) {
-  //   const entry = event.nativeEvent
-  //   if (entry == null) {
-  //    setSelectedEntry(null)
-  //   } else {
-  //     setSelectedEntry(JSON.stringify(entry))
-  //   }
-
-  //   console.log(event.nativeEvent)
-  // }
-
   return (
     <SafeAreaView>
       <BarChart
-        style={{width: '100%', height: '100%'}}
+        style={{ width: '100%', height: '100%' }}
         data={data}
         xAxis={xAxis}
-        animation={{durationX: 1000}}
+        animation={{ durationX: 1000 }}
         legend={legend}
         gridBackgroundColor={processColor('#ffffff')}
-        visibleRange={{x: {min: 7, max: 7}}}
+        visibleRange={{ x: { min: 7, max: 7 } }}
         drawBarShadow={false}
         drawValueAboveBar
         drawHighlightArrow
@@ -151,7 +144,7 @@ const BarChartScreen = () => {
         // onSelect={this.handleSelect.bind(this)}
         marker={markerConfig}
         highlights={highlights}
-        // onChange={event => console.log(event.nativeEvent)}
+      // onChange={event => console.log(event.nativeEvent)}
       />
     </SafeAreaView>
   );
