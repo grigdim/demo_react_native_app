@@ -510,7 +510,7 @@ const ProductSalesScreen = () => {
                   return (
                     <ScrollView
                       className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                      style={{ elevation: 50 }}>
+                      style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
                       <View className="p-2 bg-gray-200">
                         <Text className="m-1 text-xl text-black">
                           Product Id: {storesFromBoApi.ProductId}
@@ -553,7 +553,7 @@ const ProductSalesScreen = () => {
                   return (
                     <ScrollView
                       className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                      style={{ elevation: 50 }}>
+                      style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
                       <View
                         style={{ marginTop: 15 }}
                         className="p-2 bg-gray-200">
@@ -576,7 +576,7 @@ const ProductSalesScreen = () => {
                   return (
                     <ScrollView
                       className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                      style={{ elevation: 50 }}>
+                      style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
                       <View
                         style={{ marginTop: 15 }}
                         className="p-2 bg-gray-200">
