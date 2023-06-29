@@ -2,7 +2,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,16 +12,18 @@ import {
   ActivityIndicator,
   TextInput,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {selectToken} from '../features/bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { selectToken } from '../features/bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
-import {ip} from '@env';
+import { Picker } from '@react-native-picker/picker';
+import { ip } from '@env';
 
 const TurnoverScreen = () => {
   const navigation = useNavigation();
+  const { width, height } = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
@@ -45,7 +47,7 @@ const TurnoverScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=${fromDate}&toDate=${toDate}`,
+        `http://${ip}:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}`,
         requestOptions,
       );
       const data = await response.json();
@@ -73,7 +75,7 @@ const TurnoverScreen = () => {
               setStoresFromBoApi();
             }}
             className="p-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
-            style={{elevation: 50}}>
+            style={{ elevation: 50 }}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for turnover data'}
             </Text>
@@ -148,7 +150,7 @@ const TurnoverScreen = () => {
           {storesFromBoApi && (
             <ScrollView
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{elevation: 50}}>
+              style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
               {storesFromBoApi?.map(x => (
                 <View className="p-2 bg-gray-200" key={x.AvgPerDay}>
                   <Text className="m-1 text-xl text-black">
