@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   TextInput,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
@@ -20,6 +21,7 @@ import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
 
 const ProductSalesScreen = () => {
+  const {width, height} = Dimensions.get('screen');
   const navigation = useNavigation();
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
@@ -144,7 +146,7 @@ const ProductSalesScreen = () => {
               setOpen2(false);
               setStoresFromBoApi();
             }}
-            className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
+            className="p-2 mt-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
             style={{elevation: 10}}>
             <Text className="text-purple-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for product sales'}
@@ -507,43 +509,86 @@ const ProductSalesScreen = () => {
                   case 'ProductSalesData':
                     return (
                       <ScrollView
-                        className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                        style={{elevation: 50}}>
+                        className="divide-y-2 divide-cyan-400 rounded-2xl"
+                        style={{elevation: 50, height: height / 1.5}}>
                         <View className="p-2 bg-gray-200">
                           <Text className="m-1 text-xl text-black">
                             Product Id: {storesFromBoApi.ProductId}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Product Name: {storesFromBoApi.ProductName}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Profit on Turnover:{' '}
                             {storesFromBoApi.ProfitOnTurnOverPercentage}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Profit with VAT: {storesFromBoApi.ProfitWithVat}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Profit without VAT:{' '}
                             {storesFromBoApi.ProfitWithoutVat}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Quantity: {storesFromBoApi.Quantity}
                           </Text>
-                          <Text className="m-1 text-xl text-black">
-                            Sales Product Chart:{' '}
-                            {storesFromBoApi.SalesProductChartDtos}
-                          </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Turnover with VAT: {storesFromBoApi.TurnOverWithVat}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             Turnover without VAT:{' '}
                             {storesFromBoApi.TurnOverWithoutVat}
                           </Text>
+
                           <Text className="m-1 text-xl text-black">
                             VAT Total: {storesFromBoApi.VatTotal}
                           </Text>
+
+                          <Text className="m-1 text-3xl text-purple-300">
+                            Sales Product Chart:{' '}
+                          </Text>
+                          {storesFromBoApi.SalesProductChartDtos?.map(x => {
+                            return (
+                              <View
+                                className="p-2 bg-gray-200"
+                                key={x.DatePart}>
+                                <Text className="m-1 text-xl text-black">
+                                  Date Part: {x.DatePart}
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Product Id: {x.ProductId}
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Profit with vat: {x.ProfitWithVat} €
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Profit without vat: {x.ProfitWithoutVat} %
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Turnover with vat: {x.TurnOverWithVat} €
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Turnover without vat: {x.TurnOverWithoutVat} €
+                                </Text>
+
+                                <Text className="m-1 text-xl text-black">
+                                  Year: {x.Year} €
+                                </Text>
+                              </View>
+                            );
+                          })}
                         </View>
                       </ScrollView>
                     );
