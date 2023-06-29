@@ -510,7 +510,7 @@ const ProductSalesScreen = () => {
                   return (
                     <ScrollView
                       className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                      style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
+                      style={{ elevation: 50 }}>
                       <View className="p-2 bg-gray-200">
                         <Text className="m-1 text-xl text-black">
                           Product Id: {storesFromBoApi.ProductId}
@@ -519,56 +519,33 @@ const ProductSalesScreen = () => {
                           Product Name: {storesFromBoApi.ProductName}
                         </Text>
                         <Text className="m-1 text-xl text-black">
-                          Profit on Turnover: {storesFromBoApi.ProfitOnTurnOverPercentage}
+                          Profit on Turnover:{' '}
+                          {storesFromBoApi.ProfitOnTurnOverPercentage}
                         </Text>
                         <Text className="m-1 text-xl text-black">
                           Profit with VAT: {storesFromBoApi.ProfitWithVat}
                         </Text>
                         <Text className="m-1 text-xl text-black">
-                          Profit without VAT: {storesFromBoApi.ProfitWithoutVat}
+                          Profit without VAT:{' '}
+                          {storesFromBoApi.ProfitWithoutVat}
                         </Text>
                         <Text className="m-1 text-xl text-black">
                           Quantity: {storesFromBoApi.Quantity}
                         </Text>
                         <Text className="m-1 text-xl text-black">
+                          Sales Product Chart:{' '}
+                          {storesFromBoApi.SalesProductChartDtos}
+                        </Text>
+                        <Text className="m-1 text-xl text-black">
                           Turnover with VAT: {storesFromBoApi.TurnOverWithVat}
                         </Text>
                         <Text className="m-1 text-xl text-black">
-                          Turnover without VAT: {storesFromBoApi.TurnOverWithoutVat}
+                          Turnover without VAT:{' '}
+                          {storesFromBoApi.TurnOverWithoutVat}
                         </Text>
                         <Text className="m-1 text-xl text-black">
                           VAT Total: {storesFromBoApi.VatTotal}
                         </Text>
-                        <Text className="m-1 pt-4 text-2xl text-purple-600">
-                          Sales Product Chart:{' '}
-                        </Text>
-                        {storesFromBoApi.SalesProductChartDtos?.map(x => {
-                          return (
-                            <View className="mb-1 p-3 bg-gray-200" key={x.DatePart}>
-                              <Text className="m-1 text-xl text-black">
-                                Date Part: {x.DatePart}
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Product Id: {x.ProductId}
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Profit with vat: {x.ProfitWithVat} €
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Profit without vat: {x.ProfitWithoutVat} %
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Turnover with vat: {x.TurnOverWithVat} €
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Turnover without vat: {x.TurnOverWithoutVat} €
-                              </Text>
-                              <Text className="m-1 text-xl text-black">
-                                Year: {x.Year} €
-                              </Text>
-                            </View>
-                          );
-                        })}
                       </View>
                     </ScrollView>
                   );
