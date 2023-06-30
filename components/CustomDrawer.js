@@ -9,9 +9,9 @@ import {
 const CustomDrawer = (props) => {
     return (
         <View style={{ flex: 1 }}>
-            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: '#2B61A1' }}>
-                <Image source={require('../images/intale.png')}
-                    style={{ padding: 20, height: 70, width: 70, borderRadius: 40, marginBottom: 10, marginTop: 5, marginLeft: 10 }}>
+            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: '#3885E0' }}>
+                <Image source={require('../images/intale_statistics.png')}
+                    style={{ padding: 20, height: 80, width: 100,  marginBottom: 10, marginTop: 5, marginLeft: 10 }}>
                 </Image>
                 <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: 'Roboto-Medium', marginBottom: 10, marginLeft: 15 }}>
                     Intale Statistics
