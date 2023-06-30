@@ -547,7 +547,7 @@ const ProductSalesScreen = () => {
                         <Text className="m-1 text-xl text-black">
                           VAT Total: {storesFromBoApi.VatTotal}
                         </Text>
-                        <Text className="m-1 p-1 text-2xl text-purple-500">
+                        <Text className="m-1 pt-1 text-2xl text-purple-700">
                           Sales Product Chart:{' '}
                         </Text>
                         {storesFromBoApi.SalesProductChartDtos?.map(x => {
