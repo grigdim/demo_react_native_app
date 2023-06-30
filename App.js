@@ -8,10 +8,11 @@ import TotalProfitScreen from './screens/TotalProfitScreen';
 import TurnoverScreen from './screens/TurnoverScreen';
 import ProductSalesScreen from './screens/ProductSalesScreen';
 import LineChartScreen from './screens/LineChartScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import BarChartScreen from './screens/BarChart';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Provider} from 'react-redux';
+import {store} from './store';
 import {
   SafeAreaView,
   View,
@@ -42,7 +43,12 @@ export default function App() {
           <Stack.Screen
             name="LineChartScreen"
             component={LineChartScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="BarChartScreen"
+            component={BarChartScreen}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="AuditScreen"
@@ -62,7 +68,7 @@ export default function App() {
           <Stack.Screen
             name="ProductSalesScreen"
             component={ProductSalesScreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="TotalProfitScreen"

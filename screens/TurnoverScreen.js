@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,26 +12,29 @@ import {
   ActivityIndicator,
   TextInput,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {selectToken} from '../features/bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { selectToken } from '../features/bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
-import {ip} from '@env';
+import { Picker } from '@react-native-picker/picker';
+import { ip } from '@env';
 
 const TurnoverScreen = () => {
   const navigation = useNavigation();
+  const { width, height } = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate1, setFromDate1] = useState(new Date());
+  const [fromDate2, setFromDate2] = useState('');
+  const [toDate1, setToDate1] = useState(new Date());
+  const [toDate2, setToDate2] = useState('');
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [date, setDate] = useState(new Date());
 
-  const fetchTotalProfitDataFromBoApi = async () => {
+  const fetchTurnoverDataFromBoApi = async () => {
     setLoading(true);
     if (__DEV__ && token) {
       var myHeaders = new Headers();
@@ -42,7 +47,7 @@ const TurnoverScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=${fromDate}&toDate=${toDate}`,
+        `http://${ip}:3000/bo/Invoices/GetTurnoverDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}`,
         requestOptions,
       );
       const data = await response.json();
@@ -54,7 +59,7 @@ const TurnoverScreen = () => {
   };
 
   useEffect(() => {
-    // fetchTotalProfitDataFromBoApi();
+    // fetchTurnoverDataFromBoApi();
   }, []);
 
   return (
@@ -70,11 +75,12 @@ const TurnoverScreen = () => {
               setStoresFromBoApi();
             }}
             className="p-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
-            style={{elevation: 50}}>
+            style={{ elevation: 50 }}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for turnover data'}
             </Text>
           </TouchableOpacity>
+
           {!storesFromBoApi ? (
             <View>
               <TouchableOpacity
@@ -86,11 +92,12 @@ const TurnoverScreen = () => {
                 <DatePicker
                   modal
                   open={open}
-                  date={date}
+                  date={fromDate1}
                   mode={'date'}
                   onConfirm={date => {
                     setOpen(false);
-                    setFromDate(
+                    setFromDate1(date);
+                    setFromDate2(
                       date.toISOString().slice(0, 10).concat(' 00:00:00'),
                     );
                   }}
@@ -98,9 +105,9 @@ const TurnoverScreen = () => {
                     setOpen(false);
                   }}
                 />
-                {fromDate !== '' && (
+                {fromDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {fromDate}
+                    {fromDate2}
                   </Text>
                 )}
               </TouchableOpacity>
@@ -113,11 +120,12 @@ const TurnoverScreen = () => {
                 <DatePicker
                   modal
                   open={open2}
-                  date={date}
+                  date={toDate1}
                   mode={'date'}
                   onConfirm={date => {
-                    setOpen(false);
-                    setToDate(
+                    setOpen2(false);
+                    setToDate1(date);
+                    setToDate2(
                       date.toISOString().slice(0, 10).concat(' 23:59:59'),
                     );
                   }}
@@ -125,15 +133,15 @@ const TurnoverScreen = () => {
                     setOpen2(false);
                   }}
                 />
-                {toDate !== '' && (
+                {toDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
-                    {toDate}
+                    {toDate2}
                   </Text>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                onPress={() => fetchTotalProfitDataFromBoApi()}>
+                onPress={() => fetchTurnoverDataFromBoApi()}>
                 <Text className="text-center text-lg text-white">Submit</Text>
               </TouchableOpacity>
             </View>
@@ -142,7 +150,7 @@ const TurnoverScreen = () => {
           {storesFromBoApi && (
             <ScrollView
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{elevation: 50}}>
+              style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
               {storesFromBoApi?.map(x => (
                 <View className="p-2 bg-gray-200" key={x.AvgPerDay}>
                   <Text className="m-1 text-xl text-black">
