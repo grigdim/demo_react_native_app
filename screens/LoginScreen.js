@@ -232,7 +232,8 @@ const LoginScreen = () => {
           </View>
         )
       ) : (
-        <View>
+        <View> 
+
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
@@ -243,6 +244,7 @@ const LoginScreen = () => {
               Go to line chart screen
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             className="bg-gray-800 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
