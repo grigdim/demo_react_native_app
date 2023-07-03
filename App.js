@@ -1,35 +1,47 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import StoreScreen from './screens/StoreScreen';
 import AuditScreen from './screens/AuditScreen';
-import Home from './screens/Home';
+import CustomDrawer from './components/CustomDrawer';
 import LoginScreen from './screens/LoginScreen';
 import TotalProfitScreen from './screens/TotalProfitScreen';
 import TurnoverScreen from './screens/TurnoverScreen';
 import ProductSalesScreen from './screens/ProductSalesScreen';
 import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
-import EmptyScreen from './screens/EmptyScreen';
+import SalesTabsScreen from './screens/SalesTabsScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Provider} from 'react-redux';
 import {store} from './store';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import Tabs from './screens/DemoTabScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function Root() {
+  return (
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawer {...props} />}
+      initialRouteName="LoginScreen">
+      <Drawer.Screen name="LoginScreen" component={LoginScreen} />
+      <Drawer.Screen name="TurnoverScreen" component={TurnoverScreen} />
+      <Drawer.Screen name="TotalProfitScreen" component={TotalProfitScreen} />
+    </Drawer.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Root"
+            component={Root}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
@@ -71,8 +83,8 @@ export default function App() {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="EmptyScreen"
-            component={EmptyScreen}
+            name="SalesTabsScreen"
+            component={SalesTabsScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

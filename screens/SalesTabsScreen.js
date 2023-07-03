@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
-import StoreScreen from './StoreScreen';
-import ProductSalesScreen from './ProductSalesScreen';
+import SalesStatisticsScreen from './SalesStatisticsScreen';
+import DetailedReports from './SalesDetailedReports';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -9,7 +9,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const SalesTabsScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -24,7 +24,7 @@ const Tabs = () => {
       }}>
       <Tab.Screen
         name={'Sales statistics'}
-        component={StoreScreen}
+        component={SalesStatisticsScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <Ionicons
@@ -36,8 +36,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name={'Product Sales Screen'}
-        component={ProductSalesScreen}
+        name={'Detailed Reports'}
+        component={DetailedReports}
         options={{
           tabBarIcon: ({focused}) => (
             <SimpleLineIcons
@@ -52,4 +52,4 @@ const Tabs = () => {
   );
 };
 
-export default Tabs;
+export default SalesTabsScreen;

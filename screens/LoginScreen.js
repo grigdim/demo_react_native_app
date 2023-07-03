@@ -20,7 +20,7 @@ import {useDispatch} from 'react-redux';
 import {setToken} from '../features/bootstrap';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
-import Tabs from './DemoTabScreen';
+import Tabs from './SalesTabsScreen';
 
 const LoginScreen = () => {
   const {height, width} = Dimensions.get('screen');
@@ -244,6 +244,7 @@ const LoginScreen = () => {
               Go to line chart screen
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             className="bg-gray-800 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
@@ -328,11 +329,11 @@ const LoginScreen = () => {
           <TouchableOpacity
             className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
-              navigation.navigate('EmptyScreen');
+              navigation.navigate('SalesTabsScreen');
             }}
             style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">
-              Go to tabs screen
+              Go to sales tabs screen
             </Text>
           </TouchableOpacity>
         </View>
