@@ -10,6 +10,9 @@ import TurnoverScreen from './screens/TurnoverScreen';
 import ProductSalesScreen from './screens/ProductSalesScreen';
 import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
+import SettingsScreen from './screens/SettingsScreen';
+import InformationScreen from './screens/InformationScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -29,10 +32,45 @@ const Drawer = createDrawerNavigator();
 
 function Root() {
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} initialRouteName="LoginScreen">
-      <Drawer.Screen name="LoginScreen" component={LoginScreen} />
-      <Drawer.Screen name="TurnoverScreen" component={TurnoverScreen} />
-      <Drawer.Screen name="TotalProfitScreen" component={TotalProfitScreen} />
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}
+      screenOptions={{
+        headerShown: false, // Show or hide app button for drawer
+        headerTintColor: '#3885E0',
+        drawerActiveBackgroundColor: '#217BCC',
+        drawerActiveTintColor: '#FFFFFF',
+        drawerInactiveTintColor: '#333333',
+        drawerLabelStyle: {
+          marginLeft: - 20,
+          fontFamily: 'Roboto-Medium',
+          fontSize: 15,
+        },
+      }}
+      initialRouteName="LoginScreen" >
+      <Drawer.Screen name="Home" component={LoginScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="home-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Turnover" component={TurnoverScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="wallet-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Profit" component={TotalProfitScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="cash-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Info" component={InformationScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="information-circle-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="settings-outline" size={22} color={color} />
+        )
+      }} />
     </Drawer.Navigator>
   );
 }

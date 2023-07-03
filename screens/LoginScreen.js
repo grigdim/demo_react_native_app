@@ -11,19 +11,19 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 
 const LoginScreen = () => {
-  const {height, width} = Dimensions.get('screen');
-  const {input, button, buttonText, disabledButton} = style;
+  const { height, width } = Dimensions.get('screen');
+  const { input, button, buttonText, disabledButton } = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
@@ -132,6 +132,11 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-gray-50">
+      {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
+      <TouchableOpacity className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl" onPress={() => navigation.openDrawer()}>
+        <Text className='text-center text-xl text-bold text-white'>Open Menu</Text>
+      </TouchableOpacity>
+      {/* Drawer Menu End */}
       {loading ? (
         <ActivityIndicator color="#00CCBB" size="large" />
       ) : !token ? (
@@ -232,14 +237,14 @@ const LoginScreen = () => {
           </View>
         )
       ) : (
-        <View> 
+        <View>
 
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('LineChartScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to line chart screen
             </Text>
@@ -250,7 +255,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('BarChartScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to bar chart screen
             </Text>
@@ -261,7 +266,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('AuditScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to audit screen
             </Text>
@@ -272,7 +277,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('StoreScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to store screen
             </Text>
@@ -283,7 +288,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('TurnoverScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to turnover screen
             </Text>
@@ -294,7 +299,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('TotalProfitScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to total profit screen
             </Text>
@@ -305,7 +310,7 @@ const LoginScreen = () => {
             onPress={() => {
               navigation.navigate('ProductSalesScreen');
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to product sales screen
             </Text>
@@ -320,7 +325,7 @@ const LoginScreen = () => {
               setVat('');
               setLogin(true);
             }}
-            style={{elevation: 20}}>
+            style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Delete token and login again
             </Text>
