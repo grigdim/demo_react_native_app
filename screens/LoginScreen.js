@@ -133,6 +133,15 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-gray-50">
+      {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
+      <TouchableOpacity
+        className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
+        onPress={() => navigation.openDrawer()}>
+        <Text className="text-center text-xl text-bold text-white">
+          Open Menu
+        </Text>
+      </TouchableOpacity>
+      {/* Drawer Menu End */}
       {loading ? (
         <ActivityIndicator color="#00CCBB" size="large" />
       ) : !token ? (
