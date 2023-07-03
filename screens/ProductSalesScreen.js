@@ -146,6 +146,8 @@ const ProductSalesScreen = () => {
               setOpen(false);
               setOpen2(false);
               setStoresFromBoApi();
+              setStores2FromBoApi(null);
+              setStores3FromBoApi(null);
             }}
             className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
             style={{ elevation: 10 }}>

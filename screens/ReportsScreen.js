@@ -25,12 +25,12 @@ const ReportsScreen = () => {
     const navigation = useNavigation();
     const { width, height } = Dimensions.get('screen');
     const token = useSelector(selectToken);
-    const [reportsFromBoApi, setStoresFromBoApi] = useState();
-    const [reports2FromBoApi, setStores2FromBoApi] = useState();
-    const [reports3FromBoApi, setStores3FromBoApi] = useState();
-    const [reports4FromBoApi, setStores4FromBoApi] = useState();
-    const [reports5FromBoApi, setStores5FromBoApi] = useState();
-    const [reports6FromBoApi, setStores6FromBoApi] = useState();
+    const [reportsFromBoApi, setReportsFromBoApi] = useState();
+    const [reports2FromBoApi, setReports2FromBoApi] = useState();
+    const [reports3FromBoApi, setReports3FromBoApi] = useState();
+    const [reports4FromBoApi, setReports4FromBoApi] = useState();
+    const [reports5FromBoApi, setReports5FromBoApi] = useState();
+    const [reports6FromBoApi, setReports6FromBoApi] = useState();
     const [loading, setLoading] = useState(false);
     const [productCategoryName, setProductCategoryName] = useState(1);
     const [productSubCategoryName, setProductSubCategoryName] = useState(1);
@@ -62,7 +62,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setStoresFromBoApi(data);
+            setReportsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -86,7 +86,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setStores2FromBoApi(data);
+            setReports2FromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -110,7 +110,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setStores3FromBoApi(data);
+            setReports3FromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -128,12 +128,14 @@ const ReportsScreen = () => {
                     <TouchableOpacity
                         onPress={() => {
                             // setOpen(false);
-                            setStoresFromBoApi();
+                            setReportsFromBoApi();
+                            setReports2FromBoApi(null);
+                            setReports3FromBoApi(null);
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
-                            {reportsFromBoApi ? 'New search' : 'Search for reports'}
+                            {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
@@ -299,7 +301,7 @@ const ReportsScreen = () => {
                         })()
                         : null}
 
-                    {reportsFromBoApi || reports2FromBoApi
+                    {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -346,7 +348,7 @@ const ReportsScreen = () => {
                                             </View>
                                         </ScrollView>
                                     );
-                                    {/* case 'GetTopProductsInItemSalesFromTopProducts':
+                                case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
                                         <ScrollView
                                             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
@@ -367,7 +369,7 @@ const ReportsScreen = () => {
                                                 })}
                                             </View>
                                         </ScrollView>
-                                    ); */}
+                                    );
                                 default:
                                     return null;
                             }
