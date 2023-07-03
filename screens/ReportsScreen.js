@@ -32,18 +32,16 @@ const ReportsScreen = () => {
     const [reports5FromBoApi, setReports5FromBoApi] = useState();
     const [reports6FromBoApi, setReports6FromBoApi] = useState();
     const [reports7FromBoApi, setReports7FromBoApi] = useState();
-    const [reports8FromBoApi, setReports8FromBoApi] = useState();
-    const [reports9FromBoApi, setReports9FromBoApi] = useState();
+    const [reports8FromBoApi, setReports8FromBoApi] = useState(); 
     const [loading, setLoading] = useState(false);
-    const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState(1);
+    const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
     const [productCategoryNameForSubCategoryNames, setProductCategoryNameForSubCategoryNames] = useState(1);
     const [productCategoryNameForTopProductsInItemSales, setProductCategoryNameForTopProductsInItemSales] = useState(1);
     const [productCategoryNameForTopProductsInItemSalesPerStore, setProductCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
     const [productCategoryNameForSeasonality, setProductCategoryNameForSeasonality] = useState(1);
     const [productCategoryNameForSeasonalityDetails, setProductCategoryNameForSeasonalityDetails] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSales, setProductSubCategoryNameForTopProductsInItemSales] = useState(1);
-    const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
-    const [selectedProductCategory, setSelectedProductCategory] = useState('');
+    const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1); 
     const [selectedLabel, setSelectedLabel] = useState('GetProductCategoryNamesFromTopProducts');
 
     // Every Product Category Name Available 
@@ -62,6 +60,7 @@ const ReportsScreen = () => {
         { label: 'ΧΑΡΤΑΚΙΑ - ΦΙΛΤΡΑΚΙΑ - ΕΙΔΗ ΚΑΠΝΙΣΤΟΥ', value: 'ΧΑΡΤΑΚΙΑ - ΦΙΛΤΡΑΚΙΑ - ΕΙΔΗ ΚΑΠΝΙΣΤΟΥ' },
     ];
 
+    // Handlers
 
     const handleStoreIdsForTransactionWeeks = inputText => {
         setStoreIdsForTransactionWeeks(inputText);
@@ -94,6 +93,8 @@ const ReportsScreen = () => {
     const handleProductSubCategoryNameForTopProductsInItemSalesPerStore = (value) => {
         setProductSubCategoryNameForTopProductsInItemSalesPerStore(value);
     };
+
+    //  Fetch Requests
 
     const fetchProductCategoryNamesFromBoApi = async () => {
         setLoading(true);
@@ -276,7 +277,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?productCategoryName=${storeIdsForTransactionWeeks}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -756,9 +757,15 @@ const ReportsScreen = () => {
                                             <View className="p-2 bg-gray-200">
                                                 {reports8FromBoApi.map(x => {
                                                     return (
-                                                        <View className="p-3 bg-gray-200" key={x}>
+                                                        <View className="p-3 bg-gray-200" key={x.IsoWeek}>
                                                             <Text className="m-1 text-l text-black">
-                                                                {x}
+                                                                Iso Year: {x.IsoYear}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Iso Week: {x.IsoWeek}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Week Description: {x.WeekDescription}
                                                             </Text>
                                                         </View>
                                                     );
