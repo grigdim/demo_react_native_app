@@ -9,6 +9,7 @@ import TurnoverScreen from './screens/TurnoverScreen';
 import ProductSalesScreen from './screens/ProductSalesScreen';
 import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
+import EmptyScreen from './screens/EmptyScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-redux';
@@ -20,6 +21,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import Tabs from './screens/DemoTabScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,13 +30,6 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator>
-          {/*
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{headerShown: false}}
-          />
-           */}
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
@@ -73,6 +68,11 @@ export default function App() {
           <Stack.Screen
             name="TotalProfitScreen"
             component={TotalProfitScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="EmptyScreen"
+            component={EmptyScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

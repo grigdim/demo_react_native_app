@@ -20,6 +20,7 @@ import {useDispatch} from 'react-redux';
 import {setToken} from '../features/bootstrap';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
+import Tabs from './DemoTabScreen';
 
 const LoginScreen = () => {
   const {height, width} = Dimensions.get('screen');
@@ -321,6 +322,17 @@ const LoginScreen = () => {
             style={{elevation: 20}}>
             <Text className="text-center text-xl text-bold text-white">
               Delete token and login again
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('EmptyScreen');
+            }}
+            style={{elevation: 20}}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to tabs screen
             </Text>
           </TouchableOpacity>
         </View>
