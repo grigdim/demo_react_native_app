@@ -32,16 +32,18 @@ const ReportsScreen = () => {
     const [reports5FromBoApi, setReports5FromBoApi] = useState();
     const [reports6FromBoApi, setReports6FromBoApi] = useState();
     const [reports7FromBoApi, setReports7FromBoApi] = useState();
-    const [reports8FromBoApi, setReports8FromBoApi] = useState(); 
+    const [reports8FromBoApi, setReports8FromBoApi] = useState();
+    const [reports9FromBoApi, setReports9FromBoApi] = useState();
     const [loading, setLoading] = useState(false);
     const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
+    const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
     const [productCategoryNameForSubCategoryNames, setProductCategoryNameForSubCategoryNames] = useState(1);
     const [productCategoryNameForTopProductsInItemSales, setProductCategoryNameForTopProductsInItemSales] = useState(1);
     const [productCategoryNameForTopProductsInItemSalesPerStore, setProductCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
     const [productCategoryNameForSeasonality, setProductCategoryNameForSeasonality] = useState(1);
     const [productCategoryNameForSeasonalityDetails, setProductCategoryNameForSeasonalityDetails] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSales, setProductSubCategoryNameForTopProductsInItemSales] = useState(1);
-    const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1); 
+    const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
     const [selectedLabel, setSelectedLabel] = useState('GetProductCategoryNamesFromTopProducts');
 
     // Every Product Category Name Available 
@@ -64,6 +66,10 @@ const ReportsScreen = () => {
 
     const handleStoreIdsForTransactionWeeks = inputText => {
         setStoreIdsForTransactionWeeks(inputText);
+    };
+
+    const handleStoreIdsForTransactionStoresNames = inputText => {
+        setStoreIdsForTransactionStoresNames(inputText);
     };
 
     const handleProductCategoryName = inputText => {
@@ -288,6 +294,30 @@ const ReportsScreen = () => {
         setLoading(false);
     };
 
+    const fetchTransactionsStoreNamesBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=${storeIdsForTransactionStoresNames}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports9FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
     useEffect(() => {
     }, []);
 
@@ -308,18 +338,19 @@ const ReportsScreen = () => {
                             setReports6FromBoApi(null);
                             setReports7FromBoApi(null);
                             setReports8FromBoApi(null);
+                            setReports9FromBoApi(null);
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
                             {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                                || reports8FromBoApi
+                                || reports8FromBoApi || reports9FromBoApi
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
                         {!reportsFromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                            && !reports8FromBoApi
+                            && !reports8FromBoApi && !reports9FromBoApi
                             ? (
                                 <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
                                     <Text className="text-center text-xl">Search for: </Text>
@@ -365,13 +396,17 @@ const ReportsScreen = () => {
                                             label="Transaction Weeks"
                                             value="GetTransactionsWeeks"
                                         />
+                                        <Picker.Item
+                                            label="Transaction Store Names"
+                                            value="GetTransactionsStoreNames"
+                                        />
                                     </Picker>
                                 </TouchableOpacity>
                             ) : null}
                     </View>
 
                     {!reportsFromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                        && !reports8FromBoApi
+                        && !reports8FromBoApi && !reports9FromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -527,7 +562,7 @@ const ReportsScreen = () => {
                                     return (
                                         <View>
                                             <Text className="text-center text-xl">
-                                                Product Category Name:{' '}
+                                                Store Id:{' '}
                                             </Text>
                                             <TextInput
                                                 onChangeText={handleStoreIdsForTransactionWeeks}
@@ -548,6 +583,31 @@ const ReportsScreen = () => {
                                             </TouchableOpacity>
                                         </View>
                                     );
+                                case 'GetTransactionsStoreNames':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForTransactionStoresNames}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchTransactionsStoreNamesBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
                                 default:
                                     return null;
                             }
@@ -555,7 +615,7 @@ const ReportsScreen = () => {
                         : null}
 
                     {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                        || reports8FromBoApi
+                        || reports8FromBoApi || reports9FromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -766,6 +826,31 @@ const ReportsScreen = () => {
                                                             </Text>
                                                             <Text className="m-1 text-l text-black">
                                                                 Week Description: {x.WeekDescription}
+                                                            </Text>
+                                                        </View>
+                                                    );
+                                                })}
+                                            </View>
+                                        </ScrollView>
+                                    );
+                                case 'GetTransactionsStoreNames':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                {reports9FromBoApi.map(x => {
+                                                    return (
+                                                        <View className="p-3 bg-gray-200" key={x.StoreId}>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Store Id: {x.StoreId}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Store Name: {x.StoreName}
                                                             </Text>
                                                         </View>
                                                     );
