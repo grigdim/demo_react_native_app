@@ -306,6 +306,17 @@ const LoginScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            className="bg-pink-500 my-2 mx-auto p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('ReportsScreen');
+            }}
+            style={{ elevation: 20 }}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to reports screen
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('ProductSalesScreen');

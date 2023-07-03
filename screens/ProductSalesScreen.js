@@ -155,32 +155,34 @@ const ProductSalesScreen = () => {
           </TouchableOpacity>
 
           <View>
-            <TouchableOpacity className="bg-green-400 rounded-lg my-2 p-2 justify-center align-center">
-              <Text className="text-center text-xl">Search by: </Text>
-              <Picker
-                style={{
-                  width: '85%',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
-                selectedValue={selectedLabel}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedLabel(itemValue);
-                }}>
-                <Picker.Item
-                  label="Product Sales Data"
-                  value="ProductSalesData"
-                />
-                <Picker.Item
-                  label="Product Sales Details"
-                  value="ProductSalesDetails"
-                />
-                <Picker.Item
-                  label="Product Sales Category Data"
-                  value="ProductSalesCategoryData"
-                />
-              </Picker>
-            </TouchableOpacity>
+            {!storesFromBoApi && !stores2FromBoApi && !stores3FromBoApi ? (
+              <TouchableOpacity className="bg-green-400 rounded-lg my-2 p-2 justify-center align-center">
+                <Text className="text-center text-xl">Search by: </Text>
+                <Picker
+                  style={{
+                    width: '85%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                  }}
+                  selectedValue={selectedLabel}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedLabel(itemValue);
+                  }}>
+                  <Picker.Item
+                    label="Product Sales Data"
+                    value="ProductSalesData"
+                  />
+                  <Picker.Item
+                    label="Product Sales Details"
+                    value="ProductSalesDetails"
+                  />
+                  <Picker.Item
+                    label="Product Sales Category Data"
+                    value="ProductSalesCategoryData"
+                  />
+                </Picker>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           {!storesFromBoApi && !stores2FromBoApi && !stores3FromBoApi

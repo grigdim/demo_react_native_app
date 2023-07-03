@@ -12,6 +12,7 @@ import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
 import SettingsScreen from './screens/SettingsScreen';
 import InformationScreen from './screens/InformationScreen';
+import ReportsScreen from './screens/ReportsScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -59,6 +60,11 @@ function Root() {
       <Drawer.Screen name="Profit" component={TotalProfitScreen} options={{
         drawerIcon: ({ color }) => (
           <Ionicons name="cash-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Reports" component={ReportsScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="document-text-outline" size={22} color={color} />
         )
       }} />
       <Drawer.Screen name="Info" component={InformationScreen} options={{
@@ -123,6 +129,11 @@ export default function App() {
           <Stack.Screen
             name="TotalProfitScreen"
             component={TotalProfitScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ReportsScreen"
+            component={ReportsScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
