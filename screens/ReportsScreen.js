@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
+import subDays from "date-fns/subDays";
+import addDays from "date-fns/addDays";
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 
@@ -44,6 +46,9 @@ const ReportsScreen = () => {
     const [reports12FromBoApi, setReports12FromBoApi] = useState();
     const [reports13FromBoApi, setReports13FromBoApi] = useState();
     const [reports14FromBoApi, setReports14FromBoApi] = useState();
+    const [open, setOpen] = useState(false);
+    const [weekDescriptionForAnalysisWeekHourlyTransactions, setWeekDescriptionForAnalysisWeekHourlyTransactions] = useState(new Date());
+    const [weekDescriptionForAnalysisWeekHourlyTransactions2, setWeekDescriptionForAnalysisWeekHourlyTransactions2] = useState('');
     const [loading, setLoading] = useState(false);
     const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
     const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
@@ -129,10 +134,6 @@ const ReportsScreen = () => {
     };
 
     // Not needed at the moment to bring the result (could be needed)
-
-    const handleWeekDescriptionForTransactionAnalysisTopHour = (value) => {
-        setWeekDescriptionForTransactionAnalysisTopHour(value);
-    };
 
     const handleProductSubCategoryNameForTopProductsInItemSales = (value) => {
         setProductSubCategoryNameForTopProductsInItemSales(value);
@@ -330,11 +331,26 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports8FromBoApi(data);
+
+            setReports8FromBoApi(() => {
+                let r = []
+                data.map(x => {
+                    r.push(x.WeekDescription)
+                })
+                return r;
+            });
         }
         // end of request
         setLoading(false);
     };
+
+    useEffect(() => {
+        fetchTransactionsWeeksBoApi()
+    }, []);
+
+    useEffect(() => {
+        console.log(reports8FromBoApi);
+    }, [reports8FromBoApi]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -469,7 +485,8 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}`,
+                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${weekDescriptionForAnalysisWeekHourlyTransactions2}`,
+                // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=17/04/2023`,
                 requestOptions,
             );
             const data = await response.json();
@@ -491,7 +508,7 @@ const ReportsScreen = () => {
                 <View className="w-10/12">
                     <TouchableOpacity
                         onPress={() => {
-                            // setOpen(false);
+                            setOpen(false);
                             setReports1FromBoApi();
                             setReports2FromBoApi(null);
                             setReports3FromBoApi(null);
