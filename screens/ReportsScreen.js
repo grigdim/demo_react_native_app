@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
+import { debounce } from 'lodash';
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 
@@ -40,8 +41,6 @@ const ReportsScreen = () => {
     const [productCategoryNameForTopProductsInItemSalesPerStore, setProductCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
     const [productCategoryNameForSeasonality, setProductCategoryNameForSeasonality] = useState(1);
     const [productCategoryNameForSeasonalityDetails, setProductCategoryNameForSeasonalityDetails] = useState(1);
-    const [productSubCategoryNameForTopProductsInItemSales, setProductSubCategoryNameForTopProductsInItemSales] = useState(1);
-    const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
 
     // Reports
     const [reportsGetProductCategoryNamesFromTopProductsFromBoApi, setReportsGetProductCategoryNamesFromTopProductsFromBoApi] = useState();
@@ -70,8 +69,8 @@ const ReportsScreen = () => {
 
     // Week descriptions
     const [selectedWeek, setSelectedWeek] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedSubCategory, setSelectedSubCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('SNACKS');
+    const [selectedSubCategory, setSelectedSubCategory] = useState('BAR SNACKS');
     const [selectedCategoryData, setSelectedCategoryData] = useState([]);
     const [selectedSubCategoryData, setSelectedSubCategoryData] = useState([]);
     const [pickerWeekDescriptionData, setPickerWeekDescriptionData] = useState([]);
@@ -122,10 +121,6 @@ const ReportsScreen = () => {
         setStoreIdsForAnalysisWeekHourlyTransactions(inputText);
     };
 
-    const handleProductCategoryName = inputText => {
-        setProductCategoryNameForSubCategoryNames(inputText);
-    };
-
     const handleProductCategoryNameForProductsInItemSales = inputText => {
         setProductCategoryNameForTopProductsInItemSales(inputText);
     };
@@ -141,17 +136,6 @@ const ReportsScreen = () => {
     const handleProductCategoryNameForSeasonalityDetails = inputText => {
         setProductCategoryNameForSeasonalityDetails(inputText);
     };
-
-    // Not needed at the moment to bring the result (could be needed)
-
-    const handleProductSubCategoryNameForTopProductsInItemSales = (value) => {
-        setProductSubCategoryNameForTopProductsInItemSales(value);
-    };
-
-    const handleProductSubCategoryNameForTopProductsInItemSalesPerStore = (value) => {
-        setProductSubCategoryNameForTopProductsInItemSalesPerStore(value);
-    };
-
     //  Fetch Requests
 
     const fetchProductCategoryNamesFromBoApi = async () => {
@@ -215,7 +199,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSales}&productSubCategoryName=${selectedSubCategory}`,
+                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -239,7 +223,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSalesPerStore}&productSubCategoryName=${selectedSubCategory}`,
+                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -354,6 +338,8 @@ const ReportsScreen = () => {
         setLoading(false);
     };
 
+    // Use Effects
+
     useEffect(() => {
         fetchTransactionsWeeksBoApi()
         fetchProductCategoryNamesFromBoApi()
@@ -374,6 +360,12 @@ const ReportsScreen = () => {
         setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi);
         console.log(selectedSubCategoryData + " SUB EFFECT")
     }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            fetchProductSubCategoryNamesFromTopProductsBoApi(selectedCategory);
+        }
+    }, [selectedCategory]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -527,7 +519,7 @@ const ReportsScreen = () => {
                 <View className="w-10/12">
                     <TouchableOpacity
                         onPress={() => {
-                            setOpen(false); 
+                            setOpen(false);
                             setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi(null);
                             setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi(null);
                             setReportsGetProductCategoryNamesFromSeasonalityFromBoApi(null);
@@ -546,13 +538,13 @@ const ReportsScreen = () => {
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
-                            {  reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                            {reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
                                 || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
-                        { !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                        {!reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
                             && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                             ? (
                                 <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
@@ -566,7 +558,7 @@ const ReportsScreen = () => {
                                         selectedValue={selectedLabel}
                                         onValueChange={(itemValue, itemIndex) => {
                                             setSelectedLabel(itemValue);
-                                        }}> 
+                                        }}>
                                         <Picker.Item
                                             label="Top Products In Item Sales"
                                             value="GetTopProductsInItemSalesFromTopProducts"
@@ -620,10 +612,10 @@ const ReportsScreen = () => {
                             ) : null}
                     </View>
 
-                    { !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                    {!reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
                         && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
-                            switch (selectedLabel) { 
+                            switch (selectedLabel) {
                                 case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
                                         <View>
@@ -638,7 +630,10 @@ const ReportsScreen = () => {
                                                         marginRight: 'auto',
                                                     }}
                                                     selectedValue={selectedCategory}
-                                                    onValueChange={value => setSelectedCategory(value)}>
+                                                    onValueChange={value => {
+                                                        fetchProductSubCategoryNamesFromTopProductsBoApi(value);
+                                                        setSelectedCategory(value);
+                                                    }}>
                                                     {selectedCategoryData?.map(item => (
                                                         <Picker.Item
                                                             key={item}
@@ -668,7 +663,7 @@ const ReportsScreen = () => {
                                                         />
                                                     ))}
                                                 </Picker>
-                                            </TouchableOpacity> 
+                                            </TouchableOpacity>
                                             <TouchableOpacity
                                                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                                                 onPress={() => fetchTopProductsInItemSalesFromTopProductsBoApi()}>
@@ -692,7 +687,10 @@ const ReportsScreen = () => {
                                                         marginRight: 'auto',
                                                     }}
                                                     selectedValue={selectedCategory}
-                                                    onValueChange={value => setSelectedCategory(value)}>
+                                                    onValueChange={value => {
+                                                        fetchProductSubCategoryNamesFromTopProductsBoApi(value);
+                                                        setSelectedCategory(value);
+                                                    }}>
                                                     {selectedCategoryData?.map(item => (
                                                         <Picker.Item
                                                             key={item}
@@ -723,9 +721,6 @@ const ReportsScreen = () => {
                                                     ))}
                                                 </Picker>
                                             </TouchableOpacity>
-                                            <Text className="text-center text-xl">
-                                                Product Category Name:{' '}
-                                            </Text>
                                             <TextInput
                                                 onChangeText={handleProductCategoryNameForProductsInItemSalesPerStore}
                                                 style={styles.input}
@@ -1069,10 +1064,10 @@ const ReportsScreen = () => {
                         })()
                         : null}
 
-                    { reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                    {reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
                         || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
-                            switch (selectedLabel) { 
+                            switch (selectedLabel) {
                                 case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
                                         <ScrollView
