@@ -22,6 +22,11 @@ import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 
 const ReportsScreen = () => {
+
+    // TEST RESULTS TO GET BACK DATA
+    // Use '4043' as Store Id when needed
+    // Check productSubCategoryOptions array to use for as Product Category Name when needed
+
     const navigation = useNavigation();
     const { width, height } = Dimensions.get('screen');
     const token = useSelector(selectToken);
@@ -40,7 +45,6 @@ const ReportsScreen = () => {
     const [reports13FromBoApi, setReports13FromBoApi] = useState();
     const [reports14FromBoApi, setReports14FromBoApi] = useState();
     const [loading, setLoading] = useState(false);
-    // Use '4043' as storeId to get results
     const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
     const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
     const [storeIdsForTransactionAnalysisTopHour, setStoreIdsForTransactionAnalysisTopHour] = useState([1]);
@@ -465,7 +469,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForTransactionAnalysisTopDay}`,
+                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}`,
                 requestOptions,
             );
             const data = await response.json();
