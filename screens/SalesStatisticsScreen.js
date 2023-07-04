@@ -329,7 +329,7 @@ const SalesStatisticsScreen = () => {
           {/*Widgets start*/}
 
           {salesData !== undefined && salesData !== null ? (
-            <ScrollView className="space-y-3 mx-2" style={{elevation: 10}}>
+            <ScrollView className="space-y-3 mx-2 mb-2">
               {/*Turnover widget start*/}
               <View className="bg-white" style={{elevation: 10}}>
                 <View className="bg-yellow-500 p-3">
