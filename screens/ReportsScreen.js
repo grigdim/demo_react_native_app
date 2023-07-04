@@ -171,7 +171,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetProductCategoryNamesFromTopProductsFromBoApi(data);
         }
         // end of request
@@ -191,11 +191,11 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${productCategoryNameForSubCategoryNames}`,
+                `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${selectedCategory}`,
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi(data);
         }
         // end of request
@@ -362,18 +362,18 @@ const ReportsScreen = () => {
 
     useEffect(() => {
         setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi);
-        // console.log(pickerWeekDescriptionData + "WEEK EFFECT")
+        // console.log(pickerWeekDescriptionData + " WEEK EFFECT")
     }, [reportsGetTransactionsWeeksFromBoApi]);
 
     useEffect(() => {
         setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi);
-        // console.log(selectedCategoryData + "CAT EFFECT")
+        // console.log(selectedCategoryData + " CAT EFFECT")
     }, [reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     useEffect(() => {
         setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi);
-        // console.log(selectedSubCategoryData + "SUB EFFECT")
-    }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi]);
+        console.log(selectedSubCategoryData + " SUB EFFECT")
+    }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -539,9 +539,9 @@ const ReportsScreen = () => {
                             setReportsGetTransactionsPerHoursFromBoApi(null);
                             setReportsGetTransactionsPerDayFromBoApi(null);
                             setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(null);
-                            console.log(pickerWeekDescriptionData + " ON PRESS");
-                            console.log(selectedSubCategoryData + " ON PRESS");
-                            console.log(selectedCategoryData + " ON PRESS");
+                            // console.log(pickerWeekDescriptionData + " ON PRESS");
+                            // console.log(selectedSubCategoryData + " ON PRESS");
+                            // console.log(selectedCategoryData + " ON PRESS");
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
@@ -702,14 +702,35 @@ const ReportsScreen = () => {
                                                     ))}
                                                 </Picker>
                                             </TouchableOpacity>
+                                            <TouchableOpacity className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    SUB CATEGORY:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedSubCategory}
+                                                    onValueChange={value => setSelectedSubCategory(value)}>
+                                                    {selectedSubCategoryData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
-                                                Product Sub Category Name:{' '}
+                                                Product Category Name:{' '}
                                             </Text>
                                             <TextInput
                                                 onChangeText={handleProductCategoryNameForProductsInItemSalesPerStore}
                                                 style={styles.input}
                                                 selectTextOnFocus
-                                                placeholder="Product Sub Category Name"
+                                                placeholder="Product Category Name"
                                                 placeholderTextColor={'darkgrey'}
                                                 keyboardType="default"
                                                 clearButtonMode={'always'}
