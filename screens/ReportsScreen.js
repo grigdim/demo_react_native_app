@@ -25,7 +25,7 @@ const ReportsScreen = () => {
     const navigation = useNavigation();
     const { width, height } = Dimensions.get('screen');
     const token = useSelector(selectToken);
-    const [reportsFromBoApi, setReportsFromBoApi] = useState();
+    const [reports1FromBoApi, setReports1FromBoApi] = useState();
     const [reports2FromBoApi, setReports2FromBoApi] = useState();
     const [reports3FromBoApi, setReports3FromBoApi] = useState();
     const [reports4FromBoApi, setReports4FromBoApi] = useState();
@@ -34,9 +34,21 @@ const ReportsScreen = () => {
     const [reports7FromBoApi, setReports7FromBoApi] = useState();
     const [reports8FromBoApi, setReports8FromBoApi] = useState();
     const [reports9FromBoApi, setReports9FromBoApi] = useState();
+    const [reports10FromBoApi, setReports10FromBoApi] = useState();
+    const [reports11FromBoApi, setReports11FromBoApi] = useState();
+    const [reports12FromBoApi, setReports12FromBoApi] = useState();
+    const [reports13FromBoApi, setReports13FromBoApi] = useState();
+    const [reports14FromBoApi, setReports14FromBoApi] = useState();
     const [loading, setLoading] = useState(false);
+    // Use '4043' as storeId to get results
     const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
     const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
+    const [storeIdsForTransactionAnalysisTopHour, setStoreIdsForTransactionAnalysisTopHour] = useState([1]);
+    const [storeIdsForTransactionAnalysisTopDay, setStoreIdsForTransactionAnalysisTopDay] = useState([1]);
+    const [storeIdsForTransactionsPerHours, setStoreIdsForTransactionsPerHours] = useState([1]);
+    const [storeIdsForTransactionsPerDay, setStoreIdsForTransactionsPerDay] = useState([1]);
+    const [storeIdsForAnalysisWeekHourlyTransactions, setStoreIdsForAnalysisWeekHourlyTransactions] = useState([1]);
+    const [weekDescriptionForTransactionAnalysisTopHour, setWeekDescriptionForTransactionAnalysisTopHour] = useState(1);
     const [productCategoryNameForSubCategoryNames, setProductCategoryNameForSubCategoryNames] = useState(1);
     const [productCategoryNameForTopProductsInItemSales, setProductCategoryNameForTopProductsInItemSales] = useState(1);
     const [productCategoryNameForTopProductsInItemSalesPerStore, setProductCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
@@ -72,6 +84,26 @@ const ReportsScreen = () => {
         setStoreIdsForTransactionStoresNames(inputText);
     };
 
+    const handleStoreIdsForTransactionAnalysisTopHour = inputText => {
+        setStoreIdsForTransactionAnalysisTopHour(inputText);
+    };
+
+    const handleStoreIdsForTransactionAnalysisTopDay = inputText => {
+        setStoreIdsForTransactionAnalysisTopDay(inputText);
+    };
+
+    const handleStoreIdsForTransactionsPerHours = inputText => {
+        setStoreIdsForTransactionsPerHours(inputText);
+    };
+
+    const handleStoreIdsForTransactionsPerDay = inputText => {
+        setStoreIdsForTransactionsPerDay(inputText);
+    };
+
+    const handleStoreIdsForAnalysisWeekHourlyTransactions = inputText => {
+        setStoreIdsForAnalysisWeekHourlyTransactions(inputText);
+    };
+
     const handleProductCategoryName = inputText => {
         setProductCategoryNameForSubCategoryNames(inputText);
     };
@@ -90,6 +122,12 @@ const ReportsScreen = () => {
 
     const handleProductCategoryNameForSeasonalityDetails = inputText => {
         setProductCategoryNameForSeasonalityDetails(inputText);
+    };
+
+    // Not needed at the moment to bring the result (could be needed)
+
+    const handleWeekDescriptionForTransactionAnalysisTopHour = (value) => {
+        setWeekDescriptionForTransactionAnalysisTopHour(value);
     };
 
     const handleProductSubCategoryNameForTopProductsInItemSales = (value) => {
@@ -120,7 +158,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReportsFromBoApi(data);
+            setReports1FromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -318,6 +356,126 @@ const ReportsScreen = () => {
         setLoading(false);
     };
 
+    const fetchTransactionAnalysisTopHourBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports10FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
+    const fetchTransactionAnalysisTopDayBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports11FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
+    const fetchTransactionsPerHoursBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports12FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
+    const fetchTransactionsPerDayBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports13FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
+    const fetchAnalysisWeekHourlyTransactionsBoApi = async () => {
+        setLoading(true);
+        if (__DEV__ && token) {
+            var myHeaders = new Headers();
+            myHeaders.append('Token', token);
+            myHeaders.append('Content-Type', 'application/json');
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+            };
+
+            const response = await fetch(
+                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForTransactionAnalysisTopDay}`,
+                requestOptions,
+            );
+            const data = await response.json();
+            console.log(data);
+            setReports14FromBoApi(data);
+        }
+        // end of request
+        setLoading(false);
+    };
+
     useEffect(() => {
     }, []);
 
@@ -330,7 +488,7 @@ const ReportsScreen = () => {
                     <TouchableOpacity
                         onPress={() => {
                             // setOpen(false);
-                            setReportsFromBoApi();
+                            setReports1FromBoApi();
                             setReports2FromBoApi(null);
                             setReports3FromBoApi(null);
                             setReports4FromBoApi(null);
@@ -339,18 +497,23 @@ const ReportsScreen = () => {
                             setReports7FromBoApi(null);
                             setReports8FromBoApi(null);
                             setReports9FromBoApi(null);
+                            setReports10FromBoApi(null);
+                            setReports11FromBoApi(null);
+                            setReports12FromBoApi(null);
+                            setReports13FromBoApi(null);
+                            setReports14FromBoApi(null);
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
-                            {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                                || reports8FromBoApi || reports9FromBoApi
+                            {reports1FromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
+                                || reports8FromBoApi || reports9FromBoApi || reports10FromBoApi || reports11FromBoApi || reports12FromBoApi || reports13FromBoApi || reports14FromBoApi
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
-                        {!reportsFromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                            && !reports8FromBoApi && !reports9FromBoApi
+                        {!reports1FromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
+                            && !reports8FromBoApi && !reports9FromBoApi && !reports10FromBoApi && !reports11FromBoApi && !reports12FromBoApi && !reports13FromBoApi && !reports14FromBoApi
                             ? (
                                 <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
                                     <Text className="text-center text-xl">Search for: </Text>
@@ -400,13 +563,33 @@ const ReportsScreen = () => {
                                             label="Transaction Store Names"
                                             value="GetTransactionsStoreNames"
                                         />
+                                        <Picker.Item
+                                            label="Transaction Analysis Top Hour"
+                                            value="GetTransactionAnalysisTopHour"
+                                        />
+                                        <Picker.Item
+                                            label="Transaction Analysis Top Day"
+                                            value="GetTransactionAnalysisTopDay"
+                                        />
+                                        <Picker.Item
+                                            label="Transactions Per Hours"
+                                            value="GetTransactionsPerHours"
+                                        />
+                                        <Picker.Item
+                                            label="Transactions Per Day"
+                                            value="GetTransactionsPerDay"
+                                        />
+                                        <Picker.Item
+                                            label="Analysis Week Hourly Transactions"
+                                            value="GetAnalysisWeekHourlyTransactions"
+                                        />
                                     </Picker>
                                 </TouchableOpacity>
                             ) : null}
                     </View>
 
-                    {!reportsFromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                        && !reports8FromBoApi && !reports9FromBoApi
+                    {!reports1FromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
+                        && !reports8FromBoApi && !reports9FromBoApi && !reports10FromBoApi && !reports11FromBoApi && !reports12FromBoApi && !reports13FromBoApi && !reports14FromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -456,7 +639,7 @@ const ReportsScreen = () => {
                                                 onChangeText={handleProductCategoryNameForProductsInItemSales}
                                                 style={styles.input}
                                                 selectTextOnFocus
-                                                placeholder="Product Sub Category Name"
+                                                placeholder="Product Category Name"
                                                 placeholderTextColor={'darkgrey'}
                                                 keyboardType="default"
                                                 clearButtonMode={'always'}
@@ -481,7 +664,7 @@ const ReportsScreen = () => {
                                                 onChangeText={handleProductCategoryNameForProductsInItemSalesPerStore}
                                                 style={styles.input}
                                                 selectTextOnFocus
-                                                placeholder="Product Sub Category Name"
+                                                placeholder="Product Category Name"
                                                 placeholderTextColor={'darkgrey'}
                                                 keyboardType="default"
                                                 clearButtonMode={'always'}
@@ -608,14 +791,139 @@ const ReportsScreen = () => {
                                             </TouchableOpacity>
                                         </View>
                                     );
+                                case 'GetTransactionAnalysisTopHour':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForTransactionAnalysisTopHour}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchTransactionAnalysisTopHourBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                case 'GetTransactionAnalysisTopDay':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForTransactionAnalysisTopDay}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchTransactionAnalysisTopDayBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                case 'GetTransactionsPerHours':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForTransactionsPerHours}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchTransactionsPerHoursBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                case 'GetTransactionsPerDay':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForTransactionsPerDay}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchTransactionsPerDayBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                case 'GetAnalysisWeekHourlyTransactions':
+                                    return (
+                                        <View>
+                                            <Text className="text-center text-xl">
+                                                Store Id:{' '}
+                                            </Text>
+                                            <TextInput
+                                                onChangeText={handleStoreIdsForAnalysisWeekHourlyTransactions}
+                                                style={styles.input}
+                                                selectTextOnFocus
+                                                placeholder="Store Id"
+                                                placeholderTextColor={'darkgrey'}
+                                                keyboardType="default"
+                                                clearButtonMode={'always'}
+                                                returnKeyType="done"
+                                            />
+                                            <TouchableOpacity
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                onPress={() => fetchAnalysisWeekHourlyTransactionsBoApi()}>
+                                                <Text className="text-center text-lg text-white">
+                                                    Submit
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
                                 default:
                                     return null;
                             }
                         })()
                         : null}
 
-                    {reportsFromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                        || reports8FromBoApi || reports9FromBoApi
+                    {reports1FromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
+                        || reports8FromBoApi || reports9FromBoApi || reports10FromBoApi || reports11FromBoApi || reports12FromBoApi || reports13FromBoApi || reports14FromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -628,7 +936,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsFromBoApi.map(x => {
+                                                {reports1FromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x}>
                                                             <Text className="m-1 text-l text-black">
@@ -858,14 +1166,129 @@ const ReportsScreen = () => {
                                             </View>
                                         </ScrollView>
                                     );
+                                case 'GetTransactionAnalysisTopHour':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                <Text className="m-1 text-l text-black">
+                                                    Transactions: {reports10FromBoApi.Transactions}
+                                                </Text>
+                                                <Text className="m-1 text-l text-black">
+                                                    Military Hour: {reports10FromBoApi.MilitaryHour}
+                                                </Text>
+                                            </View>
+                                        </ScrollView>
+                                    );
+                                case 'GetTransactionAnalysisTopDay':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                <Text className="m-1 text-l text-black">
+                                                    Transactions: {reports11FromBoApi.Transactions}
+                                                </Text>
+                                                <Text className="m-1 text-l text-black">
+                                                    Day Name: {reports11FromBoApi.DayName}
+                                                </Text>
+                                            </View>
+                                        </ScrollView>
+                                    );
+                                case 'GetTransactionsPerHours':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                {reports12FromBoApi.map(x => {
+                                                    return (
+                                                        <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Transactions: {x.Transactions}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Military Hour: {x.MilitaryHour}
+                                                            </Text>
+                                                        </View>
+                                                    );
+                                                })}
+                                            </View>
+                                        </ScrollView>
+                                    );
+                                case 'GetTransactionsPerDay':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                {reports13FromBoApi.map(x => {
+                                                    return (
+                                                        <View className="p-3 bg-gray-200" key={x.DayName}>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Transactions: {x.Transactions}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Day Name: {x.DayName}
+                                                            </Text>
+                                                        </View>
+                                                    );
+                                                })}
+                                            </View>
+                                        </ScrollView>
+                                    );
+                                case 'GetAnalysisWeekHourlyTransactions':
+                                    return (
+                                        <ScrollView
+                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                                            style={{
+                                                elevation: 50,
+                                                height: height / 1.5,
+                                                marginTop: 20,
+                                            }}>
+                                            <View className="p-2 bg-gray-200">
+                                                {reports14FromBoApi.map(x => {
+                                                    return (
+                                                        <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Transactions: {x.Transactions}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Day Name: {x.DayName}
+                                                            </Text>
+                                                            <Text className="m-1 text-l text-black">
+                                                                Military Hour: {x.MilitaryHour}
+                                                            </Text>
+                                                        </View>
+                                                    );
+                                                })}
+                                            </View>
+                                        </ScrollView>
+                                    );
                                 default:
                                     return null;
                             }
                         })()
                         : null}
                 </View>
-            )
-            }
+            )}
         </SafeAreaView>
     );
 };
