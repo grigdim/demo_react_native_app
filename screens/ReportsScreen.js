@@ -31,33 +31,11 @@ const ReportsScreen = () => {
 
     const navigation = useNavigation();
     const { width, height } = Dimensions.get('screen');
-    const token = useSelector(selectToken);
-    const [reports1FromBoApi, setReports1FromBoApi] = useState();
-    const [reports2FromBoApi, setReports2FromBoApi] = useState();
-    const [reports3FromBoApi, setReports3FromBoApi] = useState();
-    const [reports4FromBoApi, setReports4FromBoApi] = useState();
-    const [reports5FromBoApi, setReports5FromBoApi] = useState();
-    const [reports6FromBoApi, setReports6FromBoApi] = useState();
-    const [reports7FromBoApi, setReports7FromBoApi] = useState();
-    const [reports8FromBoApi, setReports8FromBoApi] = useState();
-    const [reports9FromBoApi, setReports9FromBoApi] = useState();
-    const [reports10FromBoApi, setReports10FromBoApi] = useState();
-    const [reports11FromBoApi, setReports11FromBoApi] = useState();
-    const [reports12FromBoApi, setReports12FromBoApi] = useState();
-    const [reports13FromBoApi, setReports13FromBoApi] = useState();
-    const [reports14FromBoApi, setReports14FromBoApi] = useState();
-    const [open, setOpen] = useState(false);
-    const [weekDescriptionForAnalysisWeekHourlyTransactions, setWeekDescriptionForAnalysisWeekHourlyTransactions] = useState(new Date());
-    const [weekDescriptionForAnalysisWeekHourlyTransactions2, setWeekDescriptionForAnalysisWeekHourlyTransactions2] = useState('');
     const [loading, setLoading] = useState(false);
-    const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
-    const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
-    const [storeIdsForTransactionAnalysisTopHour, setStoreIdsForTransactionAnalysisTopHour] = useState([1]);
-    const [storeIdsForTransactionAnalysisTopDay, setStoreIdsForTransactionAnalysisTopDay] = useState([1]);
-    const [storeIdsForTransactionsPerHours, setStoreIdsForTransactionsPerHours] = useState([1]);
-    const [storeIdsForTransactionsPerDay, setStoreIdsForTransactionsPerDay] = useState([1]);
-    const [storeIdsForAnalysisWeekHourlyTransactions, setStoreIdsForAnalysisWeekHourlyTransactions] = useState([1]);
-    const [weekDescriptionForTransactionAnalysisTopHour, setWeekDescriptionForTransactionAnalysisTopHour] = useState(1);
+    const [open, setOpen] = useState(false); 
+    const [selectedLabel, setSelectedLabel] = useState('GetProductCategoryNamesFromTopProducts');
+    const token = useSelector(selectToken);
+    // Products
     const [productCategoryNameForSubCategoryNames, setProductCategoryNameForSubCategoryNames] = useState(1);
     const [productCategoryNameForTopProductsInItemSales, setProductCategoryNameForTopProductsInItemSales] = useState(1);
     const [productCategoryNameForTopProductsInItemSalesPerStore, setProductCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
@@ -65,7 +43,29 @@ const ReportsScreen = () => {
     const [productCategoryNameForSeasonalityDetails, setProductCategoryNameForSeasonalityDetails] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSales, setProductSubCategoryNameForTopProductsInItemSales] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
-    const [selectedLabel, setSelectedLabel] = useState('GetProductCategoryNamesFromTopProducts');
+    // Reports
+    const [reportsGetProductCategoryNamesFromTopProductsFromBoApi, setReportsGetProductCategoryNamesFromTopProductsFromBoApi] = useState();
+    const [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi] = useState();
+    const [reportsGetTopProductsInItemSalesFromTopProductsFromBoApi, setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi] = useState();
+    const [reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi, setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi] = useState();
+    const [reportsGetProductCategoryNamesFromSeasonalityFromBoApi, setReportsGetProductCategoryNamesFromSeasonalityFromBoApi] = useState();
+    const [reportsGetSeasonalityFromBoApi, setReportsGetSeasonalityFromBoApi] = useState();
+    const [reportsGetSeasonalityDetailsFromBoApi, setReportsGetSeasonalityDetailsFromBoApi] = useState();
+    const [reportsGetTransactionsWeeksFromBoApi, setReportsGetTransactionsWeeksFromBoApi] = useState();
+    const [reportsGetTransactionsStoreNamesFromBoApi, setReportsGetTransactionsStoreNamesFromBoApi] = useState();
+    const [reportsGetTransactionAnalysisTopHourFromBoApi, setReportsGetTransactionAnalysisTopHourFromBoApi] = useState();
+    const [reportsGetTransactionAnalysisTopDayFromBoApi, setReportsGetTransactionAnalysisTopDayFromBoApi] = useState();
+    const [reportsGetTransactionsPerHoursFromBoApi, setReportsGetTransactionsPerHoursFromBoApi] = useState();
+    const [reportsGetTransactionsPerDayFromBoApi, setReportsGetTransactionsPerDayFromBoApi] = useState();
+    const [reportsGetAnalysisWeekHourlyTransactionsFromBoApi, setReportsGetAnalysisWeekHourlyTransactionsFromBoApi] = useState();
+    // Store Ids
+    const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
+    const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
+    const [storeIdsForTransactionAnalysisTopHour, setStoreIdsForTransactionAnalysisTopHour] = useState([1]);
+    const [storeIdsForTransactionAnalysisTopDay, setStoreIdsForTransactionAnalysisTopDay] = useState([1]);
+    const [storeIdsForTransactionsPerHours, setStoreIdsForTransactionsPerHours] = useState([1]);
+    const [storeIdsForTransactionsPerDay, setStoreIdsForTransactionsPerDay] = useState([1]);
+    const [storeIdsForAnalysisWeekHourlyTransactions, setStoreIdsForAnalysisWeekHourlyTransactions] = useState([1]); 
 
     // Every Product Category Name Available 
     const productSubCategoryOptions = [
@@ -163,7 +163,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports1FromBoApi(data);
+            setReportsGetProductCategoryNamesFromTopProductsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -187,7 +187,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports2FromBoApi(data);
+            setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -211,7 +211,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports3FromBoApi(data);
+            setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -235,7 +235,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports4FromBoApi(data);
+            setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -259,7 +259,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports5FromBoApi(data);
+            setReportsGetProductCategoryNamesFromSeasonalityFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -283,7 +283,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports6FromBoApi(data);
+            setReportsGetSeasonalityFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -307,7 +307,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports7FromBoApi(data);
+            setReportsGetSeasonalityDetailsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -332,7 +332,7 @@ const ReportsScreen = () => {
             const data = await response.json();
             console.log(data);
 
-            setReports8FromBoApi(() => {
+            setReportsGetTransactionsWeeksFromBoApi(() => {
                 let r = []
                 data.map(x => {
                     r.push(x.WeekDescription)
@@ -349,8 +349,8 @@ const ReportsScreen = () => {
     }, []);
 
     useEffect(() => {
-        console.log(reports8FromBoApi);
-    }, [reports8FromBoApi]);
+        console.log(reportsGetTransactionsWeeksFromBoApi);
+    }, [reportsGetTransactionsWeeksFromBoApi]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -370,7 +370,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports9FromBoApi(data);
+            setReportsGetTransactionsStoreNamesFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -394,7 +394,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports10FromBoApi(data);
+            setReportsGetTransactionAnalysisTopHourFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -418,7 +418,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports11FromBoApi(data);
+            setReportsGetTransactionAnalysisTopDayFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -442,7 +442,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports12FromBoApi(data);
+            setReportsGetTransactionsPerHoursFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -466,7 +466,7 @@ const ReportsScreen = () => {
             );
             const data = await response.json();
             console.log(data);
-            setReports13FromBoApi(data);
+            setReportsGetTransactionsPerDayFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -485,13 +485,13 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${weekDescriptionForAnalysisWeekHourlyTransactions2}`,
-                // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=17/04/2023`,
+                // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${???}`,
+                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=17/04/2023`,
                 requestOptions,
             );
             const data = await response.json();
             console.log(data);
-            setReports14FromBoApi(data);
+            setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(data);
         }
         // end of request
         setLoading(false);
@@ -509,32 +509,32 @@ const ReportsScreen = () => {
                     <TouchableOpacity
                         onPress={() => {
                             setOpen(false);
-                            setReports1FromBoApi();
-                            setReports2FromBoApi(null);
-                            setReports3FromBoApi(null);
-                            setReports4FromBoApi(null);
-                            setReports5FromBoApi(null);
-                            setReports6FromBoApi(null);
-                            setReports7FromBoApi(null);
-                            setReports8FromBoApi(null);
-                            setReports9FromBoApi(null);
-                            setReports10FromBoApi(null);
-                            setReports11FromBoApi(null);
-                            setReports12FromBoApi(null);
-                            setReports13FromBoApi(null);
-                            setReports14FromBoApi(null);
+                            setReportsGetProductCategoryNamesFromTopProductsFromBoApi();
+                            setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi(null);
+                            setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi(null);
+                            setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi(null);
+                            setReportsGetProductCategoryNamesFromSeasonalityFromBoApi(null);
+                            setReportsGetSeasonalityFromBoApi(null);
+                            setReportsGetSeasonalityDetailsFromBoApi(null);
+                            setReportsGetTransactionsWeeksFromBoApi(null);
+                            setReportsGetTransactionsStoreNamesFromBoApi(null);
+                            setReportsGetTransactionAnalysisTopHourFromBoApi(null);
+                            setReportsGetTransactionAnalysisTopDayFromBoApi(null);
+                            setReportsGetTransactionsPerHoursFromBoApi(null);
+                            setReportsGetTransactionsPerDayFromBoApi(null);
+                            setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(null);
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
-                            {reports1FromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                                || reports8FromBoApi || reports9FromBoApi || reports10FromBoApi || reports11FromBoApi || reports12FromBoApi || reports13FromBoApi || reports14FromBoApi
+                            {reportsGetProductCategoryNamesFromTopProductsFromBoApi || reportsGetProductSubCategoryNamesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                                || reportsGetTransactionsWeeksFromBoApi || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
-                        {!reports1FromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                            && !reports8FromBoApi && !reports9FromBoApi && !reports10FromBoApi && !reports11FromBoApi && !reports12FromBoApi && !reports13FromBoApi && !reports14FromBoApi
+                        {!reportsGetProductCategoryNamesFromTopProductsFromBoApi && !reportsGetProductSubCategoryNamesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                            && !reportsGetTransactionsWeeksFromBoApi && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                             ? (
                                 <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
                                     <Text className="text-center text-xl">Search for: </Text>
@@ -609,8 +609,8 @@ const ReportsScreen = () => {
                             ) : null}
                     </View>
 
-                    {!reports1FromBoApi && !reports2FromBoApi && !reports3FromBoApi && !reports4FromBoApi && !reports5FromBoApi && !reports6FromBoApi && !reports7FromBoApi
-                        && !reports8FromBoApi && !reports9FromBoApi && !reports10FromBoApi && !reports11FromBoApi && !reports12FromBoApi && !reports13FromBoApi && !reports14FromBoApi
+                    {!reportsGetProductCategoryNamesFromTopProductsFromBoApi && !reportsGetProductSubCategoryNamesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                        && !reportsGetTransactionsWeeksFromBoApi && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -943,8 +943,8 @@ const ReportsScreen = () => {
                         })()
                         : null}
 
-                    {reports1FromBoApi || reports2FromBoApi || reports3FromBoApi || reports4FromBoApi || reports5FromBoApi || reports6FromBoApi || reports7FromBoApi
-                        || reports8FromBoApi || reports9FromBoApi || reports10FromBoApi || reports11FromBoApi || reports12FromBoApi || reports13FromBoApi || reports14FromBoApi
+                    {reportsGetProductCategoryNamesFromTopProductsFromBoApi || reportsGetProductSubCategoryNamesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                        || reportsGetTransactionsWeeksFromBoApi || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
                             switch (selectedLabel) {
                                 case 'GetProductCategoryNamesFromTopProducts':
@@ -957,7 +957,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports1FromBoApi.map(x => {
+                                                {reportsGetProductCategoryNamesFromTopProductsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x}>
                                                             <Text className="m-1 text-l text-black">
@@ -979,7 +979,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports2FromBoApi.map(x => {
+                                                {reportsGetProductSubCategoryNamesFromTopProductsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x}>
                                                             <Text className="m-1 text-l text-black">
@@ -1001,7 +1001,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports3FromBoApi.map(x => {
+                                                {reportsGetTopProductsInItemSalesFromTopProductsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.Product}>
                                                             <Text className="m-1 text-l text-black">
@@ -1029,7 +1029,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports4FromBoApi.map(x => {
+                                                {reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.Product}>
                                                             <Text className="m-1 text-l text-black">
@@ -1057,7 +1057,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports5FromBoApi.map(x => {
+                                                {reportsGetProductCategoryNamesFromSeasonalityFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x}>
                                                             <Text className="m-1 text-l text-black">
@@ -1079,7 +1079,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports6FromBoApi.map(x => {
+                                                {reportsGetSeasonalityFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.DateMonth}>
                                                             <Text className="m-1 text-l text-black">
@@ -1110,7 +1110,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports7FromBoApi.map(x => {
+                                                {reportsGetSeasonalityDetailsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.SubCategory}>
                                                             <Text className="m-1 text-l text-black">
@@ -1144,7 +1144,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports8FromBoApi.map(x => {
+                                                {reportsGetTransactionsWeeksFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.IsoWeek}>
                                                             <Text className="m-1 text-l text-black">
@@ -1172,7 +1172,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports9FromBoApi.map(x => {
+                                                {reportsGetTransactionsStoreNamesFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.StoreId}>
                                                             <Text className="m-1 text-l text-black">
@@ -1198,10 +1198,10 @@ const ReportsScreen = () => {
                                             }}>
                                             <View className="p-2 bg-gray-200">
                                                 <Text className="m-1 text-l text-black">
-                                                    Transactions: {reports10FromBoApi.Transactions}
+                                                    Transactions: {reportsGetTransactionAnalysisTopHourFromBoApi.Transactions}
                                                 </Text>
                                                 <Text className="m-1 text-l text-black">
-                                                    Military Hour: {reports10FromBoApi.MilitaryHour}
+                                                    Military Hour: {reportsGetTransactionAnalysisTopHourFromBoApi.MilitaryHour}
                                                 </Text>
                                             </View>
                                         </ScrollView>
@@ -1217,10 +1217,10 @@ const ReportsScreen = () => {
                                             }}>
                                             <View className="p-2 bg-gray-200">
                                                 <Text className="m-1 text-l text-black">
-                                                    Transactions: {reports11FromBoApi.Transactions}
+                                                    Transactions: {reportsGetTransactionAnalysisTopDayFromBoApi.Transactions}
                                                 </Text>
                                                 <Text className="m-1 text-l text-black">
-                                                    Day Name: {reports11FromBoApi.DayName}
+                                                    Day Name: {reportsGetTransactionAnalysisTopDayFromBoApi.DayName}
                                                 </Text>
                                             </View>
                                         </ScrollView>
@@ -1235,7 +1235,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports12FromBoApi.map(x => {
+                                                {reportsGetTransactionsPerHoursFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
                                                             <Text className="m-1 text-l text-black">
@@ -1260,7 +1260,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports13FromBoApi.map(x => {
+                                                {reportsGetTransactionsPerDayFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.DayName}>
                                                             <Text className="m-1 text-l text-black">
@@ -1285,7 +1285,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reports14FromBoApi.map(x => {
+                                                {reportsGetAnalysisWeekHourlyTransactionsFromBoApi.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
                                                             <Text className="m-1 text-l text-black">
