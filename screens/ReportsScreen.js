@@ -18,8 +18,6 @@ import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import subDays from "date-fns/subDays";
-import addDays from "date-fns/addDays";
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 
@@ -32,9 +30,10 @@ const ReportsScreen = () => {
     const navigation = useNavigation();
     const { width, height } = Dimensions.get('screen');
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false); 
-    const [selectedLabel, setSelectedLabel] = useState('GetProductCategoryNamesFromTopProducts');
+    const [open, setOpen] = useState(false);
+    const [selectedLabel, setSelectedLabel] = useState('GetSeasonality');
     const token = useSelector(selectToken);
+
     // Products
     const [productCategoryNameForSubCategoryNames, setProductCategoryNameForSubCategoryNames] = useState(1);
     const [productCategoryNameForTopProductsInItemSales, setProductCategoryNameForTopProductsInItemSales] = useState(1);
@@ -43,6 +42,7 @@ const ReportsScreen = () => {
     const [productCategoryNameForSeasonalityDetails, setProductCategoryNameForSeasonalityDetails] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSales, setProductSubCategoryNameForTopProductsInItemSales] = useState(1);
     const [productSubCategoryNameForTopProductsInItemSalesPerStore, setProductSubCategoryNameForTopProductsInItemSalesPerStore] = useState(1);
+
     // Reports
     const [reportsGetProductCategoryNamesFromTopProductsFromBoApi, setReportsGetProductCategoryNamesFromTopProductsFromBoApi] = useState();
     const [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi] = useState();
@@ -58,6 +58,7 @@ const ReportsScreen = () => {
     const [reportsGetTransactionsPerHoursFromBoApi, setReportsGetTransactionsPerHoursFromBoApi] = useState();
     const [reportsGetTransactionsPerDayFromBoApi, setReportsGetTransactionsPerDayFromBoApi] = useState();
     const [reportsGetAnalysisWeekHourlyTransactionsFromBoApi, setReportsGetAnalysisWeekHourlyTransactionsFromBoApi] = useState();
+
     // Store Ids
     const [storeIdsForTransactionWeeks, setStoreIdsForTransactionWeeks] = useState([1]);
     const [storeIdsForTransactionStoresNames, setStoreIdsForTransactionStoresNames] = useState([1]);
@@ -65,7 +66,15 @@ const ReportsScreen = () => {
     const [storeIdsForTransactionAnalysisTopDay, setStoreIdsForTransactionAnalysisTopDay] = useState([1]);
     const [storeIdsForTransactionsPerHours, setStoreIdsForTransactionsPerHours] = useState([1]);
     const [storeIdsForTransactionsPerDay, setStoreIdsForTransactionsPerDay] = useState([1]);
-    const [storeIdsForAnalysisWeekHourlyTransactions, setStoreIdsForAnalysisWeekHourlyTransactions] = useState([1]); 
+    const [storeIdsForAnalysisWeekHourlyTransactions, setStoreIdsForAnalysisWeekHourlyTransactions] = useState([1]);
+
+    // Week descriptions
+    const [selectedWeek, setSelectedWeek] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubCategory, setSelectedSubCategory] = useState('');
+    const [selectedCategoryData, setSelectedCategoryData] = useState([]);
+    const [selectedSubCategoryData, setSelectedSubCategoryData] = useState([]);
+    const [pickerWeekDescriptionData, setPickerWeekDescriptionData] = useState([]);
 
     // Every Product Category Name Available 
     const productSubCategoryOptions = [
@@ -206,7 +215,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSales}&productCategoryName=${productSubCategoryNameForTopProductsInItemSales}`,
+                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSales}&productSubCategoryName=${selectedSubCategory}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -230,7 +239,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSalesPerStore}&productCategoryName=${productSubCategoryNameForTopProductsInItemSalesPerStore}`,
+                `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${productCategoryNameForTopProductsInItemSalesPerStore}&productSubCategoryName=${selectedSubCategory}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -326,11 +335,12 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
+                // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
 
             setReportsGetTransactionsWeeksFromBoApi(() => {
                 let r = []
@@ -346,11 +356,24 @@ const ReportsScreen = () => {
 
     useEffect(() => {
         fetchTransactionsWeeksBoApi()
+        fetchProductCategoryNamesFromBoApi()
+        fetchProductSubCategoryNamesFromTopProductsBoApi()
     }, []);
 
     useEffect(() => {
-        console.log(reportsGetTransactionsWeeksFromBoApi);
+        setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi);
+        // console.log(pickerWeekDescriptionData + "WEEK EFFECT")
     }, [reportsGetTransactionsWeeksFromBoApi]);
+
+    useEffect(() => {
+        setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi);
+        // console.log(selectedCategoryData + "CAT EFFECT")
+    }, [reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
+
+    useEffect(() => {
+        setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi);
+        // console.log(selectedSubCategoryData + "SUB EFFECT")
+    }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -389,7 +412,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}&weekDescription=${selectedWeek}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -413,7 +436,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}&weekDescription=${selectedWeek}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -437,7 +460,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}&weekDescription=${selectedWeek}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -461,7 +484,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}`,
+                `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}&weekDescription=${selectedWeek}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -485,8 +508,7 @@ const ReportsScreen = () => {
             };
 
             const response = await fetch(
-                // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${???}`,
-                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=17/04/2023`,
+                `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${selectedWeek}`,
                 requestOptions,
             );
             const data = await response.json();
@@ -497,9 +519,6 @@ const ReportsScreen = () => {
         setLoading(false);
     };
 
-    useEffect(() => {
-    }, []);
-
     return (
         <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
             {loading ? (
@@ -508,33 +527,33 @@ const ReportsScreen = () => {
                 <View className="w-10/12">
                     <TouchableOpacity
                         onPress={() => {
-                            setOpen(false);
-                            setReportsGetProductCategoryNamesFromTopProductsFromBoApi();
-                            setReportsGetProductSubCategoryNamesFromTopProductsFromBoApi(null);
+                            setOpen(false); 
                             setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi(null);
                             setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi(null);
                             setReportsGetProductCategoryNamesFromSeasonalityFromBoApi(null);
                             setReportsGetSeasonalityFromBoApi(null);
                             setReportsGetSeasonalityDetailsFromBoApi(null);
-                            setReportsGetTransactionsWeeksFromBoApi(null);
                             setReportsGetTransactionsStoreNamesFromBoApi(null);
                             setReportsGetTransactionAnalysisTopHourFromBoApi(null);
                             setReportsGetTransactionAnalysisTopDayFromBoApi(null);
                             setReportsGetTransactionsPerHoursFromBoApi(null);
                             setReportsGetTransactionsPerDayFromBoApi(null);
                             setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(null);
+                            console.log(pickerWeekDescriptionData + " ON PRESS");
+                            console.log(selectedSubCategoryData + " ON PRESS");
+                            console.log(selectedCategoryData + " ON PRESS");
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
                         <Text className="text-pink-500 text-center font-bold text-3xl">
-                            {reportsGetProductCategoryNamesFromTopProductsFromBoApi || reportsGetProductSubCategoryNamesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
-                                || reportsGetTransactionsWeeksFromBoApi || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
+                            {  reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                                || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
                     <View>
-                        {!reportsGetProductCategoryNamesFromTopProductsFromBoApi && !reportsGetProductSubCategoryNamesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
-                            && !reportsGetTransactionsWeeksFromBoApi && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
+                        { !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                            && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                             ? (
                                 <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
                                     <Text className="text-center text-xl">Search for: </Text>
@@ -547,15 +566,7 @@ const ReportsScreen = () => {
                                         selectedValue={selectedLabel}
                                         onValueChange={(itemValue, itemIndex) => {
                                             setSelectedLabel(itemValue);
-                                        }}>
-                                        <Picker.Item
-                                            label="Product Category Names"
-                                            value="GetProductCategoryNamesFromTopProducts"
-                                        />
-                                        <Picker.Item
-                                            label="Product Sub Category Names"
-                                            value="GetProductSubCategoryNamesFromTopProducts"
-                                        />
+                                        }}> 
                                         <Picker.Item
                                             label="Top Products In Item Sales"
                                             value="GetTopProductsInItemSalesFromTopProducts"
@@ -609,63 +620,55 @@ const ReportsScreen = () => {
                             ) : null}
                     </View>
 
-                    {!reportsGetProductCategoryNamesFromTopProductsFromBoApi && !reportsGetProductSubCategoryNamesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
-                        && !reportsGetTransactionsWeeksFromBoApi && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
+                    { !reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
+                        && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
-                            switch (selectedLabel) {
-                                case 'GetProductCategoryNamesFromTopProducts':
-                                    return (
-                                        <View>
-                                            <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                                                onPress={() => fetchProductCategoryNamesFromBoApi()}>
-                                                <Text className="text-center text-lg text-white">
-                                                    Submit
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    );
-                                case 'GetProductSubCategoryNamesFromTopProducts':
-                                    return (
-                                        <View>
-                                            <Text className="text-center text-xl">
-                                                Product Category Name:{' '}
-                                            </Text>
-                                            <TextInput
-                                                onChangeText={handleProductCategoryName}
-                                                style={styles.input}
-                                                selectTextOnFocus
-                                                placeholder="Product Category Name"
-                                                placeholderTextColor={'darkgrey'}
-                                                keyboardType="default"
-                                                clearButtonMode={'always'}
-                                                returnKeyType="done"
-                                            />
-                                            <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                                                onPress={() => fetchProductSubCategoryNamesFromTopProductsBoApi()}>
-                                                <Text className="text-center text-lg text-white">
-                                                    Submit
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    );
+                            switch (selectedLabel) { 
                                 case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
                                         <View>
-                                            <Text className="text-center text-xl">
-                                                Product Sub Category Name:{' '}
-                                            </Text>
-                                            <TextInput
-                                                onChangeText={handleProductCategoryNameForProductsInItemSales}
-                                                style={styles.input}
-                                                selectTextOnFocus
-                                                placeholder="Product Category Name"
-                                                placeholderTextColor={'darkgrey'}
-                                                keyboardType="default"
-                                                clearButtonMode={'always'}
-                                                returnKeyType="done"
-                                            />
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    CATEGORY:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedCategory}
+                                                    onValueChange={value => setSelectedCategory(value)}>
+                                                    {selectedCategoryData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    SUB CATEGORY:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedSubCategory}
+                                                    onValueChange={value => setSelectedSubCategory(value)}>
+                                                    {selectedSubCategoryData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity> 
                                             <TouchableOpacity
                                                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                                                 onPress={() => fetchTopProductsInItemSalesFromTopProductsBoApi()}>
@@ -678,6 +681,27 @@ const ReportsScreen = () => {
                                 case 'GetTopProductsInItemSalesPerStoreFromTopProducts':
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    CATEGORY:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedCategory}
+                                                    onValueChange={value => setSelectedCategory(value)}>
+                                                    {selectedCategoryData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Product Sub Category Name:{' '}
                                             </Text>
@@ -685,7 +709,7 @@ const ReportsScreen = () => {
                                                 onChangeText={handleProductCategoryNameForProductsInItemSalesPerStore}
                                                 style={styles.input}
                                                 selectTextOnFocus
-                                                placeholder="Product Category Name"
+                                                placeholder="Product Sub Category Name"
                                                 placeholderTextColor={'darkgrey'}
                                                 keyboardType="default"
                                                 clearButtonMode={'always'}
@@ -762,31 +786,6 @@ const ReportsScreen = () => {
                                             </TouchableOpacity>
                                         </View>
                                     );
-                                case 'GetTransactionsWeeks':
-                                    return (
-                                        <View>
-                                            <Text className="text-center text-xl">
-                                                Store Id:{' '}
-                                            </Text>
-                                            <TextInput
-                                                onChangeText={handleStoreIdsForTransactionWeeks}
-                                                style={styles.input}
-                                                selectTextOnFocus
-                                                placeholder="Store Id"
-                                                placeholderTextColor={'darkgrey'}
-                                                keyboardType="default"
-                                                clearButtonMode={'always'}
-                                                returnKeyType="done"
-                                            />
-                                            <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                                                onPress={() => fetchTransactionsWeeksBoApi()}>
-                                                <Text className="text-center text-lg text-white">
-                                                    Submit
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    );
                                 case 'GetTransactionsStoreNames':
                                     return (
                                         <View>
@@ -815,6 +814,27 @@ const ReportsScreen = () => {
                                 case 'GetTransactionAnalysisTopHour':
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    WEEK:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedWeek}
+                                                    onValueChange={value => setSelectedWeek(value)}>
+                                                    {pickerWeekDescriptionData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -840,6 +860,27 @@ const ReportsScreen = () => {
                                 case 'GetTransactionAnalysisTopDay':
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    WEEK:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedWeek}
+                                                    onValueChange={value => setSelectedWeek(value)}>
+                                                    {pickerWeekDescriptionData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -865,6 +906,27 @@ const ReportsScreen = () => {
                                 case 'GetTransactionsPerHours':
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    WEEK:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedWeek}
+                                                    onValueChange={value => setSelectedWeek(value)}>
+                                                    {pickerWeekDescriptionData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -890,6 +952,27 @@ const ReportsScreen = () => {
                                 case 'GetTransactionsPerDay':
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    WEEK:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedWeek}
+                                                    onValueChange={value => setSelectedWeek(value)}>
+                                                    {pickerWeekDescriptionData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -913,8 +996,30 @@ const ReportsScreen = () => {
                                         </View>
                                     );
                                 case 'GetAnalysisWeekHourlyTransactions':
+                                    console.log(pickerWeekDescriptionData + " CASE");
                                     return (
                                         <View>
+                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                                <Text className="text-center text-xl">
+                                                    WEEK:{' '}
+                                                </Text>
+                                                <Picker
+                                                    style={{
+                                                        width: '85%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                    }}
+                                                    selectedValue={selectedWeek}
+                                                    onValueChange={value => setSelectedWeek(value)}>
+                                                    {pickerWeekDescriptionData?.map(item => (
+                                                        <Picker.Item
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                                </Picker>
+                                            </TouchableOpacity>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -943,54 +1048,10 @@ const ReportsScreen = () => {
                         })()
                         : null}
 
-                    {reportsGetProductCategoryNamesFromTopProductsFromBoApi || reportsGetProductSubCategoryNamesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
-                        || reportsGetTransactionsWeeksFromBoApi || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
+                    { reportsGetTopProductsInItemSalesFromTopProductsFromBoApi || reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi || reportsGetProductCategoryNamesFromSeasonalityFromBoApi || reportsGetSeasonalityFromBoApi || reportsGetSeasonalityDetailsFromBoApi
+                        || reportsGetTransactionsStoreNamesFromBoApi || reportsGetTransactionAnalysisTopHourFromBoApi || reportsGetTransactionAnalysisTopDayFromBoApi || reportsGetTransactionsPerHoursFromBoApi || reportsGetTransactionsPerDayFromBoApi || reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                         ? (() => {
-                            switch (selectedLabel) {
-                                case 'GetProductCategoryNamesFromTopProducts':
-                                    return (
-                                        <ScrollView
-                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                                            style={{
-                                                elevation: 50,
-                                                height: height / 1.5,
-                                                marginTop: 20,
-                                            }}>
-                                            <View className="p-2 bg-gray-200">
-                                                {reportsGetProductCategoryNamesFromTopProductsFromBoApi.map(x => {
-                                                    return (
-                                                        <View className="p-3 bg-gray-200" key={x}>
-                                                            <Text className="m-1 text-l text-black">
-                                                                {x}
-                                                            </Text>
-                                                        </View>
-                                                    );
-                                                })}
-                                            </View>
-                                        </ScrollView>
-                                    );
-                                case 'GetProductSubCategoryNamesFromTopProducts':
-                                    return (
-                                        <ScrollView
-                                            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                                            style={{
-                                                elevation: 50,
-                                                height: height / 1.5,
-                                                marginTop: 20,
-                                            }}>
-                                            <View className="p-2 bg-gray-200">
-                                                {reportsGetProductSubCategoryNamesFromTopProductsFromBoApi.map(x => {
-                                                    return (
-                                                        <View className="p-3 bg-gray-200" key={x}>
-                                                            <Text className="m-1 text-l text-black">
-                                                                {x}
-                                                            </Text>
-                                                        </View>
-                                                    );
-                                                })}
-                                            </View>
-                                        </ScrollView>
-                                    );
+                            switch (selectedLabel) { 
                                 case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
                                         <ScrollView
@@ -1001,7 +1062,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTopProductsInItemSalesFromTopProductsFromBoApi.map(x => {
+                                                {reportsGetTopProductsInItemSalesFromTopProductsFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.Product}>
                                                             <Text className="m-1 text-l text-black">
@@ -1029,7 +1090,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi.map(x => {
+                                                {reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.Product}>
                                                             <Text className="m-1 text-l text-black">
@@ -1057,7 +1118,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetProductCategoryNamesFromSeasonalityFromBoApi.map(x => {
+                                                {reportsGetProductCategoryNamesFromSeasonalityFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x}>
                                                             <Text className="m-1 text-l text-black">
@@ -1079,7 +1140,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetSeasonalityFromBoApi.map(x => {
+                                                {reportsGetSeasonalityFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.DateMonth}>
                                                             <Text className="m-1 text-l text-black">
@@ -1110,7 +1171,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetSeasonalityDetailsFromBoApi.map(x => {
+                                                {reportsGetSeasonalityDetailsFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.SubCategory}>
                                                             <Text className="m-1 text-l text-black">
@@ -1144,7 +1205,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTransactionsWeeksFromBoApi.map(x => {
+                                                {reportsGetTransactionsWeeksFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.IsoWeek}>
                                                             <Text className="m-1 text-l text-black">
@@ -1172,7 +1233,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTransactionsStoreNamesFromBoApi.map(x => {
+                                                {reportsGetTransactionsStoreNamesFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.StoreId}>
                                                             <Text className="m-1 text-l text-black">
@@ -1235,7 +1296,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTransactionsPerHoursFromBoApi.map(x => {
+                                                {reportsGetTransactionsPerHoursFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
                                                             <Text className="m-1 text-l text-black">
@@ -1260,7 +1321,7 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetTransactionsPerDayFromBoApi.map(x => {
+                                                {reportsGetTransactionsPerDayFromBoApi?.map(x => {
                                                     return (
                                                         <View className="p-3 bg-gray-200" key={x.DayName}>
                                                             <Text className="m-1 text-l text-black">
@@ -1285,9 +1346,9 @@ const ReportsScreen = () => {
                                                 marginTop: 20,
                                             }}>
                                             <View className="p-2 bg-gray-200">
-                                                {reportsGetAnalysisWeekHourlyTransactionsFromBoApi.map(x => {
+                                                {reportsGetAnalysisWeekHourlyTransactionsFromBoApi?.map((x, index) => {
                                                     return (
-                                                        <View className="p-3 bg-gray-200" key={x.MilitaryHour}>
+                                                        <View className="p-3 bg-gray-200" key={index}>
                                                             <Text className="m-1 text-l text-black">
                                                                 Transactions: {x.Transactions}
                                                             </Text>
@@ -1309,8 +1370,9 @@ const ReportsScreen = () => {
                         })()
                         : null}
                 </View>
-            )}
-        </SafeAreaView>
+            )
+            }
+        </SafeAreaView >
     );
 };
 
