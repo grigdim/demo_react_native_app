@@ -203,7 +203,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTopProductsInItemSalesFromTopProductsFromBoApi(data);
         }
         // end of request
@@ -227,7 +227,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi(data);
         }
         // end of request
@@ -251,7 +251,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetProductCategoryNamesFromSeasonalityFromBoApi(data);
         }
         // end of request
@@ -275,7 +275,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetSeasonalityFromBoApi(data);
         }
         // end of request
@@ -299,7 +299,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetSeasonalityDetailsFromBoApi(data);
         }
         // end of request
@@ -347,25 +347,27 @@ const ReportsScreen = () => {
     }, []);
 
     useEffect(() => {
-        setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi);
-        // console.log(pickerWeekDescriptionData + " WEEK EFFECT")
+        setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi); 
     }, [reportsGetTransactionsWeeksFromBoApi]);
 
     useEffect(() => {
-        setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi);
-        // console.log(selectedCategoryData + " CAT EFFECT")
+        setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi); 
     }, [reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     useEffect(() => {
-        setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi);
-        console.log(selectedSubCategoryData + " SUB EFFECT")
+        setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi); 
     }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     useEffect(() => {
-        if (selectedCategory) {
+        if (selectedCategory) { 
+          const delay = 500;
+          const timer = setTimeout(() => {
             fetchProductSubCategoryNamesFromTopProductsBoApi(selectedCategory);
+          }, delay);
+      
+          return () => clearTimeout(timer);
         }
-    }, [selectedCategory]);
+      }, [selectedCategory]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -384,7 +386,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTransactionsStoreNamesFromBoApi(data);
         }
         // end of request
@@ -408,7 +410,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTransactionAnalysisTopHourFromBoApi(data);
         }
         // end of request
@@ -432,7 +434,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTransactionAnalysisTopDayFromBoApi(data);
         }
         // end of request
@@ -456,7 +458,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTransactionsPerHoursFromBoApi(data);
         }
         // end of request
@@ -480,7 +482,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetTransactionsPerDayFromBoApi(data);
         }
         // end of request
@@ -504,7 +506,7 @@ const ReportsScreen = () => {
                 requestOptions,
             );
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(data);
         }
         // end of request
@@ -630,8 +632,7 @@ const ReportsScreen = () => {
                                                         marginRight: 'auto',
                                                     }}
                                                     selectedValue={selectedCategory}
-                                                    onValueChange={value => {
-                                                        fetchProductSubCategoryNamesFromTopProductsBoApi(value);
+                                                    onValueChange={value => { 
                                                         setSelectedCategory(value);
                                                     }}>
                                                     {selectedCategoryData?.map(item => (
@@ -1012,7 +1013,7 @@ const ReportsScreen = () => {
                                         </View>
                                     );
                                 case 'GetAnalysisWeekHourlyTransactions':
-                                    console.log(pickerWeekDescriptionData + " CASE");
+                                    {/* console.log(pickerWeekDescriptionData + " CASE"); */}
                                     return (
                                         <View>
                                             <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
