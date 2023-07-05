@@ -598,6 +598,7 @@ const SalesStatisticsScreen = () => {
                     if (index <= 9) {
                       return (
                         <Text
+                          key={salesData.TopSellingProductDtos.ProductId}
                           className="text-center py-2"
                           style={{color: 'rgb(74, 118, 194)'}}>
                           {item.ProductName.toUpperCase()}
