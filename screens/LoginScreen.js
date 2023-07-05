@@ -336,6 +336,17 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to product sales screen
             </Text>
+          </TouchableOpacity> 
+
+          <TouchableOpacity
+            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('SalesTabsScreen');
+            }}
+            style={{ elevation: 20 }}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to sales tabs screen
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -353,16 +364,6 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('SalesTabsScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to sales tabs screen
-            </Text>
-          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>
