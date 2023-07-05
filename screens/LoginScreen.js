@@ -240,16 +240,6 @@ const LoginScreen = () => {
           </TouchableOpacity>
           {/* Drawer Menu End */}
 
-          {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
-          <TouchableOpacity
-            className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => navigation.openDrawer()}>
-            <Text className="text-center text-xl text-bold text-white">
-              Open Menu
-            </Text>
-          </TouchableOpacity>
-          {/* Drawer Menu End */}
-
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
@@ -336,7 +326,7 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to product sales screen
             </Text>
-          </TouchableOpacity> 
+          </TouchableOpacity>
 
           <TouchableOpacity
             className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
