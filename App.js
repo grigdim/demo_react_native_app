@@ -12,6 +12,7 @@ import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
 import SettingsScreen from './screens/SettingsScreen';
 import InformationScreen from './screens/InformationScreen';
+import TestingScreen from './screens/TestingScreen';
 import ReportsScreen from './screens/ReportsScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { NavigationContainer } from '@react-navigation/native';
@@ -136,6 +137,11 @@ export default function App() {
           <Stack.Screen
             name="SalesTabsScreen"
             component={SalesTabsScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TestingScreen"
+            component={TestingScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

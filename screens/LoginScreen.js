@@ -344,6 +344,17 @@ const LoginScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            className="bg-amber-900 mx-auto my-2 p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('TestingScreen');
+            }}
+            style={{elevation: 20}}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to testing screen
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
               dispatch(setToken(null));
