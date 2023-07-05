@@ -27,13 +27,7 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import SalesTabsScreen from './screens/SalesTabsScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Provider } from 'react-redux';
-import { store } from './store';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -85,55 +79,6 @@ function Root() {
           <Ionicons name="settings-outline" size={22} color={color} />
         )
       }} />
-      <Drawer.Screen
-        name="Home"
-        component={LoginScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="home-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Turnover"
-        component={TurnoverScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="wallet-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Profit"
-        component={TotalProfitScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="cash-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Info"
-        component={InformationScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons
-              name="information-circle-outline"
-              size={22}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
-          ),
-        }}
-      />
     </Drawer.Navigator>
   );
 }
