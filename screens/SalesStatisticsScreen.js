@@ -25,6 +25,7 @@ import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Table, Row} from 'react-native-table-component';
 
 const SalesStatisticsScreen = () => {
@@ -191,12 +192,6 @@ const SalesStatisticsScreen = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log('====================================');
-  //   console.log('SalesDataDtos: ', salesData?.TotalSalesDtos);
-  //   console.log('====================================');
-  // }, [salesData]);
-
   useEffect(() => {
     fetchDataFromBoApi();
   }, [fromDateFormatted, toDateFormatted]);
@@ -245,94 +240,95 @@ const SalesStatisticsScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center bg-gray-200">
+    <SafeAreaView className="flex-1 justify-center items-center bg-gray-300">
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
         <View className="w-full h-full space-y-3" style={{elevation: 10}}>
-          {/*Date picker start*/}
-          <View className="space-y-1 m-2">
-            <TouchableOpacity className="bg-gray-100 border rounded-sm items-center justify-center h-12">
-              <Picker
-                style={{
-                  width: 150,
-                  color: 'rgb(23 37 84)',
-                }}
-                selectedValue={groupByDate}
-                onValueChange={itemValue => {
-                  handleGroupByChange(itemValue);
-                }}>
-                <Picker.Item label="DAY" value="DAY" />
-                <Picker.Item label="WEEK" value="WEEK" />
-                <Picker.Item label="MONTH" value="MONTH" />
-              </Picker>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
-              onPress={() => setOpenFromDate(true)}>
-              <Text className="text-center text-base text-blue-950">
-                From Date:
-              </Text>
-              <DatePicker
-                modal
-                open={openFromDate}
-                date={fromDate}
-                mode={'date'}
-                onConfirm={date => {
-                  setOpenFromDate(false);
-                  setFromDate(date);
-                  setFromDateFormatted(
-                    date.toISOString().slice(0, 10).concat(' 00:00:00'),
-                  );
-                }}
-                onCancel={() => {
-                  setOpenFromDate(false);
-                }}
-              />
-              {fromDateFormatted !== '' && (
-                <Text className="text-center text-base text-blue-950">
-                  {fromDateFormatted}
-                </Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
-              onPress={() => setOpenToDate(true)}>
-              <Text className="text-center text-base text-blue-950">
-                End Date:
-              </Text>
-              <DatePicker
-                modal
-                open={openToDate}
-                date={toDate}
-                mode={'date'}
-                onConfirm={date => {
-                  setOpenToDate(false);
-                  setToDate(date);
-                  setToDateFormatted(
-                    date.toISOString().slice(0, 10).concat(' 23:59:59'),
-                  );
-                }}
-                onCancel={() => {
-                  setOpenToDate(false);
-                }}
-              />
-              {toDateFormatted !== '' && (
-                <Text className="text-center text-base text-blue-950">
-                  {toDateFormatted}
-                </Text>
-              )}
-            </TouchableOpacity>
-          </View>
-          {/*Date picker end*/}
-
           {/*Widgets start*/}
-
           {salesData !== undefined && salesData !== null ? (
-            <ScrollView className="space-y-3 mx-2 mb-2">
+            <ScrollView className="space-y-3">
+              {/*Date picker start*/}
+              <View className="space-y-1 my-2 mx-4" style={{elevation: 50}}>
+                <TouchableOpacity className="bg-gray-200 border rounded-sm h-11 justify-center">
+                  <Picker
+                    style={{
+                      color: 'rgb(23 37 84)',
+                    }}
+                    selectedValue={groupByDate}
+                    onValueChange={itemValue => {
+                      handleGroupByChange(itemValue);
+                    }}>
+                    <Picker.Item label="DAY" value="DAY" />
+                    <Picker.Item label="WEEK" value="WEEK" />
+                    <Picker.Item label="MONTH" value="MONTH" />
+                  </Picker>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
+                  onPress={() => setOpenFromDate(true)}>
+                  <Text className="text-center text-base text-blue-950">
+                    From Date:
+                  </Text>
+                  <DatePicker
+                    modal
+                    open={openFromDate}
+                    date={fromDate}
+                    mode={'date'}
+                    onConfirm={date => {
+                      setOpenFromDate(false);
+                      setFromDate(date);
+                      setFromDateFormatted(
+                        date.toISOString().slice(0, 10).concat(' 00:00:00'),
+                      );
+                    }}
+                    onCancel={() => {
+                      setOpenFromDate(false);
+                    }}
+                  />
+                  {fromDateFormatted !== '' && (
+                    <Text className="text-center text-base text-blue-950">
+                      {fromDateFormatted}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
+                  onPress={() => setOpenToDate(true)}>
+                  <Text className="text-center text-base text-blue-950">
+                    End Date:
+                  </Text>
+                  <DatePicker
+                    modal
+                    open={openToDate}
+                    date={toDate}
+                    mode={'date'}
+                    onConfirm={date => {
+                      setOpenToDate(false);
+                      setToDate(date);
+                      setToDateFormatted(
+                        date.toISOString().slice(0, 10).concat(' 23:59:59'),
+                      );
+                    }}
+                    onCancel={() => {
+                      setOpenToDate(false);
+                    }}
+                  />
+                  {toDateFormatted !== '' && (
+                    <Text className="text-center text-base text-blue-950">
+                      {toDateFormatted}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+              {/*Date picker end*/}
               {/*Turnover widget start*/}
-              <View className="bg-white" style={{elevation: 10}}>
-                <View className="bg-yellow-500 p-3">
+              <View
+                className="bg-white my-1 mx-4 rounded-md"
+                style={{elevation: 10}}>
+                <View
+                  className="bg-yellow-500 p-3 rounded-t-md"
+                  style={{elevation: 10}}>
                   <Text className="text-center text-white underline underline-offset-8">
                     Turnover:
                   </Text>
@@ -372,7 +368,7 @@ const SalesStatisticsScreen = () => {
                       </View>
                     </View>
                     <TouchableOpacity
-                      className="py-2 flex-row space-x-2 justify-center items-center"
+                      className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
                       onPress={() => setTurnoverDetails(true)}>
                       <Text className="text-center text-yellow-500 font-bold">
                         More Details
@@ -385,8 +381,9 @@ const SalesStatisticsScreen = () => {
                     </TouchableOpacity>
                   </View>
                 ) : (
-                  <View>
-                    <View>
+                  <View className="">
+                    {/*more details start*/}
+                    <View className="">
                       <TouchableOpacity
                         className="flex-row items-center justify-between px-4"
                         onPress={() => setTurnoverDetails(false)}>
@@ -397,8 +394,7 @@ const SalesStatisticsScreen = () => {
                       </TouchableOpacity>
                     </View>
                     <View className="flex-1">
-                      {/*more details start*/}
-                      <ScrollView horizontal>
+                      <ScrollView horizontal className="rounded-b-md pb-1">
                         <Table
                           style={{
                             flex: 1,
@@ -419,7 +415,7 @@ const SalesStatisticsScreen = () => {
                             }}
                             widthArr={[100, 100, 100, 100, 100]}
                           />
-                          <View className="divide-y divide-gray-200">
+                          <View className="divide-y divide-gray-200 rounded-b-md">
                             {turnoverTableData.map((row, index) => (
                               <Row
                                 key={index}
@@ -450,8 +446,10 @@ const SalesStatisticsScreen = () => {
               </View>
               {/*Turnover widget end*/}
               {/*Profit widget start*/}
-              <View className="bg-white" style={{elevation: 10}}>
-                <View className="bg-purple-500 p-3">
+              <View
+                className="bg-white my-1 mx-4 rounded-md"
+                style={{elevation: 10}}>
+                <View className="bg-purple-500 p-3 rounded-t-md">
                   <Text className="text-center text-white underline">
                     Profit:
                   </Text>
@@ -508,7 +506,7 @@ const SalesStatisticsScreen = () => {
 
                     <View className="flex-1">
                       {/*more details start*/}
-                      <ScrollView horizontal>
+                      <ScrollView horizontal className="rounded-b-md pb-1">
                         <Table
                           style={{
                             flex: 1,
@@ -559,9 +557,49 @@ const SalesStatisticsScreen = () => {
                 )}
               </View>
               {/*Profit widget end*/}
+
+              {/*Top products start*/}
+              <View className="mb-2 mx-4">
+                <View
+                  className="py-3 rounded-t-md"
+                  style={{backgroundColor: 'rgb(74, 118, 194)', elevation: 50}}>
+                  <Text className="text-center text-white underline">
+                    Top Selling Products
+                  </Text>
+                </View>
+                <View
+                  className="divide-y divide-gray-200 bg-white rounded-b-md"
+                  style={{elevation: 50}}>
+                  {salesData?.TopSellingProductDtos?.map((item, index) => {
+                    if (index <= 9) {
+                      return (
+                        <Text
+                          className="text-center py-2"
+                          style={{color: 'rgb(74, 118, 194)'}}>
+                          {item.ProductName.toUpperCase()}
+                        </Text>
+                      );
+                    }
+                  })}
+                  <TouchableOpacity
+                    className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
+                    onPress={() => {}}>
+                    <Text
+                      className="text-center text-xs font-bold"
+                      style={{color: 'rgb(74, 118, 194)'}}>
+                      SELECT PRODUCT
+                    </Text>
+                    <FontAwesome
+                      name="arrow-right"
+                      size={10}
+                      color="rgb(74, 118, 194)"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {/*Top products end*/}
             </ScrollView>
           ) : null}
-
           {/*Widgets end*/}
         </View>
       )}
