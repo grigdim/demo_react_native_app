@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import { setToken } from '../features/bootstrap';
 import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
+import Tabs from './SalesTabsScreen';
 
 const LoginScreen = () => {
   const { height, width } = Dimensions.get('screen');
@@ -239,6 +240,16 @@ const LoginScreen = () => {
           </TouchableOpacity>
           {/* Drawer Menu End */}
 
+          {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
+          <TouchableOpacity
+            className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
+            onPress={() => navigation.openDrawer()}>
+            <Text className="text-center text-xl text-bold text-white">
+              Open Menu
+            </Text>
+          </TouchableOpacity>
+          {/* Drawer Menu End */}
+
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
@@ -339,6 +350,17 @@ const LoginScreen = () => {
             style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Delete token and login again
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('SalesTabsScreen');
+            }}
+            style={{ elevation: 20 }}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to sales tabs screen
             </Text>
           </TouchableOpacity>
         </View>

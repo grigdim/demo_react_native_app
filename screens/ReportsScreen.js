@@ -1389,7 +1389,7 @@ const ReportsScreen = () => {
                 </View>
             )
             }
-        </SafeAreaView >
+        </SafeAreaView>
     );
 };
 
