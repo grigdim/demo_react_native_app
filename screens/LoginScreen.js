@@ -234,14 +234,9 @@ const LoginScreen = () => {
         )
       ) : (
         <View>
-
           {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
-          <TouchableOpacity
-            className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => navigation.openDrawer()}>
-            <Text className="text-center text-xl text-bold text-white">
-              Open Menu
-            </Text>
+          <TouchableOpacity className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl" onPress={() => navigation.openDrawer()}>
+            <Text className='text-center text-xl text-bold text-white'>Drawer Menu</Text>
           </TouchableOpacity>
           {/* Drawer Menu End */}
 
@@ -312,6 +307,17 @@ const LoginScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            className="bg-pink-500 my-2 mx-auto p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('ReportsScreen');
+            }}
+            style={{ elevation: 20 }}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to reports screen
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('ProductSalesScreen');
@@ -319,6 +325,17 @@ const LoginScreen = () => {
             style={{ elevation: 20 }}>
             <Text className="text-center text-xl text-bold text-white">
               Go to product sales screen
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
+            onPress={() => {
+              navigation.navigate('SalesTabsScreen');
+            }}
+            style={{ elevation: 20 }}>
+            <Text className="text-center text-xl text-bold text-white">
+              Go to sales tabs screen
             </Text>
           </TouchableOpacity>
 
@@ -337,16 +354,6 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('SalesTabsScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to sales tabs screen
-            </Text>
-          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>

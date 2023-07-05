@@ -12,13 +12,22 @@ import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
 import SettingsScreen from './screens/SettingsScreen';
 import InformationScreen from './screens/InformationScreen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import ReportsScreen from './screens/ReportsScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet
+} from 'react-native';
 import SalesTabsScreen from './screens/SalesTabsScreen';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Provider} from 'react-redux';
-import {store} from './store';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,56 +48,37 @@ function Root() {
           fontSize: 15,
         },
       }}
-      initialRouteName="LoginScreen">
-      <Drawer.Screen
-        name="Home"
-        component={LoginScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="home-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Turnover"
-        component={TurnoverScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="wallet-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Profit"
-        component={TotalProfitScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="cash-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Info"
-        component={InformationScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons
-              name="information-circle-outline"
-              size={22}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
-          ),
-        }}
-      />
+      initialRouteName="LoginScreen" >
+      <Drawer.Screen name="Home" component={LoginScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="home-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Turnover" component={TurnoverScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="wallet-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Profit" component={TotalProfitScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="cash-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Reports" component={ReportsScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="document-text-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Info" component={InformationScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="information-circle-outline" size={22} color={color} />
+        )
+      }} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="settings-outline" size={22} color={color} />
+        )
+      }} />
     </Drawer.Navigator>
   );
 }
@@ -101,52 +91,57 @@ export default function App() {
           <Stack.Screen
             name="Root"
             component={Root}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="LineChartScreen"
             component={LineChartScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="BarChartScreen"
             component={BarChartScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="AuditScreen"
             component={AuditScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="StoreScreen"
             component={StoreScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="TurnoverScreen"
             component={TurnoverScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="ProductSalesScreen"
             component={ProductSalesScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="TotalProfitScreen"
             component={TotalProfitScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="SalesTabsScreen"
             component={SalesTabsScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ReportsScreen"
+            component={ReportsScreen}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </Provider>
