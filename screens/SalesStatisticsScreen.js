@@ -17,7 +17,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,6 +27,7 @@ import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Table, Row} from 'react-native-table-component';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const SalesStatisticsScreen = () => {
   const token = useSelector(selectToken);
@@ -239,6 +240,19 @@ const SalesStatisticsScreen = () => {
     }
   };
 
+  const selectedGroupByDateValue = useMemo(() => {
+    switch (groupByDate) {
+      case 'DAY':
+        return 'DAY';
+      case 'WEEK':
+        return 'WEEK';
+      case 'MONTH':
+        return 'MONTH';
+      default:
+        return '';
+    }
+  }, [groupByDate]);
+
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-gray-300">
       {loading ? (
@@ -250,20 +264,30 @@ const SalesStatisticsScreen = () => {
             <ScrollView className="space-y-3">
               {/*Date picker start*/}
               <View className="space-y-1 my-2 mx-4" style={{elevation: 50}}>
-                <TouchableOpacity className="bg-gray-200 border rounded-sm h-11 justify-center">
-                  <Picker
-                    style={{
-                      color: 'rgb(23 37 84)',
+                <View className="bg-gray-200 border rounded-sm h-11 justify-center">
+                  <SelectDropdown
+                    dropdownStyle={{
+                      backgroundColor: 'lightgray',
                     }}
-                    selectedValue={groupByDate}
-                    onValueChange={itemValue => {
-                      handleGroupByChange(itemValue);
-                    }}>
-                    <Picker.Item label="DAY" value="DAY" />
-                    <Picker.Item label="WEEK" value="WEEK" />
-                    <Picker.Item label="MONTH" value="MONTH" />
-                  </Picker>
-                </TouchableOpacity>
+                    buttonStyle={{
+                      width: '100%',
+                      height: '99%',
+                      backgroundColor: 'rgb(229 231 235)',
+                    }}
+                    buttonTextStyle={{color: 'rgb(23 37 84)'}}
+                    data={['DAY', 'WEEK', 'MONTH']}
+                    defaultValue={selectedGroupByDateValue}
+                    onSelect={(selectedItem, index) => {
+                      handleGroupByChange(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />
+                </View>
                 <TouchableOpacity
                   className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
                   onPress={() => setOpenFromDate(true)}>
