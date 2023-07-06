@@ -29,7 +29,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const TestingScreen = () => {
+const SalesStatisticsScreen = () => {
     const token = useSelector(selectToken);
     const { width, height } = Dimensions.get('screen');
     const [loading, setLoading] = useState(true);
@@ -54,13 +54,15 @@ const TestingScreen = () => {
     const [sftId, setSftId] = useState(1);
     const [turnoverDetails, setTurnoverDetails] = useState(false);
     const [profitDetails, setProfitDetails] = useState(false);
-    const [categoryDetails, setCategoryDetails] = useState(false);
     const [turnoverTableHeaders, setTurnoverTableHeaders] = useState([]);
     const [turnoverTableData, setTurnoverTableData] = useState([]);
-    const [categoryDetailsTableData, setCategoryDetailsTableData] = useState([]);
     const [profitTableHeaders, setProfitTableHeaders] = useState([]);
     const [profitTableData, setProfitTableData] = useState([]);
-    const [categoryDetailsTableHeaders, setCategoryDetailsTableHeaders] = useState([]);
+    const [categoriesDetailsTableHeaders, setCategoriesDetailsTableHeaders] =
+        useState([]);
+    const [categoriesDetailsTableData, setCategoriesDetailsTableData] = useState(
+        [],
+    );
 
     const handleChangeSftId = inputText => {
         setSftId(inputText);
@@ -188,50 +190,40 @@ const TestingScreen = () => {
                             return dataRow;
                         }),
                 );
-
-                setCategoryDetailsTableHeaders(
-                    Object.keys(data?.CategoriesSalesDtos[0])
-                        .filter(
-                            key =>
-                                key !== 'CategoryName' &&
-                                key !== 'CategoryID' &&
-                                key !== 'QuantityTmx' &&
-                                key !== 'TurnoverVatTotal',
-                        )
-                        .map(key => {
-                            return key.replace(/(?!^)([A-Z])/g, ' $1');
-                        }),
-                );
-                setCategoryDetailsTableData(
-                    data?.CategoriesSalesDtos?.filter(item => item.CategoryName !== 'CategoryName')
-                        .sort((a, b) => a.CategoryName - b.CategoryName)
-                        .map(item => {
-                            const filteredItem = Object.keys(item).reduce((acc, key) => {
-                                if (
-                                    [
-                                        'CostInclVat',
-                                        'Turnover',
-                                        'ProfitWithVat',
-                                        'ProfitWithoutVat',
-                                        'ProfitPercentage'
-                                    ].includes(key)
-                                ) {
-                                    acc[key] = item[key];
-                                }
-                                return acc;
-                            }, {});
+                setCategoriesDetailsTableHeaders(() => {
+                    let headerArray = [];
+                    if (data.CategoriesSalesDtos.length > 0) {
+                        Object.keys(data.CategoriesSalesDtos[0]).forEach(key => {
+                            if (key === 'CategoryId' || key === 'Vat') {
+                                return;
+                            } else {
+                                headerArray.push(key.replace(/(?!^)([A-Z])/g, ' $1'));
+                            }
+                        });
+                        return headerArray;
+                    } else return [];
+                });
+                setCategoriesDetailsTableData(() => {
+                    let tableData = [];
+                    if (data.CategoriesSalesDtos.length > 0) {
+                        data.CategoriesSalesDtos.map(item => {
                             let dataRow = [];
-                            Object.keys(filteredItem).forEach(key => {
-                                if (key === 'CategoryName') {
-                                    dataRow.push(filteredItem[key]);
+                            Object.keys(item).forEach(key => {
+                                if (key === 'CategoryId' || key === 'Vat') {
+                                    return;
+                                } else if (key === 'CategoryName' || key === 'QuantityTmx') {
+                                    dataRow.push(item[key]);
+                                } else if (key === 'ProfitPercentage') {
+                                    dataRow.push(item[key] + ' %');
                                 } else {
-                                    dataRow.push(filteredItem[key] + ' €');
+                                    dataRow.push(item[key] + ' €');
                                 }
                             });
-                            return dataRow;
-                        }),
-                );
-
+                            tableData.push(dataRow);
+                        });
+                    } else return [];
+                    return tableData;
+                });
                 setLoading(false);
             } catch (e) {
                 console.log(e);
@@ -628,155 +620,122 @@ const TestingScreen = () => {
                                 )}
                             </View>
                             {/*Profit widget end*/}
-
                             {/*Top products start*/}
-                            <View className="mb-2 mx-4">
-                                <View
-                                    className="py-3 rounded-t-md"
-                                    style={{ backgroundColor: 'rgb(74, 118, 194)', elevation: 50 }}>
-                                    <Text className="text-center text-white underline">
-                                        Top Selling Products
-                                    </Text>
-                                </View>
-                                <View
-                                    className="divide-y divide-gray-200 bg-white rounded-b-md"
-                                    style={{ elevation: 50 }}>
-                                    {salesData?.TopSellingProductDtos?.map((item, index) => {
-                                        if (index <= 9) {
-                                            return (
-                                                <Text
-                                                    key={salesData.TopSellingProductDtos.ProductId}
-                                                    className="text-center py-2"
-                                                    style={{ color: 'rgb(74, 118, 194)' }}>
-                                                    {item.ProductName.toUpperCase()}
-                                                </Text>
-                                            );
-                                        }
-                                    })}
-                                    <TouchableOpacity
-                                        className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                                        onPress={() => { }}>
-                                        <Text
-                                            className="text-center text-xs font-bold"
-                                            style={{ color: 'rgb(74, 118, 194)' }}>
-                                            SELECT PRODUCT
+                            {salesData.TopSellingProductDtos.length > 0 && (
+                                <View className="mb-2 mx-4">
+                                    <View
+                                        className="py-3 rounded-t-md"
+                                        style={{
+                                            backgroundColor: 'rgb(86, 113, 144)',
+                                            elevation: 50,
+                                        }}>
+                                        <Text className="text-center text-white underline">
+                                            Top Selling Products
                                         </Text>
-                                        <FontAwesome
-                                            name="arrow-right"
-                                            size={10}
-                                            color="rgb(74, 118, 194)"
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            {/*Top products end*/}
-
-                            {/*Category details widget start*/}
-                            <View
-                                className="bg-white my-1 mx-4 rounded-md"
-                                style={{ elevation: 10 }}>
-                                <View
-                                    className="py-3 rounded-t-md"
-                                    style={{ backgroundColor: 'rgb(74, 118, 194)', elevation: 50 }}>
-                                    <Text className="text-center text-white underline">
-                                        Category Details
-                                    </Text>
-                                </View>
-                                {!categoryDetails ? (
-                                    <View className="divide-y divide-gray-200 bg-white rounded-b-md"
+                                    </View>
+                                    <View
+                                        className="divide-y divide-gray-200 bg-white rounded-b-md"
                                         style={{ elevation: 50 }}>
-                                        {salesData?.CategoriesSalesDtos?.map((item, index) => {
+                                        {salesData?.TopSellingProductDtos?.map((item, index) => {
                                             if (index <= 9) {
                                                 return (
                                                     <Text
-                                                        key={salesData.CategoriesSalesDtos.CategoryName}
-                                                        className="text-center py-2"
-                                                        style={{ color: 'rgb(74, 118, 194)' }}>
-                                                        {item.CategoryName.toUpperCase()}
+                                                        key={salesData.TopSellingProductDtos.ProductId}
+                                                        className="text-center py-2 text-gray-500 font-bold"
+                                                    // style={{color: 'rgb(74, 118, 194)'}}
+                                                    >
+                                                        {item.ProductName.toUpperCase()}
                                                     </Text>
                                                 );
                                             }
                                         })}
                                         <TouchableOpacity
                                             className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                                            onPress={() => { setCategoryDetails(true) }}>
+                                            onPress={() => { }}>
                                             <Text
                                                 className="text-center text-xs font-bold"
-                                                style={{ color: 'rgb(74, 118, 194)' }}>
-                                                SELECT CATEGORY
+                                                style={{ color: 'rgb(107 114 128)' }}>
+                                                SELECT PRODUCT
                                             </Text>
                                             <FontAwesome
                                                 name="arrow-right"
                                                 size={10}
-                                                color="rgb(74, 118, 194)"
+                                                color="rgb(107 114 128)"
                                             />
                                         </TouchableOpacity>
                                     </View>
-                                ) : (
-                                    <View className="">
-                                        {/*more details start*/}
-                                        <View className="">
-                                            <TouchableOpacity
-                                                className="flex-row items-center justify-between px-4"
-                                                onPress={() => setCategoryDetails(false)}>
-                                                <Text className="text-center text-blue-950 py-2">
-                                                    Category Details
-                                                </Text>
-                                                <Icon name="close" size={15} color="rgb(23 37 84)" />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View className="flex-1">
-                                            <ScrollView horizontal className="rounded-b-md pb-1">
-                                                <Table
-                                                    style={{
-                                                        flex: 1,
-                                                        backgroundColor: '#fff',
-                                                    }}>
-                                                    <Row
-                                                        data={categoryDetailsTableHeaders}
-                                                        style={{
-                                                            alignContent: 'center',
-                                                            backgroundColor: 'rgb(250 204 21)',
-                                                            paddingRight: 2,
-                                                            paddingLeft: 2,
-                                                        }}
-                                                        textStyle={{
-                                                            textAlign: 'center',
-                                                            color: 'white',
-                                                            fontSize: 12,
-                                                        }}
-                                                        widthArr={[100, 100, 100, 100, 100]}
-                                                    />
-                                                    <View className="divide-y divide-gray-200 rounded-b-md">
-                                                        {categoryDetailsTableData.map((row, index) => (
-                                                            <Row
-                                                                key={index}
-                                                                style={{
-                                                                    alignContent: 'center',
-                                                                    paddingTop: 4,
-                                                                    paddingBottom: 4,
-                                                                    paddingLeft: 2,
-                                                                    paddingRight: 2,
-                                                                    height: 25,
-                                                                }}
-                                                                textStyle={{
-                                                                    textAlign: 'center',
-                                                                    fontSize: 12,
-                                                                    color: 'black',
-                                                                }}
-                                                                widthArr={[100, 100, 100, 100, 100]}
-                                                                data={row}
-                                                            />
-                                                        ))}
-                                                    </View>
-                                                </Table>
-                                            </ScrollView>
-                                            {/*more details end*/}
-                                        </View>
+                                </View>
+                            )}
+                            {/*Top products end*/}
+                            {/*Categories Details start*/}
+                            {categoriesDetailsTableData.length > 0 && (
+                                <View className="mb-2 mx-4">
+                                    <View
+                                        className="py-3 rounded-t-md "
+                                        style={{
+                                            backgroundColor: 'rgb(86, 113, 144)',
+                                            elevation: 50,
+                                        }}>
+                                        <Text className="text-center text-white underline">
+                                            Category Product Details
+                                        </Text>
                                     </View>
-                                )}
-                            </View>
-                            {/*Category details widget end*/}
+                                    <View className="flex-1">
+                                        <ScrollView horizontal className="rounded-b-md pb-1">
+                                            <Table
+                                                style={{
+                                                    flex: 1,
+                                                    backgroundColor: '#fff',
+                                                }}>
+                                                <Row
+                                                    data={categoriesDetailsTableHeaders}
+                                                    style={{
+                                                        alignContent: 'center',
+                                                        backgroundColor: 'rgb(105, 133, 165)',
+                                                        paddingRight: 2,
+                                                        paddingLeft: 2,
+                                                        paddingTop: 4,
+                                                        paddingBottom: 4,
+                                                    }}
+                                                    textStyle={{
+                                                        textAlign: 'center',
+                                                        color: 'white',
+                                                        fontSize: 12,
+                                                    }}
+                                                    widthArr={categoriesDetailsTableHeaders.map(
+                                                        () => 100,
+                                                    )}
+                                                />
+                                                <View className="divide-y divide-gray-200 rounded-b-md">
+                                                    {categoriesDetailsTableData.map((row, index) => (
+                                                        <Row
+                                                            key={index}
+                                                            style={{
+                                                                alignContent: 'center',
+                                                                paddingTop: 6,
+                                                                paddingBottom: 6,
+                                                                paddingLeft: 2,
+                                                                paddingRight: 2,
+                                                            }}
+                                                            textStyle={{
+                                                                textAlign: 'center',
+                                                                fontSize: 12,
+                                                                fontWeight: 'bold',
+                                                                color: 'rgb(107 114 128)',
+                                                            }}
+                                                            widthArr={categoriesDetailsTableHeaders.map(
+                                                                () => 100,
+                                                            )}
+                                                            data={row}
+                                                        />
+                                                    ))}
+                                                </View>
+                                            </Table>
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                            )}
+                            {/*Categories Details end*/}
                         </ScrollView>
                     ) : null}
                     {/*Widgets end*/}
@@ -802,4 +761,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TestingScreen;
+export default SalesStatisticsScreen;
