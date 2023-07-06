@@ -20,22 +20,22 @@ import {
   Alert,
   Touchable,
 } from 'react-native';
-import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { selectToken } from '../features/bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useState, useMemo} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {selectToken} from '../features/bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import { Picker } from '@react-native-picker/picker';
-import { ip } from '@env';
+import {Picker} from '@react-native-picker/picker';
+import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Table, Row } from 'react-native-table-component';
+import {Table, Row} from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
 const SalesStatisticsScreen = () => {
   const token = useSelector(selectToken);
-  const { width, height } = Dimensions.get('screen');
+  const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
   const [groupByDate, setGroupByDate] = useState('MONTH');
   const [salesData, setSalesData] = useState();
@@ -314,12 +314,12 @@ const SalesStatisticsScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="w-full h-full space-y-3" style={{ elevation: 10 }}>
+        <View className="w-full h-full space-y-3" style={{elevation: 10}}>
           {/*Widgets start*/}
           {salesData !== undefined && salesData !== null ? (
             <ScrollView className="space-y-3">
               {/*Date picker start*/}
-              <View className="space-y-1 my-2 mx-4" style={{ elevation: 50 }}>
+              <View className="space-y-1 my-2 mx-4" style={{elevation: 50}}>
                 <View className="bg-gray-200 border rounded-sm h-11 justify-center">
                   <SelectDropdown
                     dropdownStyle={{
@@ -330,7 +330,7 @@ const SalesStatisticsScreen = () => {
                       height: '99%',
                       backgroundColor: 'rgb(229 231 235)',
                     }}
-                    buttonTextStyle={{ color: 'rgb(23 37 84)' }}
+                    buttonTextStyle={{color: 'rgb(23 37 84)'}}
                     data={['DAY', 'WEEK', 'MONTH']}
                     defaultValue={selectedGroupByDateValue}
                     onSelect={(selectedItem, index) => {
@@ -405,10 +405,10 @@ const SalesStatisticsScreen = () => {
               {/*Turnover widget start*/}
               <View
                 className="bg-white my-1 mx-4 rounded-md"
-                style={{ elevation: 10 }}>
+                style={{elevation: 10}}>
                 <View
                   className="bg-yellow-500 p-3 rounded-t-md"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <Text className="text-center text-white underline underline-offset-8">
                     Turnover:
                   </Text>
@@ -528,7 +528,7 @@ const SalesStatisticsScreen = () => {
               {/*Profit widget start*/}
               <View
                 className="bg-white my-1 mx-4 rounded-md"
-                style={{ elevation: 10 }}>
+                style={{elevation: 10}}>
                 <View className="bg-purple-500 p-3 rounded-t-md">
                   <Text className="text-center text-white underline">
                     Profit:
@@ -652,14 +652,14 @@ const SalesStatisticsScreen = () => {
                   </View>
                   <View
                     className="divide-y divide-gray-200 bg-white rounded-b-md"
-                    style={{ elevation: 50 }}>
+                    style={{elevation: 50}}>
                     {salesData?.TopSellingProductDtos?.map((item, index) => {
                       if (index <= 9) {
                         return (
                           <Text
                             key={salesData.TopSellingProductDtos.ProductId}
                             className="text-center py-2 text-gray-500 font-bold"
-                          // style={{color: 'rgb(74, 118, 194)'}}
+                            // style={{color: 'rgb(74, 118, 194)'}}
                           >
                             {item.ProductName.toUpperCase()}
                           </Text>
@@ -668,11 +668,13 @@ const SalesStatisticsScreen = () => {
                     })}
                     <TouchableOpacity
                       className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                      style={{ backgroundColor: 'rgb(95,125,155)' }}
-                      onPress={() => { setProductModalVisible(true); }}>
+                      style={{backgroundColor: 'rgb(95,125,155)'}}
+                      onPress={() => {
+                        setProductModalVisible(true);
+                      }}>
                       <Text
                         className="text-center text-xs font-bold"
-                        style={{ color: 'rgb(255 255 255)' }}>
+                        style={{color: 'rgb(255 255 255)'}}>
                         CHOOSE A PRODUCT
                       </Text>
                       <FontAwesome
@@ -735,7 +737,7 @@ const SalesStatisticsScreen = () => {
                               borderWidth: 1,
                               borderColor: 'rgb(229 231 235)',
                             }}
-                            buttonTextStyle={{ color: '#444', textAlign: 'left' }}
+                            buttonTextStyle={{color: '#444', textAlign: 'left'}}
                             renderDropdownIcon={isOpened => {
                               return (
                                 <SimpleLineIcons
@@ -746,12 +748,12 @@ const SalesStatisticsScreen = () => {
                               );
                             }}
                             dropdownIconPosition={'left'}
-                            dropdownStyle={{ backgroundColor: '#EFEFEF' }}
+                            dropdownStyle={{backgroundColor: '#EFEFEF'}}
                             rowStyle={{
                               backgroundColor: '#EFEFEF',
                               borderBottomColor: '#C5C5C5',
                             }}
-                            rowTextStyle={{ color: '#444', textAlign: 'left' }}
+                            rowTextStyle={{color: '#444', textAlign: 'left'}}
                             selectedRowStyle={{
                               backgroundColor: 'rgba(0,0,0,0.1)',
                             }}
@@ -860,18 +862,25 @@ const SalesStatisticsScreen = () => {
               {/*Categories Details start*/}
               {categoriesDetailsTableData.length > 0 && (
                 <View className="mb-2 mx-4">
-                  <View className="flex-row justify-between rounded-t-md py-3"
+                  <View
+                    className="flex-row justify-between rounded-t-md py-3"
                     style={{
                       backgroundColor: 'rgb(86, 113, 144)',
-                      elevation: 50
+                      elevation: 50,
                     }}>
                     <Text className="text-white underline ml-3 mt-1">
                       Category Details
                     </Text>
-                    <TouchableOpacity className="flex-row space-x-2 justify-center items-center rounded-b-md"
-                      onPress={() => { }}>
-                      <Text className="text-xs font-bold border border-white p-1 mr-2"
-                        style={{ color: 'rgb(255, 255, 255)', borderRadius: 20, fontSize: 11 }}>
+                    <TouchableOpacity
+                      className="flex-row space-x-2 justify-center items-center rounded-b-md"
+                      onPress={() => {}}>
+                      <Text
+                        className="text-xs font-bold border border-white p-1 mr-2"
+                        style={{
+                          color: 'rgb(255, 255, 255)',
+                          borderRadius: 20,
+                          fontSize: 11,
+                        }}>
                         EXPORT TO EXCEL
                       </Text>
                     </TouchableOpacity>
@@ -906,77 +915,83 @@ const SalesStatisticsScreen = () => {
                         <View className="divide-y divide-gray-200">
                           {categoriesDetailsTableExpanded
                             ? categoriesDetailsTableData.map((row, index) => {
-                              return (
-                                <Row
-                                  key={index}
-                                  style={{
-                                    alignContent: 'center',
-                                    paddingTop: 6,
-                                    paddingBottom: 6,
-                                    paddingLeft: 2,
-                                    paddingRight: 2,
-                                  }}
-                                  textStyle={{
-                                    textAlign: 'center',
-                                    fontSize: 12,
-                                    fontWeight: 'bold',
-                                    color: 'rgb(107, 114, 128)',
-                                  }}
-                                  widthArr={categoriesDetailsTableHeaders.map(
-                                    () => 100,
-                                  )}
-                                  data={row}
-                                />
-                              );
-                            })
+                                return (
+                                  <Row
+                                    key={index}
+                                    style={{
+                                      alignContent: 'center',
+                                      paddingTop: 6,
+                                      paddingBottom: 6,
+                                      paddingLeft: 2,
+                                      paddingRight: 2,
+                                    }}
+                                    textStyle={{
+                                      textAlign: 'center',
+                                      fontSize: 12,
+                                      fontWeight: 'bold',
+                                      color: 'rgb(107, 114, 128)',
+                                    }}
+                                    widthArr={categoriesDetailsTableHeaders.map(
+                                      () => 100,
+                                    )}
+                                    data={row}
+                                  />
+                                );
+                              })
                             : categoriesDetailsTableDataTrunc.map(
-                              (row, index) => {
-                                if (index <= 9) {
-                                  return (
-                                    <Row
-                                      key={index}
-                                      style={{
-                                        alignContent: 'center',
-                                        paddingTop: 6,
-                                        paddingBottom: 6,
-                                        paddingLeft: 2,
-                                        paddingRight: 2,
-                                      }}
-                                      textStyle={{
-                                        textAlign: 'center',
-                                        fontSize: 12,
-                                        fontWeight: 'bold',
-                                        color: 'rgb(107, 114, 128)',
-                                      }}
-                                      widthArr={categoriesDetailsTableHeaders.map(
-                                        () => 100,
-                                      )}
-                                      data={row}
-                                    />
-                                  );
-                                }
-                                return null; // Added for the case when index > 9
-                              },
-                            )}
+                                (row, index) => {
+                                  if (index <= 9) {
+                                    return (
+                                      <Row
+                                        key={index}
+                                        style={{
+                                          alignContent: 'center',
+                                          paddingTop: 6,
+                                          paddingBottom: 6,
+                                          paddingLeft: 2,
+                                          paddingRight: 2,
+                                        }}
+                                        textStyle={{
+                                          textAlign: 'center',
+                                          fontSize: 12,
+                                          fontWeight: 'bold',
+                                          color: 'rgb(107, 114, 128)',
+                                        }}
+                                        widthArr={categoriesDetailsTableHeaders.map(
+                                          () => 100,
+                                        )}
+                                        data={row}
+                                      />
+                                    );
+                                  }
+                                  return null; // Added for the case when index > 9
+                                },
+                              )}
                         </View>
                       </Table>
                     </ScrollView>
                     <View className="rounded-b-md">
                       <TouchableOpacity
                         className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                        style={{ backgroundColor: 'rgb(95,125,155)' }}
+                        style={{backgroundColor: 'rgb(95,125,155)'}}
                         onPress={() =>
                           setCategoriesDetailsTableExpanded(
                             !categoriesDetailsTableExpanded,
                           )
                         }>
-                        <Text className="font-bold text-xs font-bold" style={{ color: 'rgb(255,255,255)' }}>
+                        <Text
+                          className="font-bold text-xs font-bold"
+                          style={{color: 'rgb(255,255,255)'}}>
                           {!categoriesDetailsTableExpanded
                             ? 'EXPAND'
                             : 'COLLAPSE'}
                         </Text>
                         <FontAwesome
-                          name={categoriesDetailsTableExpanded ? 'arrow-up' : 'arrow-down'}
+                          name={
+                            categoriesDetailsTableExpanded
+                              ? 'arrow-up'
+                              : 'arrow-down'
+                          }
                           size={10}
                           color="rgb(255,255,255)"
                         />
