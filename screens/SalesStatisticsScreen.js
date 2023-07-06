@@ -686,12 +686,12 @@ const SalesStatisticsScreen = () => {
                       animationType="slide"
                       visible={productModalVisible}
                       onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
                         setProductModalVisible(!productModalVisible);
+                        setSelectedProduct(null);
                       }}>
                       <View>
                         <View className="flex-row justify-center items-center p-4 border-b border-gray-200">
-                          <Text className="flex-1 text-center text-lg">
+                          <Text className="flex-1 text-center text-lg text-slate-500">
                             Product Sales Details
                           </Text>
                           <TouchableOpacity
@@ -702,7 +702,7 @@ const SalesStatisticsScreen = () => {
                             <Icon
                               name="close"
                               size={15}
-                              color="rgb(23 37 84)"
+                              color="rgb(100 116 139)"
                               className="grow-0"
                             />
                           </TouchableOpacity>
@@ -794,58 +794,64 @@ const SalesStatisticsScreen = () => {
                             </Text>
                           </View>
                         </View>
-                        <View className="space-y-4">
-                          <View className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md">
-                            {selectedProduct &&
-                              Object.keys(selectedProduct).map(key => {
-                                if (
-                                  key === 'Quantity' ||
-                                  key === 'TurnOverWithoutVat' ||
-                                  key === 'VatTotal' ||
-                                  key === 'TurnOverWithVat'
-                                ) {
-                                  return (
-                                    <View className="justify-start items-center p-4 w-1/2">
-                                      <Text className="text-white text-lg font-black">
-                                        {selectedProduct[key] + '€'}
-                                      </Text>
-                                      <Text className="text-white text-center text-sm">
-                                        {key
-                                          .replace(/(?!^Turn)O/g, ' o')
-                                          .replace(/(?!^)([A-Z])/g, ' $1')}
-                                      </Text>
-                                    </View>
-                                  );
-                                }
-                              })}
-                          </View>
-                          <View className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6">
-                            {selectedProduct &&
-                              Object.keys(selectedProduct).map(key => {
-                                if (
-                                  key === 'ProfitOnTurnOverPercentage' ||
-                                  key === 'ProfitWithVat' ||
-                                  key === 'ProfitWithoutVat'
-                                ) {
-                                  return (
-                                    <View className="justify-center items-center w-1/3 px-4">
-                                      <Text className="text-white text-lg font-black">
-                                        {key === 'ProfitOnTurnOverPercentage'
-                                          ? selectedProduct[key] + '%'
-                                          : selectedProduct[key] + '€'}
-                                      </Text>
+                        {selectedProduct && (
+                          <View className="space-y-4">
+                            <View
+                              className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md"
+                              style={{elevation: 10}}>
+                              {selectedProduct &&
+                                Object.keys(selectedProduct).map(key => {
+                                  if (
+                                    key === 'Quantity' ||
+                                    key === 'TurnOverWithoutVat' ||
+                                    key === 'VatTotal' ||
+                                    key === 'TurnOverWithVat'
+                                  ) {
+                                    return (
+                                      <View className="justify-start items-center p-4 w-1/2">
+                                        <Text className="text-white text-lg font-black">
+                                          {selectedProduct[key] + '€'}
+                                        </Text>
+                                        <Text className="text-white text-center text-sm">
+                                          {key
+                                            .replace(/(?!^Turn)O/g, ' o')
+                                            .replace(/(?!^)([A-Z])/g, ' $1')}
+                                        </Text>
+                                      </View>
+                                    );
+                                  }
+                                })}
+                            </View>
+                            <View
+                              className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6"
+                              style={{elevation: 10}}>
+                              {selectedProduct &&
+                                Object.keys(selectedProduct).map(key => {
+                                  if (
+                                    key === 'ProfitOnTurnOverPercentage' ||
+                                    key === 'ProfitWithVat' ||
+                                    key === 'ProfitWithoutVat'
+                                  ) {
+                                    return (
+                                      <View className="justify-center items-center w-1/3 px-4">
+                                        <Text className="text-white text-lg font-black">
+                                          {key === 'ProfitOnTurnOverPercentage'
+                                            ? selectedProduct[key] + '%'
+                                            : selectedProduct[key] + '€'}
+                                        </Text>
 
-                                      <Text className="text-white text-center text-sm">
-                                        {key
-                                          .replace(/(?!^Turn)O/g, ' o')
-                                          .replace(/(?!^)([A-Z])/g, ' $1')}
-                                      </Text>
-                                    </View>
-                                  );
-                                }
-                              })}
+                                        <Text className="text-white text-center text-sm">
+                                          {key
+                                            .replace(/(?!^Turn)O/g, ' o')
+                                            .replace(/(?!^)([A-Z])/g, ' $1')}
+                                        </Text>
+                                      </View>
+                                    );
+                                  }
+                                })}
+                            </View>
                           </View>
-                        </View>
+                        )}
                       </View>
                     </Modal>
                   </View>

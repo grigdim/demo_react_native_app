@@ -21,6 +21,7 @@ import {setToken} from '../features/bootstrap';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const LoginScreen = () => {
   const {height, width} = Dimensions.get('screen');
@@ -233,7 +234,7 @@ const LoginScreen = () => {
           </View>
         )
       ) : (
-        <View>
+        <ScrollView className="flex-1 w-full h-full">
           {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
           <TouchableOpacity
             className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
@@ -368,7 +369,7 @@ const LoginScreen = () => {
               Delete token and login again
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       )}
     </SafeAreaView>
   );
