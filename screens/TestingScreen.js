@@ -20,7 +20,6 @@ import {
     Alert,
     Touchable,
 } from 'react-native';
-import { DrawerActions } from 'react-navigation'
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
@@ -33,6 +32,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
+import DrawerHeader from './DrawerHeader';
 
 const TestingScreen = () => {
     const token = useSelector(selectToken);
@@ -320,17 +320,8 @@ const TestingScreen = () => {
                 <ActivityIndicator color="rgb(34 211 238)" size="large" />
             ) : (
                 <View className="w-full h-full  " style={{ elevation: 5 }}>
-                    <TouchableOpacity
-                        className="bg-blue-900 p-2 flex-row space-x-2 justify-center items-center"
-                        onPress={() => navigation.openDrawer()}>
-                        <Text className="text-center text-s text-bold text-white">
-                            Intale Statistics
-                        </Text>
-                        <FontAwesome
-                            name="bars"
-                            size={10}
-                            color="rgb(255 255 255)"
-                        ></FontAwesome>
+                    <TouchableOpacity  >
+                        <DrawerHeader />
                     </TouchableOpacity>
                     {/*Widgets start*/}
                     {salesData !== undefined && salesData !== null ? (

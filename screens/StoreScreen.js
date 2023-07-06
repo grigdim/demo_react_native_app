@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -15,13 +15,13 @@ import {
   processColor,
   Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {selectToken} from '../features/bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { selectToken } from '../features/bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
-import {ip} from '@env';
-import {BarChart} from 'react-native-charts-wrapper';
+import { Picker } from '@react-native-picker/picker';
+import { ip } from '@env';
+import { BarChart } from 'react-native-charts-wrapper';
 import {
   VictoryBar,
   VictoryChart,
@@ -48,7 +48,7 @@ const StoresScreen = () => {
   //config for victoryBar
   const [victoryBarData, setVictoryBarData] = useState([]);
   //end of victory bar
-  const {width, height} = Dimensions.get('screen');
+  const { width, height } = Dimensions.get('screen');
   //react-native-charts-wrapper
   const [legend, setLegend] = useState({
     enabled: false,
@@ -78,7 +78,7 @@ const StoresScreen = () => {
       barWidth: 0.7,
     },
   });
-  const [highlights, setHighlights] = useState([{x: 3}, {x: 6}]);
+  const [highlights, setHighlights] = useState([{ x: 3 }, { x: 6 }]);
   const [xAxis, setXAxis] = useState({
     granularityEnabled: true,
     granularity: 1,
@@ -125,14 +125,14 @@ const StoresScreen = () => {
               ...prevState.dataSets[0],
               values: [
                 ...prevState.dataSets[0].values,
-                {y: category.Turnover, marker: category.CategoryName},
+                { y: category.Turnover, marker: category.CategoryName },
               ],
             },
           ],
         }));
         setVictoryBarData(prevState => [
           ...prevState,
-          {y: category.Turnover, label: category.CategoryName},
+          { y: category.Turnover, label: category.CategoryName },
         ]);
         // setXAxis(prevState => ({
         //   ...prevState,
@@ -165,7 +165,7 @@ const StoresScreen = () => {
               setVictoryBarData([]);
             }}
             className="p-2 my-5 border border-solid bg-gray-300 border-cyan-200 rounded-xl"
-            style={{elevation: 10}}>
+            style={{ elevation: 10 }}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for data'}
             </Text>
@@ -271,7 +271,7 @@ const StoresScreen = () => {
             <ScrollView className="mb-10">
               <View
                 className="divide-y-2 divide-cyan-400"
-                style={{elevation: 50}}>
+                style={{ elevation: 50 }}>
                 {storesFromBoApi.CategoriesSalesDtos?.map(category => {
                   return (
                     <View className="p-2 bg-gray-200" key={category.CategoryId}>
@@ -314,18 +314,18 @@ const StoresScreen = () => {
                   }}
                   data={barChartData}
                   xAxis={xAxis}
-                  yAxis={{axisMinimum: 0}}
-                  animation={{durationX: 1000}}
+                  yAxis={{ axisMinimum: 0 }}
+                  animation={{ durationX: 1000 }}
                   legend={legend}
                   gridBackgroundColor={processColor('#ffffff')}
-                  visibleRange={{x: {min: 5, max: 5}}}
+                  visibleRange={{ x: { min: 5, max: 5 } }}
                   drawBarShadow={false}
                   drawValueAboveBar
                   drawHighlightArrow
                   // onSelect={this.handleSelect.bind(this)}
                   highlights={highlights}
                   // onChange={event => console.log(event.nativeEvent)}
-                  marker={{enabled: true}}
+                  marker={{ enabled: true }}
                   chartDescription={{
                     text: 'Categories Sales Dtos',
                     textSize: 16,
@@ -337,16 +337,16 @@ const StoresScreen = () => {
                 <VictoryChart
                   theme={VictoryTheme.material}
                   height={height / 1.5}
-                  domainPadding={{y: 50}}
+                  domainPadding={{ y: 50 }}
                   width={width / 1.1}>
                   <VictoryBar
                     data={victoryBarData}
                     style={{
-                      data: {fill: 'orange'},
+                      data: { fill: 'orange' },
                     }}
                     animate={{
                       duration: 2000,
-                      onLoad: {duration: 1000},
+                      onLoad: { duration: 1000 },
                     }}
                     barRatio={0.8}
                     labelComponent={
@@ -355,7 +355,7 @@ const StoresScreen = () => {
                         textAnchor="end"
                         dy={7}
                         dx={-5}
-                        style={{fill: 'teal'}}
+                        style={{ fill: 'teal' }}
                       />
                     }
                   />

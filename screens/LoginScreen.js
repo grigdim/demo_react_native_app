@@ -21,7 +21,9 @@ import { setToken } from '../features/bootstrap';
 import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import DrawerHeader from './DrawerHeader';
 
 const LoginScreen = () => {
   const { height, width } = Dimensions.get('screen');
@@ -235,16 +237,9 @@ const LoginScreen = () => {
         )
       ) : (
         <ScrollView className="flex-1 w-full h-full">
-          {/* Drawer Menu Start (Check App.js for headerShown: false to enable it and see the other option) */}
-          <TouchableOpacity
-            className="bg-blue-400 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => navigation.openDrawer()}>
-            <Text className="text-center text-xl text-bold text-white">
-              Drawer Menu
-            </Text>
+          <TouchableOpacity  >
+            <DrawerHeader />
           </TouchableOpacity>
-          {/* Drawer Menu End */}
-
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
