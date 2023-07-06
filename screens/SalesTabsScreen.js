@@ -26,6 +26,7 @@ const SalesTabsScreen = () => {
         name={'Sales statistics'}
         component={SalesStatisticsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <Ionicons
               name="md-stats-chart"
@@ -39,6 +40,7 @@ const SalesTabsScreen = () => {
         name={'Detailed Reports'}
         component={DetailedReports}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <SimpleLineIcons
               name="drawer"
