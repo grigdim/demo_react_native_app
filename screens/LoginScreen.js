@@ -241,7 +241,7 @@ const LoginScreen = () => {
             <DrawerHeader />
           </TouchableOpacity>
           <TouchableOpacity
-            className="bg-emerald-900 my-2 mx-auto p-2 rounded-2xl"
+            className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
             onPress={() => {
               navigation.navigate('LineChartScreen');
             }}
