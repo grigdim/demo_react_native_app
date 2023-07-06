@@ -30,7 +30,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const SalesStatisticsScreen = () => {
+const TestingScreen = () => {
     const token = useSelector(selectToken);
     const { width, height } = Dimensions.get('screen');
     const dispatch = useDispatch();
@@ -882,4 +882,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SalesStatisticsScreen;
+export default TestingScreen;
