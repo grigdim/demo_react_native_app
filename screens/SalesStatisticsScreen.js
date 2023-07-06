@@ -16,6 +16,9 @@ import {
   processColor,
   Dimensions,
   FlatList,
+  Modal,
+  Alert,
+  Touchable,
 } from 'react-native';
 import React, {useEffect, useState, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -26,6 +29,7 @@ import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Table, Row} from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -68,6 +72,8 @@ const SalesStatisticsScreen = () => {
   const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
     useState(false);
   const [dailyTransactionsAverage, setDailyTransactionsAverage] = useState();
+  const [productModalVisible, setProductModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState();
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
@@ -230,6 +236,7 @@ const SalesStatisticsScreen = () => {
           return tableData;
         });
         setDailyTransactionsAverage(data.TransactionsSalesDto);
+
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -415,7 +422,7 @@ const SalesStatisticsScreen = () => {
                 {!turnoverDetails ? (
                   <View className="divide-y divide-yellow-400">
                     <View className="flex-row justify-evenly items-center py-8">
-                      <View>
+                      <View className="w-1/3">
                         <Text className="text-center text-yellow-400 text-lg font-bold">
                           {totals[0].TurnoverWithoutVat} €
                         </Text>
@@ -423,7 +430,7 @@ const SalesStatisticsScreen = () => {
                           without VAT
                         </Text>
                       </View>
-                      <View>
+                      <View className="w-1/3">
                         <Text className="text-center text-yellow-400 text-lg font-bold">
                           {totals[0].TurnoverVatTotal}€
                         </Text>
@@ -431,7 +438,7 @@ const SalesStatisticsScreen = () => {
                           VAT total
                         </Text>
                       </View>
-                      <View>
+                      <View className="w-1/3">
                         <Text className="text-center text-yellow-400 text-lg font-bold">
                           {totals[0].AvgPerDay}€
                         </Text>
@@ -536,7 +543,7 @@ const SalesStatisticsScreen = () => {
                 {!profitDetails ? (
                   <View className="divide-y divide-purple-400">
                     <View className="flex-row justify-evenly items-center py-8">
-                      <View>
+                      <View className="w-1/2">
                         <Text className="text-center text-purple-400 text-lg font-bold">
                           {totals[0].TotalProfitWithoutVat}€
                         </Text>
@@ -544,7 +551,7 @@ const SalesStatisticsScreen = () => {
                           without VAT
                         </Text>
                       </View>
-                      <View>
+                      <View className="w-1/2">
                         <Text className="text-center text-purple-400 text-lg font-bold">
                           {totals[0].TotalProfitPercentage}%
                         </Text>
@@ -661,7 +668,9 @@ const SalesStatisticsScreen = () => {
                     })}
                     <TouchableOpacity
                       className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                      onPress={() => {}}>
+                      onPress={() => {
+                        setProductModalVisible(true);
+                      }}>
                       <Text
                         className="text-center text-xs font-bold"
                         style={{color: 'rgb(107 114 128)'}}>
@@ -673,6 +682,172 @@ const SalesStatisticsScreen = () => {
                         color="rgb(107 114 128)"
                       />
                     </TouchableOpacity>
+                    <Modal
+                      animationType="slide"
+                      visible={productModalVisible}
+                      onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setProductModalVisible(!productModalVisible);
+                      }}>
+                      <View>
+                        <View className="flex-row justify-center items-center p-4 border-b border-gray-200">
+                          <Text className="flex-1 text-center text-lg">
+                            Product Sales Details
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setProductModalVisible(false);
+                              setSelectedProduct(null);
+                            }}>
+                            <Icon
+                              name="close"
+                              size={15}
+                              color="rgb(23 37 84)"
+                              className="grow-0"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <View className="justify-center items-center py-4">
+                          <SelectDropdown
+                            data={salesData?.TopSellingProductDtos?.map(
+                              item => item.ProductName,
+                            )}
+                            onSelect={(selectedItem, index) => {
+                              setSelectedProduct(
+                                salesData.TopSellingProductDtos?.find(
+                                  item =>
+                                    item.ProductName.toLowerCase() ===
+                                    selectedItem.toLowerCase(),
+                                ),
+                              );
+                            }}
+                            defaultButtonText={' '}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                              return selectedItem;
+                            }}
+                            rowTextForSelection={(item, index) => {
+                              return item;
+                            }}
+                            buttonStyle={{
+                              width: '80%',
+                              height: 50,
+                              backgroundColor: '#FFF',
+                              borderRadius: 8,
+                              borderWidth: 1,
+                              borderColor: 'rgb(229 231 235)',
+                            }}
+                            buttonTextStyle={{color: '#444', textAlign: 'left'}}
+                            renderDropdownIcon={isOpened => {
+                              return (
+                                <SimpleLineIcons
+                                  name={'magnifier'}
+                                  color={'rgb(229 231 235)'}
+                                  size={18}
+                                />
+                              );
+                            }}
+                            dropdownIconPosition={'left'}
+                            dropdownStyle={{backgroundColor: '#EFEFEF'}}
+                            rowStyle={{
+                              backgroundColor: '#EFEFEF',
+                              borderBottomColor: '#C5C5C5',
+                            }}
+                            rowTextStyle={{color: '#444', textAlign: 'left'}}
+                            selectedRowStyle={{
+                              backgroundColor: 'rgba(0,0,0,0.1)',
+                            }}
+                            search
+                            searchInputStyle={{
+                              backgroundColor: 'white',
+                              borderBottomWidth: 1,
+                              borderBottomColor: 'rgb(229 231 235)',
+                            }}
+                            searchPlaceHolder={
+                              'Search by Name, Barcode, Supplier Code or Internal Code'
+                            }
+                            searchPlaceHolderColor={'darkgrey'}
+                            renderSearchInputLeftIcon={() => {
+                              return (
+                                <SimpleLineIcons
+                                  onEnterText
+                                  name={'magnifier'}
+                                  color={'rgb(100, 116, 139)'}
+                                  size={18}
+                                />
+                              );
+                            }}
+                          />
+                        </View>
+                        <View className="justify-center items-center space-y-2 mb-2">
+                          <View className="flex-row">
+                            <Text className="text-slate-500 text-xl">
+                              From:{' '}
+                            </Text>
+                            <Text className="text-slate-500 text-xl">
+                              {fromDateFormatted}
+                            </Text>
+                          </View>
+                          <View className="flex-row">
+                            <Text className="text-slate-500 text-xl">To: </Text>
+                            <Text className="text-slate-500 text-xl">
+                              {toDateFormatted}
+                            </Text>
+                          </View>
+                        </View>
+                        <View className="space-y-4">
+                          <View className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md">
+                            {selectedProduct &&
+                              Object.keys(selectedProduct).map(key => {
+                                if (
+                                  key === 'Quantity' ||
+                                  key === 'TurnOverWithoutVat' ||
+                                  key === 'VatTotal' ||
+                                  key === 'TurnOverWithVat'
+                                ) {
+                                  return (
+                                    <View className="justify-start items-center p-4 w-1/2">
+                                      <Text className="text-white text-lg font-black">
+                                        {selectedProduct[key] + '€'}
+                                      </Text>
+                                      <Text className="text-white text-center text-sm">
+                                        {key
+                                          .replace(/(?!^Turn)O/g, ' o')
+                                          .replace(/(?!^)([A-Z])/g, ' $1')}
+                                      </Text>
+                                    </View>
+                                  );
+                                }
+                              })}
+                          </View>
+                          <View className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6">
+                            {selectedProduct &&
+                              Object.keys(selectedProduct).map(key => {
+                                if (
+                                  key === 'ProfitOnTurnOverPercentage' ||
+                                  key === 'ProfitWithVat' ||
+                                  key === 'ProfitWithoutVat'
+                                ) {
+                                  return (
+                                    <View className="justify-center items-center w-1/3 px-4">
+                                      <Text className="text-white text-lg font-black">
+                                        {key === 'ProfitOnTurnOverPercentage'
+                                          ? selectedProduct[key] + '%'
+                                          : selectedProduct[key] + '€'}
+                                      </Text>
+
+                                      <Text className="text-white text-center text-sm">
+                                        {key
+                                          .replace(/(?!^Turn)O/g, ' o')
+                                          .replace(/(?!^)([A-Z])/g, ' $1')}
+                                      </Text>
+                                    </View>
+                                  );
+                                }
+                              })}
+                          </View>
+                        </View>
+                      </View>
+                    </Modal>
                   </View>
                 </View>
               )}
@@ -845,11 +1020,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginLeft: 'auto',
     marginRight: 'auto',
+    textAlign: 'center',
     borderWidth: 1,
     padding: 10,
     color: 'black',
     borderRadius: 5,
-    textAlign: 'center',
   },
 });
 
