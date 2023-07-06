@@ -17,6 +17,7 @@ import {
     Dimensions,
     FlatList,
 } from 'react-native';
+import { DrawerActions } from 'react-navigation'
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { selectToken } from '../features/bootstrap';
@@ -29,9 +30,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const SalesStatisticsScreen = () => {
+const TestingScreen = () => {
     const token = useSelector(selectToken);
     const { width, height } = Dimensions.get('screen');
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
     const [groupByDate, setGroupByDate] = useState('MONTH');
     const [salesData, setSalesData] = useState();
@@ -310,12 +313,24 @@ const SalesStatisticsScreen = () => {
             {loading ? (
                 <ActivityIndicator color="rgb(34 211 238)" size="large" />
             ) : (
-                <View className="w-full h-full space-y-3" style={{ elevation: 10 }}>
+                <View className="w-full h-full  " style={{ elevation: 5 }}>
+                    <TouchableOpacity
+                        className="bg-blue-900 p-2 flex-row space-x-2 justify-center items-center"
+                        onPress={() => navigation.dispatch(DrawerActions.CustomDrawer())}>
+                        <Text className="text-center text-s text-bold text-white">
+                            Intale Statistics
+                        </Text>
+                        <FontAwesome
+                            name="bars"
+                            size={10}
+                            color="rgb(255 255 255)"
+                        ></FontAwesome>
+                    </TouchableOpacity>
                     {/*Widgets start*/}
                     {salesData !== undefined && salesData !== null ? (
                         <ScrollView className="space-y-3">
                             {/*Date picker start*/}
-                            <View className="space-y-1 my-2 mx-4" style={{ elevation: 50 }}>
+                            <View className=" my-2 mx-4" style={{ elevation: 50 }}>
                                 <View className="bg-gray-200 border rounded-sm h-11 justify-center">
                                     <SelectDropdown
                                         dropdownStyle={{
@@ -867,4 +882,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SalesStatisticsScreen;
+export default TestingScreen;
