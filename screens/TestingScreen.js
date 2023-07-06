@@ -63,6 +63,10 @@ const SalesStatisticsScreen = () => {
     const [categoriesDetailsTableData, setCategoriesDetailsTableData] = useState(
         [],
     );
+    const [categoriesDetailsTableDataTrunc, setCategoriesDetailsTableDataTrunc] =
+        useState([]);
+    const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
+        useState(false);
 
     const handleChangeSftId = inputText => {
         setSftId(inputText);
@@ -224,6 +228,9 @@ const SalesStatisticsScreen = () => {
                     } else return [];
                     return tableData;
                 });
+                setCategoriesDetailsTableDataTrunc(
+                    categoriesDetailsTableData.slice(0, 10),
+                );
                 setLoading(false);
             } catch (e) {
                 console.log(e);
@@ -231,6 +238,10 @@ const SalesStatisticsScreen = () => {
             }
         }
     };
+
+    useEffect(() => {
+        setCategoriesDetailsTableDataTrunc(categoriesDetailsTableData.slice(0, 10));
+    }, [categoriesDetailsTableData]);
 
     useEffect(() => {
         fetchDataFromBoApi();
@@ -642,7 +653,6 @@ const SalesStatisticsScreen = () => {
                                                     <Text
                                                         key={salesData.TopSellingProductDtos.ProductId}
                                                         className="text-center py-2 text-gray-500 font-bold"
-                                                    // style={{color: 'rgb(74, 118, 194)'}}
                                                     >
                                                         {item.ProductName.toUpperCase()}
                                                     </Text>
@@ -651,16 +661,17 @@ const SalesStatisticsScreen = () => {
                                         })}
                                         <TouchableOpacity
                                             className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
+                                            style={{ backgroundColor: 'rgb(95,125,155)' }}
                                             onPress={() => { }}>
                                             <Text
                                                 className="text-center text-xs font-bold"
-                                                style={{ color: 'rgb(107 114 128)' }}>
+                                                style={{ color: 'rgb(255 255 255)' }}>
                                                 CHOOSE A PRODUCT
                                             </Text>
                                             <FontAwesome
                                                 name="arrow-right"
                                                 size={10}
-                                                color="rgb(107 114 128)"
+                                                color="rgb(255 255 255)"
                                             />
                                         </TouchableOpacity>
                                     </View>
@@ -710,32 +721,85 @@ const SalesStatisticsScreen = () => {
                                                         () => 100,
                                                     )}
                                                 />
-                                                <View className="divide-y divide-gray-200 rounded-b-md">
-                                                    {categoriesDetailsTableData.map((row, index) => (
-                                                        <Row
-                                                            key={index}
-                                                            style={{
-                                                                alignContent: 'center',
-                                                                paddingTop: 6,
-                                                                paddingBottom: 6,
-                                                                paddingLeft: 2,
-                                                                paddingRight: 2,
-                                                            }}
-                                                            textStyle={{
-                                                                textAlign: 'center',
-                                                                fontSize: 12,
-                                                                fontWeight: 'bold',
-                                                                color: 'rgb(107 114 128)',
-                                                            }}
-                                                            widthArr={categoriesDetailsTableHeaders.map(
-                                                                () => 100,
-                                                            )}
-                                                            data={row}
-                                                        />
-                                                    ))}
+                                                <View className="divide-y divide-gray-200">
+                                                    {categoriesDetailsTableExpanded
+                                                        ? categoriesDetailsTableData.map((row, index) => {
+                                                            return (
+                                                                <Row
+                                                                    key={index}
+                                                                    style={{
+                                                                        alignContent: 'center',
+                                                                        paddingTop: 6,
+                                                                        paddingBottom: 6,
+                                                                        paddingLeft: 2,
+                                                                        paddingRight: 2,
+                                                                    }}
+                                                                    textStyle={{
+                                                                        textAlign: 'center',
+                                                                        fontSize: 12,
+                                                                        fontWeight: 'bold',
+                                                                        color: 'rgb(107, 114, 128)',
+                                                                    }}
+                                                                    widthArr={categoriesDetailsTableHeaders.map(
+                                                                        () => 100,
+                                                                    )}
+                                                                    data={row}
+                                                                />
+                                                            );
+                                                        })
+                                                        : categoriesDetailsTableDataTrunc.map(
+                                                            (row, index) => {
+                                                                if (index <= 5) {
+                                                                    return (
+                                                                        <Row
+                                                                            key={index}
+                                                                            style={{
+                                                                                alignContent: 'center',
+                                                                                paddingTop: 6,
+                                                                                paddingBottom: 6,
+                                                                                paddingLeft: 2,
+                                                                                paddingRight: 2,
+                                                                            }}
+                                                                            textStyle={{
+                                                                                textAlign: 'center',
+                                                                                fontSize: 12,
+                                                                                fontWeight: 'bold',
+                                                                                color: 'rgb(107, 114, 128)',
+                                                                            }}
+                                                                            widthArr={categoriesDetailsTableHeaders.map(
+                                                                                () => 100,
+                                                                            )}
+                                                                            data={row}
+                                                                        />
+                                                                    );
+                                                                }
+                                                                return null;
+                                                            },
+                                                        )}
                                                 </View>
                                             </Table>
                                         </ScrollView>
+                                        <View className="rounded-b-md">
+                                            <TouchableOpacity
+                                                className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
+                                                style={{ backgroundColor: 'rgb(95,125,155)' }}
+                                                onPress={() =>
+                                                    setCategoriesDetailsTableExpanded(
+                                                        !categoriesDetailsTableExpanded,
+                                                    )
+                                                }>
+                                                <Text className="font-bold text-xs font-bold" style={{ color: 'rgb(255,255,255)' }}>
+                                                    {!categoriesDetailsTableExpanded
+                                                        ? 'EXPAND'
+                                                        : 'COLLAPSE'}
+                                                </Text>
+                                                <FontAwesome
+                                                    name={categoriesDetailsTableExpanded ? 'arrow-up' : 'arrow-down'}
+                                                    size={10}
+                                                    color="rgb(255,255,255)"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                 </View>
                             )}
