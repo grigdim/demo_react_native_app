@@ -67,6 +67,7 @@ const SalesStatisticsScreen = () => {
         useState([]);
     const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
         useState(false);
+    const [dailyTransactionsAverage, setDailyTransactionsAverage] = useState();
 
     const handleChangeSftId = inputText => {
         setSftId(inputText);
@@ -231,6 +232,7 @@ const SalesStatisticsScreen = () => {
                 setCategoriesDetailsTableDataTrunc(
                     categoriesDetailsTableData.slice(0, 10),
                 );
+                setDailyTransactionsAverage(data.TransactionsSalesDto);
                 setLoading(false);
             } catch (e) {
                 console.log(e);
@@ -680,20 +682,22 @@ const SalesStatisticsScreen = () => {
                             {/*Top products end*/}
                             {/*Categories Details start*/}
                             {categoriesDetailsTableData.length > 0 && (
-                                <View className="mb-2 mx-4">
-                                    <View style={{ backgroundColor: 'rgb(86, 113, 144)', elevation: 50 }}>
-                                        <View className="flex-row justify-between rounded-t-md py-3">
-                                            <Text className="text-white underline ml-3 mt-1">
-                                                Category Details
+                                <View className="mb-2 mx-4 ">
+                                    <View className="flex-row justify-between rounded-t-md py-3"
+                                        style={{
+                                            backgroundColor: 'rgb(86, 113, 144)',
+                                            elevation: 50
+                                        }}>
+                                        <Text className="text-white underline ml-3 mt-1">
+                                            Category Details
+                                        </Text>
+                                        <TouchableOpacity className="flex-row space-x-2 justify-center items-center rounded-b-md"
+                                            onPress={() => { }}>
+                                            <Text className="text-xs font-bold border border-white p-1 mr-2"
+                                                style={{ color: 'rgb(255, 255, 255)', borderRadius: 20, fontSize: 11 }}>
+                                                EXPORT TO EXCEL
                                             </Text>
-                                            <TouchableOpacity className="flex-row space-x-2 items-center rounded-b-md"
-                                                onPress={() => { }}>
-                                                <Text className="text-xs font-bold border border-white p-1 mr-2"
-                                                    style={{ color: 'rgb(255, 255, 255)', borderRadius: 20, fontSize: 12 }}>
-                                                    EXPORT TO EXCEL
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                     <View className="flex-1">
                                         <ScrollView horizontal className="rounded-b-md pb-1">
@@ -804,6 +808,40 @@ const SalesStatisticsScreen = () => {
                                 </View>
                             )}
                             {/*Categories Details end*/}
+                            {/*Daily Transactions Average start*/}
+                            <View className="mb-2 mx-4">
+                                <View
+                                    className="py-3 rounded-t-md"
+                                    style={{
+                                        backgroundColor: 'rgb(86, 113, 144)',
+                                        elevation: 50,
+                                    }}>
+                                    <Text className="text-center text-white underline">
+                                        Daily Transactions Average
+                                    </Text>
+                                </View>
+                                <View
+                                    className="rounded-b-md py-6 space-y-6"
+                                    style={{
+                                        backgroundColor: 'rgb(105, 133, 165)',
+                                        elevation: 50,
+                                    }}>
+                                    {dailyTransactionsAverage &&
+                                        Object.keys(dailyTransactionsAverage).map((key, index) => {
+                                            return (
+                                                <View className="justify-center items-center rounded-md space-y-2">
+                                                    <Text className="text-white text-xl font-black">
+                                                        {dailyTransactionsAverage[key]}
+                                                    </Text>
+                                                    <Text className="text-white">
+                                                        {key.replace(/(?!^)([A-Z])/g, ' $1')}
+                                                    </Text>
+                                                </View>
+                                            );
+                                        })}
+                                </View>
+                            </View>
+                            {/*Daily Transactions Average end*/}
                         </ScrollView>
                     ) : null}
                     {/*Widgets end*/}
