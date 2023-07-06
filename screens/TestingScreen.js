@@ -655,7 +655,7 @@ const SalesStatisticsScreen = () => {
                                             <Text
                                                 className="text-center text-xs font-bold"
                                                 style={{ color: 'rgb(107 114 128)' }}>
-                                                SELECT PRODUCT
+                                                CHOOSE A PRODUCT
                                             </Text>
                                             <FontAwesome
                                                 name="arrow-right"
@@ -670,15 +670,19 @@ const SalesStatisticsScreen = () => {
                             {/*Categories Details start*/}
                             {categoriesDetailsTableData.length > 0 && (
                                 <View className="mb-2 mx-4">
-                                    <View
-                                        className="py-3 rounded-t-md "
-                                        style={{
-                                            backgroundColor: 'rgb(86, 113, 144)',
-                                            elevation: 50,
-                                        }}>
-                                        <Text className="text-center text-white underline">
-                                            Category Product Details
-                                        </Text>
+                                    <View style={{ backgroundColor: 'rgb(86, 113, 144)', elevation: 50 }}>
+                                        <View className="flex-row justify-between rounded-t-md py-3">
+                                            <Text className="text-white underline ml-3 mt-1">
+                                                Category Details
+                                            </Text>
+                                            <TouchableOpacity className="flex-row space-x-2 items-center rounded-b-md"
+                                                onPress={() => { }}>
+                                                <Text className="text-xs font-bold border border-white p-1 mr-2"
+                                                    style={{ color: 'rgb(255, 255, 255)', borderRadius: 20, fontSize: 12 }}>
+                                                    EXPORT TO EXCEL
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                     <View className="flex-1">
                                         <ScrollView horizontal className="rounded-b-md pb-1">
