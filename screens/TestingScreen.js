@@ -16,6 +16,9 @@ import {
     processColor,
     Dimensions,
     FlatList,
+    Modal,
+    Alert,
+    Touchable,
 } from 'react-native';
 import { DrawerActions } from 'react-navigation'
 import React, { useEffect, useState, useMemo } from 'react';
@@ -27,6 +30,7 @@ import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -71,6 +75,8 @@ const TestingScreen = () => {
     const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
         useState(false);
     const [dailyTransactionsAverage, setDailyTransactionsAverage] = useState();
+    const [productModalVisible, setProductModalVisible] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState();
 
     const handleChangeSftId = inputText => {
         setSftId(inputText);
@@ -316,7 +322,7 @@ const TestingScreen = () => {
                 <View className="w-full h-full  " style={{ elevation: 5 }}>
                     <TouchableOpacity
                         className="bg-blue-900 p-2 flex-row space-x-2 justify-center items-center"
-                        onPress={() => navigation.dispatch(DrawerActions.CustomDrawer())}>
+                        onPress={() => navigation.openDrawer()}>
                         <Text className="text-center text-s text-bold text-white">
                             Intale Statistics
                         </Text>
@@ -330,7 +336,7 @@ const TestingScreen = () => {
                     {salesData !== undefined && salesData !== null ? (
                         <ScrollView className="space-y-3">
                             {/*Date picker start*/}
-                            <View className=" my-2 mx-4" style={{ elevation: 50 }}>
+                            <View className="space-y-1 my-2 mx-4" style={{ elevation: 50 }}>
                                 <View className="bg-gray-200 border rounded-sm h-11 justify-center">
                                     <SelectDropdown
                                         dropdownStyle={{
@@ -433,7 +439,7 @@ const TestingScreen = () => {
                                 {!turnoverDetails ? (
                                     <View className="divide-y divide-yellow-400">
                                         <View className="flex-row justify-evenly items-center py-8">
-                                            <View>
+                                            <View className="w-1/3">
                                                 <Text className="text-center text-yellow-400 text-lg font-bold">
                                                     {totals[0].TurnoverWithoutVat} €
                                                 </Text>
@@ -441,7 +447,7 @@ const TestingScreen = () => {
                                                     without VAT
                                                 </Text>
                                             </View>
-                                            <View>
+                                            <View className="w-1/3">
                                                 <Text className="text-center text-yellow-400 text-lg font-bold">
                                                     {totals[0].TurnoverVatTotal}€
                                                 </Text>
@@ -449,7 +455,7 @@ const TestingScreen = () => {
                                                     VAT total
                                                 </Text>
                                             </View>
-                                            <View>
+                                            <View className="w-1/3">
                                                 <Text className="text-center text-yellow-400 text-lg font-bold">
                                                     {totals[0].AvgPerDay}€
                                                 </Text>
@@ -554,7 +560,7 @@ const TestingScreen = () => {
                                 {!profitDetails ? (
                                     <View className="divide-y divide-purple-400">
                                         <View className="flex-row justify-evenly items-center py-8">
-                                            <View>
+                                            <View className="w-1/2">
                                                 <Text className="text-center text-purple-400 text-lg font-bold">
                                                     {totals[0].TotalProfitWithoutVat}€
                                                 </Text>
@@ -562,7 +568,7 @@ const TestingScreen = () => {
                                                     without VAT
                                                 </Text>
                                             </View>
-                                            <View>
+                                            <View className="w-1/2">
                                                 <Text className="text-center text-purple-400 text-lg font-bold">
                                                     {totals[0].TotalProfitPercentage}%
                                                 </Text>
@@ -670,6 +676,7 @@ const TestingScreen = () => {
                                                     <Text
                                                         key={salesData.TopSellingProductDtos.ProductId}
                                                         className="text-center py-2 text-gray-500 font-bold"
+                                                    // style={{color: 'rgb(74, 118, 194)'}}
                                                     >
                                                         {item.ProductName.toUpperCase()}
                                                     </Text>
@@ -679,7 +686,7 @@ const TestingScreen = () => {
                                         <TouchableOpacity
                                             className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
                                             style={{ backgroundColor: 'rgb(95,125,155)' }}
-                                            onPress={() => { }}>
+                                            onPress={() => { setProductModalVisible(true); }}>
                                             <Text
                                                 className="text-center text-xs font-bold"
                                                 style={{ color: 'rgb(255 255 255)' }}>
@@ -691,13 +698,179 @@ const TestingScreen = () => {
                                                 color="rgb(255 255 255)"
                                             />
                                         </TouchableOpacity>
+                                        <Modal
+                                            animationType="slide"
+                                            visible={productModalVisible}
+                                            onRequestClose={() => {
+                                                Alert.alert('Modal has been closed.');
+                                                setProductModalVisible(!productModalVisible);
+                                            }}>
+                                            <View>
+                                                <View className="flex-row justify-center items-center p-4 border-b border-gray-200">
+                                                    <Text className="flex-1 text-center text-lg">
+                                                        Product Sales Details
+                                                    </Text>
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            setProductModalVisible(false);
+                                                            setSelectedProduct(null);
+                                                        }}>
+                                                        <Icon
+                                                            name="close"
+                                                            size={15}
+                                                            color="rgb(23 37 84)"
+                                                            className="grow-0"
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View className="justify-center items-center py-4">
+                                                    <SelectDropdown
+                                                        data={salesData?.TopSellingProductDtos?.map(
+                                                            item => item.ProductName,
+                                                        )}
+                                                        onSelect={(selectedItem, index) => {
+                                                            setSelectedProduct(
+                                                                salesData.TopSellingProductDtos?.find(
+                                                                    item =>
+                                                                        item.ProductName.toLowerCase() ===
+                                                                        selectedItem.toLowerCase(),
+                                                                ),
+                                                            );
+                                                        }}
+                                                        defaultButtonText={' '}
+                                                        buttonTextAfterSelection={(selectedItem, index) => {
+                                                            return selectedItem;
+                                                        }}
+                                                        rowTextForSelection={(item, index) => {
+                                                            return item;
+                                                        }}
+                                                        buttonStyle={{
+                                                            width: '80%',
+                                                            height: 50,
+                                                            backgroundColor: '#FFF',
+                                                            borderRadius: 8,
+                                                            borderWidth: 1,
+                                                            borderColor: 'rgb(229 231 235)',
+                                                        }}
+                                                        buttonTextStyle={{ color: '#444', textAlign: 'left' }}
+                                                        renderDropdownIcon={isOpened => {
+                                                            return (
+                                                                <SimpleLineIcons
+                                                                    name={'magnifier'}
+                                                                    color={'rgb(229 231 235)'}
+                                                                    size={18}
+                                                                />
+                                                            );
+                                                        }}
+                                                        dropdownIconPosition={'left'}
+                                                        dropdownStyle={{ backgroundColor: '#EFEFEF' }}
+                                                        rowStyle={{
+                                                            backgroundColor: '#EFEFEF',
+                                                            borderBottomColor: '#C5C5C5',
+                                                        }}
+                                                        rowTextStyle={{ color: '#444', textAlign: 'left' }}
+                                                        selectedRowStyle={{
+                                                            backgroundColor: 'rgba(0,0,0,0.1)',
+                                                        }}
+                                                        search
+                                                        searchInputStyle={{
+                                                            backgroundColor: 'white',
+                                                            borderBottomWidth: 1,
+                                                            borderBottomColor: 'rgb(229 231 235)',
+                                                        }}
+                                                        searchPlaceHolder={
+                                                            'Search by Name, Barcode, Supplier Code or Internal Code'
+                                                        }
+                                                        searchPlaceHolderColor={'darkgrey'}
+                                                        renderSearchInputLeftIcon={() => {
+                                                            return (
+                                                                <SimpleLineIcons
+                                                                    onEnterText
+                                                                    name={'magnifier'}
+                                                                    color={'rgb(100, 116, 139)'}
+                                                                    size={18}
+                                                                />
+                                                            );
+                                                        }}
+                                                    />
+                                                </View>
+                                                <View className="justify-center items-center space-y-2 mb-2">
+                                                    <View className="flex-row">
+                                                        <Text className="text-slate-500 text-xl">
+                                                            From:{' '}
+                                                        </Text>
+                                                        <Text className="text-slate-500 text-xl">
+                                                            {fromDateFormatted}
+                                                        </Text>
+                                                    </View>
+                                                    <View className="flex-row">
+                                                        <Text className="text-slate-500 text-xl">To: </Text>
+                                                        <Text className="text-slate-500 text-xl">
+                                                            {toDateFormatted}
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                                <View className="space-y-4">
+                                                    <View className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md">
+                                                        {selectedProduct &&
+                                                            Object.keys(selectedProduct).map(key => {
+                                                                if (
+                                                                    key === 'Quantity' ||
+                                                                    key === 'TurnOverWithoutVat' ||
+                                                                    key === 'VatTotal' ||
+                                                                    key === 'TurnOverWithVat'
+                                                                ) {
+                                                                    return (
+                                                                        <View className="justify-start items-center p-4 w-1/2">
+                                                                            <Text className="text-white text-lg font-black">
+                                                                                {selectedProduct[key] + '€'}
+                                                                            </Text>
+                                                                            <Text className="text-white text-center text-sm">
+                                                                                {key
+                                                                                    .replace(/(?!^Turn)O/g, ' o')
+                                                                                    .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                            </Text>
+                                                                        </View>
+                                                                    );
+                                                                }
+                                                            })}
+                                                    </View>
+                                                    <View className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6">
+                                                        {selectedProduct &&
+                                                            Object.keys(selectedProduct).map(key => {
+                                                                if (
+                                                                    key === 'ProfitOnTurnOverPercentage' ||
+                                                                    key === 'ProfitWithVat' ||
+                                                                    key === 'ProfitWithoutVat'
+                                                                ) {
+                                                                    return (
+                                                                        <View className="justify-center items-center w-1/3 px-4">
+                                                                            <Text className="text-white text-lg font-black">
+                                                                                {key === 'ProfitOnTurnOverPercentage'
+                                                                                    ? selectedProduct[key] + '%'
+                                                                                    : selectedProduct[key] + '€'}
+                                                                            </Text>
+
+                                                                            <Text className="text-white text-center text-sm">
+                                                                                {key
+                                                                                    .replace(/(?!^Turn)O/g, ' o')
+                                                                                    .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                            </Text>
+                                                                        </View>
+                                                                    );
+                                                                }
+                                                            })}
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </Modal>
                                     </View>
                                 </View>
                             )}
                             {/*Top products end*/}
                             {/*Categories Details start*/}
                             {categoriesDetailsTableData.length > 0 && (
-                                <View className="mb-2 mx-4 ">
+                                <View className="mb-2 mx-4">
                                     <View className="flex-row justify-between rounded-t-md py-3"
                                         style={{
                                             backgroundColor: 'rgb(86, 113, 144)',
@@ -714,8 +887,8 @@ const TestingScreen = () => {
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <View className="flex-1">
-                                        <ScrollView horizontal className="rounded-b-md pb-1">
+                                    <View className="flex-1 divide-y divide-gray-200">
+                                        <ScrollView horizontal className="rounded-b-md">
                                             <Table
                                                 style={{
                                                     flex: 1,
@@ -723,6 +896,7 @@ const TestingScreen = () => {
                                                 }}>
                                                 <Row
                                                     data={categoriesDetailsTableHeaders}
+                                                    // className="bg-slate-400"
                                                     style={{
                                                         alignContent: 'center',
                                                         backgroundColor: 'rgb(105, 133, 165)',
@@ -768,7 +942,7 @@ const TestingScreen = () => {
                                                         })
                                                         : categoriesDetailsTableDataTrunc.map(
                                                             (row, index) => {
-                                                                if (index <= 5) {
+                                                                if (index <= 9) {
                                                                     return (
                                                                         <Row
                                                                             key={index}
@@ -792,7 +966,7 @@ const TestingScreen = () => {
                                                                         />
                                                                     );
                                                                 }
-                                                                return null;
+                                                                return null; // Added for the case when index > 9
                                                             },
                                                         )}
                                                 </View>
@@ -874,11 +1048,11 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         marginLeft: 'auto',
         marginRight: 'auto',
+        textAlign: 'center',
         borderWidth: 1,
         padding: 10,
         color: 'black',
         borderRadius: 5,
-        textAlign: 'center',
     },
 });
 
