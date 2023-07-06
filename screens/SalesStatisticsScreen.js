@@ -67,6 +67,7 @@ const SalesStatisticsScreen = () => {
     useState([]);
   const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
     useState(false);
+  const [dailyTransactionsAverage, setDailyTransactionsAverage] = useState();
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
@@ -228,9 +229,7 @@ const SalesStatisticsScreen = () => {
           } else return [];
           return tableData;
         });
-        setCategoriesDetailsTableDataTrunc(
-          categoriesDetailsTableData.slice(0, 10),
-        );
+        setDailyTransactionsAverage(data.TransactionsSalesDto);
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -635,9 +634,9 @@ const SalesStatisticsScreen = () => {
               {salesData.TopSellingProductDtos.length > 0 && (
                 <View className="mb-2 mx-4">
                   <View
-                    className="py-3 rounded-t-md bg-slate-500"
+                    className="py-3 rounded-t-md"
                     style={{
-                      // backgroundColor: 'rgb(74, 118, 194)',
+                      backgroundColor: 'rgb(86, 113, 144)',
                       elevation: 50,
                     }}>
                     <Text className="text-center text-white underline">
@@ -682,9 +681,9 @@ const SalesStatisticsScreen = () => {
               {categoriesDetailsTableData.length > 0 && (
                 <View className="mb-2 mx-4">
                   <View
-                    className="py-3 rounded-t-md bg-slate-500"
+                    className="py-3 rounded-t-md"
                     style={{
-                      // backgroundColor: 'rgb(74, 118, 194)',
+                      backgroundColor: 'rgb(86, 113, 144)',
                       elevation: 50,
                     }}>
                     <Text className="text-center text-white underline">
@@ -700,10 +699,10 @@ const SalesStatisticsScreen = () => {
                         }}>
                         <Row
                           data={categoriesDetailsTableHeaders}
-                          className="bg-slate-400"
+                          // className="bg-slate-400"
                           style={{
                             alignContent: 'center',
-                            // backgroundColor: 'rgb(74, 118, 194)',
+                            backgroundColor: 'rgb(105, 133, 165)',
                             paddingRight: 2,
                             paddingLeft: 2,
                             paddingTop: 4,
@@ -784,7 +783,7 @@ const SalesStatisticsScreen = () => {
                             !categoriesDetailsTableExpanded,
                           )
                         }>
-                        <Text className="text-slate-500 font-bold">
+                        <Text className="text-slate-500 font-black">
                           {!categoriesDetailsTableExpanded
                             ? 'Expand for more categories'
                             : 'Collapse'}
@@ -795,6 +794,40 @@ const SalesStatisticsScreen = () => {
                 </View>
               )}
               {/*Categories Details end*/}
+              {/*Daily Transactions Average start*/}
+              <View className="mb-2 mx-4">
+                <View
+                  className="py-3 rounded-t-md"
+                  style={{
+                    backgroundColor: 'rgb(86, 113, 144)',
+                    elevation: 50,
+                  }}>
+                  <Text className="text-center text-white underline">
+                    Daily Transactions Average
+                  </Text>
+                </View>
+                <View
+                  className="rounded-b-md py-6 space-y-6"
+                  style={{
+                    backgroundColor: 'rgb(105, 133, 165)',
+                    elevation: 50,
+                  }}>
+                  {dailyTransactionsAverage &&
+                    Object.keys(dailyTransactionsAverage).map((key, index) => {
+                      return (
+                        <View className="justify-center items-center rounded-md space-y-2">
+                          <Text className="text-white text-xl font-black">
+                            {dailyTransactionsAverage[key]}
+                          </Text>
+                          <Text className="text-white">
+                            {key.replace(/(?!^)([A-Z])/g, ' $1')}
+                          </Text>
+                        </View>
+                      );
+                    })}
+                </View>
+              </View>
+              {/*Daily Transactions Average end*/}
             </ScrollView>
           ) : null}
           {/*Widgets end*/}
