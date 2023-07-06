@@ -63,6 +63,10 @@ const SalesStatisticsScreen = () => {
   const [categoriesDetailsTableData, setCategoriesDetailsTableData] = useState(
     [],
   );
+  const [categoriesDetailsTableDataTrunc, setCategoriesDetailsTableDataTrunc] =
+    useState([]);
+  const [categoriesDetailsTableExpanded, setCategoriesDetailsTableExpanded] =
+    useState(false);
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
@@ -224,6 +228,9 @@ const SalesStatisticsScreen = () => {
           } else return [];
           return tableData;
         });
+        setCategoriesDetailsTableDataTrunc(
+          categoriesDetailsTableData.slice(0, 10),
+        );
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -231,6 +238,10 @@ const SalesStatisticsScreen = () => {
       }
     }
   };
+
+  useEffect(() => {
+    setCategoriesDetailsTableDataTrunc(categoriesDetailsTableData.slice(0, 10));
+  }, [categoriesDetailsTableData]);
 
   useEffect(() => {
     fetchDataFromBoApi();
@@ -680,8 +691,8 @@ const SalesStatisticsScreen = () => {
                       Category Product Details
                     </Text>
                   </View>
-                  <View className="flex-1">
-                    <ScrollView horizontal className="rounded-b-md pb-1">
+                  <View className="flex-1 divide-y divide-gray-200">
+                    <ScrollView horizontal className="rounded-b-md">
                       <Table
                         style={{
                           flex: 1,
@@ -707,32 +718,79 @@ const SalesStatisticsScreen = () => {
                             () => 100,
                           )}
                         />
-                        <View className="divide-y divide-gray-200 rounded-b-md">
-                          {categoriesDetailsTableData.map((row, index) => (
-                            <Row
-                              key={index}
-                              style={{
-                                alignContent: 'center',
-                                paddingTop: 6,
-                                paddingBottom: 6,
-                                paddingLeft: 2,
-                                paddingRight: 2,
-                              }}
-                              textStyle={{
-                                textAlign: 'center',
-                                fontSize: 12,
-                                fontWeight: 'bold',
-                                color: 'rgb(107 114 128)',
-                              }}
-                              widthArr={categoriesDetailsTableHeaders.map(
-                                () => 100,
+                        <View className="divide-y divide-gray-200">
+                          {categoriesDetailsTableExpanded
+                            ? categoriesDetailsTableData.map((row, index) => {
+                                return (
+                                  <Row
+                                    key={index}
+                                    style={{
+                                      alignContent: 'center',
+                                      paddingTop: 6,
+                                      paddingBottom: 6,
+                                      paddingLeft: 2,
+                                      paddingRight: 2,
+                                    }}
+                                    textStyle={{
+                                      textAlign: 'center',
+                                      fontSize: 12,
+                                      fontWeight: 'bold',
+                                      color: 'rgb(107, 114, 128)',
+                                    }}
+                                    widthArr={categoriesDetailsTableHeaders.map(
+                                      () => 100,
+                                    )}
+                                    data={row}
+                                  />
+                                );
+                              })
+                            : categoriesDetailsTableDataTrunc.map(
+                                (row, index) => {
+                                  if (index <= 9) {
+                                    return (
+                                      <Row
+                                        key={index}
+                                        style={{
+                                          alignContent: 'center',
+                                          paddingTop: 6,
+                                          paddingBottom: 6,
+                                          paddingLeft: 2,
+                                          paddingRight: 2,
+                                        }}
+                                        textStyle={{
+                                          textAlign: 'center',
+                                          fontSize: 12,
+                                          fontWeight: 'bold',
+                                          color: 'rgb(107, 114, 128)',
+                                        }}
+                                        widthArr={categoriesDetailsTableHeaders.map(
+                                          () => 100,
+                                        )}
+                                        data={row}
+                                      />
+                                    );
+                                  }
+                                  return null; // Added for the case when index > 9
+                                },
                               )}
-                              data={row}
-                            />
-                          ))}
                         </View>
                       </Table>
                     </ScrollView>
+                    <View className="bg-white p-1 rounded-b-md">
+                      <TouchableOpacity
+                        className="justify-center items-center"
+                        onPress={() =>
+                          setCategoriesDetailsTableExpanded(
+                            !categoriesDetailsTableExpanded,
+                          )
+                        }>
+                        <Text className="text-slate-500 font-bold">
+                          {!categoriesDetailsTableExpanded
+                            ? 'Expand for more categories'
+                            : 'Collapse'}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               )}
