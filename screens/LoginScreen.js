@@ -137,7 +137,9 @@ const LoginScreen = () => {
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-gray-50">
       {loading ? (
-        <ActivityIndicator color="#00CCBB" size="large" />
+        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+          <ActivityIndicator color="#00CCBB" size="large" />
+        </View>
       ) : !token ? (
         login ? (
           <View className="flex-1 justify-center items-center space-y-6 w-10/12">
@@ -240,6 +242,7 @@ const LoginScreen = () => {
           <TouchableOpacity  >
             <DrawerHeader />
           </TouchableOpacity>
+          <View className='justify-center items-center' style={{ height: height / 1.33}}>
           <TouchableOpacity
             className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
             onPress={() => {
@@ -251,7 +254,7 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-gray-800 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('BarChartScreen');
@@ -260,7 +263,7 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to bar chart screen
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"
@@ -284,7 +287,7 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-yellow-300 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('TurnoverScreen');
@@ -293,9 +296,9 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to turnover screen
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-green-300 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('TotalProfitScreen');
@@ -304,9 +307,9 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to total profit screen
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-pink-500 my-2 mx-auto p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('ReportsScreen');
@@ -315,7 +318,7 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to reports screen
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
@@ -339,7 +342,7 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-amber-900 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
               navigation.navigate('TestingScreen');
@@ -348,9 +351,9 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Go to testing screen
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
             onPress={() => {
               dispatch(setToken(null));
@@ -363,7 +366,8 @@ const LoginScreen = () => {
             <Text className="text-center text-xl text-bold text-white">
               Delete token and login again
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>

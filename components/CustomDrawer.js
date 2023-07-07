@@ -25,8 +25,7 @@ const CustomDrawer = (props) => {
                 {
                     text: 'Yes',
                     onPress: () =>
-                     RNExitApp.exitApp()
-                    // BackHandler.exitApp(),
+                     RNExitApp.exitApp() 
                 }
             ],
             { cancelable: false }

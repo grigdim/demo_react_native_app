@@ -8,9 +8,10 @@ const DrawerHeader = () => {
 
     return (
         <TouchableOpacity
+            style={{ backgroundColor: '#207ff0' }}
             className="bg-blue-900 p-3 flex-row space-x-2 justify-center items-center"
             onPress={() => navigation.openDrawer()}>
-            <Text className="text-center text-s text-bold text-white">
+            <Text className="text-center text-m text-bold text-white">
                 Intale Statistics
             </Text>
             <FontAwesome
