@@ -1,8 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-unused-vars */
-import { View, Text, SafeAreaView, processColor } from 'react-native';
+import { View, Text, SafeAreaView, processColor, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { BarChart } from 'react-native-charts-wrapper';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import DrawerHeader from './DrawerHeader';
 
 const BarChartScreen = () => {
   const [selectedEntry, setSelectedEntry] = useState();
@@ -129,6 +131,9 @@ const BarChartScreen = () => {
 
   return (
     <SafeAreaView>
+    <TouchableOpacity>
+      <DrawerHeader/>
+    </TouchableOpacity>
       <BarChart
         style={{ width: '100%', height: '100%' }}
         data={data}

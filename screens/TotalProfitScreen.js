@@ -15,6 +15,7 @@ import { selectToken } from '../features/bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import { ip } from '@env';
+import DrawerHeader from './DrawerHeader';
 
 const TotalProfitScreen = () => {
   const navigation = useNavigation();
@@ -58,12 +59,16 @@ const TotalProfitScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
+    <SafeAreaView className=" bg-gray-100 justify-center items-center">
+      <TouchableOpacity style={{ width: width, zIndex: 1 }}>
+        <DrawerHeader />
+      </TouchableOpacity>
       {loading ? (
-        <ActivityIndicator color="rgb(34 211 238)" size="large" />
+        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+          <ActivityIndicator color="rgb(34 211 238)" size="large" />
+        </View>
       ) : (
-        <View className="mb-20 mx-5">
-
+        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
@@ -78,7 +83,7 @@ const TotalProfitScreen = () => {
           </TouchableOpacity>
 
           {!storesFromBoApi ? (
-            <View>
+            <View >
               <TouchableOpacity
                 className="bg-cyan-300 rounded-xl my-2 p-2"
                 onPress={() => setOpen(true)}>
@@ -142,14 +147,6 @@ const TotalProfitScreen = () => {
               </TouchableOpacity>
             </View>
           ) : null}
-
-          {/* <View
-            className="py-2 my-5 bg-gray-200 border border-solid border-green-200 rounded-xl"
-            style={{elevation: 50}}>
-            <Text className="text-green-400 text-center font-bold text-3xl">
-              Total Profit Data
-            </Text>
-          </View> */}
 
           {storesFromBoApi && (
             <ScrollView

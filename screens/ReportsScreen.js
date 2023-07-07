@@ -21,6 +21,7 @@ import DatePicker from 'react-native-date-picker';
 import { debounce } from 'lodash';
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
+import DrawerHeader from './DrawerHeader';
 
 const ReportsScreen = () => {
 
@@ -347,27 +348,27 @@ const ReportsScreen = () => {
     }, []);
 
     useEffect(() => {
-        setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi); 
+        setPickerWeekDescriptionData(reportsGetTransactionsWeeksFromBoApi);
     }, [reportsGetTransactionsWeeksFromBoApi]);
 
     useEffect(() => {
-        setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi); 
+        setSelectedCategoryData(reportsGetProductCategoryNamesFromTopProductsFromBoApi);
     }, [reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     useEffect(() => {
-        setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi); 
+        setSelectedSubCategoryData(reportsGetProductSubCategoryNamesFromTopProductsFromBoApi);
     }, [reportsGetProductSubCategoryNamesFromTopProductsFromBoApi, reportsGetProductCategoryNamesFromTopProductsFromBoApi]);
 
     useEffect(() => {
-        if (selectedCategory) { 
-          const delay = 500;
-          const timer = setTimeout(() => {
-            fetchProductSubCategoryNamesFromTopProductsBoApi(selectedCategory);
-          }, delay);
-      
-          return () => clearTimeout(timer);
+        if (selectedCategory) {
+            const delay = 500;
+            const timer = setTimeout(() => {
+                fetchProductSubCategoryNamesFromTopProductsBoApi(selectedCategory);
+            }, delay);
+
+            return () => clearTimeout(timer);
         }
-      }, [selectedCategory]);
+    }, [selectedCategory]);
 
     const fetchTransactionsStoreNamesBoApi = async () => {
         setLoading(true);
@@ -514,11 +515,16 @@ const ReportsScreen = () => {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
+        <SafeAreaView className="bg-gray-100 justify-center items-center">
+            <TouchableOpacity style={{ width: width, zIndex: 1 }}>
+                <DrawerHeader />
+            </TouchableOpacity>
             {loading ? (
-                <ActivityIndicator color="rgb(34 211 238)" size="large" />
+                <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+                    <ActivityIndicator color="rgb(34 211 238)" size="large" />
+                </View>
             ) : (
-                <View className="w-10/12">
+                <View className="w-10/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
                     <TouchableOpacity
                         onPress={() => {
                             setOpen(false);
@@ -545,11 +551,11 @@ const ReportsScreen = () => {
                                 ? 'New search' : 'Search for reports'}
                         </Text>
                     </TouchableOpacity>
-                    <View>
+                    <View style={{ elevation: 10, width: width / 1.33 }}>
                         {!reportsGetTopProductsInItemSalesFromTopProductsFromBoApi && !reportsGetTopProductsInItemSalesPerStoreFromTopProductsFromBoApi && !reportsGetProductCategoryNamesFromSeasonalityFromBoApi && !reportsGetSeasonalityFromBoApi && !reportsGetSeasonalityDetailsFromBoApi
                             && !reportsGetTransactionsStoreNamesFromBoApi && !reportsGetTransactionAnalysisTopHourFromBoApi && !reportsGetTransactionAnalysisTopDayFromBoApi && !reportsGetTransactionsPerHoursFromBoApi && !reportsGetTransactionsPerDayFromBoApi && !reportsGetAnalysisWeekHourlyTransactionsFromBoApi
                             ? (
-                                <TouchableOpacity className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
+                                <TouchableOpacity style={{ elevation: 10 }} className="bg-pink-200 rounded-lg my-2 p-2 justify-center align-center">
                                     <Text className="text-center text-xl">Search for: </Text>
                                     <Picker
                                         style={{
@@ -580,10 +586,6 @@ const ReportsScreen = () => {
                                         <Picker.Item
                                             label="Seasonality Details"
                                             value="GetSeasonalityDetails"
-                                        />
-                                        <Picker.Item
-                                            label="Transaction Weeks"
-                                            value="GetTransactionsWeeks"
                                         />
                                         <Picker.Item
                                             label="Transaction Store Names"
@@ -620,8 +622,8 @@ const ReportsScreen = () => {
                             switch (selectedLabel) {
                                 case 'GetTopProductsInItemSalesFromTopProducts':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     CATEGORY:{' '}
                                                 </Text>
@@ -632,7 +634,7 @@ const ReportsScreen = () => {
                                                         marginRight: 'auto',
                                                     }}
                                                     selectedValue={selectedCategory}
-                                                    onValueChange={value => { 
+                                                    onValueChange={value => {
                                                         setSelectedCategory(value);
                                                     }}>
                                                     {selectedCategoryData?.map(item => (
@@ -644,7 +646,7 @@ const ReportsScreen = () => {
                                                     ))}
                                                 </Picker>
                                             </TouchableOpacity>
-                                            <TouchableOpacity className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     SUB CATEGORY:{' '}
                                                 </Text>
@@ -666,7 +668,7 @@ const ReportsScreen = () => {
                                                 </Picker>
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTopProductsInItemSalesFromTopProductsBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -676,8 +678,8 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTopProductsInItemSalesPerStoreFromTopProducts':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     CATEGORY:{' '}
                                                 </Text>
@@ -701,7 +703,7 @@ const ReportsScreen = () => {
                                                     ))}
                                                 </Picker>
                                             </TouchableOpacity>
-                                            <TouchableOpacity className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-green-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     SUB CATEGORY:{' '}
                                                 </Text>
@@ -733,7 +735,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTopProductsInItemSalesPerStoreFromTopProductsBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -743,9 +745,9 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetProductCategoryNamesFromSeasonality':
                                     return (
-                                        <View>
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchProductCategoryNamesFromSeasonalityBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -755,7 +757,7 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetSeasonality':
                                     return (
-                                        <View>
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
                                             <Text className="text-center text-xl">
                                                 Product Category Name:{' '}
                                             </Text>
@@ -770,7 +772,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchSeasonalityBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -780,7 +782,7 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetSeasonalityDetails':
                                     return (
-                                        <View>
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
                                             <Text className="text-center text-xl">
                                                 Product Category Name:{' '}
                                             </Text>
@@ -795,7 +797,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchSeasonalityDetailsBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -805,7 +807,7 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTransactionsStoreNames':
                                     return (
-                                        <View>
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
                                             <Text className="text-center text-xl">
                                                 Store Id:{' '}
                                             </Text>
@@ -820,7 +822,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTransactionsStoreNamesBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -830,8 +832,8 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTransactionAnalysisTopHour':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     WEEK:{' '}
                                                 </Text>
@@ -866,7 +868,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20" 
                                                 onPress={() => fetchTransactionAnalysisTopHourBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -876,8 +878,8 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTransactionAnalysisTopDay':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     WEEK:{' '}
                                                 </Text>
@@ -912,7 +914,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTransactionAnalysisTopDayBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -922,8 +924,8 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTransactionsPerHours':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     WEEK:{' '}
                                                 </Text>
@@ -958,7 +960,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTransactionsPerHoursBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -968,8 +970,8 @@ const ReportsScreen = () => {
                                     );
                                 case 'GetTransactionsPerDay':
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     WEEK:{' '}
                                                 </Text>
@@ -1004,7 +1006,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchTransactionsPerDayBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit
@@ -1013,10 +1015,9 @@ const ReportsScreen = () => {
                                         </View>
                                     );
                                 case 'GetAnalysisWeekHourlyTransactions':
-                                    {/* console.log(pickerWeekDescriptionData + " CASE"); */}
                                     return (
-                                        <View>
-                                            <TouchableOpacity className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
+                                        <View style={{ elevation: 10, width: width / 1.33 }}>
+                                            <TouchableOpacity style={{ elevation: 10 }} className="bg-red-300 rounded-lg my-2 p-2 justify-center align-center">
                                                 <Text className="text-center text-xl">
                                                     WEEK:{' '}
                                                 </Text>
@@ -1051,7 +1052,7 @@ const ReportsScreen = () => {
                                                 returnKeyType="done"
                                             />
                                             <TouchableOpacity
-                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                                                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg ml-20 mr-20"
                                                 onPress={() => fetchAnalysisWeekHourlyTransactionsBoApi()}>
                                                 <Text className="text-center text-lg text-white">
                                                     Submit

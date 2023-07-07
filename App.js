@@ -73,6 +73,11 @@ function Root() {
           <Ionicons name="document-text-outline" size={22} color={color} />
         )
       }} />
+      <Drawer.Screen name="Charts" component={BarChartScreen} options={{
+        drawerIcon: ({ color }) => (
+          <Ionicons name="stats-chart-outline" size={22} color={color} />
+        )
+      }} />
       <Drawer.Screen name="Testing" component={TestingScreen} options={{
         drawerIcon: ({ color }) => (
           <Ionicons name="bulb-outline" size={22} color={color} />

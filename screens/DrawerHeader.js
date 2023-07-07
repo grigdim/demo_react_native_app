@@ -8,7 +8,7 @@ const DrawerHeader = () => {
 
     return (
         <TouchableOpacity
-            className="bg-blue-900 p-2 flex-row space-x-2 justify-center items-center"
+            className="bg-blue-900 p-3 flex-row space-x-2 justify-center items-center"
             onPress={() => navigation.openDrawer()}>
             <Text className="text-center text-s text-bold text-white">
                 Intale Statistics

@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
-
+import DrawerHeader from './DrawerHeader';
 
 const TurnoverScreen = () => {
   const navigation = useNavigation();
@@ -64,11 +64,17 @@ const TurnoverScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100 justify-center items-center">
+    <SafeAreaView className="bg-gray-100 justify-center items-center">
+      <TouchableOpacity style={{ width: width, zIndex: 1 }}>
+        <DrawerHeader />
+      </TouchableOpacity>
       {loading ? (
-        <ActivityIndicator color="rgb(34 211 238)" size="large" />
+        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+          <ActivityIndicator color="rgb(34 211 238)" size="large" />
+        </View>
       ) : (
-        <View className="w-8/12 justify-center mt-2">
+        <View className="w-8/12 justify-center items-center mt-2"
+          style={{ height: height / 1.33 }}>
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
