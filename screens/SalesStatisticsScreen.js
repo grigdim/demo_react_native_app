@@ -11,21 +11,14 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  TextInput,
   StyleSheet,
-  processColor,
   Dimensions,
-  FlatList,
   Modal,
-  Alert,
-  Touchable,
 } from 'react-native';
 import React, {useEffect, useState, useMemo} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {selectToken} from '../features/bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
 import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -314,13 +307,15 @@ const SalesStatisticsScreen = () => {
       {loading ? (
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
-        <View className="w-full h-full space-y-3" style={{elevation: 10}}>
+        <View className="w-full h-full space-y-3" style={{elevation: 50}}>
           {/*Widgets start*/}
           {salesData !== undefined && salesData !== null ? (
             <ScrollView className="space-y-3">
               {/*Date picker start*/}
-              <View className="space-y-1 my-2 mx-4" style={{elevation: 50}}>
-                <View className="bg-gray-200 border rounded-sm h-11 justify-center">
+              <View className="space-y-1 my-2 mx-4">
+                <View
+                  className="bg-gray-200 border rounded-sm h-11 justify-center"
+                  style={{elevation: 10}}>
                   <SelectDropdown
                     dropdownStyle={{
                       backgroundColor: 'lightgray',
@@ -346,6 +341,7 @@ const SalesStatisticsScreen = () => {
                 </View>
                 <TouchableOpacity
                   className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
+                  style={{elevation: 50}}
                   onPress={() => setOpenFromDate(true)}>
                   <Text className="text-center text-base text-blue-950">
                     From Date:
@@ -373,6 +369,7 @@ const SalesStatisticsScreen = () => {
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
+                  style={{elevation: 50}}
                   className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
                   onPress={() => setOpenToDate(true)}>
                   <Text className="text-center text-base text-blue-950">
@@ -684,7 +681,7 @@ const SalesStatisticsScreen = () => {
                       />
                     </TouchableOpacity>
                     <Modal
-                      animationType="slide"
+                      animationType="fade"
                       visible={productModalVisible}
                       onRequestClose={() => {
                         setProductModalVisible(!productModalVisible);
@@ -763,9 +760,7 @@ const SalesStatisticsScreen = () => {
                               borderBottomWidth: 1,
                               borderBottomColor: 'rgb(229 231 235)',
                             }}
-                            searchPlaceHolder={
-                              'Search by Name, Barcode, Supplier Code or Internal Code'
-                            }
+                            searchPlaceHolder={'Search by product name'}
                             searchPlaceHolderColor={'darkgrey'}
                             renderSearchInputLeftIcon={() => {
                               return (
