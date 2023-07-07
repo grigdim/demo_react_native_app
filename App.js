@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import StoreScreen from './screens/StoreScreen';
 import AuditScreen from './screens/AuditScreen';
 import CustomDrawer from './components/CustomDrawer';
@@ -29,6 +29,8 @@ import {
   StyleSheet
 } from 'react-native';
 import SalesTabsScreen from './screens/SalesTabsScreen';
+import SplashScreen from "react-native-splash-screen";
+import GestureHandlerRootView from 'react-native-gesture-handler';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -38,6 +40,7 @@ function Root() {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
+        swipeEdgeWidth: 0, // Not swipeable
         headerShown: false, // Show or hide app button for drawer
         headerTintColor: '#3885E0',
         drawerActiveBackgroundColor: '#217BCC',
@@ -49,7 +52,7 @@ function Root() {
           fontSize: 15,
         },
       }}
-      initialRouteName="LoginScreen" >
+      initialRouteName="Root" >
       <Drawer.Screen name="Home" component={LoginScreen} options={{
         drawerIcon: ({ color }) => (
           <Ionicons name="home-outline" size={22} color={color} />
@@ -90,6 +93,10 @@ function Root() {
 }
 
 export default function App() {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <NavigationContainer>
       <Provider store={store}>

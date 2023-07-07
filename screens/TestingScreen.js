@@ -697,7 +697,7 @@ const TestingScreen = () => {
                                                 setProductModalVisible(!productModalVisible);
                                             }}>
                                             <View>
-                                                <View className="flex-row justify-center items-center p-4 border-b border-gray-200">
+                                                <View className="flex-row justify-center items-center p-4 border-b" style={{ borderColor: 'rgb(212 215 222)' }}>
                                                     <Text className="flex-1 text-center text-lg">
                                                         Product Sales Details
                                                     </Text>
@@ -741,14 +741,14 @@ const TestingScreen = () => {
                                                             backgroundColor: '#FFF',
                                                             borderRadius: 8,
                                                             borderWidth: 1,
-                                                            borderColor: 'rgb(229 231 235)',
+                                                            borderColor: 'rgb(212 215 222)',
                                                         }}
                                                         buttonTextStyle={{ color: '#444', textAlign: 'left' }}
                                                         renderDropdownIcon={isOpened => {
                                                             return (
                                                                 <SimpleLineIcons
                                                                     name={'magnifier'}
-                                                                    color={'rgb(229 231 235)'}
+                                                                    color={'rgb(212 215 222)'}
                                                                     size={18}
                                                                 />
                                                             );
@@ -756,8 +756,8 @@ const TestingScreen = () => {
                                                         dropdownIconPosition={'left'}
                                                         dropdownStyle={{ backgroundColor: '#EFEFEF' }}
                                                         rowStyle={{
-                                                            backgroundColor: '#EFEFEF',
-                                                            borderBottomColor: '#C5C5C5',
+                                                            backgroundColor: 'rgb(253 253 253)',
+                                                            borderBottomColor: 'rgb(212 215 222)',
                                                         }}
                                                         rowTextStyle={{ color: '#444', textAlign: 'left' }}
                                                         selectedRowStyle={{
@@ -767,7 +767,7 @@ const TestingScreen = () => {
                                                         searchInputStyle={{
                                                             backgroundColor: 'white',
                                                             borderBottomWidth: 1,
-                                                            borderBottomColor: 'rgb(229 231 235)',
+                                                            borderBottomColor: 'rgb(212 215 222)',
                                                         }}
                                                         searchPlaceHolder={
                                                             'Search by Name, Barcode, Supplier Code or Internal Code'
@@ -801,58 +801,60 @@ const TestingScreen = () => {
                                                         </Text>
                                                     </View>
                                                 </View>
-                                                <View className="space-y-4">
-                                                    <View className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md">
-                                                        {selectedProduct &&
-                                                            Object.keys(selectedProduct).map(key => {
-                                                                if (
-                                                                    key === 'Quantity' ||
-                                                                    key === 'TurnOverWithoutVat' ||
-                                                                    key === 'VatTotal' ||
-                                                                    key === 'TurnOverWithVat'
-                                                                ) {
-                                                                    return (
-                                                                        <View className="justify-start items-center p-4 w-1/2">
-                                                                            <Text className="text-white text-lg font-black">
-                                                                                {selectedProduct[key] + '€'}
-                                                                            </Text>
-                                                                            <Text className="text-white text-center text-sm">
-                                                                                {key
-                                                                                    .replace(/(?!^Turn)O/g, ' o')
-                                                                                    .replace(/(?!^)([A-Z])/g, ' $1')}
-                                                                            </Text>
-                                                                        </View>
-                                                                    );
-                                                                }
-                                                            })}
-                                                    </View>
-                                                    <View className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6">
-                                                        {selectedProduct &&
-                                                            Object.keys(selectedProduct).map(key => {
-                                                                if (
-                                                                    key === 'ProfitOnTurnOverPercentage' ||
-                                                                    key === 'ProfitWithVat' ||
-                                                                    key === 'ProfitWithoutVat'
-                                                                ) {
-                                                                    return (
-                                                                        <View className="justify-center items-center w-1/3 px-4">
-                                                                            <Text className="text-white text-lg font-black">
-                                                                                {key === 'ProfitOnTurnOverPercentage'
-                                                                                    ? selectedProduct[key] + '%'
-                                                                                    : selectedProduct[key] + '€'}
-                                                                            </Text>
+                                                {selectedProduct && (
+                                                    <View className="space-y-4">
+                                                        <View className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md">
+                                                            {selectedProduct &&
+                                                                Object.keys(selectedProduct).map(key => {
+                                                                    if (
+                                                                        key === 'Quantity' ||
+                                                                        key === 'TurnOverWithoutVat' ||
+                                                                        key === 'VatTotal' ||
+                                                                        key === 'TurnOverWithVat'
+                                                                    ) {
+                                                                        return (
+                                                                            <View className="justify-start items-center p-4 w-1/2">
+                                                                                <Text className="text-white text-lg font-black">
+                                                                                    {selectedProduct[key] + '€'}
+                                                                                </Text>
+                                                                                <Text className="text-white text-center text-sm">
+                                                                                    {key
+                                                                                        .replace(/(?!^Turn)O/g, ' o')
+                                                                                        .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                                </Text>
+                                                                            </View>
+                                                                        );
+                                                                    }
+                                                                })}
+                                                        </View>
+                                                        <View className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6">
+                                                            {selectedProduct &&
+                                                                Object.keys(selectedProduct).map(key => {
+                                                                    if (
+                                                                        key === 'ProfitOnTurnOverPercentage' ||
+                                                                        key === 'ProfitWithVat' ||
+                                                                        key === 'ProfitWithoutVat'
+                                                                    ) {
+                                                                        return (
+                                                                            <View className="justify-center items-center w-1/3 px-4">
+                                                                                <Text className="text-white text-lg font-black">
+                                                                                    {key === 'ProfitOnTurnOverPercentage'
+                                                                                        ? selectedProduct[key] + '%'
+                                                                                        : selectedProduct[key] + '€'}
+                                                                                </Text>
 
-                                                                            <Text className="text-white text-center text-sm">
-                                                                                {key
-                                                                                    .replace(/(?!^Turn)O/g, ' o')
-                                                                                    .replace(/(?!^)([A-Z])/g, ' $1')}
-                                                                            </Text>
-                                                                        </View>
-                                                                    );
-                                                                }
-                                                            })}
+                                                                                <Text className="text-white text-center text-sm">
+                                                                                    {key
+                                                                                        .replace(/(?!^Turn)O/g, ' o')
+                                                                                        .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                                </Text>
+                                                                            </View>
+                                                                        );
+                                                                    }
+                                                                })}
+                                                        </View>
                                                     </View>
-                                                </View>
+                                                )}
                                             </View>
                                         </Modal>
                                     </View>
@@ -972,7 +974,7 @@ const TestingScreen = () => {
                                                         !categoriesDetailsTableExpanded,
                                                     )
                                                 }>
-                                                <Text className="font-bold text-xs font-bold" style={{ color: 'rgb(255,255,255)' }}>
+                                                <Text className="font-bold text-xs" style={{ color: 'rgb(255,255,255)' }}>
                                                     {!categoriesDetailsTableExpanded
                                                         ? 'EXPAND'
                                                         : 'COLLAPSE'}
