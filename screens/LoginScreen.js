@@ -84,7 +84,7 @@ const LoginScreen = () => {
   const handleCheckEmail = () => {
     const valid = isValidEmail();
     if (valid === true) {
-      email === 'dgrigoriadis@intale.com'
+      email === 'dgrigoriadis@intale.com' || email === 'gsakellaropoulos@intale.com'
         ? setRegisteredEmail(true)
         : setRegisteredEmail(false);
       setLogin(false);

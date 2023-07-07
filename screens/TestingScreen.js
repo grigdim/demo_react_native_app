@@ -974,7 +974,7 @@ const TestingScreen = () => {
                                                         !categoriesDetailsTableExpanded,
                                                     )
                                                 }>
-                                                <Text className="font-bold text-xs font-bold" style={{ color: 'rgb(255,255,255)' }}>
+                                                <Text className="font-bold text-xs" style={{ color: 'rgb(255,255,255)' }}>
                                                     {!categoriesDetailsTableExpanded
                                                         ? 'EXPAND'
                                                         : 'COLLAPSE'}
