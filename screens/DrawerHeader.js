@@ -16,7 +16,7 @@ const DrawerHeader = () => {
             </Text>
             <FontAwesome
                 name="bars"
-                size={10}
+                size={13}
                 color="rgb(255 255 255)"
             ></FontAwesome>
         </TouchableOpacity>

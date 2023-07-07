@@ -538,10 +538,7 @@ const ReportsScreen = () => {
                             setReportsGetTransactionAnalysisTopDayFromBoApi(null);
                             setReportsGetTransactionsPerHoursFromBoApi(null);
                             setReportsGetTransactionsPerDayFromBoApi(null);
-                            setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(null);
-                            // console.log(pickerWeekDescriptionData + " ON PRESS");
-                            // console.log(selectedSubCategoryData + " ON PRESS");
-                            // console.log(selectedCategoryData + " ON PRESS");
+                            setReportsGetAnalysisWeekHourlyTransactionsFromBoApi(null); 
                         }}
                         className="p-2 my-3 border border-solid bg-gray-200 border-purple-200 rounded-xl"
                         style={{ elevation: 10 }}>
