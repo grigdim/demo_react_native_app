@@ -1,6 +1,4 @@
-/* eslint-disable no-dupe-keys */
 /* eslint-disable curly */
-/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
@@ -25,12 +23,23 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Table, Row} from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
+import {
+  VictoryLegend,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLabel,
+  VictoryAxis,
+  VictoryArea,
+  VictoryTooltip,
+} from 'victory-native';
 
 const SalesStatisticsScreen = () => {
   const token = useSelector(selectToken);
   const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
-  const [groupByDate, setGroupByDate] = useState('MONTH');
+  // const [groupByDate, setGroupByDate] = useState('days');
+  const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('MONTH');
+
   const [salesData, setSalesData] = useState();
   const [totals, setTotals] = useState();
   const [fromDate, setFromDate] = useState(() => {
@@ -45,6 +54,9 @@ const SalesStatisticsScreen = () => {
   const [toDateFormatted, setToDateFormatted] = useState(
     toDate.toISOString().slice(0, 10).concat(' 23:59:59'),
   );
+  // const [dayDiff, setDayDiff] = useState(
+  //   Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24)),
+  // );
   const [storesIds, setStoresIds] = useState([1]);
   const [openFromDate, setOpenFromDate] = useState(false);
   const [openToDate, setOpenToDate] = useState(false);
@@ -67,21 +79,60 @@ const SalesStatisticsScreen = () => {
   const [dailyTransactionsAverage, setDailyTransactionsAverage] = useState();
   const [productModalVisible, setProductModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState();
+  const [salesChartTurnoverWithVatData, setSalesChartTurnoverWithVatData] =
+    useState([]); //
+  const [
+    salesChartTurnoverWithoutVatData,
+    setSalesChartTurnoverWithoutVatData,
+  ] = useState([]); //
+  const [salesChartProfitWithVatData, setSalesChartProfitWithVatData] =
+    useState([]); //
+  const [salesChartProfitWithoutVatData, setSalesChartProfitWithoutVatData] =
+    useState([]); //
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
   };
 
+  // const getBaseUnits = () => {
+  //   if (dayDiff === 0) {
+  //     setGroupByDate('hours');
+  //   } else if (dayDiff >= 60 && dayDiff < 420) {
+  //     setGroupByDate('weeks');
+  //   } else if (dayDiff >= 420 && dayDiff < 730) {
+  //     setGroupByDate('months');
+  //   } else if (dayDiff >= 730) {
+  //     setGroupByDate('years');
+  //   } else setGroupByDate('days');
+
+  //   return dayDiff;
+  // };
+
   const fetchDataFromBoApi = async () => {
     setLoading(true);
+
+    let groupByDate;
+    let dayDiff = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+
+    if (dayDiff === 0) {
+      groupByDate = 'hours';
+    } else if (dayDiff >= 60 && dayDiff < 420) {
+      groupByDate = 'weeks';
+    } else if (dayDiff >= 420 && dayDiff < 730) {
+      groupByDate = 'months';
+    } else if (dayDiff >= 730) {
+      groupByDate = 'years';
+    } else groupByDate = 'days';
+
     // console.log(
     // fromDateFormatted,
     // toDateFormatted,
-    //   sftId,
-    //   groupByDate,
-    //   storesIds,
-    //   token,
+    // sftId,
+    // groupByDate,
+    // storesIds,
+    // token,
     // );
+
     if (__DEV__ && token) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -230,6 +281,231 @@ const SalesStatisticsScreen = () => {
         });
         setDailyTransactionsAverage(data.TransactionsSalesDto);
 
+        let totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
+          if (a.Year === b.Year) {
+            return a.Hour - b.Hour;
+          }
+          return a.Year - b.Year;
+        });
+
+        switch (groupByDate) {
+          case 'hours':
+            setSalesChartTurnoverWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: item.Hour.toString(),
+                  y: item.TurnOver,
+                });
+              });
+              return arr;
+            });
+            setSalesChartTurnoverWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: item.Hour.toString(),
+                  y: item.TurnOverWithoutVAT,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: item.Hour.toString(),
+                  y: item.TotalProfitMerged,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: item.Hour.toString(),
+                  y: item.TotalProfit,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'days':
+            setSalesChartTurnoverWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Hour} - ${item.Year}`,
+                  y: item.TurnOver,
+                });
+              });
+              return arr;
+            });
+            setSalesChartTurnoverWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Hour} - ${item.Year}`,
+                  y: item.TurnOverWithoutVAT,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Hour} - ${item.Year}`,
+                  y: item.TotalProfitMerged,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Hour} - ${item.Year}`,
+                  y: item.TotalProfit,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'weeks':
+            setSalesChartTurnoverWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Week ${item.Hour} of ${item.Year}`,
+                  y: item.TurnOver,
+                });
+              });
+              return arr;
+            });
+            setSalesChartTurnoverWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Week ${item.Hour} of ${item.Year}`,
+                  y: item.TurnOverWithoutVAT,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Week ${item.Hour} of ${item.Year}`,
+                  y: item.TotalProfitMerged,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Week ${item.Hour} of ${item.Year}`,
+                  y: item.TotalProfit,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'months':
+            setSalesChartTurnoverWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Month ${item.Hour} of ${item.Year}`,
+                  y: item.TurnOver,
+                });
+              });
+              return arr;
+            });
+            setSalesChartTurnoverWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Month ${item.Hour} of ${item.Year}`,
+                  y: item.TurnOverWithoutVAT,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Month ${item.Hour} of ${item.Year}`,
+                  y: item.TotalProfitMerged,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `Month ${item.Hour} of ${item.Year}`,
+                  y: item.TotalProfit,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'years':
+            console.log('====================================');
+            console.log('YEAR', totalSalesChartData);
+            console.log('====================================');
+            setSalesChartTurnoverWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Year}`,
+                  y: item.TurnOver,
+                });
+              });
+              return arr;
+            });
+            setSalesChartTurnoverWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Year}`,
+                  y: item.TurnOverWithoutVAT,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Year}`,
+                  y: item.TotalProfitMerged,
+                });
+              });
+              return arr;
+            });
+            setSalesChartProfitWithoutVatData(() => {
+              let arr = [];
+              totalSalesChartData.map(item => {
+                arr.push({
+                  x: `${item.Year}`,
+                  y: item.TotalProfit,
+                });
+              });
+              return arr;
+            });
+            break;
+          default:
+            break;
+        }
+
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -238,28 +514,22 @@ const SalesStatisticsScreen = () => {
     }
   };
 
-  useEffect(() => {
-    setCategoriesDetailsTableDataTrunc(categoriesDetailsTableData.slice(0, 10));
-  }, [categoriesDetailsTableData]);
-
-  useEffect(() => {
-    fetchDataFromBoApi();
-  }, [fromDateFormatted, toDateFormatted]);
-
   const handleGroupByChange = value => {
     let date = new Date();
-    setGroupByDate(value);
     switch (value) {
       case 'DAY':
+        // setGroupByDate('hours');
         setFromDate(date);
         setFromDateFormatted(() => {
           return date.toISOString().slice(0, 10).concat(' 00:00:00');
         });
+        setToDate(date);
         setToDateFormatted(() => {
           return date.toISOString().slice(0, 10).concat(' 23:59:59');
         });
         break;
       case 'WEEK':
+        // setGroupByDate('days');
         let oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
         setFromDate(oneWeekAgo);
@@ -272,6 +542,7 @@ const SalesStatisticsScreen = () => {
         });
         break;
       case 'MONTH':
+        // setGroupByDate('days');
         let oneMonthAgo = new Date();
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
         setFromDate(oneMonthAgo);
@@ -289,18 +560,18 @@ const SalesStatisticsScreen = () => {
     }
   };
 
-  const selectedGroupByDateValue = useMemo(() => {
-    switch (groupByDate) {
-      case 'DAY':
-        return 'DAY';
-      case 'WEEK':
-        return 'WEEK';
-      case 'MONTH':
-        return 'MONTH';
-      default:
-        return '';
-    }
-  }, [groupByDate]);
+  const defaultSelectedGroupByDateValue = useMemo(
+    () => selectedGroupByDateValue,
+    [selectedGroupByDateValue],
+  );
+
+  useEffect(() => {
+    setCategoriesDetailsTableDataTrunc(categoriesDetailsTableData.slice(0, 10));
+  }, [categoriesDetailsTableData]);
+
+  useEffect(() => {
+    fetchDataFromBoApi();
+  }, [fromDateFormatted, toDateFormatted]);
 
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-gray-300">
@@ -327,9 +598,10 @@ const SalesStatisticsScreen = () => {
                     }}
                     buttonTextStyle={{color: 'rgb(23 37 84)'}}
                     data={['DAY', 'WEEK', 'MONTH']}
-                    defaultValue={selectedGroupByDateValue}
+                    defaultValue={defaultSelectedGroupByDateValue}
                     onSelect={(selectedItem, index) => {
                       handleGroupByChange(selectedItem);
+                      setSelectedGroupByDate(selectedItem);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
                       return selectedItem;
@@ -580,7 +852,6 @@ const SalesStatisticsScreen = () => {
                       </Text>
                       <Icon name="close" size={15} color="rgb(23 37 84)" />
                     </TouchableOpacity>
-
                     <View className="flex-1">
                       {/*more details start*/}
                       <ScrollView horizontal className="rounded-b-md pb-1">
@@ -975,7 +1246,7 @@ const SalesStatisticsScreen = () => {
                           )
                         }>
                         <Text
-                          className="font-bold text-xs font-bold"
+                          className="text-xs font-bold"
                           style={{color: 'rgb(255,255,255)'}}>
                           {!categoriesDetailsTableExpanded
                             ? 'EXPAND'
@@ -997,7 +1268,12 @@ const SalesStatisticsScreen = () => {
               )}
               {/*Categories Details end*/}
               {/*Daily Transactions Average start*/}
-              <View className="mb-2 mx-4">
+              <View
+                className="mx-4"
+                style={{
+                  marginBottom:
+                    salesData.TotalSalesChartDtos.length > 0 ? null : 4,
+                }}>
                 <View
                   className="py-3 rounded-t-md"
                   style={{
@@ -1030,6 +1306,123 @@ const SalesStatisticsScreen = () => {
                 </View>
               </View>
               {/*Daily Transactions Average end*/}
+              {/*Graph start*/}
+              {salesData.TotalSalesChartDtos.length > 0 && (
+                <View
+                  className="mx-4 rounded-lg flex-1 justify-center items-center mb-2"
+                  style={{backgroundColor: 'rgb(105, 133, 165)'}}>
+                  <View
+                    className="w-full rounded-t-lg"
+                    style={{
+                      backgroundColor: 'rgb(86, 113, 144)',
+                      elevation: 50,
+                    }}>
+                    <Text className="text-center underline py-2 text-white">
+                      Total Turnover and Profit
+                    </Text>
+                  </View>
+                  <ScrollView horizontal className="w-full">
+                    <VictoryChart
+                      theme={VictoryTheme.material}
+                      height={height / 2}
+                      padding={{top: 75, left: 50, bottom: 50, right: 25}}
+                      domainPadding={{y: 50}}>
+                      <VictoryLegend
+                        orientation="horizontal"
+                        itemsPerRow={2}
+                        x={30}
+                        y={10}
+                        style={{
+                          title: {fontSize: 20},
+                          labels: {fill: 'white'},
+                        }}
+                        data={[
+                          {name: 'Turnover with VAT', symbol: {fill: 'orange'}},
+                          {
+                            name: 'Turnover without VAT',
+                            symbol: {fill: 'rgb(245, 185, 66)'},
+                          },
+                          {name: 'Profit with VAT', symbol: {fill: 'purple'}},
+                          {
+                            name: 'Profit without VAT',
+                            symbol: {fill: 'rgb(147, 66, 245)'},
+                          },
+                        ]}
+                      />
+                      <VictoryAxis
+                        fixLabelOverlap={true}
+                        style={{
+                          grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                          axis: {stroke: 'lightgray'},
+                          ticks: {stroke: 'lightgray'},
+                          tickLabels: {fill: 'lightgray'},
+                        }}
+                      />
+                      <VictoryAxis
+                        dependentAxis
+                        tickFormat={t => {
+                          const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
+                          const magnitude = Math.floor(Math.log10(t) / 3);
+                          const scaledNumber = t / Math.pow(10, magnitude * 3);
+                          const formattedNumber = scaledNumber.toFixed(0);
+                          return formattedNumber + suffixes[magnitude];
+                        }}
+                        style={{
+                          grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                          axis: {stroke: 'lightgray'},
+                          ticks: {stroke: 'lightgray'},
+                          tickLabels: {fill: 'lightgray'},
+                        }}
+                      />
+                      <VictoryArea
+                        interpolation="natural"
+                        data={salesChartTurnoverWithVatData}
+                        style={{
+                          data: {fill: 'orange'},
+                        }}
+                        animate={{
+                          duration: 1000,
+                          onLoad: {duration: 1000},
+                        }}
+                      />
+                      <VictoryArea
+                        interpolation="natural"
+                        data={salesChartTurnoverWithoutVatData}
+                        style={{
+                          data: {fill: 'rgba(245, 185, 66, 0.5)'},
+                        }}
+                        animate={{
+                          duration: 2000,
+                          onLoad: {duration: 2000},
+                        }}
+                      />
+                      <VictoryArea
+                        interpolation="natural"
+                        data={salesChartProfitWithVatData}
+                        style={{
+                          data: {fill: 'purple'},
+                        }}
+                        animate={{
+                          duration: 3000,
+                          onLoad: {duration: 3000},
+                        }}
+                      />
+                      <VictoryArea
+                        interpolation="natural"
+                        data={salesChartProfitWithoutVatData}
+                        style={{
+                          data: {fill: 'rgb(147, 66, 245)'},
+                        }}
+                        animate={{
+                          duration: 4000,
+                          onLoad: {duration: 4000},
+                        }}
+                      />
+                    </VictoryChart>
+                  </ScrollView>
+                </View>
+              )}
+              {/*Graph end*/}
             </ScrollView>
           ) : null}
           {/*Widgets end*/}
