@@ -31,7 +31,7 @@ const AboutScreen = () => {
         <FontAwesome
           name="coffee"
           size={20}
-          color="rgb(13 91 227)"
+          color="rgb(40 143 251)"
         />
         <Text style={styles.text}> in Athens</Text>
       </View>
