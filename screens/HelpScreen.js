@@ -24,7 +24,7 @@ const HelpScreen = () => {
         <TouchableOpacity onPress={() => Linking.openURL('tel:2109211700')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="phone" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
-            <Text>  210 92 11 700</Text>
+            <Text>{'  '}210 92 11 700</Text>
           </Text>
         </TouchableOpacity>
 
@@ -32,7 +32,7 @@ const HelpScreen = () => {
         <TouchableOpacity onPress={() => Linking.openURL('mailto:help@intale.com')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="envelope" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
-            <Text>  help@intale.com</Text>
+            <Text>{'  '}help@intale.com</Text>
           </Text>
         </TouchableOpacity>
 
@@ -40,7 +40,7 @@ const HelpScreen = () => {
         <TouchableOpacity onPress={() => Linking.openURL('https://guide.intalepoint.com/')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="book" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
-            <Text>  guide.intalepoint.com</Text>
+            <Text>{'  '}guide.intalepoint.com</Text>
           </Text>
         </TouchableOpacity>
 
@@ -48,7 +48,7 @@ const HelpScreen = () => {
         <TouchableOpacity onPress={() => Linking.openURL('https://help.intalepoint.com/')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="life-ring" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
-            <Text>  help.intalepoint.com</Text>
+            <Text>{'  '}help.intalepoint.com</Text>
           </Text>
         </TouchableOpacity>
 
@@ -56,7 +56,7 @@ const HelpScreen = () => {
         <TouchableOpacity onPress={() => Linking.openURL('https://www.youtube.com/watch?v=oHJKl-3930k')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="youtube-play" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
-            <Text>  Youtube : Intale Inc.</Text>
+            <Text>{'  '}Youtube : Intale Inc.</Text>
           </Text>
         </TouchableOpacity>
 
