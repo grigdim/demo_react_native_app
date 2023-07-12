@@ -93,12 +93,12 @@ const HelpScreen = () => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 15,
-    paddingVertical: 3,
+    paddingVertical: 2,
     fontWeight: 'bold'
   },
   infoText: {
     fontSize: 14,
-    paddingVertical: 3,
+    paddingVertical: 2,
     fontWeight: 'bold'
   },
   bottomText: {
