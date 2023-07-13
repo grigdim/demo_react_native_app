@@ -37,6 +37,7 @@ const SalesStatisticsScreen = () => {
   const token = useSelector(selectToken);
   const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(false);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('MONTH');
   const [salesData, setSalesData] = useState();
   const [totals, setTotals] = useState();
@@ -509,7 +510,7 @@ const SalesStatisticsScreen = () => {
   };
 
   const fetchProductSalesDetailsDataFromBoApi = async () => {
-    setLoading(true);
+    setChartLoading(true);
     if (__DEV__ && token) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -748,7 +749,7 @@ const SalesStatisticsScreen = () => {
           break;
       }
     }
-    setLoading(false);
+    setChartLoading(false);
   };
 
   const handleGroupByChange = value => {
@@ -1238,9 +1239,9 @@ const SalesStatisticsScreen = () => {
                               );
                             }}
                             defaultButtonText={' '}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                              return selectedItem;
-                            }}
+                            buttonTextAfterSelection={selectedItem =>
+                              selectedItem
+                            }
                             rowTextForSelection={(item, index) => {
                               return item;
                             }}
@@ -1311,7 +1312,7 @@ const SalesStatisticsScreen = () => {
                         {selectedProduct && (
                           <View className="space-y-4">
                             <View
-                              className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-2 rounded-md"
+                              className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-4 rounded-md"
                               style={{elevation: 10}}>
                               {selectedProduct &&
                                 Object.keys(selectedProduct).map(key => {
@@ -1349,7 +1350,7 @@ const SalesStatisticsScreen = () => {
                                 })}
                             </View>
                             <View
-                              className="bg-purple-400 flex-row items-start mx-2 rounded-md py-6"
+                              className="bg-purple-400 flex-row items-start mx-4 rounded-md py-6"
                               style={{elevation: 10}}>
                               {selectedProduct &&
                                 Object.keys(selectedProduct).map(key => {
@@ -1378,141 +1379,157 @@ const SalesStatisticsScreen = () => {
                             </View>
                             <View
                               className="mx-4 rounded-lg flex-1 justify-center items-center mb-2"
-                              style={{backgroundColor: 'white', elevation: 50}}>
-                              <ScrollView horizontal className="w-full">
-                                <VictoryChart
-                                  theme={VictoryTheme.material}
-                                  height={height / 2}
-                                  padding={{
-                                    top: 75,
-                                    left: 50,
-                                    bottom: 50,
-                                    right: 25,
-                                  }}
-                                  domainPadding={{y: 50}}>
-                                  <VictoryLegend
-                                    orientation="horizontal"
-                                    itemsPerRow={2}
-                                    x={30}
-                                    y={10}
-                                    style={{
-                                      title: {fontSize: 20},
-                                      labels: {fill: 'lightgray'},
+                              style={{
+                                backgroundColor: chartLoading ? null : 'white',
+                                elevation: 10,
+                              }}>
+                              {chartLoading ? (
+                                <ActivityIndicator
+                                  color="rgb(34 211 238)"
+                                  size="large"
+                                />
+                              ) : (
+                                <ScrollView horizontal className="w-full">
+                                  <VictoryChart
+                                    theme={VictoryTheme.material}
+                                    height={height / 2}
+                                    padding={{
+                                      top: 75,
+                                      left: 50,
+                                      bottom: 50,
+                                      right: 25,
                                     }}
-                                    data={[
-                                      {
-                                        name: 'Turnover with VAT',
-                                        symbol: {fill: 'orange'},
-                                      },
-                                      {
-                                        name: 'Turnover without VAT',
-                                        symbol: {fill: 'rgb(245, 185, 66)'},
-                                      },
-                                      {
-                                        name: 'Profit with VAT',
-                                        symbol: {fill: 'purple'},
-                                      },
-                                      {
-                                        name: 'Profit without VAT',
-                                        symbol: {fill: 'rgb(147, 66, 245)'},
-                                      },
-                                    ]}
-                                  />
-                                  {/*x axis start*/}
-                                  <VictoryAxis
-                                    fixLabelOverlap={true}
-                                    style={{
-                                      grid: {
-                                        stroke: 'lightgray',
-                                        strokeDasharray: 'none',
-                                      },
-                                      axis: {stroke: 'lightgray'},
-                                      ticks: {stroke: 'lightgray'},
-                                      tickLabels: {fill: 'lightgray'},
-                                    }}
-                                  />
-                                  {/*x axis end*/}
-                                  {/*y axis start*/}
-                                  <VictoryAxis
-                                    dependentAxis
-                                    tickFormat={t => {
-                                      const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
-                                      const magnitude = Math.floor(
-                                        Math.log10(t) / 3,
-                                      );
-                                      const scaledNumber =
-                                        t / Math.pow(10, magnitude * 3);
-                                      const formattedNumber =
-                                        scaledNumber.toFixed(0);
-                                      return (
-                                        formattedNumber + suffixes[magnitude]
-                                      );
-                                    }}
-                                    style={{
-                                      grid: {
-                                        stroke: 'lightgray',
-                                        strokeDasharray: 'none',
-                                      },
-                                      axis: {stroke: 'lightgray'},
-                                      ticks: {stroke: 'lightgray'},
-                                      tickLabels: {fill: 'lightgray'},
-                                    }}
-                                  />
-                                  {/*y axis end*/}
-                                  {/*turnover with vat start*/}
-                                  <VictoryArea
-                                    interpolation="natural"
-                                    data={productChartTurnoverWithVatData}
-                                    style={{
-                                      data: {fill: 'orange'},
-                                    }}
-                                    animate={{
-                                      duration: 1000,
-                                      onLoad: {duration: 1000},
-                                    }}
-                                  />
-                                  {/*turnover with vat end*/}
-                                  {/*turnover without vat start*/}
-                                  <VictoryArea
-                                    interpolation="natural"
-                                    data={productChartTurnoverWithoutVatData}
-                                    style={{
-                                      data: {fill: 'rgb(245, 185, 66)'},
-                                    }}
-                                    animate={{
-                                      duration: 2000,
-                                      onLoad: {duration: 2000},
-                                    }}
-                                  />
-                                  {/*turnover without vat end*/}
-                                  {/*profit with vat start*/}
-                                  <VictoryArea
-                                    interpolation="natural"
-                                    data={productChartProfitWithVatData}
-                                    style={{
-                                      data: {fill: 'purple'},
-                                    }}
-                                    animate={{
-                                      duration: 3000,
-                                      onLoad: {duration: 3000},
-                                    }}
-                                  />
-                                  {/*profit with vat end*/}
-                                  {/*profit without vat start*/}
-                                  <VictoryArea
-                                    interpolation="natural"
-                                    data={productChartProfitWithoutVatData}
-                                    style={{
-                                      data: {fill: 'rgb(147, 66, 245)'},
-                                    }}
-                                    animate={{
-                                      duration: 4000,
-                                      onLoad: {duration: 4000},
-                                    }}
-                                  />
-                                  {/*profit without vat end*/}
-                                </VictoryChart>
-                              </ScrollView>
+                                    domainPadding={{y: 50}}>
+                                    <VictoryLegend
+                                      orientation="horizontal"
+                                      itemsPerRow={2}
+                                      x={30}
+                                      y={10}
+                                      style={{
+                                        title: {fontSize: 20},
+                                        labels: {fill: 'lightgray'},
+                                      }}
+                                      data={[
+                                        {
+                                          name: 'Turnover with VAT',
+                                          symbol: {fill: 'orange'},
+                                        },
+                                        {
+                                          name: 'Turnover without VAT',
+                                          symbol: {fill: 'rgb(245, 185, 66)'},
+                                        },
+                                        {
+                                          name: 'Profit with VAT',
+                                          symbol: {fill: 'purple'},
+                                        },
+                                        {
+                                          name: 'Profit without VAT',
+                                          symbol: {fill: 'rgb(147, 66, 245)'},
+                                        },
+                                      ]}
+                                    />
+                                    {/*x axis start*/}
+                                    <VictoryAxis
+                                      fixLabelOverlap={true}
+                                      style={{
+                                        grid: {
+                                          stroke: 'lightgray',
+                                          strokeDasharray: 'none',
+                                        },
+                                        axis: {stroke: 'lightgray'},
+                                        ticks: {stroke: 'lightgray'},
+                                        tickLabels: {fill: 'lightgray'},
+                                      }}
+                                    />
+                                    {/*x axis end*/}
+                                    {/*y axis start*/}
+                                    <VictoryAxis
+                                      dependentAxis
+                                      tickFormat={t => {
+                                        const suffixes = [
+                                          '',
+                                          'k',
+                                          'M',
+                                          'B',
+                                          'T',
+                                        ]; // Add more suffixes as needed
+                                        const magnitude = Math.floor(
+                                          Math.log10(t) / 3,
+                                        );
+                                        const scaledNumber =
+                                          t / Math.pow(10, magnitude * 3);
+                                        const formattedNumber =
+                                          scaledNumber.toFixed(0);
+                                        return (
+                                          formattedNumber + suffixes[magnitude]
+                                        );
+                                      }}
+                                      style={{
+                                        grid: {
+                                          stroke: 'lightgray',
+                                          strokeDasharray: 'none',
+                                        },
+                                        axis: {stroke: 'lightgray'},
+                                        ticks: {stroke: 'lightgray'},
+                                        tickLabels: {fill: 'lightgray'},
+                                      }}
+                                    />
+                                    {/*y axis end*/}
+                                    {/*turnover with vat start*/}
+                                    <VictoryArea
+                                      interpolation="natural"
+                                      data={productChartTurnoverWithVatData}
+                                      style={{
+                                        data: {fill: 'orange'},
+                                      }}
+                                      animate={{
+                                        duration: 1000,
+                                        onLoad: {duration: 1000},
+                                      }}
+                                    />
+                                    {/*turnover with vat end*/}
+                                    {/*turnover without vat start*/}
+                                    <VictoryArea
+                                      interpolation="natural"
+                                      data={productChartTurnoverWithoutVatData}
+                                      style={{
+                                        data: {fill: 'rgb(245, 185, 66)'},
+                                      }}
+                                      animate={{
+                                        duration: 2000,
+                                        onLoad: {duration: 2000},
+                                      }}
+                                    />
+                                    {/*turnover without vat end*/}
+                                    {/*profit with vat start*/}
+                                    <VictoryArea
+                                      interpolation="natural"
+                                      data={productChartProfitWithVatData}
+                                      style={{
+                                        data: {fill: 'purple'},
+                                      }}
+                                      animate={{
+                                        duration: 3000,
+                                        onLoad: {duration: 3000},
+                                      }}
+                                    />
+                                    {/*profit with vat end*/}
+                                    {/*profit without vat start*/}
+                                    <VictoryArea
+                                      interpolation="natural"
+                                      data={productChartProfitWithoutVatData}
+                                      style={{
+                                        data: {fill: 'rgb(147, 66, 245)'},
+                                      }}
+                                      animate={{
+                                        duration: 4000,
+                                        onLoad: {duration: 4000},
+                                      }}
+                                    />
+                                    {/*profit without vat end*/}
+                                  </VictoryChart>
+                                </ScrollView>
+                              )}
                             </View>
                           </View>
                         )}
