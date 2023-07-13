@@ -162,7 +162,7 @@ const LoginScreen = () => {
                 color="rgb(59 130 246)"
                 className=""
               />
-              <Text className="text-blue-500 text-3xl">Hello Intaler!</Text>
+              <Text className="text-blue-500 text-3xl">{t("helloIntalerLoginScreen")}</Text>
             </View>
             <TextInput
               onChangeText={handleChangeEmail}
@@ -178,19 +178,18 @@ const LoginScreen = () => {
               onPress={handleCheckEmail}
               disabled={isEmailDisabled}
               className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>Submit</Text>
+              <Text style={buttonText}>{t("submit")}</Text>
             </TouchableOpacity>
           </View>
         ) : registeredEmail ? (
           <View className="flex-1 justify-center space-y-10 items-center w-10/12">
             <Text className="text-center text-xl font-bold text-black">
-              A one-time password has been sent to your email. Please enter it
-              below.
+              {t("oneTimePassword")}
             </Text>
             <TextInput
               onChangeText={handleChangePassword}
               style={input}
-              placeholder="password"
+              placeholder={t("password")}
               placeholderTextColor={'darkgrey'}
               clearButtonMode={'always'}
               secureTextEntry
@@ -203,27 +202,26 @@ const LoginScreen = () => {
                   setLogin(true);
                 }}
                 className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>Back to login</Text>
+                <Text style={buttonText}>{t("backToLogin")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[isPasswordDisabled && disabledButton]}
                 onPress={handleLogin}
                 disabled={isPasswordDisabled}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>Submit</Text>
+                <Text style={buttonText}>{t("submit")}</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : (
           <View className="flex-1 justify-center space-y-10 items-center w-10/12">
             <Text className="text-center text-xl font-bold text-black">
-              Your email does not correspond to a registered VAT number. Please
-              insert a valid VAT number to go with your email.
+              {t("nonRegisteredEmail")}
             </Text>
             <TextInput
               onChangeText={handleChangeVat}
               style={input}
-              placeholder="VAT"
+              placeholder={t("vat")}
               placeholderTextColor={'darkgrey'}
               clearButtonMode={'always'}
             />
@@ -237,14 +235,14 @@ const LoginScreen = () => {
                   setLogin(true);
                 }}
                 className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>Back to login</Text>
+                <Text style={buttonText}>{t("backToLogin")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleSubmitVat}
                 style={[isVatDisabled && disabledButton]}
                 disabled={isVatDisabled}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>Submit</Text>
+                <Text style={buttonText}>{t("submit")}</Text>
               </TouchableOpacity>
             </View>
           </View>

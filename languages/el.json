@@ -1,7 +1,7 @@
 {
-    "translation":{
+    "translation": {
+        // Drawer
         "intaleStatistics": "Στατιστικά Intale",
-        "changeLanguage": "Αλλαγή σε Αγγλικά",
         "homeDrawer": "Αρχική",
         "turnoverDrawer": "Τζίρος",
         "totalProfitDrawer": "Συνολικό Κέρδος",
@@ -11,11 +11,46 @@
         "helpDrawer": "Υποστήριξη",
         "aboutDrawer": "Σχετικά με Εμάς",
         "exitAppDrawer": "Έξοδος από την Εφαρμογή",
+
+        // Demo Go To
         "goToLineChartScreen": "Πήγαινε στην οθόνη γραφήματος",
         "goToAuditScreen": "Πήγαινε στην οθόνη ελέγχου",
         "goToStoreScreen": "Πήγαινε στην οθόνη καταστήματος",
         "goToProductSalesScreen": "Πήγαινε στην οθόνη πωλήσεων προϊόντων",
         "goToSalesTabsScreen": "Πήγαινε στην οθόνη καρτέλων πωλήσεων",
-        "deleteTokenAndLoginAgain": "Διέγραψε το Token και συνδέσου ξανά"
+        "deleteTokenAndLoginAgain": "Διέγραψε το Token και συνδέσου ξανά",
+        
+        // Various
+        "changeLanguage": "Αλλαγή σε Αγγλικά",
+        "submit": "Υποβολή",
+        "vat": "ΑΦΜ",
+        "password": "κωδικός",
+        
+        // Login Screen
+        "helloIntalerLoginScreen": "Γεια σου Intaler!",
+        "backToLogin": "Επιστροφή",
+        "nonRegisteredEmail": "Το email σας δεν αντιστοιχεί σε καταχωρημένο ΑΦΜ. Χρειάζεται εισαγωγή ενός έγκυρου ΑΦΜ για να συνοδεύεται από το email σας.",
+        "oneTimePassword": "Ένας κωδικός μίας χρήσης έχει σταλθεί στο email σας. Παρακαλώ, να γίνει εισαγωγή εδώ.",
+        
+        // Help Screen
+        "titleHelpScreen":"Είμαστε κοντά σας 24 ώρες το 24ωρο, 7 ημέρες την εβδομάδα, 365 ημέρες το χρόνο",
+        "secondTitleHelpScreen":"Επικοινωνήστε μαζί μας με έναν από τους παρακάτω τρόπους και βρείτε ό,τι χρειάζεστε",
+        "callCenterHelpScreen":"ΚΕΝΤΡΟ ΤΗΛΕΦΩΝΙΚΗΣ ΥΠΟΣΤΗΡΙΞΗΣ",
+        "emailHelpScreen":"EMAIL ΕΠΙΚΟΙΝΩΝΙΑΣ ΠΡΟΤΑΣΕΩΝ",
+        "manualHelpScreen":"ΟΔΗΓΟΣ ΧΡΗΣΗΣ",
+        "onlineCenterHelpScreen":"ONLINE ΚΕΝΤΡΟ ΥΠΟΣΤΗΡΙΞΗΣ",
+        "trainingVideosHelpScreen":"ΕΚΠΑΙΔΕΥΤΙΚΑ VIDEOS",
+        "storeInformationHelpScreen":"ΣΤΟΙΧΕΙΑ ΚΑΤΑΣΤΗΜΑΤΟΣ",
+        "brandHelpScreen":"ΕΠΩΝΥΜΙΑ",
+        "storeHelpScreen":"ΚΑΤΑΣΤΗΜΑ",
+        "posHelpScreen":"ΤΑΜΕΙΟ",
+
+        // About Screen
+        "yourDigitalGuideAboutScreen": "Ο ψηφιακός σου οδηγός",
+        "smallRetailAboutScreen": "Η μικρή λιανική είναι μία μεγάλη μάχη.",
+        "inIntaleWeHelpAboutScreen": "Σε βοηθάμε να κερδίσεις.",
+        "madeWithAboutScreen": "Φτιαγμένο με",
+        "andAboutScreen": "και",
+        "inAthensAboutScreen": "στην Αθήνα"
     }
 }
