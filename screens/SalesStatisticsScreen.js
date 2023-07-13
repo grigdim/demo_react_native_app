@@ -37,9 +37,7 @@ const SalesStatisticsScreen = () => {
   const token = useSelector(selectToken);
   const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
-  // const [groupByDate, setGroupByDate] = useState('days');
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('MONTH');
-
   const [salesData, setSalesData] = useState();
   const [totals, setTotals] = useState();
   const [fromDate, setFromDate] = useState(() => {
@@ -54,9 +52,6 @@ const SalesStatisticsScreen = () => {
   const [toDateFormatted, setToDateFormatted] = useState(
     toDate.toISOString().slice(0, 10).concat(' 23:59:59'),
   );
-  // const [dayDiff, setDayDiff] = useState(
-  //   Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24)),
-  // );
   const [storesIds, setStoresIds] = useState([1]);
   const [openFromDate, setOpenFromDate] = useState(false);
   const [openToDate, setOpenToDate] = useState(false);
@@ -80,33 +75,33 @@ const SalesStatisticsScreen = () => {
   const [productModalVisible, setProductModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState();
   const [salesChartTurnoverWithVatData, setSalesChartTurnoverWithVatData] =
-    useState([]); //
+    useState([]);
   const [
     salesChartTurnoverWithoutVatData,
     setSalesChartTurnoverWithoutVatData,
-  ] = useState([]); //
+  ] = useState([]);
   const [salesChartProfitWithVatData, setSalesChartProfitWithVatData] =
-    useState([]); //
+    useState([]);
   const [salesChartProfitWithoutVatData, setSalesChartProfitWithoutVatData] =
-    useState([]); //
+    useState([]);
+  const [productChartTurnoverWithVatData, setProductChartTurnoverWithVatData] =
+    useState([]);
+  const [
+    productChartTurnoverWithoutVatData,
+    setProductChartTurnoverWithoutVatData,
+  ] = useState([]);
+  const [productChartProfitWithVatData, setProductChartProfitWithVatData] =
+    useState([]);
+  const [
+    productChartProfitWithoutVatData,
+    setProductChartProfitWithoutVatData,
+  ] = useState([]);
+  const [prodID, setProdID] = useState(1);
+  const [groupBy, setGroupBy] = useState('');
 
   const handleChangeSftId = inputText => {
     setSftId(inputText);
   };
-
-  // const getBaseUnits = () => {
-  //   if (dayDiff === 0) {
-  //     setGroupByDate('hours');
-  //   } else if (dayDiff >= 60 && dayDiff < 420) {
-  //     setGroupByDate('weeks');
-  //   } else if (dayDiff >= 420 && dayDiff < 730) {
-  //     setGroupByDate('months');
-  //   } else if (dayDiff >= 730) {
-  //     setGroupByDate('years');
-  //   } else setGroupByDate('days');
-
-  //   return dayDiff;
-  // };
 
   const fetchDataFromBoApi = async () => {
     setLoading(true);
@@ -123,6 +118,8 @@ const SalesStatisticsScreen = () => {
     } else if (dayDiff >= 730) {
       groupByDate = 'years';
     } else groupByDate = 'days';
+
+    setGroupBy(groupByDate);
 
     // console.log(
     // fromDateFormatted,
@@ -458,9 +455,6 @@ const SalesStatisticsScreen = () => {
             });
             break;
           case 'years':
-            console.log('====================================');
-            console.log('YEAR', totalSalesChartData);
-            console.log('====================================');
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
               totalSalesChartData.map(item => {
@@ -514,11 +508,253 @@ const SalesStatisticsScreen = () => {
     }
   };
 
+  const fetchProductSalesDetailsDataFromBoApi = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+        requestOptions,
+      );
+      const data = await response.json();
+      // console.log(
+      //   data.sort((a, b) => {
+      //     if (a.Year === b.Year) {
+      //       return a.DatePart - b.DatePart;
+      //     }
+      //     return a.Year - b.Year;
+      //   }),
+      // );
+      switch (groupBy) {
+        case 'hours':
+          setProductChartTurnoverWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: item.DatePart.toString() + ':00',
+                y: item.TurnOverWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartTurnoverWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: item.DatePart.toString() + ':00',
+                y: item.TurnOverWithoutVAT,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: item.DatePart.toString() + ':00',
+                y: item.ProfitWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: item.DatePart.toString() + ':00',
+                y: item.ProfitWithoutVat,
+              });
+            });
+            return arr;
+          });
+          break;
+        case 'days':
+          setProductChartTurnoverWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Day ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartTurnoverWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Day ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithoutVAT,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Day ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Day ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithoutVat,
+              });
+            });
+            return arr;
+          });
+          break;
+        case 'weeks':
+          setProductChartTurnoverWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Week ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartTurnoverWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Week ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithoutVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Week ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Week ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithoutVat,
+              });
+            });
+            return arr;
+          });
+          break;
+        case 'months':
+          setProductChartTurnoverWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Month ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartTurnoverWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Month ${item.DatePart} of ${item.Year}`,
+                y: item.TurnOverWithoutVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Month ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `Month ${item.DatePart} of ${item.Year}`,
+                y: item.ProfitWithoutVat,
+              });
+            });
+            return arr;
+          });
+          break;
+        case 'years':
+          setProductChartTurnoverWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `${item.Year}`,
+                y: item.TurnOverWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartTurnoverWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `${item.Year}`,
+                y: item.TurnOverWithoutVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `${item.Year}`,
+                y: item.ProfitWithVat,
+              });
+            });
+            return arr;
+          });
+          setProductChartProfitWithoutVatData(() => {
+            let arr = [];
+            data.map(item => {
+              arr.push({
+                x: `${item.Year}`,
+                y: item.ProfitWithoutVat,
+              });
+            });
+            return arr;
+          });
+          break;
+        default:
+          break;
+      }
+    }
+    setLoading(false);
+  };
+
   const handleGroupByChange = value => {
     let date = new Date();
     switch (value) {
       case 'DAY':
-        // setGroupByDate('hours');
         setFromDate(date);
         setFromDateFormatted(() => {
           return date.toISOString().slice(0, 10).concat(' 00:00:00');
@@ -529,7 +765,6 @@ const SalesStatisticsScreen = () => {
         });
         break;
       case 'WEEK':
-        // setGroupByDate('days');
         let oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
         setFromDate(oneWeekAgo);
@@ -542,7 +777,6 @@ const SalesStatisticsScreen = () => {
         });
         break;
       case 'MONTH':
-        // setGroupByDate('days');
         let oneMonthAgo = new Date();
         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
         setFromDate(oneMonthAgo);
@@ -559,6 +793,10 @@ const SalesStatisticsScreen = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    fetchProductSalesDetailsDataFromBoApi();
+  }, [prodID]);
 
   const defaultSelectedGroupByDateValue = useMemo(
     () => selectedGroupByDateValue,
@@ -958,7 +1196,7 @@ const SalesStatisticsScreen = () => {
                         setProductModalVisible(!productModalVisible);
                         setSelectedProduct(null);
                       }}>
-                      <View>
+                      <ScrollView>
                         <View className="flex-row justify-center items-center p-4 border-b border-gray-200">
                           <Text className="flex-1 text-center text-lg text-slate-500">
                             Product Sales Details
@@ -979,7 +1217,9 @@ const SalesStatisticsScreen = () => {
                         <View className="justify-center items-center py-4">
                           <SelectDropdown
                             data={salesData?.TopSellingProductDtos?.map(
-                              item => item.ProductName,
+                              item => {
+                                return item.ProductName;
+                              },
                             )}
                             onSelect={(selectedItem, index) => {
                               setSelectedProduct(
@@ -988,6 +1228,13 @@ const SalesStatisticsScreen = () => {
                                     item.ProductName.toLowerCase() ===
                                     selectedItem.toLowerCase(),
                                 ),
+                              );
+                              setProdID(
+                                salesData.TopSellingProductDtos?.find(
+                                  item =>
+                                    item.ProductName.toLowerCase() ===
+                                    selectedItem.toLowerCase(),
+                                ).ProductId,
                               );
                             }}
                             defaultButtonText={' '}
@@ -1048,7 +1295,7 @@ const SalesStatisticsScreen = () => {
                         <View className="justify-center items-center space-y-2 mb-2">
                           <View className="flex-row">
                             <Text className="text-slate-500 text-xl">
-                              From:{' '}
+                              From:
                             </Text>
                             <Text className="text-slate-500 text-xl">
                               {fromDateFormatted}
@@ -1068,8 +1315,20 @@ const SalesStatisticsScreen = () => {
                               style={{elevation: 10}}>
                               {selectedProduct &&
                                 Object.keys(selectedProduct).map(key => {
-                                  if (
-                                    key === 'Quantity' ||
+                                  if (key === 'Quantity') {
+                                    return (
+                                      <View className="justify-start items-center p-4 w-1/2">
+                                        <Text className="text-white text-lg font-black">
+                                          {selectedProduct[key]}
+                                        </Text>
+                                        <Text className="text-white text-center text-sm">
+                                          {key
+                                            .replace(/(?!^Turn)O/g, ' o')
+                                            .replace(/(?!^)([A-Z])/g, ' $1')}
+                                        </Text>
+                                      </View>
+                                    );
+                                  } else if (
                                     key === 'TurnOverWithoutVat' ||
                                     key === 'VatTotal' ||
                                     key === 'TurnOverWithVat'
@@ -1117,9 +1376,147 @@ const SalesStatisticsScreen = () => {
                                   }
                                 })}
                             </View>
+                            <View
+                              className="mx-4 rounded-lg flex-1 justify-center items-center mb-2"
+                              style={{backgroundColor: 'white', elevation: 50}}>
+                              <ScrollView horizontal className="w-full">
+                                <VictoryChart
+                                  theme={VictoryTheme.material}
+                                  height={height / 2}
+                                  padding={{
+                                    top: 75,
+                                    left: 50,
+                                    bottom: 50,
+                                    right: 25,
+                                  }}
+                                  domainPadding={{y: 50}}>
+                                  <VictoryLegend
+                                    orientation="horizontal"
+                                    itemsPerRow={2}
+                                    x={30}
+                                    y={10}
+                                    style={{
+                                      title: {fontSize: 20},
+                                      labels: {fill: 'lightgray'},
+                                    }}
+                                    data={[
+                                      {
+                                        name: 'Turnover with VAT',
+                                        symbol: {fill: 'orange'},
+                                      },
+                                      {
+                                        name: 'Turnover without VAT',
+                                        symbol: {fill: 'rgb(245, 185, 66)'},
+                                      },
+                                      {
+                                        name: 'Profit with VAT',
+                                        symbol: {fill: 'purple'},
+                                      },
+                                      {
+                                        name: 'Profit without VAT',
+                                        symbol: {fill: 'rgb(147, 66, 245)'},
+                                      },
+                                    ]}
+                                  />
+                                  {/*x axis start*/}
+                                  <VictoryAxis
+                                    fixLabelOverlap={true}
+                                    style={{
+                                      grid: {
+                                        stroke: 'lightgray',
+                                        strokeDasharray: 'none',
+                                      },
+                                      axis: {stroke: 'lightgray'},
+                                      ticks: {stroke: 'lightgray'},
+                                      tickLabels: {fill: 'lightgray'},
+                                    }}
+                                  />
+                                  {/*x axis end*/}
+                                  {/*y axis start*/}
+                                  <VictoryAxis
+                                    dependentAxis
+                                    tickFormat={t => {
+                                      const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
+                                      const magnitude = Math.floor(
+                                        Math.log10(t) / 3,
+                                      );
+                                      const scaledNumber =
+                                        t / Math.pow(10, magnitude * 3);
+                                      const formattedNumber =
+                                        scaledNumber.toFixed(0);
+                                      return (
+                                        formattedNumber + suffixes[magnitude]
+                                      );
+                                    }}
+                                    style={{
+                                      grid: {
+                                        stroke: 'lightgray',
+                                        strokeDasharray: 'none',
+                                      },
+                                      axis: {stroke: 'lightgray'},
+                                      ticks: {stroke: 'lightgray'},
+                                      tickLabels: {fill: 'lightgray'},
+                                    }}
+                                  />
+                                  {/*y axis end*/}
+                                  {/*turnover with vat start*/}
+                                  <VictoryArea
+                                    interpolation="natural"
+                                    data={productChartTurnoverWithVatData}
+                                    style={{
+                                      data: {fill: 'orange'},
+                                    }}
+                                    animate={{
+                                      duration: 1000,
+                                      onLoad: {duration: 1000},
+                                    }}
+                                  />
+                                  {/*turnover with vat end*/}
+                                  {/*turnover without vat start*/}
+                                  <VictoryArea
+                                    interpolation="natural"
+                                    data={productChartTurnoverWithoutVatData}
+                                    style={{
+                                      data: {fill: 'rgb(245, 185, 66)'},
+                                    }}
+                                    animate={{
+                                      duration: 2000,
+                                      onLoad: {duration: 2000},
+                                    }}
+                                  />
+                                  {/*turnover without vat end*/}
+                                  {/*profit with vat start*/}
+                                  <VictoryArea
+                                    interpolation="natural"
+                                    data={productChartProfitWithVatData}
+                                    style={{
+                                      data: {fill: 'purple'},
+                                    }}
+                                    animate={{
+                                      duration: 3000,
+                                      onLoad: {duration: 3000},
+                                    }}
+                                  />
+                                  {/*profit with vat end*/}
+                                  {/*profit without vat start*/}
+                                  <VictoryArea
+                                    interpolation="natural"
+                                    data={productChartProfitWithoutVatData}
+                                    style={{
+                                      data: {fill: 'rgb(147, 66, 245)'},
+                                    }}
+                                    animate={{
+                                      duration: 4000,
+                                      onLoad: {duration: 4000},
+                                    }}
+                                  />
+                                  {/*profit without vat end*/}
+                                </VictoryChart>
+                              </ScrollView>
+                            </View>
                           </View>
                         )}
-                      </View>
+                      </ScrollView>
                     </Modal>
                   </View>
                 </View>
@@ -1293,7 +1690,9 @@ const SalesStatisticsScreen = () => {
                   {dailyTransactionsAverage &&
                     Object.keys(dailyTransactionsAverage).map((key, index) => {
                       return (
-                        <View className="justify-center items-center rounded-md space-y-2">
+                        <View
+                          className="justify-center items-center rounded-md space-y-2"
+                          key={index}>
                           <Text className="text-white text-xl font-black">
                             {dailyTransactionsAverage[key]}
                           </Text>
@@ -1349,6 +1748,7 @@ const SalesStatisticsScreen = () => {
                           },
                         ]}
                       />
+                      {/*x axis start*/}
                       <VictoryAxis
                         fixLabelOverlap={true}
                         style={{
@@ -1358,6 +1758,8 @@ const SalesStatisticsScreen = () => {
                           tickLabels: {fill: 'lightgray'},
                         }}
                       />
+                      {/*x axis end*/}
+                      {/*y axis start*/}
                       <VictoryAxis
                         dependentAxis
                         tickFormat={t => {
@@ -1374,6 +1776,8 @@ const SalesStatisticsScreen = () => {
                           tickLabels: {fill: 'lightgray'},
                         }}
                       />
+                      {/*y axis end*/}
+                      {/*turnover with vat start*/}
                       <VictoryArea
                         interpolation="natural"
                         data={salesChartTurnoverWithVatData}
@@ -1385,17 +1789,21 @@ const SalesStatisticsScreen = () => {
                           onLoad: {duration: 1000},
                         }}
                       />
+                      {/*turnover with vat end*/}
+                      {/*turnover without vat start*/}
                       <VictoryArea
                         interpolation="natural"
                         data={salesChartTurnoverWithoutVatData}
                         style={{
-                          data: {fill: 'rgba(245, 185, 66, 0.5)'},
+                          data: {fill: 'rgb(245, 185, 66)'},
                         }}
                         animate={{
                           duration: 2000,
                           onLoad: {duration: 2000},
                         }}
                       />
+                      {/*turnover without vat end*/}
+                      {/*profit with vat start*/}
                       <VictoryArea
                         interpolation="natural"
                         data={salesChartProfitWithVatData}
@@ -1407,6 +1815,8 @@ const SalesStatisticsScreen = () => {
                           onLoad: {duration: 3000},
                         }}
                       />
+                      {/*profit with vat end*/}
+                      {/*profit without vat start*/}
                       <VictoryArea
                         interpolation="natural"
                         data={salesChartProfitWithoutVatData}
@@ -1418,6 +1828,7 @@ const SalesStatisticsScreen = () => {
                           onLoad: {duration: 4000},
                         }}
                       />
+                      {/*profit without vat end*/}
                     </VictoryChart>
                   </ScrollView>
                 </View>
