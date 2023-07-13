@@ -8,9 +8,11 @@ import {
     DrawerItem
 } from '@react-navigation/drawer';
 import RNExitApp from 'react-native-exit-app';
+import { useTranslation } from 'react-i18next';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
+    const { t, i18n } = useTranslation();
 
     const exitAlert = () => {
         Alert.alert(
@@ -39,7 +41,7 @@ const CustomDrawer = (props) => {
                     style={{ padding: 20, height: 80, width: 100, marginBottom: 10, marginTop: 5, marginLeft: 10 }}>
                 </Image>
                 <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: 'Roboto-Medium', marginBottom: 10, marginLeft: 15 }}>
-                    Intale Statistics
+                    {t("intaleStatistics")}
                 </Text>
                 <View style={{ flex: 1, backgroundColor: '#FFFFFF', paddingTop: 10 }}>
                     <DrawerItemList {...props} />
@@ -50,7 +52,7 @@ const CustomDrawer = (props) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Ionicons name="exit-outline" size={22} color='#217BCC' />
                         <Text style={{ fontSize: 15, fontFamily: 'Roboto-Medium', marginLeft: 5, color: '#217BCC' }}>
-                            Exit App
+                            {t("exitAppDrawer")}
                         </Text>
                     </View>
                 </TouchableOpacity>

@@ -11,23 +11,32 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
+import { useTranslation } from 'react-i18next';
+import SwitchSelector from 'react-native-switch-selector'
+
+const options = [
+  { label: 'Ελληνικά', value: 'el' },
+  { label: 'English', value: 'en' },
+]
 
 const LoginScreen = () => {
-  const {height, width} = Dimensions.get('screen');
-  const {input, button, buttonText, disabledButton} = style;
+  const { t, i18n } = useTranslation();
+
+  const { height, width } = Dimensions.get('screen');
+  const { input, button, buttonText, disabledButton } = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
@@ -85,7 +94,7 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-      email === 'gsakellaropoulos@intale.com'
+        email === 'gsakellaropoulos@intale.com'
         ? setRegisteredEmail(true)
         : setRegisteredEmail(false);
       setLogin(false);
@@ -140,7 +149,7 @@ const LoginScreen = () => {
       {loading ? (
         <View
           className="w-8/12 justify-center items-center mt-2"
-          style={{height: height / 1.33}}>
+          style={{ height: height / 1.33 }}>
           <ActivityIndicator color="#00CCBB" size="large" />
         </View>
       ) : !token ? (
@@ -247,37 +256,26 @@ const LoginScreen = () => {
           </TouchableOpacity>
           <View
             className="justify-center items-center"
-            style={{height: height / 1.33}}>
+            style={{ height: height / 1.33 }}>
             <TouchableOpacity
               className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
               onPress={() => {
                 navigation.navigate('LineChartScreen');
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Go to line chart screen
+                {t('goToLineChartScreen')}
               </Text>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-            className="bg-gray-800 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('BarChartScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to bar chart screen
-            </Text>
-          </TouchableOpacity> */}
 
             <TouchableOpacity
               className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"
               onPress={() => {
                 navigation.navigate('AuditScreen');
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Go to audit screen
+                {t('goToAuditScreen')}
               </Text>
             </TouchableOpacity>
 
@@ -286,53 +284,20 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('StoreScreen');
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Go to store screen
+                {t('goToStoreScreen')}
               </Text>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-            className="bg-yellow-300 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('TurnoverScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to turnover screen
-            </Text>
-          </TouchableOpacity> */}
-
-            {/* <TouchableOpacity
-            className="bg-green-300 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('TotalProfitScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to total profit screen
-            </Text>
-          </TouchableOpacity> */}
-
-            {/* <TouchableOpacity
-            className="bg-pink-500 my-2 mx-auto p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('ReportsScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to reports screen
-            </Text>
-          </TouchableOpacity> */}
 
             <TouchableOpacity
               className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
               onPress={() => {
                 navigation.navigate('ProductSalesScreen');
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Go to product sales screen
+                {t('goToProductSalesScreen')}
               </Text>
             </TouchableOpacity>
 
@@ -341,22 +306,11 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('SalesTabsScreen');
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Go to sales tabs screen
+                {t('goToSalesTabsScreen')}
               </Text>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-            className="bg-amber-900 mx-auto my-2 p-2 rounded-2xl"
-            onPress={() => {
-              navigation.navigate('TestingScreen');
-            }}
-            style={{ elevation: 20 }}>
-            <Text className="text-center text-xl text-bold text-white">
-              Go to testing screen
-            </Text>
-          </TouchableOpacity> */}
 
             <TouchableOpacity
               className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
@@ -367,14 +321,29 @@ const LoginScreen = () => {
                 setVat('');
                 setLogin(true);
               }}
-              style={{elevation: 20}}>
+              style={{ elevation: 20 }}>
               <Text className="text-center text-xl text-bold text-white">
-                Delete token and login again
+                {t('deleteTokenAndLoginAgain')}
               </Text>
             </TouchableOpacity>
+
+            {/* Test button to change the language in app */}
+            <TouchableOpacity
+              className="bg-gray-600 mx-auto my-10 p-1 rounded-2xl"
+              style={{ elevation: 20 }}
+              onPress={() => {
+                const newLanguage = i18n.language === 'el' ? 'en' : 'el';
+                i18n.changeLanguage(newLanguage);
+              }}>
+              <Text className="text-center text-xl text-bold text-white">
+                {t('changeLanguage')}
+              </Text>
+            </TouchableOpacity>
+
           </View>
         </ScrollView>
-      )}
+      )
+      }
     </SafeAreaView>
   );
 };

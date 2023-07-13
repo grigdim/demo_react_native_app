@@ -1,0 +1,21 @@
+{
+    "translation": {
+        "intaleStatistics": "Intale Statistics",
+        "changeLanguage": "Switch to Greek",
+        "homeDrawer": "Home",
+        "turnoverDrawer": "Turnover",
+        "totalProfitDrawer": "Total Profit",
+        "reportsDrawer": "Reports",
+        "chartsDrawer": "Charts",
+        "testingDrawer": "Testing",
+        "helpDrawer": "Help",
+        "aboutDrawer": "About",
+        "exitAppDrawer": "Exit App",
+        "goToLineChartScreen": "Go to line chart screen",
+        "goToAuditScreen": "Go to audit screen",
+        "goToStoreScreen": "Go to store screen",
+        "goToProductSalesScreen": "Go to product sales screen",
+        "goToSalesTabsScreen": "Go to sales tabs screen",
+        "deleteTokenAndLoginAgain": "Delete token and login again"
+    }
+}

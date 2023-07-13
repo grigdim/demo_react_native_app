@@ -31,11 +31,15 @@ import {
 import SalesTabsScreen from './screens/SalesTabsScreen';
 import SplashScreen from 'react-native-splash-screen';
 import GestureHandlerRootView from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Root() {
+
+  const { t, i18n } = useTranslation();
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
@@ -54,7 +58,8 @@ function Root() {
       }}
       initialRouteName="Root">
       <Drawer.Screen
-        name="Home"
+        name={t('homeDrawer')}
+        // name="Home"
         component={LoginScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -63,7 +68,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Turnover"
+        name={t('turnoverDrawer')}
+        // name="Turnover"
         component={TurnoverScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -72,7 +78,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Profit"
+        name={t('totalProfitDrawer')}
+        // name="Total Profit"
         component={TotalProfitScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -81,7 +88,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Reports"
+        name={t('reportsDrawer')}
+        // name="Reports"
         component={ReportsScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -90,7 +98,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Charts"
+        name={t('chartsDrawer')}
+        // name="Charts"
         component={BarChartScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -99,7 +108,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Testing"
+        name={t('testingDrawer')}
+        // name="Testing"
         component={TestingScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -108,7 +118,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="Help"
+        name={t('helpDrawer')}
+        // name="Help"
         component={HelpScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -117,7 +128,8 @@ function Root() {
         }}
       />
       <Drawer.Screen
-        name="About"
+        name={t('aboutDrawer')}
+        // name="About"
         component={AboutScreen}
         options={{
           drawerIcon: ({ color }) => (
@@ -134,6 +146,7 @@ function Root() {
 }
 
 export default function App() {
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);

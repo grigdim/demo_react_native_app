@@ -1,0 +1,21 @@
+{
+    "translation":{
+        "intaleStatistics": "Στατιστικά Intale",
+        "changeLanguage": "Αλλαγή σε Αγγλικά",
+        "homeDrawer": "Αρχική",
+        "turnoverDrawer": "Τζίρος",
+        "totalProfitDrawer": "Συνολικό Κέρδος",
+        "reportsDrawer": "Αναφορές",
+        "chartsDrawer": "Διαγράμματα",
+        "testingDrawer": "Τεστ",
+        "helpDrawer": "Υποστήριξη",
+        "aboutDrawer": "Σχετικά με Εμάς",
+        "exitAppDrawer": "Έξοδος από την Εφαρμογή",
+        "goToLineChartScreen": "Πήγαινε στην οθόνη γραφήματος",
+        "goToAuditScreen": "Πήγαινε στην οθόνη ελέγχου",
+        "goToStoreScreen": "Πήγαινε στην οθόνη καταστήματος",
+        "goToProductSalesScreen": "Πήγαινε στην οθόνη πωλήσεων προϊόντων",
+        "goToSalesTabsScreen": "Πήγαινε στην οθόνη καρτέλων πωλήσεων",
+        "deleteTokenAndLoginAgain": "Διέγραψε το Token και συνδέσου ξανά"
+    }
+}
