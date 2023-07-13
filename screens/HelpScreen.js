@@ -2,6 +2,7 @@ import { View, Text, ScrollView, Image, TouchableOpacity, Linking, StyleSheet } 
 import React from 'react';
 import DrawerHeader from './DrawerHeader';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useTranslation } from 'react-i18next';
 
 const hardCodedBrandName = 'SAKE A.E'
 const hardCodedVAT = '123456789'
@@ -9,18 +10,20 @@ const hardCodedStoreId = '55589'
 const hardCodedPos = '2'
 
 const HelpScreen = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity>
         <DrawerHeader />
       </TouchableOpacity>
       <View style={{ alignItems: 'flex-start', marginTop: 25, paddingHorizontal: 20 }}>
-        <Text style={styles.text}>We are with you 24 hours a day, 7 days a week, 365 days a year</Text>
-        <Text style={[styles.text, { marginTop: 10 }]}>Contact us with one of the following ways below and find out what you need</Text>
+        <Text style={styles.text}>{t("titleHelpScreen")}</Text>
+        <Text style={[styles.text, { marginTop: 10 }]}>{t("secondTitleHelpScreen")}</Text>
       </View>
-      <View style={{ marginTop: 15, paddingHorizontal: 20, flex: 1}}>
+      <View style={{ marginTop: 15, paddingHorizontal: 20, flex: 1 }}>
 
-        <Text style={styles.capsText}>CALL CENTER SUPPORT</Text>
+        <Text style={styles.capsText}>{t("callCenterHelpScreen")}</Text>
         <TouchableOpacity onPress={() => Linking.openURL('tel:2109211700')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="phone" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
@@ -28,7 +31,7 @@ const HelpScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        <Text style={styles.capsText}>PROPOSAL COMMUNICATION E-MAIL</Text>
+        <Text style={styles.capsText}>{t("emailHelpScreen")}</Text>
         <TouchableOpacity onPress={() => Linking.openURL('mailto:help@intale.com')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="envelope" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
@@ -36,7 +39,7 @@ const HelpScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        <Text style={styles.capsText}>USAGE MANUAL</Text>
+        <Text style={styles.capsText}>{t("manualHelpScreen")}</Text>
         <TouchableOpacity onPress={() => Linking.openURL('https://guide.intalepoint.com/')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="book" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
@@ -44,7 +47,7 @@ const HelpScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        <Text style={styles.capsText}>ONLINE SUPPORT CENTER</Text>
+        <Text style={styles.capsText}>{t("onlineCenterHelpScreen")}</Text>
         <TouchableOpacity onPress={() => Linking.openURL('https://help.intalepoint.com/')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="life-ring" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
@@ -52,7 +55,7 @@ const HelpScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        <Text style={styles.capsText}>TRAINING VIDEOS</Text>
+        <Text style={styles.capsText}>{t("trainingVideosHelpScreen")}</Text>
         <TouchableOpacity onPress={() => Linking.openURL('https://www.youtube.com/watch?v=oHJKl-3930k')}>
           <Text style={styles.detailsText}>
             <FontAwesome name="youtube-play" size={30} color="rgb(80 143 251)" style={{ marginRight: 5 }} />
@@ -62,25 +65,25 @@ const HelpScreen = () => {
 
       </View>
       <View style={{ marginBottom: 20, paddingHorizontal: 20 }}>
-        <Text style={styles.bottomText}>STORE INFORMATION</Text>
+        <Text style={styles.bottomText}>{t("storeInformationHelpScreen")}</Text>
         <View style={{ marginTop: 15 }} >
-          <Text style={styles.infoText}>BRAND NAME:{'  '}
-            <Text style={{color:'black'}}>
+          <Text style={styles.infoText}>{t("brandHelpScreen")}:{'  '}
+            <Text style={{ color: 'black' }}>
               {hardCodedBrandName}
             </Text>
           </Text>
-          <Text style={styles.infoText}>VAT:{'  '}
-            <Text style={{color:'black'}}>
+          <Text style={styles.infoText}>{t("vat")}:{'  '}
+            <Text style={{ color: 'black' }}>
               {hardCodedVAT}
             </Text>
           </Text>
-          <Text style={styles.infoText}>STORE ID:{'  '}
-            <Text style={{color:'black'}}>
+          <Text style={styles.infoText}>{t("storeHelpScreen")}:{'  '}
+            <Text style={{ color: 'black' }}>
               {hardCodedStoreId}
             </Text>
           </Text>
-          <Text style={styles.infoText}>POS:{'  '}
-            <Text style={{color:'black'}}>
+          <Text style={styles.infoText}>{t("posHelpScreen")}:{'  '}
+            <Text style={{ color: 'black' }}>
               {hardCodedPos}
             </Text>
           </Text>

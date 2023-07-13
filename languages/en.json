@@ -1,0 +1,56 @@
+{
+    "translation": {
+        // Drawer
+        "intaleStatistics": "Intale Statistics",
+        "changeLanguage": "Switch to Greek",
+        "homeDrawer": "Home",
+        "turnoverDrawer": "Turnover",
+        "totalProfitDrawer": "Total Profit",
+        "reportsDrawer": "Reports",
+        "chartsDrawer": "Charts",
+        "testingDrawer": "Testing",
+        "helpDrawer": "Help",
+        "aboutDrawer": "About",
+        "exitAppDrawer": "Exit App",
+
+        // Demo Go To
+        "goToLineChartScreen": "Go to line chart screen",
+        "goToAuditScreen": "Go to audit screen",
+        "goToStoreScreen": "Go to store screen",
+        "goToProductSalesScreen": "Go to product sales screen",
+        "goToSalesTabsScreen": "Go to sales tabs screen",
+        "deleteTokenAndLoginAgain": "Delete token and login again",
+
+        // Various
+        "submit": "Submit",
+        "vat": "VAT",
+        "password": "password",
+        
+        // Login Screen
+        "helloIntalerLoginScreen": "Hello Intaler!",
+        "backToLogin": "Back to login",
+        "nonRegisteredEmail": "Your email does not correspond to a registered VAT number. Please insert a valid VAT number to go with your email.",
+        "oneTimePassword": "A one-time password has been sent to your email. Please enter it below.",
+
+        // Help Screen
+        "titleHelpScreen":"We are with you 24 hours a day, 7 days a week, 365 days a year",
+        "secondTitleHelpScreen":"Contact us with one of the following ways below and find out what you need",
+        "callCenterHelpScreen":"CALL CENTER SUPPORT",
+        "emailHelpScreen":"PROPOSAL COMMUNICATION EMAIL",
+        "manualHelpScreen":"USAGE MANUAL",
+        "onlineCenterHelpScreen":"ONLINE SUPPORT CENTER",
+        "trainingVideosHelpScreen":"TRAINING VIDEOS",
+        "storeInformationHelpScreen":"STORE INFORMATION",
+        "brandHelpScreen":"BRAND NAME",
+        "storeHelpScreen":"STORE",
+        "posHelpScreen":"POS",
+
+        // About Screen
+        "yourDigitalGuideAboutScreen": "Your digital guide",
+        "smallRetailAboutScreen": "Small retail is a daily battle.",
+        "inIntaleWeHelpAboutScreen": "In Intale we help you to win.",
+        "madeWithAboutScreen": "Made with",
+        "andAboutScreen": "and",
+        "inAthensAboutScreen": "in Athens"
+    }
+}

@@ -2,8 +2,11 @@ import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'rea
 import React from 'react';
 import DrawerHeader from './DrawerHeader';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useTranslation } from 'react-i18next';
 
 const AboutScreen = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity>
@@ -16,24 +19,24 @@ const AboutScreen = () => {
         />
       </View>
       <View style={{ alignItems: 'center', marginTop: 25, flex: 1, paddingHorizontal: 20 }}>
-        <Text style={styles.middleText}>Your digital guide</Text>
-        <Text style={styles.middleTextNoPadding}>Small retail is a daily battle.</Text>
-        <Text style={styles.middleTextNoPadding}>In Intale we help you to win.</Text>
+        <Text style={styles.middleText}>{t("yourDigitalGuideAboutScreen")}</Text>
+        <Text style={styles.middleTextNoPadding}>{t("smallRetailAboutScreen")}</Text>
+        <Text style={styles.middleTextNoPadding}>{t("inIntaleWeHelpAboutScreen")}</Text>
       </View>
       <View style={styles.bottomText}>
-        <Text style={styles.text}>Made with </Text>
+        <Text style={styles.text}> {t("madeWithAboutScreen")} </Text>
         <FontAwesome
           name="heart"
           size={20}
           color="rgb(209 26 26)"
         />
-        <Text style={styles.text}> and </Text>
+        <Text style={styles.text}> {t("andAboutScreen")} </Text>
         <FontAwesome
           name="coffee"
           size={20}
           color="rgb(40 143 251)"
         />
-        <Text style={styles.text}> in Athens</Text>
+        <Text style={styles.text}> {t("inAthensAboutScreen")}</Text>
       </View>
     </View>
   );
