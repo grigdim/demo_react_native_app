@@ -132,7 +132,8 @@ const TestingScreen = () => {
                 key !== 'TotalProfitPercentage',
             )
             .map(key => {
-              return key.replace(/(?!^)([A-Z])/g, ' $1');
+              const translatedKey = t(key);
+              return translatedKey;
             }),
         );
         setTurnoverTableData(
@@ -176,7 +177,8 @@ const TestingScreen = () => {
                 key !== 'AvgPerDay',
             )
             .map(key => {
-              return key.replace(/(?!^)([A-Z])/g, ' $1');
+              const translatedKey = t(key);
+              return translatedKey;
             }),
         );
         setProfitTableData(
@@ -214,7 +216,11 @@ const TestingScreen = () => {
               if (key === 'CategoryId' || key === 'Vat') {
                 return;
               } else {
-                headerArray.push(key.replace(/(?!^)([A-Z])/g, ' $1'));
+                const translatedHeader = t(key);
+                const uppercaseHeader = translatedHeader
+                  .toUpperCase()
+                  .replace(/Έ/g, 'Ε');
+                headerArray.push(uppercaseHeader);
               }
             });
             return headerArray;

@@ -7,7 +7,7 @@
         "totalProfitDrawer": "Total Profit",
         "reportsDrawer": "Reports",
         "chartsDrawer": "Charts",
-        "testingDrawer": "Testing",
+        "testingDrawer": "Test Sales",
         "helpDrawer": "Help",
         "aboutDrawer": "About",
         "exitAppDrawer": "Exit App",
@@ -94,6 +94,8 @@
         // Test Screen (Sales tabs screen)
         "turnover": "Turnover",
         "profit": "Profit",
+        "turnoverDetails": "Turnover Details",
+        "profitDetails": "Total Profit Details",
         "topProducts": "Top Selling Products",
         "categoryDetails": "Category Details",
         "productSalesDetails": "Product Sales Details",
@@ -116,11 +118,33 @@
         "ProfitOnTurnOverPercentage": "turnover profit percentage",
         "TurnOverWithoutVat": "turnover excl. VAT",
         "TurnOverWithVat": "turnover incl. VAT",
+        "TotalProfitVat": "VAT", // TotalProfit API
+        "TotalProfitWithoutVat": "TOTAL PROFIT INCL. VAT", // TotalProfit API
+        "TotalProfitWithVat": "TOTAL PROFIT EXCL. VAT", // TotalProfit API
+        "TurnoverWithoutVat": "TURNOVER EXCL. VAT", // Turnover API
+        "TurnoverWithVat": "TURNOVER INCL. VAT", // Turnover API
+        "TurnoverVatTotal": "VAT", // Turnover API 
+        "Level": "VAT%", // Turnover API 
+        "TotalProfitPercentage": "VAT", // Turnover API
+        "AvgPerDay": "AVERAGE PER DAY", // Turnover API
         "VatTotal": "VAT Sum",
         "Quantity": "items",
         "AverageTransactionsPerDay": "transactions/day",
         "AverageTotalGrossPerTransaction": "per transaction",
         "AverageProductsCountPerTransaction": "products in the cart",
-        "AverageVatPerDay": "VAT/day" 
+        "AverageVatPerDay": "VAT/day",
+        "CategoryName": "CATEGORY", // Category Details API
+        "CostInclVat": "COST INCL. VAT", // Category Details API
+        "QuantityTmx": "QUANTITY", // Category Details API
+        "Turnover": "REVENUES", // Category Details API
+        "ProfitPercentage": "% PROFIT" // Category Details API
+
+        // Category Details
+        // Category Name, Cost Incl Vat, Quantity Tmx, Turnover
+        // Profit Without Vat, Profit With Vat, Profit Percentage
+
+        // CATEGORY, COST INCL. VAT, QUANTITY, REVENUES,
+        // PROFIT EXCL. VAT, PROFIT INCL. VAT, % PROFIT
+
     }
 }
