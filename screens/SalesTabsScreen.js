@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import SalesStatisticsScreen from './SalesStatisticsScreen';
-import DetailedReports from './SalesDetailedReports';
+import SalesInsightsScreen from './SalesInsightsScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -37,13 +37,13 @@ const SalesTabsScreen = () => {
         }}
       />
       <Tab.Screen
-        name={'Detailed Reports'}
-        component={DetailedReports}
+        name={'Sales insights'}
+        component={SalesInsightsScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
-            <SimpleLineIcons
-              name="drawer"
+            <MaterialIcons
+              name="insights"
               size={25}
               color={focused ? 'white' : 'black'}
             />
