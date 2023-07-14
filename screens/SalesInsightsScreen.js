@@ -20,6 +20,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const SalesInsightsScreen = () => {
+  const authorizedUser = true;
   const token = useSelector(selectToken);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -84,61 +85,74 @@ const SalesInsightsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      {loading ? (
-        <ActivityIndicator
-          color="rgb(34 211 238)"
-          size="large"
-          className="mx-auto my-auto"
-        />
-      ) : (
-        <ScrollView
-          className="bg-gray-200 space-y-2"
-          contentContainerStyle={{
-            alignItems: 'center',
-          }}>
-          <View
-            className="rounded-md bg-white p-2 my-4 w-10/12 space-y-2"
-            style={{elevation: 10}}>
-            <TouchableOpacity
-              className="items-center space-y-2"
-              onPress={() => setCategoryModalVisible(true)}>
-              <View>
-                {selectedCategories.length > 0 ? (
-                  <Text className="underline text-xl font-extrabold">
-                    Selected Categories
-                  </Text>
-                ) : (
-                  <Text className="underline text-xl font-extrabold">
-                    Choose Category
-                  </Text>
+      {authorizedUser ? (
+        loading ? (
+          <ActivityIndicator
+            color="rgb(34 211 238)"
+            size="large"
+            className="mx-auto my-auto"
+          />
+        ) : (
+          <ScrollView
+            className="bg-gray-300 space-y-2"
+            contentContainerStyle={{
+              alignItems: 'center',
+            }}>
+            <View
+              className="rounded-md bg-white p-2 my-4 w-10/12 space-y-2"
+              style={{elevation: 25}}>
+              <TouchableOpacity
+                className="items-center space-y-2"
+                onPress={() => setCategoryModalVisible(true)}>
+                <View>
+                  {selectedCategories.length > 0 ? (
+                    <Text className="underline text-xl font-extrabold">
+                      Selected Categories
+                    </Text>
+                  ) : (
+                    <Text className=" text-xl font-extrabold">
+                      Press to choose a category
+                    </Text>
+                  )}
+                </View>
+                {selectedCategories.length > 0 && (
+                  <View className="">
+                    {selectedCategories.map(item => {
+                      return (
+                        <View className="flex-row items-center space-x-2">
+                          <View>
+                            <Fontisto name="check" />
+                          </View>
+                          <View>
+                            <Text>{item}</Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
                 )}
-              </View>
-            </TouchableOpacity>
-            {selectedCategories.length > 0 && (
-              <View className="">
-                {selectedCategories.map(item => {
-                  return (
-                    <View className="flex-row items-center space-x-2">
-                      <View>
-                        <Fontisto name="check" />
-                      </View>
-                      <View>
-                        <Text>{item}</Text>
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
-            )}
-          </View>
-        </ScrollView>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        )
+      ) : (
+        <View
+          className="mx-auto my-auto w-2/3 bg-white rounded-lg p-4"
+          style={{elevation: 25}}>
+          <Text className="text-center text-xl font-extrabold">
+            You do not have access to this page. Press this to upgrade your
+            subscription plan.
+          </Text>
+        </View>
       )}
       <Modal visible={categoryModalVisible}>
-        <View className="bg-gray-200 flex-1 items-center justify-center">
+        <View className="bg-gray-100 flex-1 items-center justify-center">
           {categories.length > 0 ? (
             <View className="space-y-2 items-center h-5/6 w-full">
               <View className="my-4">
-                <Text className="text-xl font-extrabold border p-2 rounded-md">
+                <Text
+                  className="text-white text-xl font-extrabold border border-gray-500 p-2 rounded-md bg-gray-500"
+                  style={{elevation: 25}}>
                   Available Categories
                 </Text>
               </View>
@@ -169,10 +183,13 @@ const SalesInsightsScreen = () => {
                                 ? 'checkbox-active'
                                 : 'checkbox-passive'
                             }
+                            color="black"
                           />
                         </View>
                         <View>
-                          <Text className="text-lg">{item.name}</Text>
+                          <Text className="text-lg text-black">
+                            {item.name}
+                          </Text>
                         </View>
                       </TouchableOpacity>
                     );
@@ -197,8 +214,9 @@ const SalesInsightsScreen = () => {
                           return newState;
                         });
                       }}
-                      className="border rounded-xl p-2">
-                      <Text className="text-lg">Show all</Text>
+                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">Show all</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -223,8 +241,9 @@ const SalesInsightsScreen = () => {
                           return newState;
                         });
                       }}
-                      className="border rounded-xl p-2">
-                      <Text className="text-lg">Show selected</Text>
+                      className="border border-gray-500 p-2 rounded-md bg-gray-500"
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">Show selected</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -245,8 +264,9 @@ const SalesInsightsScreen = () => {
                         });
                         setSelectAllCategories(false);
                       }}
-                      className="border rounded-xl p-2">
-                      <Text className="text-lg">Unselect all</Text>
+                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">Unselect all</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -264,8 +284,9 @@ const SalesInsightsScreen = () => {
                         });
                         setSelectAllCategories(true);
                       }}
-                      className="border rounded-xl p-2">
-                      <Text className="text-lg">Select all</Text>
+                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">Select all</Text>
                     </TouchableOpacity>
                   )}
                 </View>
