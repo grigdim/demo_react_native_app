@@ -217,7 +217,7 @@ const TestingScreen = () => {
                                 return;
                             } else {
                                 const translatedHeader = t(key);
-                                const uppercaseHeader = translatedHeader.toUpperCase().replace(/[΄΄ίϊΐόύϋΰάέήΊΪΌΎΫΆΈΉ]/g, '');
+                                const uppercaseHeader = translatedHeader.toUpperCase().replace(/Έ/g, 'Ε');
                                 headerArray.push(uppercaseHeader);
                             }
                         });
