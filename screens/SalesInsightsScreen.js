@@ -97,7 +97,7 @@ const SalesInsightsScreen = () => {
             alignItems: 'center',
           }}>
           <View
-            className="rounded-md bg-yellow-200 p-2 my-4 w-10/12 space-y-2"
+            className="rounded-md bg-white p-2 my-4 w-10/12 space-y-2"
             style={{elevation: 10}}>
             <TouchableOpacity
               className="items-center space-y-2"
