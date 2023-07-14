@@ -100,24 +100,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   infoText: {
-    fontSize: 14,
+    fontSize: 15,
     paddingVertical: 2,
     fontWeight: 'bold'
   },
   bottomText: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 17,
     marginRight: 10,
     fontWeight: 'bold',
   },
   capsText: {
     marginTop: 15,
-    fontSize: 16,
+    fontSize: 17,
     marginRight: 10,
     fontWeight: 'bold',
   },
   detailsText: {
-    fontSize: 15,
+    fontSize: 16,
     marginTop: 5,
     marginRight: 10,
     fontWeight: 'bold',

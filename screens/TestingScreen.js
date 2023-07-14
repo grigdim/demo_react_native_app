@@ -33,8 +33,11 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Table, Row } from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 import DrawerHeader from './DrawerHeader';
+import { useTranslation } from 'react-i18next';
+import i18next from '../languages/i18n';
 
 const TestingScreen = () => {
+    const { t, i18n } = useTranslation();
     const token = useSelector(selectToken);
     const { width, height } = Dimensions.get('screen');
     const dispatch = useDispatch();
@@ -262,7 +265,7 @@ const TestingScreen = () => {
         let date = new Date();
         setGroupByDate(value);
         switch (value) {
-            case 'DAY':
+            case t('day'):
                 setFromDate(date);
                 setFromDateFormatted(() => {
                     return date.toISOString().slice(0, 10).concat(' 00:00:00');
@@ -271,7 +274,7 @@ const TestingScreen = () => {
                     return date.toISOString().slice(0, 10).concat(' 23:59:59');
                 });
                 break;
-            case 'WEEK':
+            case t('week'):
                 let oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
                 setFromDate(oneWeekAgo);
@@ -283,7 +286,7 @@ const TestingScreen = () => {
                     return date.toISOString().slice(0, 10).concat(' 23:59:59');
                 });
                 break;
-            case 'MONTH':
+            case t('month'):
                 let oneMonthAgo = new Date();
                 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
                 setFromDate(oneMonthAgo);
@@ -303,14 +306,14 @@ const TestingScreen = () => {
 
     const selectedGroupByDateValue = useMemo(() => {
         switch (groupByDate) {
-            case 'DAY':
-                return 'DAY';
-            case 'WEEK':
-                return 'WEEK';
-            case 'MONTH':
-                return 'MONTH';
+            case t('day'):
+                return t('day');
+            case t('week'):
+                return t('week');
+            case t('month'):
+                return t('month');
             default:
-                return '';
+                return t('day');
         }
     }, [groupByDate]);
 
@@ -339,7 +342,7 @@ const TestingScreen = () => {
                                             backgroundColor: 'rgb(229 231 235)',
                                         }}
                                         buttonTextStyle={{ color: 'rgb(23 37 84)' }}
-                                        data={['DAY', 'WEEK', 'MONTH']}
+                                        data={[t("day"), t("week"), t("month")]}
                                         defaultValue={selectedGroupByDateValue}
                                         onSelect={(selectedItem, index) => {
                                             handleGroupByChange(selectedItem);
@@ -356,9 +359,10 @@ const TestingScreen = () => {
                                     className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
                                     onPress={() => setOpenFromDate(true)}>
                                     <Text className="text-center text-base text-blue-950">
-                                        From Date:
+                                        {t("fromDate")}:
                                     </Text>
                                     <DatePicker
+                                        locale={i18next.language}
                                         modal
                                         open={openFromDate}
                                         date={fromDate}
@@ -373,6 +377,9 @@ const TestingScreen = () => {
                                         onCancel={() => {
                                             setOpenFromDate(false);
                                         }}
+                                        cancelText={t('cancel')}
+                                        confirmText={t('confirm')}
+                                        title={t("selectDate")}
                                     />
                                     {fromDateFormatted !== '' && (
                                         <Text className="text-center text-base text-blue-950">
@@ -384,9 +391,10 @@ const TestingScreen = () => {
                                     className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
                                     onPress={() => setOpenToDate(true)}>
                                     <Text className="text-center text-base text-blue-950">
-                                        End Date:
+                                        {t("endDate")}:
                                     </Text>
                                     <DatePicker
+                                        locale={i18next.language}
                                         modal
                                         open={openToDate}
                                         date={toDate}
@@ -401,6 +409,9 @@ const TestingScreen = () => {
                                         onCancel={() => {
                                             setOpenToDate(false);
                                         }}
+                                        cancelText={t('cancel')}
+                                        confirmText={t('confirm')}
+                                        title={t("selectDate")}
                                     />
                                     {toDateFormatted !== '' && (
                                         <Text className="text-center text-base text-blue-950">
@@ -418,14 +429,14 @@ const TestingScreen = () => {
                                     className="bg-yellow-500 p-3 rounded-t-md"
                                     style={{ elevation: 10 }}>
                                     <Text className="text-center text-white underline underline-offset-8">
-                                        Turnover:
+                                        {t("turnover")}:
                                     </Text>
                                 </View>
                                 <View className="bg-yellow-400 p-8">
                                     <Text className="text-center text-white font-bold text-xl">
                                         {totals[0].TurnoverWithVat}€
                                     </Text>
-                                    <Text className="text-center text-white"> with VAT</Text>
+                                    <Text className="text-center text-white"> {t("withVAT")}</Text>
                                 </View>
                                 {!turnoverDetails ? (
                                     <View className="divide-y divide-yellow-400">
@@ -435,7 +446,7 @@ const TestingScreen = () => {
                                                     {totals[0].TurnoverWithoutVat} €
                                                 </Text>
                                                 <Text className="text-center text-yellow-400">
-                                                    without VAT
+                                                    {t("withoutVAT")}
                                                 </Text>
                                             </View>
                                             <View className="w-1/3">
@@ -443,7 +454,7 @@ const TestingScreen = () => {
                                                     {totals[0].TurnoverVatTotal}€
                                                 </Text>
                                                 <Text className="text-center text-yellow-400">
-                                                    VAT total
+                                                    {t("vatTotal")}
                                                 </Text>
                                             </View>
                                             <View className="w-1/3">
@@ -451,7 +462,7 @@ const TestingScreen = () => {
                                                     {totals[0].AvgPerDay}€
                                                 </Text>
                                                 <Text className="text-center text-yellow-400">
-                                                    Average Per Day
+                                                    {t("avgPerDay")}
                                                 </Text>
                                             </View>
                                         </View>
@@ -459,7 +470,7 @@ const TestingScreen = () => {
                                             className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
                                             onPress={() => setTurnoverDetails(true)}>
                                             <Text className="text-center text-yellow-500 font-bold">
-                                                More Details
+                                                {t("moreDetails")}
                                             </Text>
                                             <Icon
                                                 name="arrowright"
@@ -476,7 +487,7 @@ const TestingScreen = () => {
                                                 className="flex-row items-center justify-between px-4"
                                                 onPress={() => setTurnoverDetails(false)}>
                                                 <Text className="text-center text-blue-950 py-2">
-                                                    Turnover Details
+                                                    {t("turnoverDetails")}
                                                 </Text>
                                                 <Icon name="close" size={15} color="rgb(23 37 84)" />
                                             </TouchableOpacity>
@@ -539,14 +550,14 @@ const TestingScreen = () => {
                                 style={{ elevation: 10 }}>
                                 <View className="bg-purple-500 p-3 rounded-t-md">
                                     <Text className="text-center text-white underline">
-                                        Profit:
+                                        {t("profit")}:
                                     </Text>
                                 </View>
                                 <View className="bg-purple-400 p-8">
                                     <Text className="text-center text-white font-bold text-xl">
                                         {totals[0].TotalProfitWithVat}€
                                     </Text>
-                                    <Text className="text-center text-white"> with VAT</Text>
+                                    <Text className="text-center text-white"> {t("withVAT")}</Text>
                                 </View>
                                 {!profitDetails ? (
                                     <View className="divide-y divide-purple-400">
@@ -556,7 +567,7 @@ const TestingScreen = () => {
                                                     {totals[0].TotalProfitWithoutVat}€
                                                 </Text>
                                                 <Text className="text-center text-purple-400">
-                                                    without VAT
+                                                    {t("withoutVAT")}
                                                 </Text>
                                             </View>
                                             <View className="w-1/2">
@@ -564,7 +575,7 @@ const TestingScreen = () => {
                                                     {totals[0].TotalProfitPercentage}%
                                                 </Text>
                                                 <Text className="text-center text-purple-400">
-                                                    profit as a percentage
+                                                    {t("profitAsPer")}
                                                 </Text>
                                             </View>
                                         </View>
@@ -572,7 +583,7 @@ const TestingScreen = () => {
                                             className="py-2 flex-row space-x-2 justify-center items-center"
                                             onPress={() => setProfitDetails(true)}>
                                             <Text className="text-center text-purple-500 font-bold">
-                                                More Details
+                                                {t("moreDetails")}
                                             </Text>
                                             <Icon
                                                 name="arrowright"
@@ -587,7 +598,7 @@ const TestingScreen = () => {
                                             className="flex-row items-center justify-between px-4"
                                             onPress={() => setProfitDetails(false)}>
                                             <Text className="text-center text-blue-950 py-2">
-                                                Profit Details
+                                                {t("profitDetails")}
                                             </Text>
                                             <Icon name="close" size={15} color="rgb(23 37 84)" />
                                         </TouchableOpacity>
@@ -655,7 +666,7 @@ const TestingScreen = () => {
                                             elevation: 50,
                                         }}>
                                         <Text className="text-center text-white underline">
-                                            Top Selling Products
+                                            {t("topProducts")}
                                         </Text>
                                     </View>
                                     <View
@@ -681,7 +692,7 @@ const TestingScreen = () => {
                                             <Text
                                                 className="text-center text-xs font-bold"
                                                 style={{ color: 'rgb(255 255 255)' }}>
-                                                CHOOSE A PRODUCT
+                                                {t("chooseProduct")}
                                             </Text>
                                             <FontAwesome
                                                 name="arrow-right"
@@ -699,7 +710,7 @@ const TestingScreen = () => {
                                             <View>
                                                 <View className="flex-row justify-center items-center p-4 border-b" style={{ borderColor: 'rgb(212 215 222)' }}>
                                                     <Text className="flex-1 text-center text-lg">
-                                                        Product Sales Details
+                                                        {t("productSalesDetails")}
                                                     </Text>
                                                     <TouchableOpacity
                                                         onPress={() => {
@@ -770,7 +781,7 @@ const TestingScreen = () => {
                                                             borderBottomColor: 'rgb(212 215 222)',
                                                         }}
                                                         searchPlaceHolder={
-                                                            'Search by Name, Barcode, Supplier Code or Internal Code'
+                                                            t("productPlaceHolder")
                                                         }
                                                         searchPlaceHolderColor={'darkgrey'}
                                                         renderSearchInputLeftIcon={() => {
@@ -788,14 +799,14 @@ const TestingScreen = () => {
                                                 <View className="justify-center items-center space-y-2 mb-2">
                                                     <View className="flex-row">
                                                         <Text className="text-slate-500 text-xl">
-                                                            From:{' '}
+                                                            {t("from")}:{' '}
                                                         </Text>
                                                         <Text className="text-slate-500 text-xl">
                                                             {fromDateFormatted}
                                                         </Text>
                                                     </View>
                                                     <View className="flex-row">
-                                                        <Text className="text-slate-500 text-xl">To: </Text>
+                                                        <Text className="text-slate-500 text-xl">{t("to")}: </Text>
                                                         <Text className="text-slate-500 text-xl">
                                                             {toDateFormatted}
                                                         </Text>
@@ -812,15 +823,16 @@ const TestingScreen = () => {
                                                                         key === 'VatTotal' ||
                                                                         key === 'TurnOverWithVat'
                                                                     ) {
+                                                                        const translatedKey = t(key);
+                                                                        const value = selectedProduct[key];
+
                                                                         return (
                                                                             <View className="justify-start items-center p-4 w-1/2">
                                                                                 <Text className="text-white text-lg font-black">
-                                                                                    {selectedProduct[key] + '€'}
+                                                                                    {value + '€'}
                                                                                 </Text>
                                                                                 <Text className="text-white text-center text-sm">
-                                                                                    {key
-                                                                                        .replace(/(?!^Turn)O/g, ' o')
-                                                                                        .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                                    {translatedKey}
                                                                                 </Text>
                                                                             </View>
                                                                         );
@@ -835,18 +847,19 @@ const TestingScreen = () => {
                                                                         key === 'ProfitWithVat' ||
                                                                         key === 'ProfitWithoutVat'
                                                                     ) {
+                                                                        const translatedKey = t(key);
+                                                                        const value = selectedProduct[key];
+
                                                                         return (
                                                                             <View className="justify-center items-center w-1/3 px-4">
                                                                                 <Text className="text-white text-lg font-black">
                                                                                     {key === 'ProfitOnTurnOverPercentage'
-                                                                                        ? selectedProduct[key] + '%'
-                                                                                        : selectedProduct[key] + '€'}
+                                                                                        ? `${value} %`
+                                                                                        : `${value} €`}
                                                                                 </Text>
 
                                                                                 <Text className="text-white text-center text-sm">
-                                                                                    {key
-                                                                                        .replace(/(?!^Turn)O/g, ' o')
-                                                                                        .replace(/(?!^)([A-Z])/g, ' $1')}
+                                                                                    {translatedKey}
                                                                                 </Text>
                                                                             </View>
                                                                         );
@@ -870,13 +883,13 @@ const TestingScreen = () => {
                                             elevation: 50
                                         }}>
                                         <Text className="text-white underline ml-3 mt-1">
-                                            Category Details
+                                            {t("categoryDetails")}
                                         </Text>
                                         <TouchableOpacity className="flex-row space-x-2 justify-center items-center rounded-b-md"
                                             onPress={() => { }}>
                                             <Text className="text-xs font-bold border border-white p-1 mr-2"
                                                 style={{ color: 'rgb(255, 255, 255)', borderRadius: 20, fontSize: 11 }}>
-                                                EXPORT TO EXCEL
+                                                {t("exportToExcel")}
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
@@ -976,8 +989,8 @@ const TestingScreen = () => {
                                                 }>
                                                 <Text className="font-bold text-xs" style={{ color: 'rgb(255,255,255)' }}>
                                                     {!categoriesDetailsTableExpanded
-                                                        ? 'EXPAND'
-                                                        : 'COLLAPSE'}
+                                                        ? t("expand")
+                                                        : t("collapse")}
                                                 </Text>
                                                 <FontAwesome
                                                     name={categoriesDetailsTableExpanded ? 'arrow-up' : 'arrow-down'}
@@ -999,7 +1012,7 @@ const TestingScreen = () => {
                                         elevation: 50,
                                     }}>
                                     <Text className="text-center text-white underline">
-                                        Daily Transactions Average
+                                        {t("dailyTransactionAvg")}
                                     </Text>
                                 </View>
                                 <View
@@ -1007,20 +1020,27 @@ const TestingScreen = () => {
                                     style={{
                                         backgroundColor: 'rgb(105, 133, 165)',
                                         elevation: 50,
-                                    }}>
-                                    {dailyTransactionsAverage &&
+                                    }}
+                                >
+                                    {dailyTransactionsAverage ? (
                                         Object.keys(dailyTransactionsAverage).map((key, index) => {
+                                            const translatedKey = t(key);
+                                            const value = dailyTransactionsAverage[key];
+
                                             return (
                                                 <View className="justify-center items-center rounded-md space-y-2">
                                                     <Text className="text-white text-xl font-black">
-                                                        {dailyTransactionsAverage[key]}
+                                                        {value}
                                                     </Text>
                                                     <Text className="text-white">
-                                                        {key.replace(/(?!^)([A-Z])/g, ' $1')}
+                                                        {translatedKey}
                                                     </Text>
                                                 </View>
                                             );
-                                        })}
+                                        })
+                                    ) : (
+                                        <Text className="text-white">{t("noDataAvailable")}</Text>
+                                    )}
                                 </View>
                             </View>
                             {/*Daily Transactions Average end*/}

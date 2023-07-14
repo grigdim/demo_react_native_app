@@ -70,7 +70,7 @@ const LoginScreen = () => {
     if (vat.length === 9 && /^\d+$/.test(vat)) {
       setRegisteredEmail(true);
     } else {
-      Alert.alert('Warning', 'Please enter a valid VAT number', [
+      Alert.alert(t("warning"), t("validVatNumber"), [
         {
           text: 'OK',
           onPress: () => {
@@ -99,7 +99,7 @@ const LoginScreen = () => {
         : setRegisteredEmail(false);
       setLogin(false);
     } else {
-      Alert.alert('Warning', 'Please enter a valid email', [
+      Alert.alert(t("warning"), t("validEmail"), [
         {
           text: 'OK',
           onPress: () => {

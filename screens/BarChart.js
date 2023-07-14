@@ -5,8 +5,10 @@ import React, { useState } from 'react';
 import { BarChart } from 'react-native-charts-wrapper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
+import { useTranslation } from 'react-i18next';
 
 const BarChartScreen = () => {
+  const { t, i18n } = useTranslation();
   const [selectedEntry, setSelectedEntry] = useState();
   const [selectedBarValue, setSelectedBarValue] = useState(null);
   const colorsArray = [
@@ -112,18 +114,18 @@ const BarChartScreen = () => {
     textSize: 18,
     textColor: processColor('black'),
     valueFormatter: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      t("january"), 
+      t("february"), 
+      t("march"), 
+      t("april"), 
+      t("may"), 
+      t("june"), 
+      t("july"), 
+      t("august"), 
+      t("september"), 
+      t("october"), 
+      t("november"), 
+      t("december"),  
     ],
     granularityEnabled: true,
     granularity: 1,
