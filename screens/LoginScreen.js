@@ -11,32 +11,32 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { selectBox } from '../features/bootstrap';
-import { selectToken } from '../features/bootstrap';
+import React, {useState, useEffect, useRef} from 'react';
+import {useSelector} from 'react-redux';
+import {selectBox} from '../features/bootstrap';
+import {selectToken} from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
-import { setToken } from '../features/bootstrap';
-import { useNavigation } from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setToken} from '../features/bootstrap';
+import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import { useTranslation } from 'react-i18next';
-import SwitchSelector from 'react-native-switch-selector'
+import {useTranslation} from 'react-i18next';
+import SwitchSelector from 'react-native-switch-selector';
 
 const options = [
-  { label: 'Ελληνικά', value: 'el' },
-  { label: 'English', value: 'en' },
-]
+  {label: 'Ελληνικά', value: 'el'},
+  {label: 'English', value: 'en'},
+];
 
 const LoginScreen = () => {
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
-  const { height, width } = Dimensions.get('screen');
-  const { input, button, buttonText, disabledButton } = style;
+  const {height, width} = Dimensions.get('screen');
+  const {input, button, buttonText, disabledButton} = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
@@ -94,7 +94,7 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-        email === 'gsakellaropoulos@intale.com'
+      email === 'gsakellaropoulos@intale.com'
         ? setRegisteredEmail(true)
         : setRegisteredEmail(false);
       setLogin(false);
@@ -116,6 +116,8 @@ const LoginScreen = () => {
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
+      // username: 'intaleadmin',
+      // password: '2NJDtm2w#nUh$+Hm',
       username: 'admin',
       password:
         'AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A==',
@@ -149,7 +151,7 @@ const LoginScreen = () => {
       {loading ? (
         <View
           className="w-8/12 justify-center items-center mt-2"
-          style={{ height: height / 1.33 }}>
+          style={{height: height / 1.33}}>
           <ActivityIndicator color="#00CCBB" size="large" />
         </View>
       ) : !token ? (
@@ -162,7 +164,9 @@ const LoginScreen = () => {
                 color="rgb(59 130 246)"
                 className=""
               />
-              <Text className="text-blue-500 text-3xl">{t("helloIntalerLoginScreen")}</Text>
+              <Text className="text-blue-500 text-3xl">
+                {t('helloIntalerLoginScreen')}
+              </Text>
             </View>
             <TextInput
               onChangeText={handleChangeEmail}
@@ -178,18 +182,18 @@ const LoginScreen = () => {
               onPress={handleCheckEmail}
               disabled={isEmailDisabled}
               className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t("submit")}</Text>
+              <Text style={buttonText}>{t('submit')}</Text>
             </TouchableOpacity>
           </View>
         ) : registeredEmail ? (
           <View className="flex-1 justify-center space-y-10 items-center w-10/12">
             <Text className="text-center text-xl font-bold text-black">
-              {t("oneTimePassword")}
+              {t('oneTimePassword')}
             </Text>
             <TextInput
               onChangeText={handleChangePassword}
               style={input}
-              placeholder={t("password")}
+              placeholder={t('password')}
               placeholderTextColor={'darkgrey'}
               clearButtonMode={'always'}
               secureTextEntry
@@ -202,26 +206,26 @@ const LoginScreen = () => {
                   setLogin(true);
                 }}
                 className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t("backToLogin")}</Text>
+                <Text style={buttonText}>{t('backToLogin')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[isPasswordDisabled && disabledButton]}
                 onPress={handleLogin}
                 disabled={isPasswordDisabled}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t("submit")}</Text>
+                <Text style={buttonText}>{t('submit')}</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : (
           <View className="flex-1 justify-center space-y-10 items-center w-10/12">
             <Text className="text-center text-xl font-bold text-black">
-              {t("nonRegisteredEmail")}
+              {t('nonRegisteredEmail')}
             </Text>
             <TextInput
               onChangeText={handleChangeVat}
               style={input}
-              placeholder={t("vat")}
+              placeholder={t('vat')}
               placeholderTextColor={'darkgrey'}
               clearButtonMode={'always'}
             />
@@ -235,14 +239,14 @@ const LoginScreen = () => {
                   setLogin(true);
                 }}
                 className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t("backToLogin")}</Text>
+                <Text style={buttonText}>{t('backToLogin')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleSubmitVat}
                 style={[isVatDisabled && disabledButton]}
                 disabled={isVatDisabled}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t("submit")}</Text>
+                <Text style={buttonText}>{t('submit')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -254,13 +258,13 @@ const LoginScreen = () => {
           </TouchableOpacity>
           <View
             className="justify-center items-center"
-            style={{ height: height / 1.33 }}>
+            style={{height: height / 1.33}}>
             <TouchableOpacity
               className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
               onPress={() => {
                 navigation.navigate('LineChartScreen');
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('goToLineChartScreen')}
               </Text>
@@ -271,7 +275,7 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('AuditScreen');
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('goToAuditScreen')}
               </Text>
@@ -282,7 +286,7 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('StoreScreen');
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('goToStoreScreen')}
               </Text>
@@ -293,7 +297,7 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('ProductSalesScreen');
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('goToProductSalesScreen')}
               </Text>
@@ -304,7 +308,7 @@ const LoginScreen = () => {
               onPress={() => {
                 navigation.navigate('SalesTabsScreen');
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('goToSalesTabsScreen')}
               </Text>
@@ -319,7 +323,7 @@ const LoginScreen = () => {
                 setVat('');
                 setLogin(true);
               }}
-              style={{ elevation: 20 }}>
+              style={{elevation: 20}}>
               <Text className="text-center text-xl text-bold text-white">
                 {t('deleteTokenAndLoginAgain')}
               </Text>
@@ -328,7 +332,7 @@ const LoginScreen = () => {
             {/* Test button to change the language in app */}
             <TouchableOpacity
               className="bg-gray-600 mx-auto my-10 p-1 rounded-2xl"
-              style={{ elevation: 20 }}
+              style={{elevation: 20}}
               onPress={() => {
                 const newLanguage = i18n.language === 'el' ? 'en' : 'el';
                 i18n.changeLanguage(newLanguage);
@@ -337,11 +341,9 @@ const LoginScreen = () => {
                 {t('changeLanguage')}
               </Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
-      )
-      }
+      )}
     </SafeAreaView>
   );
 };
