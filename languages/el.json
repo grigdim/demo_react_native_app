@@ -7,7 +7,7 @@
         "totalProfitDrawer": "Συνολικό Κέρδος",
         "reportsDrawer": "Αναφορές",
         "chartsDrawer": "Διαγράμματα",
-        "testingDrawer": "Τεστ",
+        "testingDrawer": "Τεστ Πωλήσεις",
         "helpDrawer": "Υποστήριξη",
         "aboutDrawer": "Σχετικά με Εμάς",
         "exitAppDrawer": "Έξοδος από την Εφαρμογή",
@@ -117,12 +117,29 @@
         "ProfitWithoutVat": "κέρδος χωρίς Φ.Π.Α.",
         "ProfitOnTurnOverPercentage": "κέρδος επί του τζίρου",
         "TurnOverWithoutVat": "τζίρος με Φ.Π.Α",
-        "TurnOverWithVat": "τζίρος χωρίς Φ.Π.Α",
+        "TurnOverWithVat": "τζίρος χωρίς Φ.Π.Α", 
+        "TotalProfitVat": "ΦΠΑ", // TotalProfit API
+        "TotalProfitWithoutVat": "ΚΕΡΔΟΣ ΜΕ ΦΠΑ", // TotalProfit API
+        "TotalProfitWithVat": "ΚΕΡΔΟΣ ΧΩΡΙΣ ΦΠΑ", // TotalProfit API
+        "Level": "ΦΠΑ%", // Turnover API  // TotalProfit API
+        "TurnoverWithoutVat": "ΤΖΙΡΟΣ ΜΕ ΦΠΑ", // Turnover API
+        "TurnoverWithVat": "ΤΖΙΡΟΣ ΧΩΡΙΣ ΦΠΑ", // Turnover API
+        "TurnoverVatTotal": "ΦΠΑ", // Turnover API
+        "AvgPerDay": "Μ.Ο ΑΝΑ ΗΜΕΡΑ", // Turnover API
         "VatTotal": "σύνολο Φ.Π.Α.",
         "Quantity": "τεμάχια",
         "AverageTransactionsPerDay": "συναλλαγές ανά ημέρα",
         "AverageTotalGrossPerTransaction": "ανά συναλλαγή",
         "AverageProductsCountPerTransaction": "προϊόντα στο καλάθι ανά συναλλαγή",
-        "AverageVatPerDay": "Φ.Π.Α. ανά ημέρα"
+        "AverageVatPerDay": "Φ.Π.Α. ανά ημέρα",
+        "CategoryName": "ΚΑΤΗΓΟΡΙΑ", // Category Details API
+        "CostInclVat": "ΚΟΣΤΟΣ ΜΕ ΦΠΑ", // Category Details API
+        "QuantityTmx": "ΤΜΧ", // Category Details API
+        "Turnover": "ΤΖΙΡΟΣ", // Category Details API
+        "ProfitPercentage": "% ΚΕΡΔΟΣ" // Category Details API
+
+        
+        // ΚΑΤΗΓΟΡΙΑ, ΚΟΣΤΟΣ ΜΕ ΦΠΑ, ΤΜΧ, ΤΖΙΡΟΣ, ΚΕΡΔΟΣ ΧΩΡΙΣ ΦΠΑ
+        // ΚΕΡΔΟΣ ΜΕ ΦΠΑ, % ΚΕΡΔΟΣ
     }
 }
