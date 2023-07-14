@@ -22,9 +22,47 @@
         
         // Various
         "changeLanguage": "Αλλαγή σε Αγγλικά",
+        "from": "Από",
+        "to": "Έως",
+        "cancel": "Ακύρωση",
+        "confirm": "Επιβεβαίωση",
+        "expand": "ΕΠΕΚΤΑΣΗ",
+        "collapse": "ΚΑΤΑΡΡΕΥΣΗ",
         "submit": "Υποβολή",
         "vat": "ΑΦΜ",
         "password": "κωδικός",
+        "newSearch": "Νέα Αναζήτηση",
+        "selectAnOption": "Διαλέξτε μία επιλογή",
+        "warning": "Προειδοποίηση",
+        "validVatNumber": "Παρακαλώ εισάγετε έναν έγκυρο αριθμό ΑΦΜ",
+        "validEmail": "Παρακαλώ εισάγετε έναν έγκυρο λογαριασμό email",
+
+        // Dates
+        "day": "ΗΜΕΡΑ",
+        "week": "ΕΒΔΟΜΑΔΑ",
+        "month": "ΜΗΝΑΣ",
+        "year": "ΧΡΟΝΟΣ",
+        "january": "Ιαν",
+        "february": "Φεβ",
+        "march": "Μαρ",
+        "april": "Απρ",
+        "may": "Μαι",
+        "june": "Ιουν",
+        "july": "Ιουλ",
+        "august": "Αυγ",
+        "september": "Σεπ",
+        "october": "Οκτ",
+        "november": "Νοε",
+        "december": "Δεκ", 
+        "selectFromDate": "Επιλογή Ημ/νίας Από", 
+        "selectEndDate": "Επιλογή Ημ/νίας Έως", 
+        "fromDate": "Ημ/νία Από", 
+        "endDate": "Ημ/νία Έως", 
+        "selectDate": "Επιλογή Ημ/νίας",
+        "noDataAvailable": "Δεν υπάρχουν δεδομένα",
+
+        // Turnover Screen
+        "searchForTurnoverData": "Αναζήτηση για δεδομένα τζίρου",
         
         // Login Screen
         "helloIntalerLoginScreen": "Γεια σου Intaler!",
@@ -51,6 +89,40 @@
         "inIntaleWeHelpAboutScreen": "Σε βοηθάμε να κερδίσεις.",
         "madeWithAboutScreen": "Φτιαγμένο με",
         "andAboutScreen": "και",
-        "inAthensAboutScreen": "στην Αθήνα"
+        "inAthensAboutScreen": "στην Αθήνα",
+
+        // Test Screen (Sales tabs screen)
+        "turnover": "Τζίρος",
+        "profit": "Κέρδος",
+        "turnoverDetails": "Λεπτομέρειες Τζίρου",
+        "profitDetails": "Λεπτομέρειες Κέρδους",
+        "topProducts": "Κορυφαία Προϊόντα",
+        "categoryDetails": "Λεπτομέρειες Κατηγοριών Προϊόντων",
+        "productSalesDetails": "Λεπτομέρειες Πωλήσεων Προϊόντων",
+        "dailyTransactionAvg": "Μ.Ο Συναλλαγών Καταστήματος",
+        "exportToExcel": "ΕΞΑΓΩΓΗ ΣΕ EXCEL",
+        "vatTotal": "σύνολο Φ.Π.Α.",
+        "avgPerDay": "Μ.Ο ανά ημέρα",
+        "withVAT": "με Φ.Π.Α",
+        "withoutVAT": "χωρίς Φ.Π.Α.",
+        "profitAsPer": "κέρδος επί του Τζίρου",
+        "moreDetails": "Λεπτομέρειες",
+
+        // Product Details 
+        "chooseProduct": "ΕΠΙΛΟΓΗ ΠΡΟΪΟΝΤΟΣ",
+        "productPlaceHolder": "Αναζήτηση με Όνομα, Barcode, κωδικό Προμηθευτή ή Εσωτερικό κωδικό",
+
+        // *Non changeable* Data Specific
+        "ProfitWithVat": "κέρδος με Φ.Π.Α.",
+        "ProfitWithoutVat": "κέρδος χωρίς Φ.Π.Α.",
+        "ProfitOnTurnOverPercentage": "κέρδος επί του τζίρου",
+        "TurnOverWithoutVat": "τζίρος με Φ.Π.Α",
+        "TurnOverWithVat": "τζίρος χωρίς Φ.Π.Α",
+        "VatTotal": "σύνολο Φ.Π.Α.",
+        "Quantity": "τεμάχια",
+        "AverageTransactionsPerDay": "συναλλαγές ανά ημέρα",
+        "AverageTotalGrossPerTransaction": "ανά συναλλαγή",
+        "AverageProductsCountPerTransaction": "προϊόντα στο καλάθι ανά συναλλαγή",
+        "AverageVatPerDay": "Φ.Π.Α. ανά ημέρα"
     }
 }

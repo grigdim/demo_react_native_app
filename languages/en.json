@@ -2,7 +2,6 @@
     "translation": {
         // Drawer
         "intaleStatistics": "Intale Statistics",
-        "changeLanguage": "Switch to Greek",
         "homeDrawer": "Home",
         "turnoverDrawer": "Turnover",
         "totalProfitDrawer": "Total Profit",
@@ -21,10 +20,49 @@
         "goToSalesTabsScreen": "Go to sales tabs screen",
         "deleteTokenAndLoginAgain": "Delete token and login again",
 
-        // Various
+        // Various 
+        "changeLanguage": "Switch to Greek",
+        "from": "From",
+        "to": "To",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "expand": "EXPAND",
+        "collapse": "COLLAPSE",
         "submit": "Submit",
         "vat": "VAT",
         "password": "password",
+        "newSearch": "New Search",
+        "selectAnOption": "Select an option",
+        "warning": "Warning",
+        "validVatNumber": "Please enter a valid VAT number",
+        "validEmail": "Please enter a valid email",
+
+        // Dates
+        "day": "DAY",
+        "week": "WEEK",
+        "month": "MONTH",
+        "year": "YEAR",
+        "january": "Jan",
+        "february": "Feb",
+        "march": "Mar",
+        "april": "Apr",
+        "may": "May",
+        "june": "Jun",
+        "july": "Jul",
+        "august": "Aug",
+        "september": "Sep",
+        "october": "Oct",
+        "november": "Nov",
+        "december": "Dec", 
+        "selectFromDate": "Select From Date", 
+        "selectEndDate": "Select End Date", 
+        "fromDate": "From Date", 
+        "endDate": "End Date", 
+        "selectDate": "Select Date", 
+        "noDataAvailable": "No data available",
+        
+        // Turnover Screen
+        "searchForTurnoverData": "Search for turnover data",
         
         // Login Screen
         "helloIntalerLoginScreen": "Hello Intaler!",
@@ -51,6 +89,38 @@
         "inIntaleWeHelpAboutScreen": "In Intale we help you to win.",
         "madeWithAboutScreen": "Made with",
         "andAboutScreen": "and",
-        "inAthensAboutScreen": "in Athens"
+        "inAthensAboutScreen": "in Athens",
+
+        // Test Screen (Sales tabs screen)
+        "turnover": "Turnover",
+        "profit": "Profit",
+        "topProducts": "Top Selling Products",
+        "categoryDetails": "Category Details",
+        "productSalesDetails": "Product Sales Details",
+        "dailyTransactionAvg": "Daily Transactions Average",
+        "exportToExcel": "EXPORT TO EXCEL",
+        "vatTotal": "VAT total",
+        "avgPerDay": "Average Per Day",
+        "withVAT": "with VAT",
+        "withoutVAT": "without VAT",
+        "profitAsPer": "profit as a percentage",
+        "moreDetails": "More Details",
+
+        // Product Details
+        "chooseProduct": "CHOOSE A PRODUCT",
+        "productPlaceHolder": "Search by Name, Barcode, Supplier Code or Internal Code",
+
+        // *Non changeable* Data Specific
+        "ProfitWithVat": "profit incl. VAT",
+        "ProfitWithoutVat": "profit excl. VAT",
+        "ProfitOnTurnOverPercentage": "turnover profit percentage",
+        "TurnOverWithoutVat": "turnover excl. VAT",
+        "TurnOverWithVat": "turnover incl. VAT",
+        "VatTotal": "VAT Sum",
+        "Quantity": "items",
+        "AverageTransactionsPerDay": "transactions/day",
+        "AverageTotalGrossPerTransaction": "per transaction",
+        "AverageProductsCountPerTransaction": "products in the cart",
+        "AverageVatPerDay": "VAT/day" 
     }
 }

@@ -21,8 +21,11 @@ import DatePicker from 'react-native-date-picker';
 import { Picker } from '@react-native-picker/picker';
 import { ip } from '@env';
 import DrawerHeader from './DrawerHeader';
+import { useTranslation } from 'react-i18next';
+import i18next from '../languages/i18n';
 
 const TurnoverScreen = () => {
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation();
   const { width, height } = Dimensions.get('screen');
   const token = useSelector(selectToken);
@@ -84,7 +87,7 @@ const TurnoverScreen = () => {
             className="p-2 my-5 bg-gray-200 border border-solid border-cyan-200 rounded-xl"
             style={{ elevation: 50 }}>
             <Text className="text-cyan-400 text-center font-bold text-3xl">
-              {storesFromBoApi ? 'New search' : 'Search for turnover data'}
+              {storesFromBoApi ? t("newSearch") : t("searchForTurnoverData")}
             </Text>
           </TouchableOpacity>
 
@@ -94,9 +97,10 @@ const TurnoverScreen = () => {
                 className="bg-cyan-300 rounded-xl my-2 p-2"
                 onPress={() => setOpen(true)}>
                 <Text className="text-center text-xl text-white">
-                  Select From Date
+                  {t("selectFromDate")}
                 </Text>
                 <DatePicker
+                  locale={i18next.language}
                   modal
                   open={open}
                   date={fromDate1}
@@ -111,6 +115,9 @@ const TurnoverScreen = () => {
                   onCancel={() => {
                     setOpen(false);
                   }}
+                  cancelText={t('cancel')}  
+                  confirmText={t('confirm')}
+                  title={t("selectDate")}
                 />
                 {fromDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
@@ -122,9 +129,10 @@ const TurnoverScreen = () => {
                 className="bg-blue-300 rounded-xl my-2 p-2"
                 onPress={() => setOpen2(true)}>
                 <Text className="text-center text-xl text-white">
-                  Select End Date
+                  {t("selectEndDate")}
                 </Text>
                 <DatePicker
+                  locale={i18next.language}
                   modal
                   open={open2}
                   date={toDate1}
@@ -139,6 +147,9 @@ const TurnoverScreen = () => {
                   onCancel={() => {
                     setOpen2(false);
                   }}
+                  cancelText={t('cancel')}  
+                  confirmText={t('confirm')}
+                  title={t("selectDate")}
                 />
                 {toDate2 !== '' && (
                   <Text className="text-center text-xl text-white">
@@ -149,7 +160,7 @@ const TurnoverScreen = () => {
               <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                 onPress={() => fetchTurnoverDataFromBoApi()}>
-                <Text className="text-center text-lg text-white">Submit</Text>
+                <Text className="text-center text-lg text-white">{t("submit")}</Text>
               </TouchableOpacity>
             </View>
           ) : null}
