@@ -1,22 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {
-  StyleSheet,
   View,
   Text,
   ScrollView,
   SafeAreaView,
   Modal,
-  TextInput,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {selectToken} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import {ip} from '@env';
-import SelectDropdown from 'react-native-select-dropdown';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const SalesInsightsScreen = () => {
@@ -35,6 +31,7 @@ const SalesInsightsScreen = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [subCategoryModalVisible, setSubCategoryModalVisible] = useState(false);
   const [selectAllSubCategories, setSelectAllSubCategories] = useState(false);
+  const [topProducts, setTopProducts] = useState([]);
 
   const fetchProductCategoryNamesFromBoApi = async () => {
     setLoading(true);
@@ -107,6 +104,61 @@ const SalesInsightsScreen = () => {
     setLoading(false);
   };
 
+  const fetchTopProductsInItemSalesFromTopProducts = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+      try {
+        let topProductsArr = [];
+        for (const category of selectedCategories) {
+          topProductsArr.push({
+            categoryName: category,
+            topSellingProductsPerSubCategory: [],
+          });
+        }
+        const promises = [];
+        for (const category of subCategories) {
+          for (const subCategory of category.subCategories) {
+            if (subCategory.isChecked) {
+              const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              promises.push(
+                (async () => {
+                  const response = await fetch(url, requestOptions);
+                  const data = await response.json();
+                  for (const item of topProductsArr) {
+                    if (item.categoryName === category.categoryName) {
+                      item.topSellingProductsPerSubCategory.push({
+                        subCategoryName: subCategory.subCategoryName,
+                        topSellingProducts: data,
+                      });
+                    }
+                  }
+                })(),
+              );
+            }
+          }
+        }
+        await Promise.all(promises);
+        setTopProducts(topProductsArr);
+      } catch (error) {
+        console.error('Error occurred while fetching subcategories:', error);
+      }
+    }
+    // end of request
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchTopProductsInItemSalesFromTopProducts();
+  }, [selectedSubCategories]);
+
   useEffect(() => {
     fetchProductSubCategoryNamesFromTopProducts();
   }, [selectedCategories]);
@@ -165,6 +217,7 @@ const SalesInsightsScreen = () => {
             contentContainerStyle={{
               alignItems: 'center',
             }}>
+            {/*Categories card start*/}
             <View
               className="rounded-md bg-white p-2 my-10 w-10/12 space-y-2"
               style={{elevation: 15}}>
@@ -173,11 +226,11 @@ const SalesInsightsScreen = () => {
                 onPress={() => setCategoryModalVisible(true)}>
                 <View>
                   {selectedCategories.length > 0 ? (
-                    <Text className="underline text-xl font-extrabold">
+                    <Text className="underline text-xl font-extrabold text-gray-600">
                       Selected Categories
                     </Text>
                   ) : (
-                    <Text className=" text-xl font-extrabold">
+                    <Text className=" text-xl font-extrabold text-gray-600">
                       Press to choose a category
                     </Text>
                   )}
@@ -188,10 +241,10 @@ const SalesInsightsScreen = () => {
                       return (
                         <View className="flex-row items-center space-x-2">
                           <View>
-                            <Fontisto name="check" />
+                            <Fontisto name="check" color="rgb(75 85 99)" />
                           </View>
                           <View>
-                            <Text>{item}</Text>
+                            <Text className="text-gray-600">{item}</Text>
                           </View>
                         </View>
                       );
@@ -200,6 +253,8 @@ const SalesInsightsScreen = () => {
                 )}
               </TouchableOpacity>
             </View>
+            {/*Categories card end*/}
+            {/*SubCategories card start*/}
             <View
               className="rounded-md bg-white p-2 my-10 w-10/12 space-y-2"
               style={{elevation: 15}}>
@@ -208,11 +263,11 @@ const SalesInsightsScreen = () => {
                 onPress={() => setSubCategoryModalVisible(true)}>
                 <View>
                   {selectedSubCategories.length > 0 ? (
-                    <Text className="underline text-xl font-extrabold">
+                    <Text className="underline text-xl font-extrabold text-gray-600">
                       Selected Sub Categories
                     </Text>
                   ) : (
-                    <Text className=" text-xl font-extrabold">
+                    <Text className=" text-xl font-extrabold text-gray-600">
                       Press to choose sub categories
                     </Text>
                   )}
@@ -223,16 +278,23 @@ const SalesInsightsScreen = () => {
                       return (
                         <View>
                           <View>
-                            <Text>{item.categoryName}</Text>
+                            <Text className="text-gray-600">
+                              {item.categoryName}
+                            </Text>
                           </View>
                           {item.selectedSubCategories.map(innerItem => {
                             return (
                               <View className="flex-row items-center space-x-2">
                                 <View>
-                                  <Fontisto name="check" />
+                                  <Fontisto
+                                    name="check"
+                                    color="rgb(75 85 99)"
+                                  />
                                 </View>
                                 <View>
-                                  <Text>{innerItem}</Text>
+                                  <Text className="text-gray-600">
+                                    {innerItem}
+                                  </Text>
                                 </View>
                               </View>
                             );
@@ -244,6 +306,52 @@ const SalesInsightsScreen = () => {
                 )}
               </TouchableOpacity>
             </View>
+            {/*SubCategories card end*/}
+            {/*Display Top Products card start*/}
+            {topProducts.length > 0 &&
+              topProducts.map(item => {
+                if (item.topSellingProductsPerSubCategory.length > 0) {
+                  return (
+                    <View
+                      className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
+                      style={{elevation: 15}}>
+                      <View>
+                        <Text className="text-center text-xl font-bold text-gray-600">
+                          {item.categoryName}
+                        </Text>
+                      </View>
+                      <View className="mx-2 space-y-6">
+                        {item.topSellingProductsPerSubCategory.map(
+                          subCategory => (
+                            <View className="space-y-2">
+                              <View>
+                                <Text className="font-semibold text-lg text-gray-600">
+                                  {subCategory.subCategoryName}
+                                </Text>
+                              </View>
+                              <View className="space-y-1 divide-y divide-gray-400">
+                                {subCategory.topSellingProducts.map(
+                                  (product, index) => (
+                                    <View className="flex-row">
+                                      <Text className=" text-gray-600">
+                                        {index + 1}.{' '}
+                                      </Text>
+                                      <Text className="flex-1 flex-wrap text-gray-600">
+                                        {product.Product}
+                                      </Text>
+                                    </View>
+                                  ),
+                                )}
+                              </View>
+                            </View>
+                          ),
+                        )}
+                      </View>
+                    </View>
+                  );
+                }
+              })}
+            {/*Display Top Products card start*/}
           </ScrollView>
         )
       ) : (
@@ -400,7 +508,7 @@ const SalesInsightsScreen = () => {
             </View>
           ) : (
             <View>
-              <Text className="text-xl font-extrabold">
+              <Text className="text-xl font-extrabold text-gray-600">
                 There is no data available
               </Text>
             </View>
@@ -409,8 +517,10 @@ const SalesInsightsScreen = () => {
             <TouchableOpacity
               onPress={() => setCategoryModalVisible(false)}
               className="w-full flex-row items-center space-x-4">
-              <Fontisto name="close-a" size={20} />
-              <Text className="text-2xl font-extrabold">Close</Text>
+              <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
+              <Text className="text-2xl font-extrabold text-gray-600">
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -434,7 +544,7 @@ const SalesInsightsScreen = () => {
                     return (
                       <View key={index} className="mx-4">
                         <View>
-                          <Text className="text-center text-xl font-bold">
+                          <Text className="text-center text-xl font-bold text-gray-600">
                             {item.categoryName}
                           </Text>
                         </View>
@@ -644,8 +754,10 @@ const SalesInsightsScreen = () => {
             <TouchableOpacity
               onPress={() => setSubCategoryModalVisible(false)}
               className="w-full flex-row items-center space-x-4">
-              <Fontisto name="close-a" size={20} />
-              <Text className="text-2xl font-extrabold">Close</Text>
+              <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
+              <Text className="text-2xl font-extrabold text-gray-600">
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
