@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
@@ -36,14 +37,14 @@ const LoginScreen = () => {
   const {t, i18n} = useTranslation();
 
   const {height, width} = Dimensions.get('screen');
-  const {input, button, buttonText, disabledButton} = style;
+  const {input, buttonText, disabledButton} = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
   const [loading, setLoading] = useState(false);
   const [emulator, setEmulator] = useState(null);
-  const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
-  const [softKeys, setSoftKeys] = useState(null);
+  // const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
+  // const [softKeys, setSoftKeys] = useState(null);
   const [login, setLogin] = useState(true);
   const [registeredEmail, setRegisteredEmail] = useState(false);
 
@@ -70,7 +71,7 @@ const LoginScreen = () => {
     if (vat.length === 9 && /^\d+$/.test(vat)) {
       setRegisteredEmail(true);
     } else {
-      Alert.alert(t("warning"), t("validVatNumber"), [
+      Alert.alert(t('warning'), t('validVatNumber'), [
         {
           text: 'OK',
           onPress: () => {
@@ -99,7 +100,7 @@ const LoginScreen = () => {
         : setRegisteredEmail(false);
       setLogin(false);
     } else {
-      Alert.alert(t("warning"), t("validEmail"), [
+      Alert.alert(t('warning'), t('validEmail'), [
         {
           text: 'OK',
           onPress: () => {
@@ -147,231 +148,233 @@ const LoginScreen = () => {
   }, [emulator]);
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center bg-gray-50">
-      {loading ? (
-        <View
-          className="w-8/12 justify-center items-center mt-2"
-          style={{height: height / 1.33}}>
-          <ActivityIndicator color="#00CCBB" size="large" />
-        </View>
-      ) : !token ? (
-        login ? (
-          <View className="flex-1 justify-center items-center space-y-6 w-10/12">
-            <View className="items-center">
-              <Icon
-                name="user"
-                size={75}
-                color="rgb(59 130 246)"
-                className=""
-              />
-              <Text className="text-blue-500 text-3xl">
-                {t('helloIntalerLoginScreen')}
-              </Text>
-            </View>
-            <TextInput
-              onChangeText={handleChangeEmail}
-              style={input}
-              placeholder="email"
-              placeholderTextColor={'darkgrey'}
-              keyboardType="email-address"
-              clearButtonMode={'always'}
-              ref={inputRef}
-            />
-            <TouchableOpacity
-              style={[isEmailDisabled && disabledButton]}
-              onPress={handleCheckEmail}
-              disabled={isEmailDisabled}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t('submit')}</Text>
-            </TouchableOpacity>
+    <ImageBackground
+      source={require('../images/intale3.png')}
+      className="flex-1 w-full h-full"
+      resizeMode="stretch">
+      <SafeAreaView className="flex-1 justify-center items-center">
+        {loading ? (
+          <View
+            className="w-8/12 justify-center items-center mt-2"
+            style={{height: height / 1.33}}>
+            <ActivityIndicator color="#00CCBB" size="large" />
           </View>
-        ) : registeredEmail ? (
-          <View className="flex-1 justify-center space-y-10 items-center w-10/12">
-            <Text className="text-center text-xl font-bold text-black">
-              {t('oneTimePassword')}
-            </Text>
-            <TextInput
-              onChangeText={handleChangePassword}
-              style={input}
-              placeholder={t('password')}
-              placeholderTextColor={'darkgrey'}
-              clearButtonMode={'always'}
-              secureTextEntry
-            />
-            <View className="flex-row items-center space-x-4">
+        ) : !token ? (
+          login ? (
+            <View
+              className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              }}>
+              <View className="items-center">
+                <Icon
+                  name="user"
+                  size={75}
+                  color="white"
+                  // color="rgb(59 130 246)"
+                />
+                <Text className="text-white text-3xl">
+                  {t('helloIntalerLoginScreen')}
+                </Text>
+              </View>
+              <TextInput
+                onChangeText={handleChangeEmail}
+                style={input}
+                placeholder="email"
+                placeholderTextColor={'white'}
+                keyboardType="email-address"
+                clearButtonMode={'always'}
+                ref={inputRef}
+              />
               <TouchableOpacity
-                onPress={() => {
-                  setEmail('');
-                  setRegisteredEmail(false);
-                  setLogin(true);
-                }}
-                className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t('backToLogin')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[isPasswordDisabled && disabledButton]}
-                onPress={handleLogin}
-                disabled={isPasswordDisabled}
+                style={[isEmailDisabled && disabledButton]}
+                onPress={handleCheckEmail}
+                disabled={isEmailDisabled}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
                 <Text style={buttonText}>{t('submit')}</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          ) : registeredEmail ? (
+            <View
+              className="justify-center space-y-10 items-center w-10/12 py-10 rounded-lg"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              }}>
+              <Text className="text-center text-xl font-bold text-white">
+                {t('oneTimePassword')}
+              </Text>
+              <TextInput
+                onChangeText={handleChangePassword}
+                style={input}
+                placeholder={t('password')}
+                placeholderTextColor={'white'}
+                clearButtonMode={'always'}
+                secureTextEntry
+              />
+              <View className="flex-row items-center space-x-4">
+                <TouchableOpacity
+                  onPress={() => {
+                    setEmail('');
+                    setRegisteredEmail(false);
+                    setLogin(true);
+                  }}
+                  className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
+                  <Text style={buttonText}>{t('backToLogin')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[isPasswordDisabled && disabledButton]}
+                  onPress={handleLogin}
+                  disabled={isPasswordDisabled}
+                  className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                  <Text style={buttonText}>{t('submit')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            <View
+              className="justify-center space-y-10 items-center w-10/12 py-10 rounded-lg"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              }}>
+              <Text className="text-center text-xl font-bold text-white">
+                {t('nonRegisteredEmail')}
+              </Text>
+              <TextInput
+                onChangeText={handleChangeVat}
+                style={input}
+                placeholder={t('vat')}
+                placeholderTextColor={'white'}
+                clearButtonMode={'always'}
+              />
+              <View className="flex-row items-center space-x-4">
+                <TouchableOpacity
+                  onPress={() => {
+                    setEmail('');
+                    setVat('');
+                    setPassword('');
+                    setRegisteredEmail(false);
+                    setLogin(true);
+                  }}
+                  className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
+                  <Text style={buttonText}>{t('backToLogin')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSubmitVat}
+                  style={[isVatDisabled && disabledButton]}
+                  disabled={isVatDisabled}
+                  className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                  <Text style={buttonText}>{t('submit')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )
         ) : (
-          <View className="flex-1 justify-center space-y-10 items-center w-10/12">
-            <Text className="text-center text-xl font-bold text-black">
-              {t('nonRegisteredEmail')}
-            </Text>
-            <TextInput
-              onChangeText={handleChangeVat}
-              style={input}
-              placeholder={t('vat')}
-              placeholderTextColor={'darkgrey'}
-              clearButtonMode={'always'}
-            />
-            <View className="flex-row items-center space-x-4">
+          <ScrollView className="flex-1 w-full h-full">
+            <TouchableOpacity>
+              <DrawerHeader />
+            </TouchableOpacity>
+            <View
+              className="justify-center items-center"
+              style={{height: height / 1.33}}>
               <TouchableOpacity
+                className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
+                  navigation.navigate('LineChartScreen');
+                }}
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('goToLineChartScreen')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"
+                onPress={() => {
+                  navigation.navigate('AuditScreen');
+                }}
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('goToAuditScreen')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-indigo-300 my-2 mx-auto p-2 rounded-2xl"
+                onPress={() => {
+                  navigation.navigate('StoreScreen');
+                }}
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('goToStoreScreen')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
+                onPress={() => {
+                  navigation.navigate('ProductSalesScreen');
+                }}
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('goToProductSalesScreen')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
+                onPress={() => {
+                  navigation.navigate('SalesTabsScreen');
+                }}
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('goToSalesTabsScreen')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
+                onPress={() => {
+                  dispatch(setToken(null));
+                  setPassword('');
                   setEmail('');
                   setVat('');
-                  setPassword('');
-                  setRegisteredEmail(false);
                   setLogin(true);
                 }}
-                className="rounded-2xl bg-red-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t('backToLogin')}</Text>
+                style={{elevation: 20}}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('deleteTokenAndLoginAgain')}
+                </Text>
               </TouchableOpacity>
+
+              {/* Test button to change the language in app */}
               <TouchableOpacity
-                onPress={handleSubmitVat}
-                style={[isVatDisabled && disabledButton]}
-                disabled={isVatDisabled}
-                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t('submit')}</Text>
+                className="bg-gray-600 mx-auto my-10 p-1 rounded-2xl"
+                style={{elevation: 20}}
+                onPress={() => {
+                  const newLanguage = i18n.language === 'el' ? 'en' : 'el';
+                  i18n.changeLanguage(newLanguage);
+                }}>
+                <Text className="text-center text-xl text-bold text-white">
+                  {t('changeLanguage')}
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )
-      ) : (
-        <ScrollView className="flex-1 w-full h-full">
-          <TouchableOpacity>
-            <DrawerHeader />
-          </TouchableOpacity>
-          <View
-            className="justify-center items-center"
-            style={{height: height / 1.33}}>
-            <TouchableOpacity
-              className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
-              onPress={() => {
-                navigation.navigate('LineChartScreen');
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('goToLineChartScreen')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"
-              onPress={() => {
-                navigation.navigate('AuditScreen');
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('goToAuditScreen')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="bg-indigo-300 my-2 mx-auto p-2 rounded-2xl"
-              onPress={() => {
-                navigation.navigate('StoreScreen');
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('goToStoreScreen')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
-              onPress={() => {
-                navigation.navigate('ProductSalesScreen');
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('goToProductSalesScreen')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
-              onPress={() => {
-                navigation.navigate('SalesTabsScreen');
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('goToSalesTabsScreen')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
-              onPress={() => {
-                dispatch(setToken(null));
-                setPassword('');
-                setEmail('');
-                setVat('');
-                setLogin(true);
-              }}
-              style={{elevation: 20}}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('deleteTokenAndLoginAgain')}
-              </Text>
-            </TouchableOpacity>
-
-            {/* Test button to change the language in app */}
-            <TouchableOpacity
-              className="bg-gray-600 mx-auto my-10 p-1 rounded-2xl"
-              style={{elevation: 20}}
-              onPress={() => {
-                const newLanguage = i18n.language === 'el' ? 'en' : 'el';
-                i18n.changeLanguage(newLanguage);
-              }}>
-              <Text className="text-center text-xl text-bold text-white">
-                {t('changeLanguage')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      )}
-    </SafeAreaView>
+          </ScrollView>
+        )}
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const style = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    fontSize: 50,
-    marginTop: 12,
-    marginBottom: 12,
-    color: 'darkgrey',
-  },
   input: {
     height: 40,
     width: '75%',
     borderWidth: 1,
     padding: 10,
-    color: 'black',
+    color: 'white',
     borderRadius: 5,
     textAlign: 'center',
-  },
-  button: {
-    height: 40,
-    width: '50%',
-    backgroundColor: '#4287f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
   },
   buttonText: {
     color: 'white',

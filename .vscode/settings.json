@@ -24,7 +24,8 @@
         "netinfo",
         "reduxjs",
         "tailwindcss",
-        "zeroconf"
+        "zeroconf",
+        "Ελληνικά"
     ],
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive"
