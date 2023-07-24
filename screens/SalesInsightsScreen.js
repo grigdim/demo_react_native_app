@@ -309,10 +309,11 @@ const SalesInsightsScreen = () => {
             {/*SubCategories card end*/}
             {/*Display Top Products card start*/}
             {topProducts.length > 0 &&
-              topProducts.map(item => {
+              topProducts.map((item, index) => {
                 if (item.topSellingProductsPerSubCategory.length > 0) {
                   return (
                     <View
+                      key={index}
                       className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
                       style={{elevation: 15}}>
                       <View>
@@ -322,8 +323,8 @@ const SalesInsightsScreen = () => {
                       </View>
                       <View className="mx-2 space-y-6">
                         {item.topSellingProductsPerSubCategory.map(
-                          subCategory => (
-                            <View className="space-y-2">
+                          (subCategory, index2) => (
+                            <View key={index2} className="space-y-2">
                               <View>
                                 <Text className="font-semibold text-lg text-gray-600">
                                   {subCategory.subCategoryName}
@@ -331,10 +332,10 @@ const SalesInsightsScreen = () => {
                               </View>
                               <View className="space-y-1 divide-y divide-gray-400">
                                 {subCategory.topSellingProducts.map(
-                                  (product, index) => (
+                                  (product, index3) => (
                                     <View className="flex-row">
                                       <Text className=" text-gray-600">
-                                        {index + 1}.{' '}
+                                        {index3 + 1}.{' '}
                                       </Text>
                                       <Text className="flex-1 flex-wrap text-gray-600">
                                         {product.Product}
