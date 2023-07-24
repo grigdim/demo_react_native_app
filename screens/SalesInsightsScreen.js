@@ -374,7 +374,7 @@ const SalesInsightsScreen = () => {
                 <Text
                   className="text-white text-xl font-extrabold border border-gray-500 p-2 rounded-md bg-gray-500"
                   style={{ elevation: 25 }}>
-                  {t("Available Categories")}
+                  {t("AvailableCategories")}
                 </Text>
               </View>
               <ScrollView className="space-y-2 w-full">
@@ -437,7 +437,9 @@ const SalesInsightsScreen = () => {
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
                       style={{ elevation: 25 }}>
-                      <Text className="text-white text-lg">Show all</Text>
+                      <Text className="text-white text-lg">
+                        {t("showAll")}
+                      </Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -458,7 +460,7 @@ const SalesInsightsScreen = () => {
                       className="border border-gray-500 p-2 rounded-md bg-gray-500"
                       style={{ elevation: 25 }}>
                       <Text className="text-white text-lg">
-                        {t("Show selected")}
+                        {t("showSelected")}
                       </Text>
                     </TouchableOpacity>
                   )}

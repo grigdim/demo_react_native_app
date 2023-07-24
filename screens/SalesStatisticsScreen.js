@@ -255,7 +255,11 @@ const SalesStatisticsScreen = () => {
               if (key === 'CategoryId' || key === 'Vat') {
                 return;
               } else {
-                headerArray.push(key.replace(/(?!^)([A-Z])/g, ' $1'));
+                const translatedHeader = t(key);
+                const uppercaseHeader = translatedHeader
+                  .toUpperCase()
+                  .replace(/Έ/g, 'Ε');
+                headerArray.push(uppercaseHeader);
               }
             });
             return headerArray;
@@ -931,10 +935,24 @@ const SalesStatisticsScreen = () => {
     }
   }, [prodID]);
 
-  const defaultSelectedGroupByDateValue = useMemo(
-    () => selectedGroupByDateValue,
-    [selectedGroupByDateValue],
-  );
+  // const defaultSelectedGroupByDateValue = useMemo(
+  //   () => selectedGroupByDateValue ,
+  //   [selectedGroupByDateValue],
+  // );
+
+  // Default day value
+  const defaultSelectedGroupByDateValue = useMemo(() => {
+    switch (selectedGroupByDateValue) {
+      case t('day'):
+        return t('day');
+      case t('week'):
+        return t('week');
+      case t('month'):
+        return t('month');
+      default:
+        return t('day');
+    }
+  }, [selectedGroupByDateValue]);
 
   useEffect(() => {
     setCategoriesDetailsTableDataTrunc(categoriesDetailsTableData.slice(0, 10));
@@ -1436,7 +1454,7 @@ const SalesStatisticsScreen = () => {
                               borderBottomWidth: 1,
                               borderBottomColor: 'rgb(229 231 235)',
                             }}
-                            searchPlaceHolder={'Search by product name'}
+                            searchPlaceHolder={t('productPlaceHolder')}
                             searchPlaceHolderColor={'darkgrey'}
                             renderSearchInputLeftIcon={() => {
                               return (
@@ -1591,19 +1609,23 @@ const SalesStatisticsScreen = () => {
                                       }}
                                       data={[
                                         {
-                                          name: 'Turnover with VAT',
+                                          // name: 'Turnover with VAT',
+                                          name: t("TurnOverWithVat"),
                                           symbol: { fill: 'orange' },
                                         },
                                         {
-                                          name: 'Turnover without VAT',
+                                          // name: 'Turnover without VAT',
+                                          name: t("TurnOverWithoutVat"),
                                           symbol: { fill: 'rgb(245, 185, 66)' },
                                         },
                                         {
-                                          name: 'Profit with VAT',
+                                          // name: 'Profit with VAT',
+                                          name: t("ProfitWithVat"),
                                           symbol: { fill: 'purple' },
                                         },
                                         {
-                                          name: 'Profit without VAT',
+                                          // name: 'Profit without VAT',
+                                          name: t("ProfitWithoutVat"),
                                           symbol: { fill: 'rgb(147, 66, 245)' },
                                         },
                                       ]}
@@ -1937,14 +1959,14 @@ const SalesStatisticsScreen = () => {
                           labels: { fill: 'white' },
                         }}
                         data={[
-                          { name: 'Turnover with VAT', symbol: { fill: 'orange' } },
+                          { name: t("TurnOverWithVat"), symbol: { fill: 'orange' } },
                           {
-                            name: 'Turnover without VAT',
+                            name: t("TurnOverWithoutVat"),
                             symbol: { fill: 'rgb(245, 185, 66)' },
                           },
-                          { name: 'Profit with VAT', symbol: { fill: 'purple' } },
+                          { name: t("ProfitWithVat"), symbol: { fill: 'purple' } },
                           {
-                            name: 'Profit without VAT',
+                            name: t("ProfitWithoutVat"),
                             symbol: { fill: 'rgb(147, 66, 245)' },
                           },
                         ]}
