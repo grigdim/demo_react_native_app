@@ -60,7 +60,7 @@
         "fromDate": "Ημ/νία Από", 
         "endDate": "Ημ/νία Έως", 
         "selectDate": "Επιλογή Ημ/νίας",
-        "noDataAvailable": "Δεν υπάρχουν δεδομένα",
+        "noDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα",
 
         // Turnover Screen
         "searchForTurnoverData": "Αναζήτηση για δεδομένα τζίρου",
