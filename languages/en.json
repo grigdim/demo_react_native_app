@@ -24,6 +24,7 @@
         "changeLanguage": "Switch to Greek",
         "from": "From",
         "to": "To",
+        "close": "Close",
         "cancel": "Cancel",
         "confirm": "Confirm",
         "expand": "EXPAND",
@@ -142,6 +143,19 @@
 
         // Sales Tabs
         "SalesStatistics": "Sales statistics",
-        "SalesInsights": "Sales insights"
+        "SalesInsights": "Sales insights",
+        
+        // Sales Insights
+        "SelectedCategories": "Selected Categories",
+        "PressToChooseCategory": "Press to choose a category",
+        "SelectedSubCategories": "Selected Sub Categories",
+        "PressToChooseSubCategory": "Press to choose sub categories",
+        "AvailableCategories": "Available Categories",
+        "AvailableSubCategories": "Available Sub Categories",
+        "SubscriptionAccess": "You do not have access to this page. Press this to upgrade your subscription plan.",
+        "showSelected": "Show selected",
+        "showAll": "Show all",
+        "selectAll": "Select all", 
+        "unselectAll": "Unselect all", 
     }
 }

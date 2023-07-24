@@ -24,6 +24,7 @@
         "changeLanguage": "Αλλαγή σε Αγγλικά",
         "from": "Από",
         "to": "Έως",
+        "close": "Κλείσιμο",
         "cancel": "Ακύρωση",
         "confirm": "Επιβεβαίωση",
         "expand": "ΕΠΕΚΤΑΣΗ",
@@ -141,6 +142,19 @@
 
         // Sales Tabs
         "SalesStatistics": "Στατιστικά Πωλήσεων",
-        "SalesInsights": "Πληροφορίες Πωλήσεων"
+        "SalesInsights": "Πληροφορίες Πωλήσεων",
+        
+        // Sales Insights
+        "SelectedCategories": "Επιλεγμένες Κατηγορίες",
+        "PressToChooseCategory": "Πάτησε για να διαλέξεις μία κατηγορία",
+        "SelectedSubCategories": "Επιλεγμένες Υποκατηγορίες",
+        "PressToChooseSubCategory": "Πάτησε για να διαλέξεις μία υποκατηγορία",
+        "AvailableCategories": "Διαθέσιμες Κατηγορίες",
+        "AvailableSubCategories": "Διαθέσιμες Υποκατηγορίες",
+        "SubscriptionAccess": "Δεν έχετε πρόσβαση σε αυτή την σελίδα. Πατήστε εδώ για να αναβαθμίσετε τη συνδρομή σας.",
+        "showSelected": "Ένδειξη επιλεγμένων",
+        "showAll": "Ένδειξη όλων",
+        "selectAll": "Επιλογή όλων", 
+        "unselectAll": "Αποεπιλογή όλων", 
     }
 }
