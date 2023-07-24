@@ -9,15 +9,15 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { selectToken } from '../features/bootstrap';
-import { useSelector } from 'react-redux';
-import { ip } from '@env';
+import React, {useState, useEffect} from 'react';
+import {selectToken} from '../features/bootstrap';
+import {useSelector} from 'react-redux';
+import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const SalesInsightsScreen = () => {
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const authorizedUser = true;
   const token = useSelector(selectToken);
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ const SalesInsightsScreen = () => {
       setCategories(() => {
         let arr = [];
         data.map(item => {
-          arr.push({ name: item, isChecked: false, isVisible: true });
+          arr.push({name: item, isChecked: false, isVisible: true});
         });
         return arr;
       });
@@ -222,18 +222,18 @@ const SalesInsightsScreen = () => {
             {/*Categories card start*/}
             <View
               className="rounded-md bg-white p-2 my-10 w-10/12 space-y-2"
-              style={{ elevation: 15 }}>
+              style={{elevation: 15}}>
               <TouchableOpacity
                 className="items-center space-y-2"
                 onPress={() => setCategoryModalVisible(true)}>
                 <View>
                   {selectedCategories.length > 0 ? (
                     <Text className="underline text-xl font-extrabold text-gray-600">
-                      {t("SelectedCategories")}
+                      {t('SelectedCategories')}
                     </Text>
                   ) : (
                     <Text className=" text-xl font-extrabold text-gray-600">
-                      {t("PressToChooseCategory")}
+                      {t('PressToChooseCategory')}
                     </Text>
                   )}
                 </View>
@@ -259,18 +259,18 @@ const SalesInsightsScreen = () => {
             {/*SubCategories card start*/}
             <View
               className="rounded-md bg-white p-2 my-10 w-10/12 space-y-2"
-              style={{ elevation: 15 }}>
+              style={{elevation: 15}}>
               <TouchableOpacity
                 className="items-center space-y-2"
                 onPress={() => setSubCategoryModalVisible(true)}>
                 <View>
                   {selectedSubCategories.length > 0 ? (
                     <Text className="underline text-xl font-extrabold text-gray-600">
-                      {t("SelectedSubCategories")}
+                      {t('SelectedSubCategories')}
                     </Text>
                   ) : (
                     <Text className=" text-xl font-extrabold text-gray-600">
-                      {t("PressToChooseSubCategory")}
+                      {t('PressToChooseSubCategory')}
                     </Text>
                   )}
                 </View>
@@ -317,7 +317,7 @@ const SalesInsightsScreen = () => {
                     <View
                       key={index}
                       className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
-                      style={{ elevation: 15 }}>
+                      style={{elevation: 15}}>
                       <View>
                         <Text className="text-center text-xl font-bold text-gray-600">
                           {item.categoryName}
@@ -360,9 +360,9 @@ const SalesInsightsScreen = () => {
       ) : (
         <View
           className="mx-auto my-auto w-2/3 bg-white rounded-lg p-4"
-          style={{ elevation: 25 }}>
+          style={{elevation: 25}}>
           <Text className="text-center text-xl font-extrabold">
-            {t("SubscriptionAccess")}
+            {t('SubscriptionAccess')}
           </Text>
         </View>
       )}
@@ -374,8 +374,8 @@ const SalesInsightsScreen = () => {
               <View className="my-4">
                 <Text
                   className="text-white text-xl font-extrabold border border-gray-500 p-2 rounded-md bg-gray-500"
-                  style={{ elevation: 25 }}>
-                  {t("AvailableCategories")}
+                  style={{elevation: 25}}>
+                  {t('AvailableCategories')}
                 </Text>
               </View>
               <ScrollView className="space-y-2 w-full">
@@ -389,7 +389,7 @@ const SalesInsightsScreen = () => {
                           setCategories(prevState => {
                             const newState = prevState.map(obj => {
                               if (obj.name === item.name) {
-                                const updatedObj = { ...obj };
+                                const updatedObj = {...obj};
                                 updatedObj.isChecked = !updatedObj.isChecked;
                                 return updatedObj;
                               }
@@ -427,7 +427,7 @@ const SalesInsightsScreen = () => {
                         setCategories(prevState => {
                           const newState = prevState.map(obj => {
                             if (obj.isVisible === false) {
-                              const updatedObj = { ...obj };
+                              const updatedObj = {...obj};
                               updatedObj.isVisible = !updatedObj.isVisible;
                               return updatedObj;
                             }
@@ -437,10 +437,8 @@ const SalesInsightsScreen = () => {
                         });
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
-                      <Text className="text-white text-lg">
-                        {t("showAll")}
-                      </Text>
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">{t('showAll')}</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -449,7 +447,7 @@ const SalesInsightsScreen = () => {
                         setCategories(prevState => {
                           const newState = prevState.map(obj => {
                             if (!obj.isChecked) {
-                              const updatedObj = { ...obj };
+                              const updatedObj = {...obj};
                               updatedObj.isVisible = !updatedObj.isVisible;
                               return updatedObj;
                             }
@@ -459,9 +457,9 @@ const SalesInsightsScreen = () => {
                         });
                       }}
                       className="border border-gray-500 p-2 rounded-md bg-gray-500"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("showSelected")}
+                        {t('showSelected')}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -485,9 +483,9 @@ const SalesInsightsScreen = () => {
                         setSelectedCategories([]);
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("unselectAll")}
+                        {t('unselectAll')}
                       </Text>
                     </TouchableOpacity>
                   ) : (
@@ -507,9 +505,9 @@ const SalesInsightsScreen = () => {
                         setSelectAllCategories(true);
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("selectAll")}
+                        {t('selectAll')}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -519,7 +517,7 @@ const SalesInsightsScreen = () => {
           ) : (
             <View>
               <Text className="text-xl font-extrabold text-gray-600">
-                {t("noDataAvailable")}
+                {t('noDataAvailable')}
               </Text>
             </View>
           )}
@@ -529,7 +527,7 @@ const SalesInsightsScreen = () => {
               className="w-full flex-row items-center space-x-4">
               <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
               <Text className="text-2xl font-extrabold text-gray-600">
-                {t("close")}
+                {t('close')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -544,8 +542,8 @@ const SalesInsightsScreen = () => {
               <View className="my-4">
                 <Text
                   className="text-white text-xl font-extrabold border border-gray-500 p-2 rounded-md bg-gray-500"
-                  style={{ elevation: 25 }}>
-                  {t("AvailableSubCategories")}
+                  style={{elevation: 25}}>
+                  {t('AvailableSubCategories')}
                 </Text>
               </View>
               <ScrollView className="space-y-2 w-full">
@@ -639,7 +637,7 @@ const SalesInsightsScreen = () => {
                               isVisible: true,
                               subCategories: outerObj.subCategories.map(
                                 innerObj => {
-                                  const updatedInnerObject = { ...innerObj };
+                                  const updatedInnerObject = {...innerObj};
                                   return {
                                     subCategoryName:
                                       updatedInnerObject.subCategoryName,
@@ -654,10 +652,8 @@ const SalesInsightsScreen = () => {
                         });
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
-                      <Text className="text-white text-lg">
-                        {t("showAll")}
-                      </Text>
+                      style={{elevation: 25}}>
+                      <Text className="text-white text-lg">{t('showAll')}</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -674,7 +670,7 @@ const SalesInsightsScreen = () => {
                                 : false,
                               subCategories: outerObj.subCategories.map(
                                 innerObj => {
-                                  const updatedInnerObject = { ...innerObj };
+                                  const updatedInnerObject = {...innerObj};
                                   return {
                                     subCategoryName:
                                       updatedInnerObject.subCategoryName,
@@ -691,9 +687,9 @@ const SalesInsightsScreen = () => {
                         });
                       }}
                       className="border border-gray-500 p-2 rounded-md bg-gray-500"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("showSelected")}
+                        {t('showSelected')}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -717,9 +713,9 @@ const SalesInsightsScreen = () => {
                         setSelectAllSubCategories(false);
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("unselectAll")}
+                        {t('unselectAll')}
                       </Text>
                     </TouchableOpacity>
                   ) : (
@@ -752,9 +748,9 @@ const SalesInsightsScreen = () => {
                         setSelectAllSubCategories(true);
                       }}
                       className="border border-gray-500 bg-gray-500 rounded-xl p-2"
-                      style={{ elevation: 25 }}>
+                      style={{elevation: 25}}>
                       <Text className="text-white text-lg">
-                        {t("selectAll")}
+                        {t('selectAll')}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -764,7 +760,7 @@ const SalesInsightsScreen = () => {
           ) : (
             <View>
               <Text className="text-xl font-extrabold">
-                {t("noDataAvailable")}
+                {t('noDataAvailable')}
               </Text>
             </View>
           )}
@@ -774,7 +770,7 @@ const SalesInsightsScreen = () => {
               className="w-full flex-row items-center space-x-4">
               <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
               <Text className="text-2xl font-extrabold text-gray-600">
-                {t("close")}
+                {t('close')}
               </Text>
             </TouchableOpacity>
           </View>
