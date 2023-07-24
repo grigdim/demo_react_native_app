@@ -136,10 +136,11 @@
         "CostInclVat": "ΚΟΣΤΟΣ ΜΕ ΦΠΑ", // Category Details API
         "QuantityTmx": "ΤΜΧ", // Category Details API
         "Turnover": "ΤΖΙΡΟΣ", // Category Details API
-        "ProfitPercentage": "% ΚΕΡΔΟΣ" // Category Details API
+        "ProfitPercentage": "% ΚΕΡΔΟΣ", // Category Details API
+        "TotalTurnoverAndProfit": "Σύνολο Τζίρου και Κέρδους",
 
-        
-        // ΚΑΤΗΓΟΡΙΑ, ΚΟΣΤΟΣ ΜΕ ΦΠΑ, ΤΜΧ, ΤΖΙΡΟΣ, ΚΕΡΔΟΣ ΧΩΡΙΣ ΦΠΑ
-        // ΚΕΡΔΟΣ ΜΕ ΦΠΑ, % ΚΕΡΔΟΣ
+        // Sales Tabs
+        "SalesStatistics": "Στατιστικά Πωλήσεων",
+        "SalesInsights": "Πληροφορίες Πωλήσεων"
     }
 }

@@ -137,14 +137,11 @@
         "CostInclVat": "COST INCL. VAT", // Category Details API
         "QuantityTmx": "QUANTITY", // Category Details API
         "Turnover": "REVENUES", // Category Details API
-        "ProfitPercentage": "% PROFIT" // Category Details API
+        "ProfitPercentage": "% PROFIT", // Category Details API
+        "TotalTurnoverAndProfit": "Total Turnover and Profit",
 
-        // Category Details
-        // Category Name, Cost Incl Vat, Quantity Tmx, Turnover
-        // Profit Without Vat, Profit With Vat, Profit Percentage
-
-        // CATEGORY, COST INCL. VAT, QUANTITY, REVENUES,
-        // PROFIT EXCL. VAT, PROFIT INCL. VAT, % PROFIT
-
+        // Sales Tabs
+        "SalesStatistics": "Sales statistics",
+        "SalesInsights": "Sales insights"
     }
 }
