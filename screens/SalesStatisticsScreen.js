@@ -459,7 +459,14 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  x:
+                    t('WeekAbbr') +
+                    ' ' +
+                    item.Hour +
+                    ' ' +
+                    t('of') +
+                    ' ' +
+                    item.Year,
                   // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TurnOver,
                 });
@@ -470,7 +477,14 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  x:
+                    t('WeekAbbr') +
+                    ' ' +
+                    item.Hour +
+                    ' ' +
+                    t('of') +
+                    ' ' +
+                    item.Year,
                   // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TurnOverWithoutVAT,
                 });
@@ -481,7 +495,14 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  x:
+                    t('WeekAbbr') +
+                    ' ' +
+                    item.Hour +
+                    ' ' +
+                    t('of') +
+                    ' ' +
+                    item.Year,
                   // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TotalProfitMerged,
                 });
@@ -492,7 +513,14 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  x:
+                    t('WeekAbbr') +
+                    ' ' +
+                    item.Hour +
+                    ' ' +
+                    t('of') +
+                    ' ' +
+                    item.Year,
                   // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TotalProfit,
                 });
@@ -1656,7 +1684,7 @@ const SalesStatisticsScreen = () => {
                                     {/*y axis start*/}
                                     <VictoryAxis
                                       dependentAxis
-                                      tickFormat={t => {
+                                      tickFormat={tick => {
                                         const suffixes = [
                                           '',
                                           'k',
@@ -1665,10 +1693,10 @@ const SalesStatisticsScreen = () => {
                                           'T',
                                         ]; // Add more suffixes as needed
                                         const magnitude = Math.floor(
-                                          Math.log10(t) / 3,
+                                          Math.log10(tick) / 3,
                                         );
                                         const scaledNumber =
-                                          t / Math.pow(10, magnitude * 3);
+                                          tick / Math.pow(10, magnitude * 3);
                                         const formattedNumber =
                                           scaledNumber.toFixed(0);
                                         return (
@@ -1997,10 +2025,11 @@ const SalesStatisticsScreen = () => {
                       {/*y axis start*/}
                       <VictoryAxis
                         dependentAxis
-                        tickFormat={t => {
+                        tickFormat={tick => {
                           const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
-                          const magnitude = Math.floor(Math.log10(t) / 3);
-                          const scaledNumber = t / Math.pow(10, magnitude * 3);
+                          const magnitude = Math.floor(Math.log10(tick) / 3);
+                          const scaledNumber =
+                            tick / Math.pow(10, magnitude * 3);
                           const formattedNumber = scaledNumber.toFixed(0);
                           return formattedNumber + suffixes[magnitude] + '€';
                         }}
