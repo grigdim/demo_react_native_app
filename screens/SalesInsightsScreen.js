@@ -34,6 +34,7 @@ const SalesInsightsScreen = () => {
   const [subCategoryModalVisible, setSubCategoryModalVisible] = useState(false);
   const [selectAllSubCategories, setSelectAllSubCategories] = useState(false);
   const [topProducts, setTopProducts] = useState([]);
+  const [topProductsPerStore, setTopProductsPerStore] = useState([]);
 
   const fetchProductCategoryNamesFromBoApi = async () => {
     setLoading(true);
@@ -157,8 +158,60 @@ const SalesInsightsScreen = () => {
     setLoading(false);
   };
 
+  const fetchTopProductsInItemSalesPerStoreFromTopProducts = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+      try {
+        let topProductsPerStoreArr = [];
+        for (const category of selectedCategories) {
+          topProductsPerStoreArr.push({
+            categoryName: category,
+            topSellingProductsPerSubCategory: [],
+          });
+        }
+        const promises = [];
+        for (const category of subCategories) {
+          for (const subCategory of category.subCategories) {
+            if (subCategory.isChecked) {
+              const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              promises.push(
+                (async () => {
+                  const response = await fetch(url, requestOptions);
+                  const data = await response.json();
+                  for (const item of topProductsPerStoreArr) {
+                    if (item.categoryName === category.categoryName) {
+                      item.topSellingProductsPerSubCategory.push({
+                        subCategoryName: subCategory.subCategoryName,
+                        topSellingProducts: data,
+                      });
+                    }
+                  }
+                })(),
+              );
+            }
+          }
+        }
+        await Promise.all(promises);
+        setTopProductsPerStore(topProductsPerStoreArr);
+      } catch (error) {
+        console.error('Error occurred while fetching subcategories:', error);
+      }
+    }
+    // end of request
+    setLoading(false);
+  };
+
   useEffect(() => {
     fetchTopProductsInItemSalesFromTopProducts();
+    fetchTopProductsInItemSalesPerStoreFromTopProducts();
   }, [selectedSubCategories]);
 
   useEffect(() => {
@@ -311,50 +364,111 @@ const SalesInsightsScreen = () => {
             {/*SubCategories card end*/}
             {/*Display Top Products card start*/}
             {topProducts.length > 0 &&
-              topProducts.map((item, index) => {
-                if (item.topSellingProductsPerSubCategory.length > 0) {
-                  return (
-                    <View
-                      key={index}
-                      className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
-                      style={{elevation: 15}}>
-                      <View>
-                        <Text className="text-center text-xl font-bold text-gray-600">
-                          {item.categoryName}
-                        </Text>
-                      </View>
-                      <View className="mx-2 space-y-6">
-                        {item.topSellingProductsPerSubCategory.map(
-                          (subCategory, index2) => (
-                            <View key={index2} className="space-y-2">
-                              <View>
-                                <Text className="font-semibold text-lg text-gray-600">
-                                  {subCategory.subCategoryName}
-                                </Text>
-                              </View>
-                              <View className="space-y-1 divide-y divide-gray-400">
-                                {subCategory.topSellingProducts.map(
-                                  (product, index3) => (
-                                    <View className="flex-row">
-                                      <Text className=" text-gray-600">
-                                        {index3 + 1}.{' '}
-                                      </Text>
-                                      <Text className="flex-1 flex-wrap text-gray-600">
-                                        {product.Product}
-                                      </Text>
-                                    </View>
-                                  ),
-                                )}
-                              </View>
-                            </View>
-                          ),
-                        )}
-                      </View>
-                    </View>
-                  );
-                }
-              })}
+              topProducts[0].topSellingProductsPerSubCategory.length > 0 && (
+                <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
+                  <Text className="underline text-xl font-extrabold text-gray-600">
+                    Top products in items sales
+                  </Text>
+                  {topProducts.map((item, index) => {
+                    if (item.topSellingProductsPerSubCategory.length > 0) {
+                      return (
+                        <View
+                          key={index}
+                          className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
+                          style={{elevation: 15}}>
+                          <View>
+                            <Text className="text-center text-xl font-bold text-gray-600">
+                              {item.categoryName}
+                            </Text>
+                          </View>
+                          <View className="mx-2 space-y-6">
+                            {item.topSellingProductsPerSubCategory.map(
+                              (subCategory, index2) => (
+                                <View key={index2} className="space-y-2">
+                                  <View>
+                                    <Text className="font-semibold text-lg text-gray-600">
+                                      {subCategory.subCategoryName}
+                                    </Text>
+                                  </View>
+                                  <View className="space-y-1 divide-y divide-gray-400">
+                                    {subCategory.topSellingProducts.map(
+                                      (product, index3) => (
+                                        <View className="flex-row">
+                                          <Text className=" text-gray-600">
+                                            {index3 + 1}.{' '}
+                                          </Text>
+                                          <Text className="flex-1 flex-wrap text-gray-600">
+                                            {product.Product}
+                                          </Text>
+                                        </View>
+                                      ),
+                                    )}
+                                  </View>
+                                </View>
+                              ),
+                            )}
+                          </View>
+                        </View>
+                      );
+                    }
+                  })}
+                </View>
+              )}
             {/*Display Top Products card start*/}
+            {/*Display Top Products per store card start*/}
+            {topProductsPerStore.length > 0 &&
+              topProductsPerStore[0].topSellingProductsPerSubCategory.length >
+                0 && (
+                <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
+                  <Text className="underline text-center text-xl font-extrabold text-gray-600">
+                    Top products in items sales per store
+                  </Text>
+                  {topProductsPerStore.map((item, index) => {
+                    if (item.topSellingProductsPerSubCategory.length > 0) {
+                      return (
+                        <View
+                          key={index}
+                          className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
+                          style={{elevation: 15}}>
+                          <View>
+                            <Text className="text-center text-xl font-bold text-gray-600">
+                              {item.categoryName}
+                            </Text>
+                          </View>
+                          <View className="mx-2 space-y-6">
+                            {item.topSellingProductsPerSubCategory.map(
+                              (subCategory, index2) => (
+                                <View key={index2} className="space-y-2">
+                                  <View>
+                                    <Text className="font-semibold text-lg text-gray-600">
+                                      {subCategory.subCategoryName}
+                                    </Text>
+                                  </View>
+                                  <View className="space-y-1 divide-y divide-gray-400">
+                                    {subCategory.topSellingProducts.map(
+                                      (product, index3) => (
+                                        <View className="flex-row">
+                                          <Text className=" text-gray-600">
+                                            {index3 + 1}.{' '}
+                                          </Text>
+                                          <Text className="flex-1 flex-wrap text-gray-600">
+                                            {product.Product}
+                                          </Text>
+                                        </View>
+                                      ),
+                                    )}
+                                  </View>
+                                </View>
+                              ),
+                            )}
+                          </View>
+                        </View>
+                      );
+                    }
+                  })}
+                </View>
+              )}
+            {/*Display Top Products per store card start*/}
           </ScrollView>
         )
       ) : (
