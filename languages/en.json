@@ -95,7 +95,7 @@
         "andAboutScreen": "and",
         "inAthensAboutScreen": "in Athens",
 
-        // Test Screen (Sales tabs screen)
+        // Sales tabs screen
         "turnover": "Turnover",
         "profit": "Profit",
         "turnoverDetails": "Turnover Details",
@@ -111,6 +111,8 @@
         "withoutVAT": "without VAT",
         "profitAsPer": "profit as a percentage",
         "moreDetails": "More Details",
+        "Week": "Week",
+        "of": "of",
 
         // Product Details
         "chooseProduct": "CHOOSE A PRODUCT",

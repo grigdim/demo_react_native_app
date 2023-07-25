@@ -94,7 +94,7 @@
         "andAboutScreen": "και",
         "inAthensAboutScreen": "στην Αθήνα",
 
-        // Test Screen (Sales tabs screen)
+        // Sales tabs screen
         "turnover": "Τζίρος",
         "profit": "Κέρδος",
         "turnoverDetails": "Λεπτομέρειες Τζίρου",
@@ -110,6 +110,8 @@
         "withoutVAT": "χωρίς Φ.Π.Α.",
         "profitAsPer": "κέρδος επί του Τζίρου",
         "moreDetails": "Λεπτομέρειες",
+        "WeekAbbr": "Εβδ",
+        "of": "του",
 
         // Product Details 
         "chooseProduct": "ΕΠΙΛΟΓΗ ΠΡΟΪΟΝΤΟΣ",
