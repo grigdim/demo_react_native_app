@@ -26,6 +26,7 @@
         "changeLanguage": "Αλλαγή σε Αγγλικά",
         "from": "Από",
         "to": "Έως",
+        "return": "Επιστροφή",
         "close": "Κλείσιμο",
         "cancel": "Ακύρωση",
         "confirm": "Επιβεβαίωση",
@@ -149,6 +150,8 @@
         "SalesInsights": "Πληροφορίες Πωλήσεων",
         
         // Sales Insights
+        "TopProductsInItemsSales": "Κορυφαία προϊόντα σε πωλήσεις ειδών",
+        "TopProductsInItemsSalesPerStore": "Κορυφαία προϊόντα σε πωλήσεις ειδών ανά κατάστημα",
         "SelectedCategories": "Επιλεγμένες Κατηγορίες",
         "PressToChooseCategory": "Πάτησε για να διαλέξεις μία κατηγορία",
         "SelectedSubCategories": "Επιλεγμένες Υποκατηγορίες",
