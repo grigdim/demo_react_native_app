@@ -35,6 +35,7 @@ import SwitchSelector from 'react-native-switch-selector';
 const options = [
   { label: 'Ελληνικά', value: 'el' },
   { label: 'English', value: 'en' },
+  { label: 'Românesc', value: 'ro' },
 ];
 
 const LoginScreen = () => {
@@ -361,28 +362,31 @@ const LoginScreen = () => {
                 </Text>
               </TouchableOpacity>
 
-              {/* Attribute "Freepik" for rounded language flags */} 
+              {/* Attribute "Freepik" for rounded language flags */}
 
               <View style={languageStyle.container}>
                 <View style={languageStyle.flagContainer}>
                   <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
                     <Image
                       style={languageStyle.flag}
-                      source={i18n.language === 'en' ? require('../images/england.png') : require('../images/greece.png')}
+                      source={
+                        i18n.language === 'el' ? require('../images/greece.png')
+                          : i18n.language === 'en' ? require('../images/england.png')
+                            : require('../images/romania.png')
+                      }
                     />
                   </TouchableOpacity>
-                  {isPickerVisible && (
-                    <View style={languageStyle.pickerContainer}>
-                      <Picker
-                        style={languageStyle.picker}
-                        selectedValue={selectedLanguage}
-                        onValueChange={handleLanguageChange}
-                      >
-                        <Picker.Item label={t('english')} value="en" />
-                        <Picker.Item label={t('greek')} value="el" />
-                      </Picker>
-                    </View>
-                  )}
+                  <View style={languageStyle.pickerContainer}>
+                    <Picker
+                      style={languageStyle.picker}
+                      selectedValue={selectedLanguage}
+                      onValueChange={handleLanguageChange}
+                    >
+                      <Picker.Item label={t('greek')} value="el" />
+                      <Picker.Item label={t('english')} value="en" />
+                      <Picker.Item label={t('romanian')} value="ro" />
+                    </Picker>
+                  </View>
                 </View>
               </View>
 

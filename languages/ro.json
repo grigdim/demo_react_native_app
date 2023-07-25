@@ -1,30 +1,32 @@
 
+// DEFINITELY TO BE CHANGED IF EVEN USED AT ALL
+
 {
     "translation": {
         // Drawer
-        "intaleStatistics": "Intale Statistics",
-        "homeDrawer": "Home",
-        "turnoverDrawer": "Turnover",
-        "totalProfitDrawer": "Total Profit",
-        "reportsDrawer": "Reports",
-        "chartsDrawer": "Charts",
-        "testingDrawer": "Test Sales",
-        "helpDrawer": "Help",
-        "aboutDrawer": "About",
-        "exitAppDrawer": "Exit App",
+        "intaleStatistics": "Statistici Intale",
+        "homeDrawer": "Acasă",
+        "turnoverDrawer": "Cifra de afaceri",
+        "totalProfitDrawer": "Profitul Total",
+        "reportsDrawer": "Rapoarte",
+        "chartsDrawer": "Grafice",
+        "testingDrawer": "Test de vânzări",
+        "helpDrawer": "Ajutor",
+        "aboutDrawer": "Despre",
+        "exitAppDrawer": "Ieșiți din aplicație",
 
         // Demo Go To
-        "goToLineChartScreen": "Go to line chart screen",
-        "goToAuditScreen": "Go to audit screen",
-        "goToStoreScreen": "Go to store screen",
-        "goToProductSalesScreen": "Go to product sales screen",
-        "goToSalesTabsScreen": "Go to sales tabs screen",
-        "deleteTokenAndLoginAgain": "Delete token and login again",
+        "goToLineChartScreen": "Accesați ecranul diagramă cu linii",
+        "goToAuditScreen": "Accesați ecranul de audit",
+        "goToStoreScreen": "Accesați ecranul magazinului",
+        "goToProductSalesScreen": "Accesați ecranul de vânzări de produse",
+        "goToSalesTabsScreen": "Accesați ecranul cu filele de vânzări",
+        "deleteTokenAndLoginAgain": "Ștergeți tokenul și conectați-vă din nou",
 
         // Various 
-        "english": "ENGLISH",
-        "greek": "GREEK",
-        "romanian": "ROMANIAN",
+        "english": "ENGLEZĂ",
+        "greek": "GRECĂ",
+        "romanian": "ROMÂNĂ",
         "from": "From",
         "to": "To",
         "return": "Return",
