@@ -367,7 +367,7 @@ const SalesInsightsScreen = () => {
               topProducts[0].topSellingProductsPerSubCategory.length > 0 && (
                 <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
                   <Text className="underline text-xl font-extrabold text-gray-600">
-                    Top products in items sales
+                    {t("TopProductsInItemsSales")}
                   </Text>
                   {topProducts.map((item, index) => {
                     if (item.topSellingProductsPerSubCategory.length > 0) {
@@ -425,7 +425,7 @@ const SalesInsightsScreen = () => {
                 0 && (
                 <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
                   <Text className="underline text-center text-xl font-extrabold text-gray-600">
-                    Top products in items sales per store
+                    {t("TopProductsInItemsSalesPerStore")}
                   </Text>
                   {topProductsPerStore.map((item, index) => {
                     if (item.topSellingProductsPerSubCategory.length > 0) {
@@ -647,9 +647,9 @@ const SalesInsightsScreen = () => {
             <TouchableOpacity
               onPress={() => setCategoryModalVisible(false)}
               className="w-full flex-row items-center space-x-4">
-              <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
+              <Fontisto name="arrow-left-l" size={20} color="rgb(75 85 99)" />
               <Text className="text-2xl font-extrabold text-gray-600">
-                {t('close')}
+                {t('return')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -890,9 +890,9 @@ const SalesInsightsScreen = () => {
             <TouchableOpacity
               onPress={() => setSubCategoryModalVisible(false)}
               className="w-full flex-row items-center space-x-4">
-              <Fontisto name="close-a" size={20} color="rgb(75 85 99)" />
+              <Fontisto name="arrow-left-l" size={20} color="rgb(75 85 99)" />
               <Text className="text-2xl font-extrabold text-gray-600">
-                {t('close')}
+                {t('return')}
               </Text>
             </TouchableOpacity>
           </View>

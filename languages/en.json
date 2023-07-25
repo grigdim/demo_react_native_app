@@ -27,6 +27,7 @@
         "changeLanguage": "Switch to Greek",
         "from": "From",
         "to": "To",
+        "return": "Return",
         "close": "Close",
         "cancel": "Cancel",
         "confirm": "Confirm",
@@ -95,7 +96,7 @@
         "andAboutScreen": "and",
         "inAthensAboutScreen": "in Athens",
 
-        // Test Screen (Sales tabs screen)
+        // Sales tabs screen
         "turnover": "Turnover",
         "profit": "Profit",
         "turnoverDetails": "Turnover Details",
@@ -111,6 +112,8 @@
         "withoutVAT": "without VAT",
         "profitAsPer": "profit as a percentage",
         "moreDetails": "More Details",
+        "Week": "Week",
+        "of": "of",
 
         // Product Details
         "chooseProduct": "CHOOSE A PRODUCT",
@@ -149,6 +152,8 @@
         "SalesInsights": "Sales insights",
         
         // Sales Insights
+        "TopProductsInItemsSales": "Top products in items sales",
+        "TopProductsInItemsSalesPerStore": "Top products in items sales per store",
         "SelectedCategories": "Selected Categories",
         "PressToChooseCategory": "Press to choose a category",
         "SelectedSubCategories": "Selected Sub Categories",

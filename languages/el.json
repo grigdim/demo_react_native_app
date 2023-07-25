@@ -26,6 +26,7 @@
         "changeLanguage": "Αλλαγή σε Αγγλικά",
         "from": "Από",
         "to": "Έως",
+        "return": "Επιστροφή",
         "close": "Κλείσιμο",
         "cancel": "Ακύρωση",
         "confirm": "Επιβεβαίωση",
@@ -94,7 +95,7 @@
         "andAboutScreen": "και",
         "inAthensAboutScreen": "στην Αθήνα",
 
-        // Test Screen (Sales tabs screen)
+        // Sales tabs screen
         "turnover": "Τζίρος",
         "profit": "Κέρδος",
         "turnoverDetails": "Λεπτομέρειες Τζίρου",
@@ -110,6 +111,8 @@
         "withoutVAT": "χωρίς Φ.Π.Α.",
         "profitAsPer": "κέρδος επί του Τζίρου",
         "moreDetails": "Λεπτομέρειες",
+        "WeekAbbr": "Εβδ",
+        "of": "του",
 
         // Product Details 
         "chooseProduct": "ΕΠΙΛΟΓΗ ΠΡΟΪΟΝΤΟΣ",
@@ -147,6 +150,8 @@
         "SalesInsights": "Πληροφορίες Πωλήσεων",
         
         // Sales Insights
+        "TopProductsInItemsSales": "Κορυφαία προϊόντα σε πωλήσεις ειδών",
+        "TopProductsInItemsSalesPerStore": "Κορυφαία προϊόντα σε πωλήσεις ειδών ανά κατάστημα",
         "SelectedCategories": "Επιλεγμένες Κατηγορίες",
         "PressToChooseCategory": "Πάτησε για να διαλέξεις μία κατηγορία",
         "SelectedSubCategories": "Επιλεγμένες Υποκατηγορίες",

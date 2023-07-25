@@ -459,7 +459,8 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: `Week ${item.Hour} of ${item.Year}`,
+                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TurnOver,
                 });
               });
@@ -469,7 +470,8 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: `Week ${item.Hour} of ${item.Year}`,
+                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TurnOverWithoutVAT,
                 });
               });
@@ -479,7 +481,8 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: `Week ${item.Hour} of ${item.Year}`,
+                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TotalProfitMerged,
                 });
               });
@@ -489,7 +492,8 @@ const SalesStatisticsScreen = () => {
               let arr = [];
               totalSalesChartData.map(item => {
                 arr.push({
-                  x: `Week ${item.Hour} of ${item.Year}`,
+                  x: t("WeekAbbr") + " " + item.Hour + " " + t("of") + " " + item.Year,
+                  // x: `Week ${item.Hour} of ${item.Year}`,
                   y: item.TotalProfit,
                 });
               });
