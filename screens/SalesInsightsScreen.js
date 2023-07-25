@@ -367,7 +367,7 @@ const SalesInsightsScreen = () => {
               topProducts[0].topSellingProductsPerSubCategory.length > 0 && (
                 <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
                   <Text className="underline text-xl font-extrabold text-gray-600">
-                    {t("TopProductsInItemsSales")}
+                    {t('TopProductsInItemsSales')}
                   </Text>
                   {topProducts.map((item, index) => {
                     if (item.topSellingProductsPerSubCategory.length > 0) {
@@ -425,7 +425,7 @@ const SalesInsightsScreen = () => {
                 0 && (
                 <View className="rounded-md items-center bg-white p-2 my-10 w-10/12 space-y-4">
                   <Text className="underline text-center text-xl font-extrabold text-gray-600">
-                    {t("TopProductsInItemsSalesPerStore")}
+                    {t('TopProductsInItemsSalesPerStore')}
                   </Text>
                   {topProductsPerStore.map((item, index) => {
                     if (item.topSellingProductsPerSubCategory.length > 0) {
