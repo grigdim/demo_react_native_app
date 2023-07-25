@@ -22,6 +22,8 @@
         "deleteTokenAndLoginAgain": "Delete token and login again",
 
         // Various 
+        "english": "ENGLISH",
+        "greek": "GREEK",
         "changeLanguage": "Switch to Greek",
         "from": "From",
         "to": "To",

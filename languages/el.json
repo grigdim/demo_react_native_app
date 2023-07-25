@@ -21,6 +21,8 @@
         "deleteTokenAndLoginAgain": "Διέγραψε το Token και συνδέσου ξανά",
         
         // Various
+        "english": "ΑΓΓΛΙΚΑ",
+        "greek": "ΕΛΛΗΝΙΚΑ",
         "changeLanguage": "Αλλαγή σε Αγγλικά",
         "from": "Από",
         "to": "Έως",
