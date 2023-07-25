@@ -374,7 +374,7 @@ const SalesInsightsScreen = () => {
                       return (
                         <View
                           key={index}
-                          className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
+                          className="rounded-md bg-white p-2 my-10 w-11/12 space-y-4"
                           style={{elevation: 15}}>
                           <View>
                             <Text className="text-center text-xl font-bold text-gray-600">
@@ -382,8 +382,13 @@ const SalesInsightsScreen = () => {
                             </Text>
                           </View>
                           <View className="mx-2 space-y-6">
-                            {item.topSellingProductsPerSubCategory.map(
-                              (subCategory, index2) => (
+                            {item.topSellingProductsPerSubCategory
+                              .sort((a, b) => {
+                                a.subCategoryName.localeCompare(
+                                  b.subCategoryName,
+                                );
+                              })
+                              .map((subCategory, index2) => (
                                 <View key={index2} className="space-y-2">
                                   <View>
                                     <Text className="font-semibold text-lg text-gray-600">
@@ -405,8 +410,7 @@ const SalesInsightsScreen = () => {
                                     )}
                                   </View>
                                 </View>
-                              ),
-                            )}
+                              ))}
                           </View>
                         </View>
                       );
@@ -428,7 +432,7 @@ const SalesInsightsScreen = () => {
                       return (
                         <View
                           key={index}
-                          className="rounded-md bg-white p-2 my-10 w-10/12 space-y-4"
+                          className="rounded-md bg-white p-2 my-10 w-11/12 space-y-4"
                           style={{elevation: 15}}>
                           <View>
                             <Text className="text-center text-xl font-bold text-gray-600">
@@ -436,8 +440,13 @@ const SalesInsightsScreen = () => {
                             </Text>
                           </View>
                           <View className="mx-2 space-y-6">
-                            {item.topSellingProductsPerSubCategory.map(
-                              (subCategory, index2) => (
+                            {item.topSellingProductsPerSubCategory
+                              .sort((a, b) => {
+                                a.subCategoryName.localeCompare(
+                                  b.subCategoryName,
+                                );
+                              })
+                              .map((subCategory, index2) => (
                                 <View key={index2} className="space-y-2">
                                   <View>
                                     <Text className="font-semibold text-lg text-gray-600">
@@ -459,8 +468,7 @@ const SalesInsightsScreen = () => {
                                     )}
                                   </View>
                                 </View>
-                              ),
-                            )}
+                              ))}
                           </View>
                         </View>
                       );
