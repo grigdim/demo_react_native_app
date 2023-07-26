@@ -14,40 +14,45 @@ import {
   Image,
   Modal,
   TouchableWithoutFeedback,
-  Linking,
+  Linking
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const options = [
-  {label: 'Ελληνικά', value: 'el'},
-  {label: 'English', value: 'en'},
-  {label: 'Românesc', value: 'ro'},
+  { label: 'Ελληνικά', value: 'el' },
+  { label: 'English', value: 'en' },
+  { label: 'Românesc', value: 'ro' },
 ];
 
 const LoginScreen = () => {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
+  const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
 
   // Privacy Policy
-
+  const [isScrolledToEnd, setScrolledToEnd] = useState(false);
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+
+  const privacyButtonStyle = isScrolledToEnd
+    ? privacyButtonStyles.buttonEnabled
+    : privacyButtonStyles.buttonDisabled;
 
   const handlePrivacyPolicy = async () => {
     setPrivacyPolicyAccepted(true);
@@ -61,9 +66,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const loadPrivacyPolicyAcceptedState = async () => {
       try {
-        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
-          '@privacyPolicyAccepted',
-        );
+        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem('@privacyPolicyAccepted');
         if (storedPrivacyPolicyAccepted === 'true') {
           setPrivacyPolicyAccepted(true);
         }
@@ -78,29 +81,21 @@ const LoginScreen = () => {
     Linking.openURL('https://www.intale.com/privacy');
   };
 
-  // Localization
+  const handleScroll = (event) => {
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const scrollOffset = event.nativeEvent.contentOffset.y;
+    const scrollViewHeight = event.nativeEvent.layoutMeasurement.height;
+    if (scrollOffset + scrollViewHeight >= contentHeight - 20) {
+      setScrolledToEnd(true);
+    } else {
+      setScrolledToEnd(false);
+    }
+  };
 
-  // Privacy Policy
-
-  useEffect(() => {
-    const loadPrivacyPolicyAcceptedState = async () => {
-      try {
-        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
-          '@privacyPolicyAccepted',
-        );
-        if (storedPrivacyPolicyAccepted === 'true') {
-          setPrivacyPolicyAccepted(true);
-        }
-      } catch (error) {
-        console.error('Error accepting Privacy Policy:', error); // Never seen
-      }
-    };
-    loadPrivacyPolicyAcceptedState();
-  }, []);
 
   // Localization
 
-  const handleLanguageChange = newLanguage => {
+  const handleLanguageChange = (newLanguage) => {
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
   };
@@ -109,8 +104,8 @@ const LoginScreen = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const {height, width} = Dimensions.get('screen');
-  const {input, buttonText, disabledButton} = style;
+  const { height, width } = Dimensions.get('screen');
+  const { input, buttonText, disabledButton } = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
@@ -120,7 +115,6 @@ const LoginScreen = () => {
   // const [softKeys, setSoftKeys] = useState(null);
   const [login, setLogin] = useState(true);
   const [registeredEmail, setRegisteredEmail] = useState(false);
-  const [loginErrorMessage, setLoginErrorMessage] = useState();
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -169,7 +163,7 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-      email === 'gsakellaropoulos@intale.com'
+        email === 'gsakellaropoulos@intale.com'
         ? setRegisteredEmail(true)
         : setRegisteredEmail(false);
       setLogin(false);
@@ -210,11 +204,7 @@ const LoginScreen = () => {
       requestOptions,
     );
     const data = await response.text();
-    if (data.Code === null) {
-      setLoginErrorMessage(data.Message);
-    } else {
-      dispatch(setToken(data));
-    }
+    dispatch(setToken(data));
     setLoading(false);
   };
 
@@ -234,52 +224,43 @@ const LoginScreen = () => {
         {!isPrivacyPolicyAccepted ? (
           <View className="justify-center items-center w-10/12">
             <ScrollView
+              ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}>
+              style={{ width: '85%', height: '75%' }}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+            >
               <View
                 style={{
                   backgroundColor: 'white',
                   padding: 20,
                   borderRadius: 10,
                   elevation: 40,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: 'black',
-                    fontWeight: 'bold',
-                    marginBottom: 20,
-                    marginTop: 10,
-                    textAlign: 'center',
-                  }}>
-                  {t('privacyPolicy')}
-                </Text>
+                }}
+              >
+                <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', marginBottom: 20, marginTop: 10, textAlign: "center" }}>{t("privacyPolicy")}</Text>
                 <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: 'blue',
-                      marginTop: 10,
-                      marginBottom: 20,
-                    }}>
-                    {t('intalePrivacyPolicyLink')}
+                  <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
+                    {t("intalePrivacyPolicyLink")}
                   </Text>
                 </TouchableOpacity>
-                <Text>{t('privacyPolicyContent')}</Text>
+                <Text >{t("privacyPolicyContent")}</Text>
               </View>
             </ScrollView>
 
             <TouchableOpacity
-              style={{marginTop: 20}}
+              style={privacyButtonStyle}
               onPress={handlePrivacyPolicy}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t('accept')}</Text>
+              disabled={!isScrolledToEnd}
+              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10"
+            >
+              <Text style={buttonText}>{t("accept")}</Text>
             </TouchableOpacity>
           </View>
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{height: height / 1.33}}>
+            style={{ height: height / 1.33 }}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !token ? (
@@ -294,7 +275,7 @@ const LoginScreen = () => {
                   name="user"
                   size={75}
                   color="white"
-                  // color="rgb(59 130 246)"
+                // color="rgb(59 130 246)"
                 />
                 <Text className="text-white text-3xl">
                   {t('helloIntalerLoginScreen')}
@@ -398,13 +379,13 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{height: height / 1.33}}>
+              style={{ height: height / 1.33 }}>
               <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('LineChartScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToLineChartScreen')}
                 </Text>
@@ -415,7 +396,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('AuditScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToAuditScreen')}
                 </Text>
@@ -426,7 +407,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('StoreScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToStoreScreen')}
                 </Text>
@@ -437,7 +418,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('ProductSalesScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToProductSalesScreen')}
                 </Text>
@@ -448,7 +429,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('SalesTabsScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToSalesTabsScreen')}
                 </Text>
@@ -463,7 +444,7 @@ const LoginScreen = () => {
                   setVat('');
                   setLogin(true);
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('deleteTokenAndLoginAgain')}
                 </Text>
@@ -477,11 +458,9 @@ const LoginScreen = () => {
                     <Image
                       style={languageStyle.flag}
                       source={
-                        i18n.language === 'el'
-                          ? require('../images/greece.png')
-                          : i18n.language === 'en'
-                          ? require('../images/england.png')
-                          : require('../images/romania.png')
+                        i18n.language === 'el' ? require('../images/greece.png')
+                          : i18n.language === 'en' ? require('../images/england.png')
+                            : require('../images/romania.png')
                       }
                     />
                   </TouchableOpacity>
@@ -489,7 +468,8 @@ const LoginScreen = () => {
                     <Picker
                       style={languageStyle.picker}
                       selectedValue={selectedLanguage}
-                      onValueChange={handleLanguageChange}>
+                      onValueChange={handleLanguageChange}
+                    >
                       <Picker.Item label={t('greek')} value="el" />
                       <Picker.Item label={t('english')} value="en" />
                       <Picker.Item label={t('romanian')} value="ro" />
@@ -497,6 +477,7 @@ const LoginScreen = () => {
                   </View>
                 </View>
               </View>
+
             </View>
           </ScrollView>
         )}
@@ -504,6 +485,25 @@ const LoginScreen = () => {
     </ImageBackground>
   );
 };
+
+const privacyButtonStyles = StyleSheet.create({
+  buttonEnabled: {
+    borderRadius: 6,
+    backgroundColor: '#3885E0',
+    padding: 10,
+    alignItems: 'center',
+    opacity: 1,
+    marginTop: 20,
+  },
+  buttonDisabled: {
+    borderRadius: 2,
+    backgroundColor: 'gray',
+    padding: 10,
+    alignItems: 'center',
+    opacity: 0.8,
+    marginTop: 20,
+  },
+});
 
 const style = StyleSheet.create({
   input: {
@@ -528,13 +528,13 @@ const style = StyleSheet.create({
 const languageStyle = StyleSheet.create({
   container: {
     marginTop: 30,
-    elevation: 30,
+    elevation: 30
   },
   picker: {
     height: 30,
     width: 200,
-    color: 'black',
-    fontSize: 20,
+    color: "black",
+    fontSize: 20
   },
   pickerContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
