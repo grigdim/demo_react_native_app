@@ -16,20 +16,20 @@ const CustomDrawer = (props) => {
 
     const exitAlert = () => {
         Alert.alert(
-            'Exit App',
-            'Are you sure you want to exit the app?\n\nYou must log in again.',
-            [
-                {
-                    text: 'No',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-                {
-                    text: 'Yes',
-                    onPress: () =>
-                     RNExitApp.exitApp() 
-                }
-            ],
+            t("exitApp"),
+            t("areYouSureExitApp") + "\n\n" + t("mustLogInAgain"),
+        [
+        {
+            text: t("no"),
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+        },
+        {
+            text: t("yes"),
+            onPress: () =>
+                RNExitApp.exitApp()
+        }
+        ],
             { cancelable: false }
         );
     };

@@ -14,6 +14,7 @@ import {
   Image,
   Modal,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, {useState, useEffect, useRef} from 'react';
@@ -31,16 +32,73 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
 import {useTranslation} from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const options = [
   {label: 'Ελληνικά', value: 'el'},
   {label: 'English', value: 'en'},
+  {label: 'Românesc', value: 'ro'},
 ];
 
 const LoginScreen = () => {
   const {t, i18n} = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
+
+  // Privacy Policy
+
+  const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+
+  const handlePrivacyPolicy = async () => {
+    setPrivacyPolicyAccepted(true);
+    try {
+      await AsyncStorage.setItem('@privacyPolicyAccepted', 'true');
+    } catch (error) {
+      console.error('Error accepting Privacy Policy:', error); // Never seen
+    }
+  };
+
+  useEffect(() => {
+    const loadPrivacyPolicyAcceptedState = async () => {
+      try {
+        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
+          '@privacyPolicyAccepted',
+        );
+        if (storedPrivacyPolicyAccepted === 'true') {
+          setPrivacyPolicyAccepted(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Privacy Policy:', error); // Never seen
+      }
+    };
+    loadPrivacyPolicyAcceptedState();
+  }, []);
+
+  const handlePrivacyPolicyLink = () => {
+    Linking.openURL('https://www.intale.com/privacy');
+  };
+
+  // Localization
+
+  // Privacy Policy
+
+  useEffect(() => {
+    const loadPrivacyPolicyAcceptedState = async () => {
+      try {
+        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
+          '@privacyPolicyAccepted',
+        );
+        if (storedPrivacyPolicyAccepted === 'true') {
+          setPrivacyPolicyAccepted(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Privacy Policy:', error); // Never seen
+      }
+    };
+    loadPrivacyPolicyAcceptedState();
+  }, []);
+
+  // Localization
 
   const handleLanguageChange = newLanguage => {
     setSelectedLanguage(newLanguage);
@@ -173,7 +231,52 @@ const LoginScreen = () => {
       className="flex-1 w-full h-full"
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
-        {loading ? (
+        {!isPrivacyPolicyAccepted ? (
+          <View className="justify-center items-center w-10/12">
+            <ScrollView
+              className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+              style={{width: '85%', height: '75%'}}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  padding: 20,
+                  borderRadius: 10,
+                  elevation: 40,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'black',
+                    fontWeight: 'bold',
+                    marginBottom: 20,
+                    marginTop: 10,
+                    textAlign: 'center',
+                  }}>
+                  {t('privacyPolicy')}
+                </Text>
+                <TouchableOpacity onPress={handlePrivacyPolicyLink}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: 'blue',
+                      marginTop: 10,
+                      marginBottom: 20,
+                    }}>
+                    {t('intalePrivacyPolicyLink')}
+                  </Text>
+                </TouchableOpacity>
+                <Text>{t('privacyPolicyContent')}</Text>
+              </View>
+            </ScrollView>
+
+            <TouchableOpacity
+              style={{marginTop: 20}}
+              onPress={handlePrivacyPolicy}
+              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+              <Text style={buttonText}>{t('accept')}</Text>
+            </TouchableOpacity>
+          </View>
+        ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
             style={{height: height / 1.33}}>
@@ -374,23 +477,24 @@ const LoginScreen = () => {
                     <Image
                       style={languageStyle.flag}
                       source={
-                        i18n.language === 'en'
+                        i18n.language === 'el'
+                          ? require('../images/greece.png')
+                          : i18n.language === 'en'
                           ? require('../images/england.png')
-                          : require('../images/greece.png')
+                          : require('../images/romania.png')
                       }
                     />
                   </TouchableOpacity>
-                  {isPickerVisible && (
-                    <View style={languageStyle.pickerContainer}>
-                      <Picker
-                        style={languageStyle.picker}
-                        selectedValue={selectedLanguage}
-                        onValueChange={handleLanguageChange}>
-                        <Picker.Item label={t('english')} value="en" />
-                        <Picker.Item label={t('greek')} value="el" />
-                      </Picker>
-                    </View>
-                  )}
+                  <View style={languageStyle.pickerContainer}>
+                    <Picker
+                      style={languageStyle.picker}
+                      selectedValue={selectedLanguage}
+                      onValueChange={handleLanguageChange}>
+                      <Picker.Item label={t('greek')} value="el" />
+                      <Picker.Item label={t('english')} value="en" />
+                      <Picker.Item label={t('romanian')} value="ro" />
+                    </Picker>
+                  </View>
                 </View>
               </View>
             </View>
