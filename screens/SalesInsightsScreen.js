@@ -35,8 +35,12 @@ const SalesInsightsScreen = () => {
   const [selectAllSubCategories, setSelectAllSubCategories] = useState(false);
   const [topProducts, setTopProducts] = useState([]);
   const [topProductsPerStore, setTopProductsPerStore] = useState([]);
+  const [
+    productCategoryNamesFromSeasonality,
+    setProductCategoryNameFromSeasonality,
+  ] = useState([]);
 
-  const fetchProductCategoryNamesFromBoApi = async () => {
+  const fetchProductCategoryNames = async () => {
     setLoading(true);
     if (__DEV__ && token) {
       var myHeaders = new Headers();
@@ -209,6 +213,112 @@ const SalesInsightsScreen = () => {
     setLoading(false);
   };
 
+  const fetchProductCategoryNamesFromSeasonality = async () => {
+    // setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+      setProductCategoryNameFromSeasonality(data);
+    }
+    // end of request
+    // setLoading(false);
+  };
+
+  const fetchSeasonality = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${productCategoryNameForSeasonality}`,
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+    }
+    // end of request
+    setLoading(false);
+  };
+
+  const fetchSeasonalityDetails = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${productCategoryNameForSeasonalityDetails}`,
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+    }
+    // end of request
+    setLoading(false);
+  };
+
+  const fetchTransactionsWeeks = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
+        `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+
+      // setReportsGetTransactionsWeeksFromBoApi(() => {
+      //   let r = [];
+      //   data.map(x => {
+      //     r.push(x.WeekDescription);
+      //   });
+      //   return r;
+      // });
+    }
+    // end of request
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProductCategoryNamesFromSeasonality();
+  }, []);
+
   useEffect(() => {
     fetchTopProductsInItemSalesFromTopProducts();
     fetchTopProductsInItemSalesPerStoreFromTopProducts();
@@ -254,7 +364,7 @@ const SalesInsightsScreen = () => {
   }, [subCategories]);
 
   useEffect(() => {
-    fetchProductCategoryNamesFromBoApi();
+    fetchProductCategoryNames();
   }, []);
 
   return (
@@ -384,8 +494,14 @@ const SalesInsightsScreen = () => {
                           <View className="mx-2 space-y-6">
                             {item.topSellingProductsPerSubCategory
                               .sort((a, b) => {
-                                a.subCategoryName.localeCompare(
-                                  b.subCategoryName,
+                                const subCategoryNameA = a.subCategoryName
+                                  .trim()
+                                  .toUpperCase();
+                                const subCategoryNameB = b.subCategoryName
+                                  .trim()
+                                  .toUpperCase();
+                                return subCategoryNameA.localeCompare(
+                                  subCategoryNameB,
                                 );
                               })
                               .map((subCategory, index2) => (
@@ -442,8 +558,14 @@ const SalesInsightsScreen = () => {
                           <View className="mx-2 space-y-6">
                             {item.topSellingProductsPerSubCategory
                               .sort((a, b) => {
-                                a.subCategoryName.localeCompare(
-                                  b.subCategoryName,
+                                const subCategoryNameA = a.subCategoryName
+                                  .trim()
+                                  .toUpperCase();
+                                const subCategoryNameB = b.subCategoryName
+                                  .trim()
+                                  .toUpperCase();
+                                return subCategoryNameA.localeCompare(
+                                  subCategoryNameB,
                                 );
                               })
                               .map((subCategory, index2) => (
