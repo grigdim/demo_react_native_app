@@ -15,6 +15,16 @@
         "aboutDrawer": "Despre",
         "exitAppDrawer": "Ieșiți din aplicație",
 
+        // Agreements
+        "privacyPolicy": "Politica de confidentialitate",
+        "intalePrivacyPolicyLink": "intale Privacy Policy",
+        "accept": "Accepta",
+
+        // Exit App
+        "exitApp": "Exit App",
+        "areYouSureExitApp": "Are you sure you want to exit the app?",
+        "mustLogInAgain": "You must log in again.",
+
         // Demo Go To
         "goToLineChartScreen": "Accesați ecranul diagramă cu linii",
         "goToAuditScreen": "Accesați ecranul de audit",
@@ -27,6 +37,8 @@
         "english": "ENGLEZĂ",
         "greek": "GRECĂ",
         "romanian": "ROMÂNĂ",
+        "no": "Nu",
+        "yes": "Da",
         "from": "From",
         "to": "To",
         "return": "Return",
