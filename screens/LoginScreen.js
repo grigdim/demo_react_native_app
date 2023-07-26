@@ -14,7 +14,7 @@ import {
   Image,
   Modal,
   TouchableWithoutFeedback,
-  Linking 
+  Linking
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState, useEffect, useRef } from 'react';
@@ -42,12 +42,17 @@ const options = [
 
 const LoginScreen = () => {
   const { t, i18n } = useTranslation();
+  const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
 
   // Privacy Policy
-
+  const [isScrolledToEnd, setScrolledToEnd] = useState(false);
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+
+  const privacyButtonStyle = isScrolledToEnd
+    ? privacyButtonStyles.buttonEnabled
+    : privacyButtonStyles.buttonDisabled;
 
   const handlePrivacyPolicy = async () => {
     setPrivacyPolicyAccepted(true);
@@ -72,9 +77,21 @@ const LoginScreen = () => {
     loadPrivacyPolicyAcceptedState();
   }, []);
 
-  const handlePrivacyPolicyLink = () => { 
+  const handlePrivacyPolicyLink = () => {
     Linking.openURL('https://www.intale.com/privacy');
   };
+
+  const handleScroll = (event) => {
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const scrollOffset = event.nativeEvent.contentOffset.y;
+    const scrollViewHeight = event.nativeEvent.layoutMeasurement.height;
+    if (scrollOffset + scrollViewHeight >= contentHeight - 20) {
+      setScrolledToEnd(true);
+    } else {
+      setScrolledToEnd(false);
+    }
+  };
+
 
   // Localization
 
@@ -207,8 +224,11 @@ const LoginScreen = () => {
         {!isPrivacyPolicyAccepted ? (
           <View className="justify-center items-center w-10/12">
             <ScrollView
+              ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
               style={{ width: '85%', height: '75%' }}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
             >
               <View
                 style={{
@@ -220,17 +240,18 @@ const LoginScreen = () => {
               >
                 <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', marginBottom: 20, marginTop: 10, textAlign: "center" }}>{t("privacyPolicy")}</Text>
                 <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                <Text style={{ fontSize: 16, color: 'blue', marginTop: 10,  marginBottom: 20}}>
-                  {t("intalePrivacyPolicyLink")}
-                </Text>
-              </TouchableOpacity>
+                  <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
+                    {t("intalePrivacyPolicyLink")}
+                  </Text>
+                </TouchableOpacity>
                 <Text >{t("privacyPolicyContent")}</Text>
               </View>
             </ScrollView>
 
             <TouchableOpacity
-              style={{ marginTop: 20 }}
+              style={privacyButtonStyle}
               onPress={handlePrivacyPolicy}
+              disabled={!isScrolledToEnd}
               className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10"
             >
               <Text style={buttonText}>{t("accept")}</Text>
@@ -464,6 +485,25 @@ const LoginScreen = () => {
     </ImageBackground>
   );
 };
+
+const privacyButtonStyles = StyleSheet.create({
+  buttonEnabled: {
+    borderRadius: 6,
+    backgroundColor: '#3885E0',
+    padding: 10,
+    alignItems: 'center',
+    opacity: 1,
+    marginTop: 20,
+  },
+  buttonDisabled: {
+    borderRadius: 2,
+    backgroundColor: 'gray',
+    padding: 10,
+    alignItems: 'center',
+    opacity: 0.8,
+    marginTop: 20,
+  },
+});
 
 const style = StyleSheet.create({
   input: {
