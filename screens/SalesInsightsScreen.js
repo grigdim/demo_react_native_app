@@ -316,10 +316,6 @@ const SalesInsightsScreen = () => {
   };
 
   useEffect(() => {
-    fetchProductCategoryNamesFromSeasonality();
-  }, []);
-
-  useEffect(() => {
     fetchTopProductsInItemSalesFromTopProducts();
     fetchTopProductsInItemSalesPerStoreFromTopProducts();
   }, [selectedSubCategories]);
@@ -364,7 +360,10 @@ const SalesInsightsScreen = () => {
   }, [subCategories]);
 
   useEffect(() => {
+    setLoading(true);
     fetchProductCategoryNames();
+    fetchProductCategoryNamesFromSeasonality();
+    setLoading(false);
   }, []);
 
   return (
