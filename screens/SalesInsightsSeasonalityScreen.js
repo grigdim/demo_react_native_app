@@ -111,7 +111,9 @@ const SalesInsightsSeasonalityScreen = () => {
                 {seasonalityPerCategory.map(item => (
                   <View className="flex-row space-x-4 p-1 rounded-md">
                     <Text className="grow-1">{item.Category}</Text>
-                    <Text>{item.currentMonth.MonthName}</Text>
+                    <Text className="bg-slate-600 rounded-md px-2 text-white">
+                      {item.currentMonth.MonthName}
+                    </Text>
                     <Text
                       className="px-2 rounded-md"
                       style={{
@@ -121,7 +123,9 @@ const SalesInsightsSeasonalityScreen = () => {
                       }}>
                       {item.currentMonth.Seasonality}%
                     </Text>
-                    <Text>{item.nextMonth.MonthName}</Text>
+                    <Text className="bg-slate-600 rounded-md px-2 text-white">
+                      {item.nextMonth.MonthName}
+                    </Text>
                     <Text
                       className="px-2 rounded-md"
                       style={{
