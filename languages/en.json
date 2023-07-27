@@ -15,8 +15,8 @@
         "TopProductsTabs": "Top Products",
         "SeasonalityTabs": "Seasonality",
         "TransactionTabs": "Transactions",
-		"DifferenceTabs": "Difference",
-		"ProductsTabs": "Products",
+        "DifferenceTabs": "Difference",
+        "ProductsTabs": "Products",
         // Agreements
         "privacyPolicy": "Privacy Policy",
         "intalePrivacyPolicyLink": "Privacy Policy Link",
@@ -171,6 +171,26 @@
         "showSelected": "Show selected",
         "showAll": "Show all",
         "selectAll": "Select all",
-        "unselectAll": "Unselect all"
+        "unselectAll": "Unselect all",
+        // All Arrays
+        "months": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        },
+        // Not needed atm
+        "subProducts": {
+            "BAR SNACKS": "BAR SNACKS",
+            "CHIPS": "CHIPS"
+        }
     }
 }
