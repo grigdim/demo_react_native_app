@@ -209,52 +209,6 @@ const SalesInsightsTopProductsScreen = () => {
     setLoading(false);
   };
 
-  // const fetchSeasonality = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-
-  //     const response = await fetch(
-  //       `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${productCategoryNameForSeasonality}`,
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //   }
-  //   // end of request
-  //   setLoading(false);
-  // };
-
-  // const fetchSeasonalityDetails = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-
-  //     const response = await fetch(
-  //       `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${productCategoryNameForSeasonalityDetails}`,
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //   }
-  //   // end of request
-  //   setLoading(false);
-  // };
-
   // const fetchTransactionsWeeks = async () => {
   //   setLoading(true);
   //   if (__DEV__ && token) {
