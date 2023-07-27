@@ -279,7 +279,7 @@ const LoginScreen = () => {
           <ScrollView
             ref={scrollViewRef}
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{ width: '100%', height: '100%', backgroundColor: 'gray' }}
+            style={{ width: '100%', height: '100%', backgroundColor: 'white', opacity: 0.1 }}
           >
           </ScrollView>) :
           !isTermsOfServiceAccepted ? (
