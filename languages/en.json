@@ -11,6 +11,12 @@
         "helpDrawer": "Help",
         "aboutDrawer": "About",
         "exitAppDrawer": "Exit App",
+        // Tabs (in caps)
+        "TopProductsTabs": "Top Products",
+        "SeasonalityTabs": "Seasonality",
+        "TransactionTabs": "Transactions",
+		"DifferenceTabs": "Difference",
+		"ProductsTabs": "Products",
         // Agreements
         "privacyPolicy": "Privacy Policy",
         "intalePrivacyPolicyLink": "Privacy Policy Link",

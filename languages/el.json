@@ -11,6 +11,12 @@
         "helpDrawer": "Υποστήριξη",
         "aboutDrawer": "Σχετικά με Εμάς",
         "exitAppDrawer": "Έξοδος από την Εφαρμογή",
+        // Tabs (in caps no intonation)
+        "TopProductsTabs": "Κορυφαια Προϊοντα",
+        "SeasonalityTabs": "Εποχικοτητα",
+        "TransactionTabs": "Συναλλαγες",
+		"DifferenceTabs": "Διαφορα",
+		"ProductsTabs": "Προϊοντα",
         // Agreements
         "privacyPolicy": "Πολιτική Απορρήτου",
         "intalePrivacyPolicyLink": "Σύνδεσμος Πολιτικής Απορρήτου",
