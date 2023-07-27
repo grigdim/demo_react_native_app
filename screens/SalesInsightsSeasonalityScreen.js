@@ -23,6 +23,18 @@ const SalesInsightsSeasonalityScreen = () => {
   const [categories, setCategories] = useState([]);
   const [seasonalityPerCategory, setSeasonalityPerCategory] = useState([]);
 
+  const getBackgroundColor = value => {
+    if (value === 0) {
+      return 'transparent';
+    } else if (value > 0) {
+      const opacity = Math.min(1, 0.25 + value / 200);
+      return `rgba(0, 255, 0, ${opacity})`;
+    } else {
+      const opacity = Math.min(1, 0.25 + Math.abs(value) / 200);
+      return `rgba(255, 0, 0, ${opacity})`;
+    }
+  };
+
   const fetchProductCategoryNamesFromSeasonality = async () => {
     // setLoading(true);
     if (__DEV__ && token) {
@@ -55,6 +67,7 @@ const SalesInsightsSeasonalityScreen = () => {
       });
 
       await Promise.all(promises.map(promise => promise()));
+      let seasonalityPerCategoryArrFormatted = [];
       seasonalityPerCategoryArr.map(item => {
         let obj = {};
         console.log(item);
@@ -69,10 +82,9 @@ const SalesInsightsSeasonalityScreen = () => {
           MonthName: item[1].MonthName,
           Seasonality: item[1].Seasonality,
         };
-        // console.log(obj);
+        seasonalityPerCategoryArrFormatted.push(obj);
       });
-      console.log(seasonalityPerCategoryArr);
-      setSeasonalityPerCategory(seasonalityPerCategoryArr);
+      setSeasonalityPerCategory(seasonalityPerCategoryArrFormatted);
       // end of request
       // setLoading(false);
     }
@@ -86,21 +98,51 @@ const SalesInsightsSeasonalityScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <ScrollView className="w-full space-y-4">
-        {/*Seasonality per product category start*/}
-        <ScrollView horizontal>
-          <View
-            className="bg-white m-4 p-4 space-y-2 rounded-lg"
-            style={{elevation: 10}}>
-            {}
-          </View>
-        </ScrollView>
-        {/*Seasonality per product category end*/}
+      {loading ? (
+        <ActivityIndicator color="rgb(34 211 238)" size="large" />
+      ) : (
+        <ScrollView className="w-full space-y-4">
+          {/*Seasonality per product category start*/}
+          {seasonalityPerCategory.length > 0 && (
+            <ScrollView horizontal>
+              <View
+                className="bg-white m-4 p-4 space-y-2 rounded-lg"
+                style={{elevation: 10}}>
+                {seasonalityPerCategory.map(item => (
+                  <View className="flex-row space-x-4 p-1 rounded-md">
+                    <Text className="grow-1">{item.Category}</Text>
+                    <Text>{item.currentMonth.MonthName}</Text>
+                    <Text
+                      className="px-2 rounded-md"
+                      style={{
+                        backgroundColor: getBackgroundColor(
+                          item.currentMonth.Seasonality,
+                        ),
+                      }}>
+                      {item.currentMonth.Seasonality}%
+                    </Text>
+                    <Text>{item.nextMonth.MonthName}</Text>
+                    <Text
+                      className="px-2 rounded-md"
+                      style={{
+                        backgroundColor: getBackgroundColor(
+                          item.nextMonth.Seasonality,
+                        ),
+                      }}>
+                      {item.nextMonth.Seasonality}%
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          )}
+          {/*Seasonality per product category end*/}
 
-        {/*Seasonality per product category with sub categories start*/}
-        <View></View>
-        {/*Seasonality per product category with sub categories end*/}
-      </ScrollView>
+          {/*Seasonality per product category with sub categories start*/}
+          <View></View>
+          {/*Seasonality per product category with sub categories end*/}
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
