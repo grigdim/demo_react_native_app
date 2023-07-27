@@ -60,7 +60,7 @@ const LoginScreen = () => {
     } catch (error) {
       console.error('Error accepting Privacy Policy:', error); // Never seen
     }
-  }; 
+  };
 
   const handlePrivacyPolicyLink = () => {
     Linking.openURL('https://www.intale.com/privacy');
@@ -77,7 +77,7 @@ const LoginScreen = () => {
     } catch (error) {
       console.error('Error accepting Terms of Service:', error); // Never seen
     }
-  }; 
+  };
 
   // New ToS to be added
   // const handleTermsOfServiceLink = () => {
@@ -112,7 +112,7 @@ const LoginScreen = () => {
     };
     loadTermsOfServiceAcceptedState();
   }, []);
-  
+
   useEffect(() => {
     const loadPrivacyPolicyAcceptedState = async () => {
       try {
@@ -256,7 +256,17 @@ const LoginScreen = () => {
   useEffect(() => {
     isRunningOnEmulator();
   }, [emulator]);
+  const [isRenderVisible, setIsRenderVisible] = useState(true);
 
+  useEffect(() => {
+    // Using it since the language picker rerenders the screen to show the change
+    const timeoutId = setTimeout(() => {
+      setIsRenderVisible(false);
+    }, 100); 
+    // Cleanup function to clear the timeout if the component unmounts before the delay finishes
+    return () => clearTimeout(timeoutId);
+  }, []); 
+  
   return (
     <ImageBackground
       source={require('../images/intale3.png')}
@@ -264,46 +274,51 @@ const LoginScreen = () => {
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
 
-        {/* TERMS OF SERVICE */}
-        {!isTermsOfServiceAccepted ? (
-          <View className="justify-center items-center w-10/12">
-            <ScrollView
-              ref={scrollViewRef}
-              className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ width: '85%', height: '75%' }}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
-            >
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  padding: 20,
-                  borderRadius: 10,
-                  elevation: 40,
-                }}
+        {/* RERENDERED SCREEN FOR LANGUAGE CHANGE */}
+        {isRenderVisible  ? (
+          <ScrollView
+            ref={scrollViewRef}
+            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+            style={{ width: '100%', height: '100%', backgroundColor: 'gray' }}
+          >
+          </ScrollView>) :
+          !isTermsOfServiceAccepted ? (
+            <View className="justify-center items-center w-10/12">
+              <ScrollView
+                ref={scrollViewRef}
+                className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                style={{ width: '85%', height: '75%' }}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
               >
-                <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', marginBottom: 20, marginTop: 10, textAlign: "center" }}>{t("termsOfService")}</Text>
-                <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                  {/* <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    padding: 20,
+                    borderRadius: 10,
+                    elevation: 40,
+                  }}
+                >
+                  <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', marginBottom: 20, marginTop: 10, textAlign: "center" }}>{t("termsOfService")}</Text>
+                  <TouchableOpacity onPress={handlePrivacyPolicyLink}>
+                    {/* <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
                     {t("intaleTermsOfServiceLink")}
                   </Text> */}
-                </TouchableOpacity>
-                <Text >{t("termsOfServiceContent")}</Text>
-              </View>
-            </ScrollView>
+                  </TouchableOpacity>
+                  <Text >{t("termsOfServiceContent")}</Text>
+                </View>
+              </ScrollView>
 
-            <TouchableOpacity
-              style={acceptButtonStyle}
-              onPress={handleTermsOfService}
-              disabled={!isScrolledToEnd}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10"
-            >
-              <Text style={buttonText}>{t("accept")}</Text>
-            </TouchableOpacity>
-          </View>
-        ) :
-
-          !isPrivacyPolicyAccepted ? (
+              <TouchableOpacity
+                style={acceptButtonStyle}
+                onPress={handleTermsOfService}
+                disabled={!isScrolledToEnd}
+                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10"
+              >
+                <Text style={buttonText}>{t("accept")}</Text>
+              </TouchableOpacity>
+            </View>
+          ) : !isPrivacyPolicyAccepted ? (
             <View className="justify-center items-center w-10/12">
               <ScrollView
                 ref={scrollViewRef}
