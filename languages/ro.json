@@ -17,7 +17,9 @@
 
         // Agreements
         "privacyPolicy": "Politica de confidentialitate",
+        "termsOfService": "Termenii serviciului",
         "intalePrivacyPolicyLink": "intale Privacy Policy",
+        "intaleTermsOfServiceLink": "Terms of Service Link",
         "accept": "Accepta",
 
         // Exit App
