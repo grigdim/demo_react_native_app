@@ -15,6 +15,8 @@
         "TopProductsTabs": "Top Products",
         "SeasonalityTabs": "Seasonality",
         "TransactionTabs": "Transactions",
+        "ByCategoriesTabs": "By Categories",
+        "BySubCategoriesTabs": "By Sub Categories",
         "DifferenceTabs": "Difference",
         "ProductsTabs": "Products",
         // Agreements
@@ -156,8 +158,8 @@
         "ProfitPercentage": "% PROFIT", // Category Details API
         "TotalTurnoverAndProfit": "Total Turnover and Profit",
         // Sales Tabs
-        "SalesStatistics": "Sales statistics",
-        "SalesInsights": "Sales insights",
+        "SalesStatistics": "Sales Statistics",
+        "SalesInsights": "Sales Insights",
         // Sales Insights
         "TopProductsInItemsSales": "Top products in items sales",
         "TopProductsInItemsSalesPerStore": "Top products in items sales per store",
