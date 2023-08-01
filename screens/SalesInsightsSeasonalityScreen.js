@@ -10,15 +10,15 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { selectToken } from '../features/bootstrap';
-import { useSelector } from 'react-redux';
-import { ip } from '@env';
+import React, {useState, useEffect} from 'react';
+import {selectToken} from '../features/bootstrap';
+import {useSelector} from 'react-redux';
+import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const SalesInsightsSeasonalityScreen = () => {
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const token = useSelector(selectToken);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -26,34 +26,34 @@ const SalesInsightsSeasonalityScreen = () => {
   const [seasonalityDetailsPerCategory, setSeasonalityDetailsPerCategory] =
     useState([]);
 
-  const getLocalizedMonthName = (month) => {
+  const getLocalizedMonthName = month => {
     switch (month) {
       case 1:
-        return t("months.january");
+        return t('months.january');
       case 2:
-        return t("months.february");
+        return t('months.february');
       case 3:
-        return t("months.march");
+        return t('months.march');
       case 4:
-        return t("months.april");
+        return t('months.april');
       case 5:
-        return t("months.may");
+        return t('months.may');
       case 6:
-        return t("months.june");
+        return t('months.june');
       case 7:
-        return t("months.july");
+        return t('months.july');
       case 8:
-        return t("months.august");
+        return t('months.august');
       case 9:
-        return t("months.september");
+        return t('months.september');
       case 10:
-        return t("months.october");
+        return t('months.october');
       case 11:
-        return t("months.november");
+        return t('months.november');
       case 12:
-        return t("months.december");
+        return t('months.december');
       default:
-        return "";
+        return '';
     }
   };
 
@@ -70,7 +70,6 @@ const SalesInsightsSeasonalityScreen = () => {
   };
 
   const fetchProductCategoryNamesFromSeasonality = async () => {
-    // setLoading(true);
     if (__DEV__ && token) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -182,12 +181,6 @@ const SalesInsightsSeasonalityScreen = () => {
           return collator.compare(categoryA, categoryB);
         }),
       );
-
-      console.log('====================================');
-      console.log(seasonalityDetailsPerCategoryArrFormatted);
-      console.log('====================================');
-      // end of request
-      // setLoading(false);
     }
   };
 
@@ -203,15 +196,17 @@ const SalesInsightsSeasonalityScreen = () => {
         <ActivityIndicator color="rgb(34 211 238)" size="large" />
       ) : (
         <ScrollView className="space-y-4">
-          <Text style={{ fontSize: 16, color: 'rgb(86, 113, 144)' }} className="underline text-center pt-4">
-            {t("ByCategoriesTabs").toUpperCase()}
+          <Text
+            style={{fontSize: 16, color: 'rgb(86, 113, 144)'}}
+            className="underline text-center pt-4">
+            {t('ByCategoriesTabs').toUpperCase()}
           </Text>
           {/*Seasonality per product category start*/}
           {seasonalityPerCategory.length > 0 && (
             <ScrollView horizontal className="">
               <View
                 className="bg-white mx-2 p-2 space-y-2 rounded-lg"
-                style={{ elevation: 10 }}>
+                style={{elevation: 10}}>
                 {seasonalityPerCategory.map(item => (
                   <View className="flex-row space-x-4 p-1 mr-0 rounded-md">
                     <Text className="">{item.Category}</Text>
@@ -247,14 +242,16 @@ const SalesInsightsSeasonalityScreen = () => {
           {/*Seasonality per product category end*/}
 
           {/*Seasonality per product category with sub categories start*/}
-          <Text style={{ fontSize: 16, color: 'rgb(86, 113, 144)' }} className="underline text-center">
-            {t("BySubCategoriesTabs").toUpperCase()}
+          <Text
+            style={{fontSize: 16, color: 'rgb(86, 113, 144)'}}
+            className="underline text-center">
+            {t('BySubCategoriesTabs').toUpperCase()}
           </Text>
           {seasonalityDetailsPerCategory.length > 0 && (
             <ScrollView horizontal>
               <View
                 className="bg-white mx-2 p-2 space-y-2 rounded-lg divide-y-2 divide-gray-500"
-                style={{ elevation: 10 }}>
+                style={{elevation: 10}}>
                 {seasonalityDetailsPerCategory.map(item => (
                   <View className="space-x-4 p-1 flex-row">
                     <Text className="w-1/4 text-left font-bold">

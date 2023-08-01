@@ -209,38 +209,6 @@ const SalesInsightsTopProductsScreen = () => {
     setLoading(false);
   };
 
-  // const fetchTransactionsWeeks = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-
-  //     const response = await fetch(
-  //       // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
-  //       `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-
-  //     // setReportsGetTransactionsWeeksFromBoApi(() => {
-  //     //   let r = [];
-  //     //   data.map(x => {
-  //     //     r.push(x.WeekDescription);
-  //     //   });
-  //     //   return r;
-  //     // });
-  //   }
-  //   // end of request
-  //   setLoading(false);
-  // };
-
   useEffect(() => {
     fetchTopProductsInItemSalesFromTopProducts();
     fetchTopProductsInItemSalesPerStoreFromTopProducts();
