@@ -45,7 +45,7 @@ const SalesInsightsTransactionsScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      // console.log(data);
+      // console.log('transaction weeks', data);
       setTransactionsWeeks(data);
 
       const response2 = await fetch(
@@ -53,74 +53,88 @@ const SalesInsightsTransactionsScreen = () => {
         requestOptions,
       );
       const data2 = await response2.json();
-      // console.log(data2);
+      // console.log('transaction stores', data2);
       setTransactionsStores(data2);
+
       const promises = [];
       let arr = [];
-      data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=4043&weekDescription${item.WeekDescription}`;
-        promises.push(async () => {
-          const response3 = await fetch(url, requestOptions);
-          const data3 = await response3.json();
-          arr.push(data3);
-        });
+      data.forEach(item => {
+        const url = `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=4043&weekDescription=${item.WeekDescription}`;
+        promises.push(
+          fetch(url, requestOptions)
+            .then(response3 => response3.json())
+            .then(data3 => {
+              arr.push(data3);
+            }),
+        );
       });
-      await Promise.all(promises.map(promise => promise()));
+      await Promise.all(promises);
+      // console.log('top transaction per hours', arr);
       setTopTransactionsHours(arr);
 
       const promises2 = [];
       let arr2 = [];
-      data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=4043&weekDescription${item.WeekDescription}`;
-        promises2.push(async () => {
-          const response4 = await fetch(url, requestOptions);
-          const data4 = await response4.json();
-          arr2.push(data4);
-        });
+
+      data.forEach(item => {
+        const url = `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=4043&weekDescription=${item.WeekDescription}`;
+        promises2.push(
+          fetch(url, requestOptions)
+            .then(response4 => response4.json())
+            .then(data4 => {
+              arr2.push(data4);
+            }),
+        );
       });
-      await Promise.all(promises2.map(promise => promise()));
+      await Promise.all(promises2);
+      // console.log('top transactions day', arr2);
       setTopTransactionsDay(arr2);
 
       const promises3 = [];
       let arr3 = [];
-      data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=4043&weekDescription${item.WeekDescription}`;
-        promises3.push(async () => {
-          const response5 = await fetch(url, requestOptions);
-          const data5 = await response5.json();
-          arr3.push(data5);
-        });
+      data.forEach(item => {
+        const url = `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=4043&weekDescription=${item.WeekDescription}`;
+        promises3.push(
+          fetch(url, requestOptions)
+            .then(response5 => response5.json())
+            .then(data5 => {
+              arr3.push(data5);
+            }),
+        );
       });
-      await Promise.all(promises3.map(promise => promise()));
-      console.log(arr3);
+      await Promise.all(promises3);
+      // console.log('transactions per hours', arr3);
       setTransactionsPerHours(arr3);
 
       const promises4 = [];
       let arr4 = [];
-      data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=4043&weekDescription${item.WeekDescription}`;
-        promises4.push(async () => {
-          const response6 = await fetch(url, requestOptions);
-          const data6 = await response6.json();
-          arr4.push(data6);
-        });
+      data.forEach(item => {
+        const url = `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=4043&weekDescription=${item.WeekDescription}`;
+        promises4.push(
+          fetch(url, requestOptions)
+            .then(response6 => response6.json())
+            .then(data6 => {
+              arr4.push(data6);
+            }),
+        );
       });
-      await Promise.all(promises4.map(promise => promise()));
-      console.log(arr4);
+      await Promise.all(promises4);
+      // console.log('transactions per day', arr4);
       setTransactionsPerDay(arr4);
 
       const promises5 = [];
       let arr5 = [];
-      data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=4043&weekDescription${item.WeekDescription}`;
-        promises5.push(async () => {
-          const response7 = await fetch(url, requestOptions);
-          const data7 = await response7.json();
-          arr5.push(data7);
-        });
+      data.forEach(item => {
+        const url = `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=4043&weekDescription=${item.WeekDescription}`;
+        promises5.push(
+          fetch(url, requestOptions)
+            .then(response7 => response7.json())
+            .then(data7 => {
+              arr5.push(data7);
+            }),
+        );
       });
-      await Promise.all(promises5.map(promise => promise()));
-      console.log(arr5);
+      await Promise.all(promises5);
+      console.log('analysis week hourly transactions', arr5);
       setAnalysisWeekHourlyTransactions(arr5);
     }
     // end of request
