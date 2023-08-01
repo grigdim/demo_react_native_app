@@ -273,7 +273,7 @@ const LoginScreen = () => {
 
   return (
     <ImageBackground
-      source={require('../images/intale3.png')}
+      source={require('../images/intale_statistics_home.png')}
       className="flex-1 w-full h-full"
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
