@@ -40,6 +40,15 @@ const SalesInsightsTransactionsScreen = () => {
   const [transactionsPerDay, setTransactionsPerDay] = useState([]);
   const [analysisWeekHourlyTransactions, setAnalysisWeekHourlyTransactions] =
     useState([]);
+  const dayOrder = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   const fetchTransactionsWeeks = async () => {
     setLoading(true);
@@ -157,7 +166,7 @@ const SalesInsightsTransactionsScreen = () => {
           return dayA - dayB; // Compare days
         }
       });
-      // console.log('transactions per day', arr4Formatted);
+      console.log('transactions per day', arr4Formatted[0]);
       setTransactionsPerDay(arr4Formatted);
 
       const promises5 = [];
@@ -257,7 +266,7 @@ const SalesInsightsTransactionsScreen = () => {
       )}
       {/*Transactions per hour end*/}
       {/*Transactions per day start*/}
-      {transactionsPerHours.length > 0 && (
+      {transactionsPerDay.length > 0 && (
         <ScrollView horizontal className="w-full">
           <View
             className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
@@ -271,7 +280,7 @@ const SalesInsightsTransactionsScreen = () => {
               theme={VictoryTheme.material}
               height={height / 2}
               padding={{top: 25, left: 50, bottom: 50, right: 25}}
-              domainPadding={{x: [-10, 0], y: 50}}>
+              domainPadding={{x: [30, 0], y: 50}}>
               <VictoryLegend
                 orientation="horizontal"
                 itemsPerRow={2}
@@ -305,13 +314,16 @@ const SalesInsightsTransactionsScreen = () => {
                 }}
               />
               {/*y axis end*/}
-              {/*turnover with vat start*/}
+
               <VictoryBar
                 alignment="center"
-                data={transactionsPerDay[0].data.map(item => ({
-                  x: item.MilitaryHour,
-                  y: item.Transactions,
-                }))}
+                data={transactionsPerDay[0].data.map(item => {
+                  console.log(item);
+                  return {
+                    x: item.DayName,
+                    y: item.Transactions,
+                  };
+                })}
                 style={{
                   data: {fill: 'red'},
                   labels: {fill: 'white'},
@@ -323,7 +335,6 @@ const SalesInsightsTransactionsScreen = () => {
                 labels={({datum}) => datum.y}
                 labelComponent={<VictoryLabel dy={30} />}
               />
-              {/*turnover with vat end*/}
             </VictoryChart>
           </View>
         </ScrollView>
