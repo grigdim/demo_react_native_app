@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -12,15 +13,15 @@ const SalesInsightsScreen = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name={t("TopProductsTabs")}
+        name={t('TopProductsTabs')}
         component={SalesInsightsTopProductsScreen}
       />
       <Tab.Screen
-        name={t("SeasonalityTabs")}
+        name={t('SeasonalityTabs')}
         component={SalesInsightsSeasonalityScreen}
       />
       <Tab.Screen
-        name={t("TransactionTabs")}
+        name={t('TransactionTabs')}
         component={SalesInsightsTransactionsScreen}
       />
     </Tab.Navigator>

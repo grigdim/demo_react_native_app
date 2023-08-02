@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   View,
@@ -7,6 +9,7 @@ import {
   Modal,
   ActivityIndicator,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {selectToken} from '../features/bootstrap';
@@ -14,8 +17,19 @@ import {useSelector} from 'react-redux';
 import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useTranslation} from 'react-i18next';
+import {
+  VictoryLegend,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLabel,
+  VictoryAxis,
+  VictoryArea,
+  VictoryTooltip,
+  VictoryBar,
+} from 'victory-native';
 
 const SalesInsightsTransactionsScreen = () => {
+  const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
@@ -24,7 +38,7 @@ const SalesInsightsTransactionsScreen = () => {
   const [topTransactionsDay, setTopTransactionsDay] = useState([]);
   const [transactionsPerHours, setTransactionsPerHours] = useState([]);
   const [transactionsPerDay, setTransactionsPerDay] = useState([]);
-  const [αnalysisWeekHourlyTransactions, setAnalysisWeekHourlyTransactions] =
+  const [analysisWeekHourlyTransactions, setAnalysisWeekHourlyTransactions] =
     useState([]);
 
   const fetchTransactionsWeeks = async () => {
@@ -97,13 +111,26 @@ const SalesInsightsTransactionsScreen = () => {
           fetch(url, requestOptions)
             .then(response5 => response5.json())
             .then(data5 => {
-              arr3.push(data5);
+              arr3.push({week: item.WeekDescription, data: data5});
             }),
         );
       });
       await Promise.all(promises3);
-      // console.log('transactions per hours', arr3);
-      setTransactionsPerHours(arr3);
+      let arr3Formatted = arr3.sort((a, b) => {
+        const [dayA, monthA, yearA] = a.week.split('/').map(Number);
+        const [dayB, monthB, yearB] = b.week.split('/').map(Number);
+
+        if (yearA !== yearB) {
+          return yearA - yearB; // Compare years
+        } else if (monthA !== monthB) {
+          return monthA - monthB; // Compare months
+        } else {
+          return dayA - dayB; // Compare days
+        }
+      });
+
+      // console.log('transactions per hours', arr3Formatted);
+      setTransactionsPerHours(arr3Formatted);
 
       const promises4 = [];
       let arr4 = [];
@@ -113,13 +140,25 @@ const SalesInsightsTransactionsScreen = () => {
           fetch(url, requestOptions)
             .then(response6 => response6.json())
             .then(data6 => {
-              arr4.push(data6);
+              arr4.push({week: item.WeekDescription, data: data6});
             }),
         );
       });
       await Promise.all(promises4);
-      // console.log('transactions per day', arr4);
-      setTransactionsPerDay(arr4);
+      let arr4Formatted = arr4.sort((a, b) => {
+        const [dayA, monthA, yearA] = a.week.split('/').map(Number);
+        const [dayB, monthB, yearB] = b.week.split('/').map(Number);
+
+        if (yearA !== yearB) {
+          return yearA - yearB; // Compare years
+        } else if (monthA !== monthB) {
+          return monthA - monthB; // Compare months
+        } else {
+          return dayA - dayB; // Compare days
+        }
+      });
+      // console.log('transactions per day', arr4Formatted);
+      setTransactionsPerDay(arr4Formatted);
 
       const promises5 = [];
       let arr5 = [];
@@ -134,7 +173,7 @@ const SalesInsightsTransactionsScreen = () => {
         );
       });
       await Promise.all(promises5);
-      console.log('analysis week hourly transactions', arr5);
+      // console.log('analysis week hourly transactions', arr5);
       setAnalysisWeekHourlyTransactions(arr5);
     }
     // end of request
@@ -146,9 +185,151 @@ const SalesInsightsTransactionsScreen = () => {
   }, []);
 
   return (
-    <View>
-      <Text>SalesInsightsTransactionsScreen</Text>
-    </View>
+    <ScrollView className="space-y-2">
+      {/*Transactions per hour start*/}
+      {transactionsPerHours.length > 0 && (
+        <ScrollView horizontal className="w-full">
+          <View
+            className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
+            style={{elevation: 10}}>
+            <View className="bg-slate-500 p-3 rounded-t-lg">
+              <Text className="text-white underline">
+                Transactions per hour
+              </Text>
+            </View>
+            <VictoryChart
+              theme={VictoryTheme.material}
+              height={height / 2}
+              padding={{top: 25, left: 50, bottom: 50, right: 25}}
+              domainPadding={{y: 50}}>
+              <VictoryLegend
+                orientation="horizontal"
+                itemsPerRow={2}
+                x={30}
+                y={10}
+                style={{
+                  title: {fontSize: 20},
+                  labels: {fill: 'white'},
+                }}
+                data={[]}
+              />
+              {/*x axis start*/}
+              <VictoryAxis
+                fixLabelOverlap={true}
+                style={{
+                  grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                  axis: {stroke: 'lightgray'},
+                  ticks: {stroke: 'lightgray'},
+                  tickLabels: {fill: 'lightgray'},
+                }}
+              />
+              {/*x axis end*/}
+              {/*y axis start*/}
+              <VictoryAxis
+                dependentAxis
+                style={{
+                  grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                  axis: {stroke: 'lightgray'},
+                  ticks: {stroke: 'lightgray'},
+                  tickLabels: {fill: 'lightgray'},
+                }}
+              />
+              {/*y axis end*/}
+              {/*turnover with vat start*/}
+              <VictoryArea
+                interpolation="natural"
+                data={transactionsPerHours[0].data.map(item => ({
+                  x: item.MilitaryHour,
+                  y: item.Transactions,
+                }))}
+                style={{
+                  data: {fill: 'rgba(162, 247, 2, 0.3)'},
+                }}
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 1000},
+                }}
+              />
+              {/*turnover with vat end*/}
+            </VictoryChart>
+          </View>
+        </ScrollView>
+      )}
+      {/*Transactions per hour end*/}
+      {/*Transactions per day start*/}
+      {transactionsPerHours.length > 0 && (
+        <ScrollView horizontal className="w-full">
+          <View
+            className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
+            style={{elevation: 10}}>
+            <View className="bg-slate-500 p-3 rounded-t-lg">
+              <Text className="text-white underline">
+                Transactions per hour
+              </Text>
+            </View>
+            <VictoryChart
+              theme={VictoryTheme.material}
+              height={height / 2}
+              padding={{top: 25, left: 50, bottom: 50, right: 25}}
+              domainPadding={{x: [-10, 0], y: 50}}>
+              <VictoryLegend
+                orientation="horizontal"
+                itemsPerRow={2}
+                x={30}
+                y={10}
+                style={{
+                  title: {fontSize: 20},
+                  labels: {fill: 'white'},
+                }}
+                data={[]}
+              />
+              {/*x axis start*/}
+              <VictoryAxis
+                fixLabelOverlap={true}
+                style={{
+                  grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                  axis: {stroke: 'lightgray'},
+                  ticks: {stroke: 'lightgray'},
+                  tickLabels: {fill: 'lightgray'},
+                }}
+              />
+              {/*x axis end*/}
+              {/*y axis start*/}
+              <VictoryAxis
+                dependentAxis
+                style={{
+                  grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                  axis: {stroke: 'lightgray'},
+                  ticks: {stroke: 'lightgray'},
+                  tickLabels: {fill: 'lightgray'},
+                }}
+              />
+              {/*y axis end*/}
+              {/*turnover with vat start*/}
+              <VictoryBar
+                alignment="center"
+                data={transactionsPerDay[0].data.map(item => ({
+                  x: item.MilitaryHour,
+                  y: item.Transactions,
+                }))}
+                style={{
+                  data: {fill: 'red'},
+                  labels: {fill: 'white'},
+                }}
+                animate={{
+                  duration: 1000,
+                  onLoad: {duration: 1000},
+                }}
+                labels={({datum}) => datum.y}
+                labelComponent={<VictoryLabel dy={30} />}
+              />
+              {/*turnover with vat end*/}
+            </VictoryChart>
+          </View>
+        </ScrollView>
+      )}
+      {/*Transactions per day end*/}
+    </ScrollView>
   );
 };
 
