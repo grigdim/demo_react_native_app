@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable dot-notation */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -100,8 +101,8 @@ const SalesInsightsSeasonalityScreen = () => {
           seasonalityPerCategoryArr.push(data2);
         });
       });
-
       await Promise.all(promises.map(promise => promise()));
+
       let seasonalityPerCategoryArrFormatted = [];
       seasonalityPerCategoryArr.map(item => {
         let obj = {};
@@ -136,8 +137,8 @@ const SalesInsightsSeasonalityScreen = () => {
           seasonalityDetailsPerCategoryArr.push(data2);
         });
       });
-
       await Promise.all(promises2.map(promise => promise()));
+
       let seasonalityDetailsPerCategoryArrFormatted =
         seasonalityDetailsPerCategoryArr.map(arr => {
           const obj = {
