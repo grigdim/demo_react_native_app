@@ -17,32 +17,32 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const options = [
-  {label: 'Ελληνικά', value: 'el'},
-  {label: 'English', value: 'en'},
-  {label: 'Românesc', value: 'ro'},
-];
 
 const LoginScreen = () => {
-  const {t, i18n} = useTranslation();
+  const options = [
+    { label: 'Ελληνικά', value: 'el' },
+    { label: 'English', value: 'en' },
+    { label: 'Românesc', value: 'ro' },
+  ];
+  const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -50,6 +50,88 @@ const LoginScreen = () => {
   const acceptButtonStyle = isScrolledToEnd
     ? acceptButtonStyles.buttonEnabled
     : acceptButtonStyles.buttonDisabled;
+
+
+  // TO BE IMPLEMENTED - START
+
+  const [VATbyEmailFromBoApi, setVATbyEmailFromBoApi] = useState();
+  const [allVATsbyEmailFromBoApi, setAllVATsByEmailFromBoApi] = useState();
+  const [infoByVATfromBoApi, setInfoByVATfromBoApi] = useState();
+
+  const fetchVATbyEmail = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailassignedvats/jzois1967@gmail.com`, // HARD CODED ATM
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+      setVATbyEmailFromBoApi(data);
+    }
+    setLoading(false);
+  };
+
+  const fetchAllVATsbyEmail = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailserverassignedvats/inkat`, // HARD CODED ATM
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+      setAllVATsByEmailFromBoApi(data);
+    }
+    setLoading(false);
+  };
+
+  const fetchInfoByVAT = async () => {
+    setLoading(true);
+    if (__DEV__ && token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+      const queryParams = new URLSearchParams({ // Needed to get the data for now
+        "loadDwStageInfo": false,
+        "loadPmiInfo": false
+      });
+      
+      const response = await fetch(
+        `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/vat/038588921/intaleInfo?${queryParams}`, // HARD CODED ATM
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data);
+      setInfoByVATfromBoApi(data);
+    }
+    setLoading(false);
+  };
+
+  // TO BE IMPLEMENTED - END
 
   // Privacy Policy
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
@@ -136,7 +218,7 @@ const LoginScreen = () => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
+      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
     }
   }, [isTermsOfServiceAccepted]);
 
@@ -151,8 +233,8 @@ const LoginScreen = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const {height, width} = Dimensions.get('screen');
-  const {input, buttonText, disabledButton} = style;
+  const { height, width } = Dimensions.get('screen');
+  const { input, buttonText, disabledButton } = style;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [vat, setVat] = useState('');
@@ -210,7 +292,7 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-      email === 'gsakellaropoulos@intale.com'
+        email === 'gsakellaropoulos@intale.com'
         ? setRegisteredEmail(true)
         : setRegisteredEmail(false);
       setLogin(false);
@@ -294,7 +376,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -337,7 +419,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -384,7 +466,7 @@ const LoginScreen = () => {
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{height: height / 1.33}}>
+            style={{ height: height / 1.33 }}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !token ? (
@@ -399,7 +481,7 @@ const LoginScreen = () => {
                   name="user"
                   size={75}
                   color="white"
-                  // color="rgb(59 130 246)"
+                // color="rgb(59 130 246)"
                 />
                 <Text className="text-white text-3xl">
                   {t('helloIntalerLoginScreen')}
@@ -503,13 +585,13 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{height: height / 1.33}}>
+              style={{ height: height / 1.33 }}>
               <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('LineChartScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToLineChartScreen')}
                 </Text>
@@ -520,7 +602,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('AuditScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToAuditScreen')}
                 </Text>
@@ -531,7 +613,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('StoreScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToStoreScreen')}
                 </Text>
@@ -542,7 +624,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('ProductSalesScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToProductSalesScreen')}
                 </Text>
@@ -553,7 +635,7 @@ const LoginScreen = () => {
                 onPress={() => {
                   navigation.navigate('SalesTabsScreen');
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToSalesTabsScreen')}
                 </Text>
@@ -568,7 +650,7 @@ const LoginScreen = () => {
                   setVat('');
                   setLogin(true);
                 }}
-                style={{elevation: 20}}>
+                style={{ elevation: 20 }}>
                 <Text className="text-center text-xl text-bold text-white">
                   {t('deleteTokenAndLoginAgain')}
                 </Text>
@@ -585,8 +667,8 @@ const LoginScreen = () => {
                         i18n.language === 'el'
                           ? require('../images/greece.png')
                           : i18n.language === 'en'
-                          ? require('../images/england.png')
-                          : require('../images/romania.png')
+                            ? require('../images/england.png')
+                            : require('../images/romania.png')
                       }
                     />
                   </TouchableOpacity>
