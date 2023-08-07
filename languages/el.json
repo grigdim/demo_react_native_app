@@ -173,6 +173,9 @@
         "showAll": "Ένδειξη όλων",
         "selectAll": "Επιλογή όλων",
         "unselectAll": "Αποεπιλογή όλων",
+        "TransactionsPerHour": "Συναλλαγές ανά ώρα",
+        "TransactionsPerDay": "Συναλλαγές ανά ημέρα",
+        "WeeklyAnalysisOfHourlyTransactions": "Εβδομαδιαία Ανάλυση ωριαίων συναλλαγών",
         // All Arrays
         "months": {
             "january": "Ιανουάριος",

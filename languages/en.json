@@ -174,6 +174,9 @@
         "showAll": "Show all",
         "selectAll": "Select all",
         "unselectAll": "Unselect all",
+        "TransactionsPerHour": "Transaction Per Hour",
+        "TransactionsPerDay": "Transaction Per Day",
+        "WeeklyAnalysisOfHourlyTransactions": "Weekly Analysis of Hourly Transactions",
         // All Arrays
         "months": {
             "january": "January",
