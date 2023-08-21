@@ -34,7 +34,7 @@ import DrawerHeader from './DrawerHeader';
 import { useTranslation } from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useInfo } from '../components/PersonalInfoTaken';
 
 const LoginScreen = () => {
   const options = [
@@ -42,6 +42,7 @@ const LoginScreen = () => {
     { label: 'English', value: 'en' },
     { label: 'Românesc', value: 'ro' },
   ];
+  const { setInfoVat, setInfoPrimaryEmail } = useInfo();
   const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
@@ -214,13 +215,21 @@ const LoginScreen = () => {
     loadPrivacyPolicyAcceptedState();
   }, []);
 
+  // useEffect(() => {
+  //   // Check if the Terms of Service has been accepted
+  //   if (isTermsOfServiceAccepted) {
+  //     // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
+  //     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
+  //   }
+  // }, [isTermsOfServiceAccepted]);
+
   useEffect(() => {
     // Check if the Terms of Service has been accepted
-    if (isTermsOfServiceAccepted) {
+    if (isTermsOfServiceAccepted && scrollViewRef.current) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
       scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
     }
-  }, [isTermsOfServiceAccepted]);
+  }, [isTermsOfServiceAccepted, scrollViewRef]);
 
   // Localization
 
@@ -267,6 +276,7 @@ const LoginScreen = () => {
   const handleSubmitVat = () => {
     if (vat.length === 9 && /^\d+$/.test(vat)) {
       setRegisteredEmail(true);
+      setInfoVat(vat);
     } else {
       Alert.alert(t('warning'), t('validVatNumber'), [
         {
@@ -292,9 +302,10 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-        email === 'gsakellaropoulos@intale.com'
-        ? setRegisteredEmail(true)
-        : setRegisteredEmail(false);
+      email === 'gsakellaropoulos@intale.com'
+      ? setRegisteredEmail(true)
+      : setRegisteredEmail(false);
+      setInfoPrimaryEmail(email);
       setLogin(false);
     } else {
       Alert.alert(t('warning'), t('validEmail'), [

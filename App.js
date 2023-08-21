@@ -20,6 +20,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { InfoProvider } from './components/PersonalInfoTaken';
 import {
   SafeAreaView,
   View,
@@ -152,71 +153,73 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Provider store={store}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Root"
-            component={Root}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="LineChartScreen"
-            component={LineChartScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="BarChartScreen"
-            component={BarChartScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AuditScreen"
-            component={AuditScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="StoreScreen"
-            component={StoreScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TurnoverScreen"
-            component={TurnoverScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ProductSalesScreen"
-            component={ProductSalesScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TotalProfitScreen"
-            component={TotalProfitScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SalesTabsScreen"
-            component={SalesTabsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TestingScreen"
-            component={TestingScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ReportsScreen"
-            component={ReportsScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </Provider>
-    </NavigationContainer>
+    <InfoProvider>
+      <NavigationContainer>
+        <Provider store={store}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Root"
+              component={Root}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LineChartScreen"
+              component={LineChartScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="BarChartScreen"
+              component={BarChartScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AuditScreen"
+              component={AuditScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="StoreScreen"
+              component={StoreScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TurnoverScreen"
+              component={TurnoverScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ProductSalesScreen"
+              component={ProductSalesScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TotalProfitScreen"
+              component={TotalProfitScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SalesTabsScreen"
+              component={SalesTabsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TestingScreen"
+              component={TestingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ReportsScreen"
+              component={ReportsScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </Provider>
+      </NavigationContainer>
+    </InfoProvider>
   );
 }

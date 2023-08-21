@@ -3,14 +3,17 @@ import React from 'react';
 import DrawerHeader from './DrawerHeader';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
+import { useInfo } from '../components/PersonalInfoTaken';
 
 const hardCodedBrandName = 'SAKE A.E'
-const hardCodedVAT = '123456789'
+// const hardCodedVAT = '123456789'
+// const hardCodedPrimaryEmail = 'dasasd@hotmail.com'
 const hardCodedStoreId = '55589'
 const hardCodedPos = '2'
 
 const HelpScreen = () => {
   const { t, i18n } = useTranslation();
+  const {vatNumber, primaryEmail}  = useInfo();
 
   return (
     <View style={{ flex: 1 }}>
@@ -72,9 +75,14 @@ const HelpScreen = () => {
               {hardCodedBrandName}
             </Text>
           </Text>
-          <Text style={styles.infoText}>{t("vat")}:{'  '}
+          <Text style={styles.infoText}>{t("vatHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
-              {hardCodedVAT}
+              {vatNumber} 
+            </Text>
+          </Text>
+          <Text style={styles.infoText}>{t("primaryEmailHelpScreen")}:{'  '}
+            <Text style={{ color: 'black' }}>
+              {primaryEmail} 
             </Text>
           </Text>
           <Text style={styles.infoText}>{t("storeHelpScreen")}:{'  '}
