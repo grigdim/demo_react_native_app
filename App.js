@@ -32,6 +32,7 @@ import {
 import SalesTabsScreen from './screens/SalesTabsScreen';
 import SplashScreen from 'react-native-splash-screen';
 import GestureHandlerRootView from 'react-native-gesture-handler';
+import SalesStatisticsScreen from './screens/SalesStatisticsScreen';
 import { useTranslation } from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
@@ -105,6 +106,16 @@ function Root() {
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name="stats-chart-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name={t('salesDrawer')}
+        // name="Sales"
+        component={SalesTabsScreen} // So it corresponds with the tab navigation
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="card-outline" size={22} color={color} />
           ),
         }}
       />
@@ -205,6 +216,11 @@ export default function App() {
             <Stack.Screen
               name="SalesTabsScreen"
               component={SalesTabsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SalesStatisticsScreen"
+              component={SalesStatisticsScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
