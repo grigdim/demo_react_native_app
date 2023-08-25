@@ -997,6 +997,7 @@ const SalesStatisticsScreen = () => {
 
   return (
     <View className="flex-1 bg-gray-300">
+      {/* Comment out The DrawerHeader to remove it from app */}
       <TouchableOpacity style={{ width: width, zIndex: 1 }}>
         <DrawerHeader />
       </TouchableOpacity>
