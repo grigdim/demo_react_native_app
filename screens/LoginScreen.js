@@ -59,6 +59,7 @@ const LoginScreen = () => {
   const [allVATsbyEmailFromBoApi, setAllVATsByEmailFromBoApi] = useState();
   const [infoByVATfromBoApi, setInfoByVATfromBoApi] = useState();
 
+  // Correctly brings back the VAT (tested with button Fetch VAT)
   const fetchVATbyEmail = async () => {
     setLoading(true);
     if (__DEV__ && token) {
@@ -70,9 +71,9 @@ const LoginScreen = () => {
         headers: myHeaders,
         redirect: 'follow',
       };
-
+  
       const response = await fetch(
-        `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailassignedvats/jzois1967@gmail.com`, // HARD CODED ATM
+        `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailassignedvats/${email}`,
         requestOptions,
       );
       const data = await response.json();
@@ -306,6 +307,7 @@ const LoginScreen = () => {
       ? setRegisteredEmail(true)
       : setRegisteredEmail(false);
       setInfoPrimaryEmail(email);
+      fetchVATbyEmail();
       setLogin(false);
     } else {
       Alert.alert(t('warning'), t('validEmail'), [
@@ -628,6 +630,12 @@ const LoginScreen = () => {
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToStoreScreen')}
                 </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
+                onPress={() => fetchVATbyEmail()}>
+                <Text className="text-center text-lg text-white">Fetch VAT</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
