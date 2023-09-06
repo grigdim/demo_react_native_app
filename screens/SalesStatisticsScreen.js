@@ -14,15 +14,15 @@ import {
   Modal,
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
-import React, { useEffect, useState, useMemo } from 'react';
-import { selectToken } from '../features/bootstrap';
-import { useSelector } from 'react-redux';
+import React, {useEffect, useState, useMemo} from 'react';
+import {selectToken} from '../features/bootstrap';
+import {useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import { ip } from '@env';
+import {ip} from '@env';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Table, Row } from 'react-native-table-component';
+import {Table, Row} from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
 import {
   VictoryLegend,
@@ -33,13 +33,13 @@ import {
   VictoryArea,
   VictoryTooltip,
 } from 'victory-native';
-import { useTranslation } from 'react-i18next';
-// import i18next from '../languages/i18n';
+import {useTranslation} from 'react-i18next';
+import i18next from '../languages/i18n';
 
 const SalesStatisticsScreen = () => {
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const token = useSelector(selectToken);
-  const { width, height } = Dimensions.get('screen');
+  const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('WEEK');
@@ -324,8 +324,9 @@ const SalesStatisticsScreen = () => {
             const data2 = await response2.json();
             const data2Formatted = data2.TotalSalesChartDtos.map(item => ({
               ...item,
-              Hour: `${item.Hour}/${fromDate.getMonth() + 1
-                }/${fromDate.getFullYear()}`,
+              Hour: `${item.Hour}/${
+                fromDate.getMonth() + 1
+              }/${fromDate.getFullYear()}`,
             }));
             var myHeaders3 = new Headers();
             myHeaders3.append('Token', token);
@@ -353,16 +354,18 @@ const SalesStatisticsScreen = () => {
             const data3 = await response3.json();
             const data3Formatted = data3.TotalSalesChartDtos.map(item => ({
               ...item,
-              Hour: `${item.Hour}/${toDate.getMonth() + 1
-                }/${toDate.getFullYear()}`,
+              Hour: `${item.Hour}/${
+                toDate.getMonth() + 1
+              }/${toDate.getFullYear()}`,
             }));
 
             totalSalesChartData = [...data2Formatted, ...data3Formatted];
           } else {
             totalSalesChartData = data.TotalSalesChartDtos.map(item => ({
               ...item,
-              Hour: `${item.Hour}/${toDate.getMonth() + 1
-                }/${toDate.getFullYear()}`,
+              Hour: `${item.Hour}/${
+                toDate.getMonth() + 1
+              }/${toDate.getFullYear()}`,
             }));
           }
         }
@@ -663,14 +666,16 @@ const SalesStatisticsScreen = () => {
 
           const data1Formatted = data1.map(item => ({
             ...item,
-            Date: `${item.DatePart}/${fromDate.getMonth() + 1
-              }/${fromDate.getFullYear()}`,
+            Date: `${item.DatePart}/${
+              fromDate.getMonth() + 1
+            }/${fromDate.getFullYear()}`,
           }));
           const data2 = await response2.json();
           const data2Formatted = data2.map(item => ({
             ...item,
-            Date: `${item.DatePart}/${toDate.getMonth() + 1
-              }/${toDate.getFullYear()}`,
+            Date: `${item.DatePart}/${
+              toDate.getMonth() + 1
+            }/${toDate.getFullYear()}`,
           }));
           data = [...data1Formatted, ...data2Formatted];
         } else {
@@ -681,8 +686,9 @@ const SalesStatisticsScreen = () => {
           const dataUnformatted = await response.json();
           data = dataUnformatted.map(item => ({
             ...item,
-            Date: `${item.DatePart}/${toDate.getMonth() + 1
-              }/${toDate.getFullYear()}`,
+            Date: `${item.DatePart}/${
+              toDate.getMonth() + 1
+            }/${toDate.getFullYear()}`,
           }));
         }
       } else {
@@ -706,9 +712,9 @@ const SalesStatisticsScreen = () => {
               return arr;
             } else
               return [
-                { x: `${(data[0].DatePart - 1).toString()}:00`, y: 0 },
+                {x: `${(data[0].DatePart - 1).toString()}:00`, y: 0},
                 ...arr,
-                { x: `${(data[0].DatePart + 1).toString()}:00`, y: 0 },
+                {x: `${(data[0].DatePart + 1).toString()}:00`, y: 0},
               ];
           });
           setProductChartTurnoverWithoutVatData(() => {
@@ -745,25 +751,25 @@ const SalesStatisticsScreen = () => {
         case 'days':
           setProductChartTurnoverWithVatData(() => {
             let arr = [];
-            data.map(item => arr.push({ x: item.Date, y: item.TurnOverWithVat }));
+            data.map(item => arr.push({x: item.Date, y: item.TurnOverWithVat}));
             return arr;
           });
           setProductChartTurnoverWithoutVatData(() => {
             let arr = [];
             data.map(item =>
-              arr.push({ x: item.Date, y: item.TurnOverWithoutVat }),
+              arr.push({x: item.Date, y: item.TurnOverWithoutVat}),
             );
             return arr;
           });
           setProductChartProfitWithVatData(() => {
             let arr = [];
-            data.map(item => arr.push({ x: item.Date, y: item.ProfitWithVat }));
+            data.map(item => arr.push({x: item.Date, y: item.ProfitWithVat}));
             return arr;
           });
           setProductChartProfitWithoutVatData(() => {
             let arr = [];
             data.map(item =>
-              arr.push({ x: item.Date, y: item.ProfitWithoutVat }),
+              arr.push({x: item.Date, y: item.ProfitWithoutVat}),
             );
             return arr;
           });
@@ -998,14 +1004,14 @@ const SalesStatisticsScreen = () => {
   return (
     <View className="flex-1 bg-gray-300">
       {/* Comment out The DrawerHeader to remove it from app */}
-      <TouchableOpacity style={{ width: width, zIndex: 1 }}>
+      <TouchableOpacity style={{width: width, zIndex: 1}}>
         <DrawerHeader />
       </TouchableOpacity>
       <SafeAreaView className="flex-1 justify-center items-center bg-gray-300">
         {loading ? (
           <ActivityIndicator color="rgb(34 211 238)" size="large" />
         ) : (
-          <View className="w-full h-full space-y-3" style={{ elevation: 50 }}>
+          <View className="w-full h-full space-y-3" style={{elevation: 50}}>
             {/*Widgets start*/}
             {salesData !== undefined && salesData !== null ? (
               <ScrollView className="space-y-3">
@@ -1013,7 +1019,7 @@ const SalesStatisticsScreen = () => {
                 <View className="space-y-1 my-2 mx-4">
                   <View
                     className="bg-gray-200 border rounded-sm h-11 justify-center"
-                    style={{ elevation: 10 }}>
+                    style={{elevation: 10}}>
                     <SelectDropdown
                       dropdownStyle={{
                         backgroundColor: 'lightgray',
@@ -1023,7 +1029,7 @@ const SalesStatisticsScreen = () => {
                         height: '99%',
                         backgroundColor: 'rgb(229 231 235)',
                       }}
-                      buttonTextStyle={{ color: 'rgb(23 37 84)' }}
+                      buttonTextStyle={{color: 'rgb(23 37 84)'}}
                       data={[t('day'), t('week'), t('month')]}
                       defaultValue={defaultSelectedGroupByDateValue}
                       onSelect={(selectedItem, index) => {
@@ -1040,7 +1046,7 @@ const SalesStatisticsScreen = () => {
                   </View>
                   <TouchableOpacity
                     className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
-                    style={{ elevation: 50 }}
+                    style={{elevation: 50}}
                     onPress={() => setOpenFromDate(true)}>
                     <Text className="text-center text-base text-blue-950">
                       {t('fromDate')}:
@@ -1072,7 +1078,7 @@ const SalesStatisticsScreen = () => {
                     )}
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={{ elevation: 50 }}
+                    style={{elevation: 50}}
                     className="bg-gray-200 border-solid border border-blue-950 rounded-sm p-2 flex-row justify-center space-x-1"
                     onPress={() => setOpenToDate(true)}>
                     <Text className="text-center text-base text-blue-950">
@@ -1109,10 +1115,10 @@ const SalesStatisticsScreen = () => {
                 {/*Turnover widget start*/}
                 <View
                   className="bg-white my-1 mx-4 rounded-md"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <View
                     className="bg-yellow-500 p-3 rounded-t-md"
-                    style={{ elevation: 10 }}>
+                    style={{elevation: 10}}>
                     <Text className="text-center text-white underline underline-offset-8">
                       {t('turnover')}:
                     </Text>
@@ -1235,7 +1241,7 @@ const SalesStatisticsScreen = () => {
                 {/*Profit widget start*/}
                 <View
                   className="bg-white my-1 mx-4 rounded-md"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <View className="bg-purple-500 p-3 rounded-t-md">
                     <Text className="text-center text-white underline">
                       {t('profit')}:
@@ -1245,7 +1251,9 @@ const SalesStatisticsScreen = () => {
                     <Text className="text-center text-white font-bold text-xl">
                       {totals[0].TotalProfitWithVat}€
                     </Text>
-                    <Text className="text-center text-white">{t('withVAT')}</Text>
+                    <Text className="text-center text-white">
+                      {t('withVAT')}
+                    </Text>
                   </View>
                   {!profitDetails ? (
                     <View className="divide-y divide-purple-400">
@@ -1358,7 +1366,7 @@ const SalesStatisticsScreen = () => {
                     </View>
                     <View
                       className="divide-y divide-gray-200 bg-white rounded-b-md"
-                      style={{ elevation: 50 }}>
+                      style={{elevation: 50}}>
                       {salesData?.TopSellingProductDtos?.map((item, index) => {
                         if (index <= 9) {
                           return (
@@ -1372,7 +1380,7 @@ const SalesStatisticsScreen = () => {
                               <Text
                                 key={salesData.TopSellingProductDtos.ProductId}
                                 className="text-center py-2 text-gray-500 font-bold"
-                              // style={{color: 'rgb(74, 118, 194)'}}
+                                // style={{color: 'rgb(74, 118, 194)'}}
                               >
                                 {item.ProductName.toUpperCase()}
                               </Text>
@@ -1382,13 +1390,13 @@ const SalesStatisticsScreen = () => {
                       })}
                       <TouchableOpacity
                         className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                        style={{ backgroundColor: 'rgb(95,125,155)' }}
+                        style={{backgroundColor: 'rgb(95,125,155)'}}
                         onPress={() => {
                           setProductModalVisible(true);
                         }}>
                         <Text
                           className="text-center text-xs font-bold"
-                          style={{ color: 'rgb(255 255 255)' }}>
+                          style={{color: 'rgb(255 255 255)'}}>
                           {t('chooseProduct')}
                         </Text>
                         <FontAwesome
@@ -1464,7 +1472,10 @@ const SalesStatisticsScreen = () => {
                                 borderWidth: 1,
                                 borderColor: 'rgb(229 231 235)',
                               }}
-                              buttonTextStyle={{ color: '#444', textAlign: 'left' }}
+                              buttonTextStyle={{
+                                color: '#444',
+                                textAlign: 'left',
+                              }}
                               renderDropdownIcon={isOpened => {
                                 return (
                                   <SimpleLineIcons
@@ -1475,12 +1486,12 @@ const SalesStatisticsScreen = () => {
                                 );
                               }}
                               dropdownIconPosition={'left'}
-                              dropdownStyle={{ backgroundColor: '#EFEFEF' }}
+                              dropdownStyle={{backgroundColor: '#EFEFEF'}}
                               rowStyle={{
                                 backgroundColor: '#EFEFEF',
                                 borderBottomColor: '#C5C5C5',
                               }}
-                              rowTextStyle={{ color: '#444', textAlign: 'left' }}
+                              rowTextStyle={{color: '#444', textAlign: 'left'}}
                               selectedRowStyle={{
                                 backgroundColor: 'rgba(0,0,0,0.1)',
                               }}
@@ -1526,7 +1537,7 @@ const SalesStatisticsScreen = () => {
                             <View className="space-y-4">
                               <View
                                 className="bg-yellow-400 flex-row flex-wrap justify-center items-center mx-4 rounded-md"
-                                style={{ elevation: 10 }}>
+                                style={{elevation: 10}}>
                                 {selectedProduct &&
                                   Object.keys(selectedProduct).map(
                                     (key, index) => {
@@ -1570,7 +1581,7 @@ const SalesStatisticsScreen = () => {
                               </View>
                               <View
                                 className="bg-purple-400 flex-row items-start mx-4 rounded-md py-6"
-                                style={{ elevation: 10 }}>
+                                style={{elevation: 10}}>
                                 {selectedProduct &&
                                   Object.keys(selectedProduct).map(
                                     (key, index) => {
@@ -1588,7 +1599,7 @@ const SalesStatisticsScreen = () => {
                                             className="justify-center items-center w-1/3 px-4">
                                             <Text className="text-white text-lg font-black">
                                               {key ===
-                                                'ProfitOnTurnOverPercentage'
+                                              'ProfitOnTurnOverPercentage'
                                                 ? `${value} %`
                                                 : `${value} €`}
                                             </Text>
@@ -1616,9 +1627,9 @@ const SalesStatisticsScreen = () => {
                                   }}>
                                   <View
                                     className="w-full rounded-t-lg bg-white"
-                                  // style={{
-                                  // backgroundColor: 'rgb(86, 113, 144)',
-                                  // }}
+                                    // style={{
+                                    // backgroundColor: 'rgb(86, 113, 144)',
+                                    // }}
                                   >
                                     <Text className="text-center underline py-2 text-slate-500">
                                       {t('TotalTurnoverAndProfit')}
@@ -1634,36 +1645,36 @@ const SalesStatisticsScreen = () => {
                                         bottom: 50,
                                         right: 25,
                                       }}
-                                      domainPadding={{ y: 50 }}>
+                                      domainPadding={{y: 50}}>
                                       <VictoryLegend
                                         orientation="horizontal"
                                         itemsPerRow={2}
                                         x={30}
                                         y={10}
                                         style={{
-                                          title: { fontSize: 20 },
-                                          labels: { fill: 'rgb(100 116 139)' },
+                                          title: {fontSize: 20},
+                                          labels: {fill: 'rgb(100 116 139)'},
                                         }}
                                         data={[
                                           {
                                             // name: 'Turnover with VAT',
                                             name: t('TurnOverWithVat'),
-                                            symbol: { fill: 'orange' },
+                                            symbol: {fill: 'orange'},
                                           },
                                           {
                                             // name: 'Turnover without VAT',
                                             name: t('TurnOverWithoutVat'),
-                                            symbol: { fill: 'rgb(245, 185, 66)' },
+                                            symbol: {fill: 'rgb(245, 185, 66)'},
                                           },
                                           {
                                             // name: 'Profit with VAT',
                                             name: t('ProfitWithVat'),
-                                            symbol: { fill: 'purple' },
+                                            symbol: {fill: 'purple'},
                                           },
                                           {
                                             // name: 'Profit without VAT',
                                             name: t('ProfitWithoutVat'),
-                                            symbol: { fill: 'rgb(147, 66, 245)' },
+                                            symbol: {fill: 'rgb(147, 66, 245)'},
                                           },
                                         ]}
                                       />
@@ -1675,9 +1686,11 @@ const SalesStatisticsScreen = () => {
                                             stroke: 'rgb(100 116 139)',
                                             strokeDasharray: 'none',
                                           },
-                                          axis: { stroke: 'rgb(100 116 139)' },
-                                          ticks: { stroke: 'rgb(100 116 139)' },
-                                          tickLabels: { fill: 'rgb(100 116 139)' },
+                                          axis: {stroke: 'rgb(100 116 139)'},
+                                          ticks: {stroke: 'rgb(100 116 139)'},
+                                          tickLabels: {
+                                            fill: 'rgb(100 116 139)',
+                                          },
                                         }}
                                       />
                                       {/*x axis end*/}
@@ -1710,9 +1723,11 @@ const SalesStatisticsScreen = () => {
                                             stroke: 'rgb(100 116 139)',
                                             strokeDasharray: 'none',
                                           },
-                                          axis: { stroke: 'rgb(100 116 139)' },
-                                          ticks: { stroke: 'rgb(100 116 139)' },
-                                          tickLabels: { fill: 'rgb(100 116 139)' },
+                                          axis: {stroke: 'rgb(100 116 139)'},
+                                          ticks: {stroke: 'rgb(100 116 139)'},
+                                          tickLabels: {
+                                            fill: 'rgb(100 116 139)',
+                                          },
                                         }}
                                       />
                                       {/*y axis end*/}
@@ -1721,24 +1736,26 @@ const SalesStatisticsScreen = () => {
                                         interpolation="natural"
                                         data={productChartTurnoverWithVatData}
                                         style={{
-                                          data: { fill: 'orange' },
+                                          data: {fill: 'orange'},
                                         }}
                                         animate={{
                                           duration: 1000,
-                                          onLoad: { duration: 1000 },
+                                          onLoad: {duration: 1000},
                                         }}
                                       />
                                       {/*turnover with vat end*/}
                                       {/*turnover without vat start*/}
                                       <VictoryArea
                                         interpolation="natural"
-                                        data={productChartTurnoverWithoutVatData}
+                                        data={
+                                          productChartTurnoverWithoutVatData
+                                        }
                                         style={{
-                                          data: { fill: 'rgb(245, 185, 66)' },
+                                          data: {fill: 'rgb(245, 185, 66)'},
                                         }}
                                         animate={{
                                           duration: 2000,
-                                          onLoad: { duration: 2000 },
+                                          onLoad: {duration: 2000},
                                         }}
                                       />
                                       {/*turnover without vat end*/}
@@ -1747,11 +1764,11 @@ const SalesStatisticsScreen = () => {
                                         interpolation="natural"
                                         data={productChartProfitWithVatData}
                                         style={{
-                                          data: { fill: 'purple' },
+                                          data: {fill: 'purple'},
                                         }}
                                         animate={{
                                           duration: 3000,
-                                          onLoad: { duration: 3000 },
+                                          onLoad: {duration: 3000},
                                         }}
                                       />
                                       {/*profit with vat end*/}
@@ -1760,11 +1777,11 @@ const SalesStatisticsScreen = () => {
                                         interpolation="natural"
                                         data={productChartProfitWithoutVatData}
                                         style={{
-                                          data: { fill: 'rgb(147, 66, 245)' },
+                                          data: {fill: 'rgb(147, 66, 245)'},
                                         }}
                                         animate={{
                                           duration: 4000,
-                                          onLoad: { duration: 4000 },
+                                          onLoad: {duration: 4000},
                                         }}
                                       />
                                       {/*profit without vat end*/}
@@ -1794,7 +1811,7 @@ const SalesStatisticsScreen = () => {
                       </Text>
                       <TouchableOpacity
                         className="flex-row space-x-2 justify-center items-center rounded-b-md"
-                        onPress={() => { }}>
+                        onPress={() => {}}>
                         <Text
                           className="text-xs font-bold border border-white p-1 mr-2"
                           style={{
@@ -1836,65 +1853,65 @@ const SalesStatisticsScreen = () => {
                           <View className="divide-y divide-gray-200">
                             {categoriesDetailsTableExpanded
                               ? categoriesDetailsTableData.map((row, index) => {
-                                return (
-                                  <Row
-                                    key={index}
-                                    style={{
-                                      alignContent: 'center',
-                                      paddingTop: 6,
-                                      paddingBottom: 6,
-                                      paddingLeft: 2,
-                                      paddingRight: 2,
-                                    }}
-                                    textStyle={{
-                                      textAlign: 'center',
-                                      fontSize: 12,
-                                      fontWeight: 'bold',
-                                      color: 'rgb(107, 114, 128)',
-                                    }}
-                                    widthArr={categoriesDetailsTableHeaders.map(
-                                      () => 100,
-                                    )}
-                                    data={row}
-                                  />
-                                );
-                              })
+                                  return (
+                                    <Row
+                                      key={index}
+                                      style={{
+                                        alignContent: 'center',
+                                        paddingTop: 6,
+                                        paddingBottom: 6,
+                                        paddingLeft: 2,
+                                        paddingRight: 2,
+                                      }}
+                                      textStyle={{
+                                        textAlign: 'center',
+                                        fontSize: 12,
+                                        fontWeight: 'bold',
+                                        color: 'rgb(107, 114, 128)',
+                                      }}
+                                      widthArr={categoriesDetailsTableHeaders.map(
+                                        () => 100,
+                                      )}
+                                      data={row}
+                                    />
+                                  );
+                                })
                               : categoriesDetailsTableDataTrunc.map(
-                                (row, index) => {
-                                  if (index <= 9) {
-                                    return (
-                                      <Row
-                                        key={index}
-                                        style={{
-                                          alignContent: 'center',
-                                          paddingTop: 6,
-                                          paddingBottom: 6,
-                                          paddingLeft: 2,
-                                          paddingRight: 2,
-                                        }}
-                                        textStyle={{
-                                          textAlign: 'center',
-                                          fontSize: 12,
-                                          fontWeight: 'bold',
-                                          color: 'rgb(107, 114, 128)',
-                                        }}
-                                        widthArr={categoriesDetailsTableHeaders.map(
-                                          () => 100,
-                                        )}
-                                        data={row}
-                                      />
-                                    );
-                                  }
-                                  return null; // Added for the case when index > 9
-                                },
-                              )}
+                                  (row, index) => {
+                                    if (index <= 9) {
+                                      return (
+                                        <Row
+                                          key={index}
+                                          style={{
+                                            alignContent: 'center',
+                                            paddingTop: 6,
+                                            paddingBottom: 6,
+                                            paddingLeft: 2,
+                                            paddingRight: 2,
+                                          }}
+                                          textStyle={{
+                                            textAlign: 'center',
+                                            fontSize: 12,
+                                            fontWeight: 'bold',
+                                            color: 'rgb(107, 114, 128)',
+                                          }}
+                                          widthArr={categoriesDetailsTableHeaders.map(
+                                            () => 100,
+                                          )}
+                                          data={row}
+                                        />
+                                      );
+                                    }
+                                    return null; // Added for the case when index > 9
+                                  },
+                                )}
                           </View>
                         </Table>
                       </ScrollView>
                       <View className="rounded-b-md">
                         <TouchableOpacity
                           className="py-2 flex-row space-x-2 justify-center items-center rounded-b-md"
-                          style={{ backgroundColor: 'rgb(95,125,155)' }}
+                          style={{backgroundColor: 'rgb(95,125,155)'}}
                           onPress={() =>
                             setCategoriesDetailsTableExpanded(
                               !categoriesDetailsTableExpanded,
@@ -1902,7 +1919,7 @@ const SalesStatisticsScreen = () => {
                           }>
                           <Text
                             className="text-xs font-bold"
-                            style={{ color: 'rgb(255,255,255)' }}>
+                            style={{color: 'rgb(255,255,255)'}}>
                             {!categoriesDetailsTableExpanded
                               ? t('expand')
                               : t('collapse')}
@@ -1946,19 +1963,23 @@ const SalesStatisticsScreen = () => {
                       elevation: 50,
                     }}>
                     {dailyTransactionsAverage ? (
-                      Object.keys(dailyTransactionsAverage).map((key, index) => {
-                        const translatedKey = t(key);
-                        const value = dailyTransactionsAverage[key];
+                      Object.keys(dailyTransactionsAverage).map(
+                        (key, index) => {
+                          const translatedKey = t(key);
+                          const value = dailyTransactionsAverage[key];
 
-                        return (
-                          <View className="justify-center items-center rounded-md space-y-2">
-                            <Text className="text-white text-xl font-black">
-                              {value}
-                            </Text>
-                            <Text className="text-white">{translatedKey}</Text>
-                          </View>
-                        );
-                      })
+                          return (
+                            <View className="justify-center items-center rounded-md space-y-2">
+                              <Text className="text-white text-xl font-black">
+                                {value}
+                              </Text>
+                              <Text className="text-white">
+                                {translatedKey}
+                              </Text>
+                            </View>
+                          );
+                        },
+                      )
                     ) : (
                       <Text className="text-white">{t('noDataAvailable')}</Text>
                     )}
@@ -1969,7 +1990,7 @@ const SalesStatisticsScreen = () => {
                 {salesData.TotalSalesChartDtos.length > 0 && (
                   <View
                     className="mx-4 rounded-lg flex-1 justify-center items-center mb-2"
-                    style={{ backgroundColor: 'rgb(105, 133, 165)' }}>
+                    style={{backgroundColor: 'rgb(105, 133, 165)'}}>
                     <View
                       className="w-full rounded-t-lg"
                       style={{
@@ -1984,30 +2005,33 @@ const SalesStatisticsScreen = () => {
                       <VictoryChart
                         theme={VictoryTheme.material}
                         height={height / 2}
-                        padding={{ top: 75, left: 50, bottom: 50, right: 25 }}
-                        domainPadding={{ y: 50 }}>
+                        padding={{top: 75, left: 50, bottom: 50, right: 25}}
+                        domainPadding={{y: 50}}>
                         <VictoryLegend
                           orientation="horizontal"
                           itemsPerRow={2}
                           x={30}
                           y={10}
                           style={{
-                            title: { fontSize: 20 },
-                            labels: { fill: 'white' },
+                            title: {fontSize: 20},
+                            labels: {fill: 'white'},
                           }}
                           data={[
                             {
                               name: t('TurnOverWithVat'),
-                              symbol: { fill: 'orange' },
+                              symbol: {fill: 'orange'},
                             },
                             {
                               name: t('TurnOverWithoutVat'),
-                              symbol: { fill: 'rgb(245, 185, 66)' },
+                              symbol: {fill: 'rgb(245, 185, 66)'},
                             },
-                            { name: t('ProfitWithVat'), symbol: { fill: 'purple' } },
+                            {
+                              name: t('ProfitWithVat'),
+                              symbol: {fill: 'purple'},
+                            },
                             {
                               name: t('ProfitWithoutVat'),
-                              symbol: { fill: 'rgb(147, 66, 245)' },
+                              symbol: {fill: 'rgb(147, 66, 245)'},
                             },
                           ]}
                         />
@@ -2015,10 +2039,13 @@ const SalesStatisticsScreen = () => {
                         <VictoryAxis
                           fixLabelOverlap={true}
                           style={{
-                            grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                            axis: { stroke: 'lightgray' },
-                            ticks: { stroke: 'lightgray' },
-                            tickLabels: { fill: 'lightgray' },
+                            grid: {
+                              stroke: 'lightgray',
+                              strokeDasharray: 'none',
+                            },
+                            axis: {stroke: 'lightgray'},
+                            ticks: {stroke: 'lightgray'},
+                            tickLabels: {fill: 'lightgray'},
                           }}
                         />
                         {/*x axis end*/}
@@ -2034,10 +2061,13 @@ const SalesStatisticsScreen = () => {
                             return formattedNumber + suffixes[magnitude] + '€';
                           }}
                           style={{
-                            grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                            axis: { stroke: 'lightgray' },
-                            ticks: { stroke: 'lightgray' },
-                            tickLabels: { fill: 'lightgray' },
+                            grid: {
+                              stroke: 'lightgray',
+                              strokeDasharray: 'none',
+                            },
+                            axis: {stroke: 'lightgray'},
+                            ticks: {stroke: 'lightgray'},
+                            tickLabels: {fill: 'lightgray'},
                           }}
                         />
                         {/*y axis end*/}
@@ -2046,11 +2076,11 @@ const SalesStatisticsScreen = () => {
                           interpolation="natural"
                           data={salesChartTurnoverWithVatData}
                           style={{
-                            data: { fill: 'orange' },
+                            data: {fill: 'orange'},
                           }}
                           animate={{
                             duration: 1000,
-                            onLoad: { duration: 1000 },
+                            onLoad: {duration: 1000},
                           }}
                         />
                         {/*turnover with vat end*/}
@@ -2059,11 +2089,11 @@ const SalesStatisticsScreen = () => {
                           interpolation="natural"
                           data={salesChartTurnoverWithoutVatData}
                           style={{
-                            data: { fill: 'rgb(245, 185, 66)' },
+                            data: {fill: 'rgb(245, 185, 66)'},
                           }}
                           animate={{
                             duration: 2000,
-                            onLoad: { duration: 2000 },
+                            onLoad: {duration: 2000},
                           }}
                         />
                         {/*turnover without vat end*/}
@@ -2072,11 +2102,11 @@ const SalesStatisticsScreen = () => {
                           interpolation="natural"
                           data={salesChartProfitWithVatData}
                           style={{
-                            data: { fill: 'purple' },
+                            data: {fill: 'purple'},
                           }}
                           animate={{
                             duration: 3000,
-                            onLoad: { duration: 3000 },
+                            onLoad: {duration: 3000},
                           }}
                         />
                         {/*profit with vat end*/}
@@ -2085,11 +2115,11 @@ const SalesStatisticsScreen = () => {
                           interpolation="natural"
                           data={salesChartProfitWithoutVatData}
                           style={{
-                            data: { fill: 'rgb(147, 66, 245)' },
+                            data: {fill: 'rgb(147, 66, 245)'},
                           }}
                           animate={{
                             duration: 4000,
-                            onLoad: { duration: 4000 },
+                            onLoad: {duration: 4000},
                           }}
                         />
                         {/*profit without vat end*/}

@@ -12,12 +12,12 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { selectToken } from '../features/bootstrap';
-import { useSelector } from 'react-redux';
-import { ip } from '@env';
+import React, {useState, useEffect} from 'react';
+import {selectToken} from '../features/bootstrap';
+import {useSelector} from 'react-redux';
+import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import {
@@ -32,8 +32,8 @@ import {
 } from 'victory-native';
 
 const SalesInsightsTransactionsScreen = () => {
-  const { t, i18n } = useTranslation();
-  const { width, height } = Dimensions.get('screen');
+  const {t, i18n} = useTranslation();
+  const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
@@ -212,22 +212,20 @@ const SalesInsightsTransactionsScreen = () => {
       // console.log('analysis', data);
       const groupedData = Object.entries(
         data.reduce((result, item) => {
-          const { DayName, ...rest } = item;
+          const {DayName, ...rest} = item;
           if (!result[DayName]) {
             result[DayName] = [];
           }
           result[DayName].push(rest);
           return result;
         }, {}),
-      ).map(([DayName, items]) => ({ DayName, items }));
+      ).map(([DayName, items]) => ({DayName, items}));
       setAnalysisWeekHourlyTransactions(groupedData);
     }
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchTransactionsWeeks();
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -256,7 +254,7 @@ const SalesInsightsTransactionsScreen = () => {
                 width: '100%',
                 backgroundColor: 'rgb(229 231 235)',
               }}
-              buttonTextStyle={{ color: 'rgb(23 37 84)' }}
+              buttonTextStyle={{color: 'rgb(23 37 84)'}}
               data={transactionsWeeks.map(item => item.WeekDescription) || []}
               // defaultValue={}
               onSelect={(selectedItem, index) => {
@@ -276,25 +274,25 @@ const SalesInsightsTransactionsScreen = () => {
               <ScrollView horizontal className="w-full">
                 <View
                   className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <View className="bg-slate-500 p-3 rounded-t-lg">
                     <Text className="text-white underline">
-                      {t("TransactionsPerHour")}
+                      {t('TransactionsPerHour')}
                     </Text>
                   </View>
                   <VictoryChart
                     theme={VictoryTheme.material}
                     height={height / 2}
-                    padding={{ top: 25, left: 50, bottom: 50, right: 25 }}
-                    domainPadding={{ y: 50 }}>
+                    padding={{top: 25, left: 50, bottom: 50, right: 25}}
+                    domainPadding={{y: 50}}>
                     {/*x axis start*/}
                     <VictoryAxis
                       fixLabelOverlap={true}
                       style={{
-                        grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                        axis: { stroke: 'lightgray' },
-                        ticks: { stroke: 'lightgray' },
-                        tickLabels: { fill: 'lightgray' },
+                        grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                        axis: {stroke: 'lightgray'},
+                        ticks: {stroke: 'lightgray'},
+                        tickLabels: {fill: 'lightgray'},
                       }}
                     />
                     {/*x axis end*/}
@@ -302,10 +300,10 @@ const SalesInsightsTransactionsScreen = () => {
                     <VictoryAxis
                       dependentAxis
                       style={{
-                        grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                        axis: { stroke: 'lightgray' },
-                        ticks: { stroke: 'lightgray' },
-                        tickLabels: { fill: 'lightgray' },
+                        grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                        axis: {stroke: 'lightgray'},
+                        ticks: {stroke: 'lightgray'},
+                        tickLabels: {fill: 'lightgray'},
                       }}
                     />
                     {/*y axis end*/}
@@ -317,11 +315,11 @@ const SalesInsightsTransactionsScreen = () => {
                         y: item.Transactions,
                       }))}
                       style={{
-                        data: { fill: 'rgba(162, 247, 2, 0.3)' },
+                        data: {fill: 'rgba(162, 247, 2, 0.3)'},
                       }}
                       animate={{
                         duration: 1000,
-                        onLoad: { duration: 1000 },
+                        onLoad: {duration: 1000},
                       }}
                     />
                     {/*turnover with vat end*/}
@@ -335,25 +333,25 @@ const SalesInsightsTransactionsScreen = () => {
               <ScrollView horizontal className="w-full">
                 <View
                   className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <View className="bg-slate-500 p-3 rounded-t-lg">
                     <Text className="text-white underline">
-                      {t("TransactionsPerDay")}
+                      {t('TransactionsPerDay')}
                     </Text>
                   </View>
                   <VictoryChart
                     theme={VictoryTheme.material}
                     height={height / 2}
-                    padding={{ top: 25, left: 50, bottom: 50, right: 25 }}
-                    domainPadding={{ x: [30, 0], y: 50 }}>
+                    padding={{top: 25, left: 50, bottom: 50, right: 25}}
+                    domainPadding={{x: [30, 0], y: 50}}>
                     {/*x axis start*/}
                     <VictoryAxis
                       fixLabelOverlap={true}
                       style={{
-                        grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                        axis: { stroke: 'lightgray' },
-                        ticks: { stroke: 'lightgray' },
-                        tickLabels: { fill: 'lightgray' },
+                        grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                        axis: {stroke: 'lightgray'},
+                        ticks: {stroke: 'lightgray'},
+                        tickLabels: {fill: 'lightgray'},
                       }}
                     />
                     {/*x axis end*/}
@@ -361,10 +359,10 @@ const SalesInsightsTransactionsScreen = () => {
                     <VictoryAxis
                       dependentAxis
                       style={{
-                        grid: { stroke: 'lightgray', strokeDasharray: 'none' },
-                        axis: { stroke: 'lightgray' },
-                        ticks: { stroke: 'lightgray' },
-                        tickLabels: { fill: 'lightgray' },
+                        grid: {stroke: 'lightgray', strokeDasharray: 'none'},
+                        axis: {stroke: 'lightgray'},
+                        ticks: {stroke: 'lightgray'},
+                        tickLabels: {fill: 'lightgray'},
                       }}
                     />
                     {/*y axis end*/}
@@ -378,14 +376,14 @@ const SalesInsightsTransactionsScreen = () => {
                         };
                       })}
                       style={{
-                        data: { fill: 'red' },
-                        labels: { fill: 'white' },
+                        data: {fill: 'red'},
+                        labels: {fill: 'white'},
                       }}
                       animate={{
                         duration: 1000,
-                        onLoad: { duration: 1000 },
+                        onLoad: {duration: 1000},
                       }}
-                      labels={({ datum }) => datum.y}
+                      labels={({datum}) => datum.y}
                       labelComponent={<VictoryLabel dy={30} />}
                     />
                   </VictoryChart>
@@ -398,34 +396,34 @@ const SalesInsightsTransactionsScreen = () => {
               <ScrollView horizontal className="w-full">
                 <View
                   className="flex-1 justify-center bg-white mx-2 rounded-lg my-6"
-                  style={{ elevation: 10 }}>
+                  style={{elevation: 10}}>
                   <View className="bg-slate-500 p-3 rounded-t-lg">
                     <Text className="text-white underline">
-                      {t("WeeklyAnalysisOfHourlyTransactions")}
+                      {t('WeeklyAnalysisOfHourlyTransactions')}
                     </Text>
                   </View>
                   <VictoryChart
                     theme={VictoryTheme.material}
                     height={height / 2}
-                    padding={{ top: 100, left: 50, bottom: 50, right: 25 }}>
+                    padding={{top: 100, left: 50, bottom: 50, right: 25}}>
                     <VictoryLegend
                       orientation="horizontal"
                       itemsPerRow={4}
                       x={30}
                       y={10}
                       style={{
-                        title: { fontSize: 20 },
-                        labels: { fill: 'rgb(100 116 139)' },
+                        title: {fontSize: 20},
+                        labels: {fill: 'rgb(100 116 139)'},
                       }}
                       data={analysisWeekHourlyTransactions.map(item => ({
                         name: item.DayName,
-                        symbol: { fill: setColor(item.DayName) },
+                        symbol: {fill: setColor(item.DayName)},
                       }))}
                     />
                     {analysisWeekHourlyTransactions.map((item, index) => {
                       return (
                         <VictoryLine
-                          style={{ data: { stroke: setColor(item.DayName) } }}
+                          style={{data: {stroke: setColor(item.DayName)}}}
                           key={index}
                           data={item.items?.map(innerItem => {
                             return {

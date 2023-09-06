@@ -186,9 +186,7 @@ const SalesInsightsSeasonalityScreen = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchProductCategoryNamesFromSeasonality();
-    setLoading(false);
   }, []);
 
   return (

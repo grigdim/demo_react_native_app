@@ -53,6 +53,7 @@ const SalesInsightsTopProductsScreen = () => {
         requestOptions,
       );
       const data = await response.json();
+      console.log(data);
       setCategories(() => {
         let arr = [];
         data.map(item => {
@@ -254,9 +255,7 @@ const SalesInsightsTopProductsScreen = () => {
   }, [subCategories]);
 
   useEffect(() => {
-    setLoading(true);
     fetchProductCategoryNames();
-    setLoading(false);
   }, []);
 
   return (
