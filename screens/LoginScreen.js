@@ -71,7 +71,7 @@ const LoginScreen = () => {
         headers: myHeaders,
         redirect: 'follow',
       };
-  
+
       const response = await fetch(
         `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailassignedvats/${email}`,
         requestOptions,
@@ -121,7 +121,7 @@ const LoginScreen = () => {
         "loadDwStageInfo": false,
         "loadPmiInfo": false
       });
-      
+
       const response = await fetch(
         `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/vat/038588921/intaleInfo?${queryParams}`, // HARD CODED ATM
         requestOptions,
@@ -303,9 +303,9 @@ const LoginScreen = () => {
     const valid = isValidEmail();
     if (valid === true) {
       email === 'dgrigoriadis@intale.com' ||
-      email === 'gsakellaropoulos@intale.com'
-      ? setRegisteredEmail(true)
-      : setRegisteredEmail(false);
+        email === 'gsakellaropoulos@intale.com'
+        ? setRegisteredEmail(true)
+        : setRegisteredEmail(false);
       setInfoPrimaryEmail(email);
       fetchVATbyEmail();
       setLogin(false);
@@ -599,7 +599,7 @@ const LoginScreen = () => {
             <View
               className="justify-center items-center"
               style={{ height: height / 1.33 }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('LineChartScreen');
@@ -630,15 +630,16 @@ const LoginScreen = () => {
                 <Text className="text-center text-xl text-bold text-white">
                   {t('goToStoreScreen')}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <TouchableOpacity
+              {/* Correctly fetches the VAT (console.log) */}
+              {/* <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                 onPress={() => fetchVATbyEmail()}>
                 <Text className="text-center text-lg text-white">Fetch VAT</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('ProductSalesScreen');
@@ -673,7 +674,7 @@ const LoginScreen = () => {
                 <Text className="text-center text-xl text-bold text-white">
                   {t('deleteTokenAndLoginAgain')}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               {/* Attribute "Freepik" for rounded language flags */}
 
@@ -685,9 +686,7 @@ const LoginScreen = () => {
                       source={
                         i18n.language === 'el'
                           ? require('../images/greece.png')
-                          : i18n.language === 'en'
-                            ? require('../images/england.png')
-                            : require('../images/romania.png')
+                          : require('../images/england.png')
                       }
                     />
                   </TouchableOpacity>
@@ -698,7 +697,7 @@ const LoginScreen = () => {
                       onValueChange={handleLanguageChange}>
                       <Picker.Item label={t('greek')} value="el" />
                       <Picker.Item label={t('english')} value="en" />
-                      <Picker.Item label={t('romanian')} value="ro" />
+                      {/* <Picker.Item label={t('romanian')} value="ro" /> */}
                     </Picker>
                   </View>
                 </View>
@@ -752,7 +751,8 @@ const style = StyleSheet.create({
 
 const languageStyle = StyleSheet.create({
   container: {
-    marginTop: 30,
+    position: 'absolute',
+    bottom: 50,
     elevation: 30,
   },
   picker: {

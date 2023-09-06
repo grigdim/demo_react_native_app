@@ -69,7 +69,7 @@ function Root() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name={t('turnoverDrawer')}
         // name="Turnover"
         component={TurnoverScreen}
@@ -108,7 +108,7 @@ function Root() {
             <Ionicons name="stats-chart-outline" size={22} color={color} />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name={t('salesDrawer')}
         // name="Sales"
@@ -119,7 +119,7 @@ function Root() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name={t('testingDrawer')}
         // name="Testing"
         component={TestingScreen}
@@ -128,7 +128,7 @@ function Root() {
             <Ionicons name="bulb-outline" size={22} color={color} />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name={t('helpDrawer')}
         // name="Help"

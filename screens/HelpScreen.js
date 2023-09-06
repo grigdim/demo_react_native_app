@@ -70,11 +70,11 @@ const HelpScreen = () => {
       <View style={{ marginBottom: 20, paddingHorizontal: 20 }}>
         <Text style={styles.bottomText}>{t("storeInformationHelpScreen")}</Text>
         <View style={{ marginTop: 15 }} >
-          <Text style={styles.infoText}>{t("brandHelpScreen")}:{'  '}
+          {/* <Text style={styles.infoText}>{t("brandHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
               {hardCodedBrandName}
             </Text>
-          </Text>
+          </Text> */}
           <Text style={styles.infoText}>{t("vatHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
               {vatNumber} 
@@ -85,7 +85,7 @@ const HelpScreen = () => {
               {primaryEmail} 
             </Text>
           </Text>
-          <Text style={styles.infoText}>{t("storeHelpScreen")}:{'  '}
+          {/* <Text style={styles.infoText}>{t("storeHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
               {hardCodedStoreId}
             </Text>
@@ -94,7 +94,7 @@ const HelpScreen = () => {
             <Text style={{ color: 'black' }}>
               {hardCodedPos}
             </Text>
-          </Text>
+          </Text> */}
         </View>
       </View>
     </View>
