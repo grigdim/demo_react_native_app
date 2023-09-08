@@ -60,7 +60,7 @@
         "selectAnOption": "Select an option",
         "warning": "Warning",
         "validVatNumber": "Please enter a valid VAT number",
-        "validEmail": "Please enter a valid email",
+        "validCredentials": "Please enter a valid credentials",
         // Dates
         "day": "DAY",
         "week": "WEEK",
