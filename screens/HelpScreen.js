@@ -64,11 +64,6 @@ const HelpScreen = () => {
       <View style={{ marginBottom: 20, paddingHorizontal: 20 }}>
         <Text style={styles.bottomText}>{t("storeInformationHelpScreen")}</Text>
         <View style={{ marginTop: 15 }} >
-          {/* <Text style={styles.infoText}>{t("brandHelpScreen")}:{'  '}
-            <Text style={{ color: 'black' }}>
-              {hardCodedBrandName}
-            </Text>
-          </Text> */}
           <Text style={styles.infoText}>{t("domainHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
               {domain} 

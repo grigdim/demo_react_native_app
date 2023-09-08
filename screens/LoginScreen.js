@@ -42,7 +42,7 @@ const LoginScreen = () => {
     { label: 'Ελληνικά', value: 'el' },
     { label: 'English', value: 'en' },
   ];
-  const { setInfoVat, setInfoDomain, setInfoStoreId } = useInfo();
+  const { setInfoDomain, setInfoStoreId } = useInfo();
   const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
@@ -276,10 +276,12 @@ const LoginScreen = () => {
 
   const handleChangeDomain = async (inputText) => {
     setDomain(inputText);
+    setInfoDomain(inputText);
   };
 
   const handleChangeStoreId = async (inputText) => {
     setStoreId(inputText);
+    setInfoStoreId(inputText);
   };
 
   const handleChangeVat = inputText => {
@@ -289,7 +291,6 @@ const LoginScreen = () => {
   const handleSubmitVat = () => {
     if (vat.length === 9 && /^\d+$/.test(vat)) {
       setRegisteredEmail(true);
-      setInfoVat(vat);
     } else {
       Alert.alert(t('warning'), t('validVatNumber'), [
         {
@@ -385,7 +386,8 @@ const LoginScreen = () => {
       ]);
     } else {
       dispatch(setToken(data));
-      await AsyncStorage.setItem('@userToken', data);
+      await AsyncStorage.setItem('@userToken', data); // Needed
+      // Rest are for storing purposes
       await AsyncStorage.setItem('@username', username);
       await AsyncStorage.setItem('@password', password);
       await AsyncStorage.setItem('@domain', domain);
@@ -629,14 +631,14 @@ const LoginScreen = () => {
             </TouchableOpacity>
           </View>
         ) : (
-        <ScrollView className="flex-1 w-full h-full">
-          <TouchableOpacity>
-            <DrawerHeader />
-          </TouchableOpacity>
-          <View
-            className="justify-center items-center"
-            style={{ height: height / 1.33 }}>
-            {/* <TouchableOpacity
+          <ScrollView className="flex-1 w-full h-full">
+            <TouchableOpacity>
+              <DrawerHeader />
+            </TouchableOpacity>
+            <View
+              className="justify-center items-center"
+              style={{ height: height / 1.33 }}>
+              {/* <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('LineChartScreen');
@@ -669,14 +671,14 @@ const LoginScreen = () => {
                 </Text>
               </TouchableOpacity> */}
 
-            {/* Correctly fetches the VAT (console.log) */}
-            {/* <TouchableOpacity
+              {/* Correctly fetches the VAT (console.log) */}
+              {/* <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                 onPress={() => fetchVATbyEmail()}>
                 <Text className="text-center text-lg text-white">Fetch VAT</Text>
               </TouchableOpacity> */}
 
-            {/* <TouchableOpacity
+              {/* <TouchableOpacity
                 className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('ProductSalesScreen');
@@ -713,34 +715,34 @@ const LoginScreen = () => {
                 </Text>
               </TouchableOpacity> */}
 
-            {/* Attribute "Freepik" for rounded language flags */}
+              {/* Attribute "Freepik" for rounded language flags */}
 
-            <View style={languageStyle.container}>
-              <View style={languageStyle.flagContainer}>
-                <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
-                  <Image
-                    style={languageStyle.flag}
-                    source={
-                      i18n.language === 'el'
-                        ? require('../images/greece.png')
-                        : require('../images/england.png')
-                    }
-                  />
-                </TouchableOpacity>
-                <View style={languageStyle.pickerContainer}>
-                  <Picker
-                    style={languageStyle.picker}
-                    selectedValue={selectedLanguage}
-                    onValueChange={handleLanguageChange}>
-                    <Picker.Item label={t('greek')} value="el" />
-                    <Picker.Item label={t('english')} value="en" />
-                    {/* <Picker.Item label={t('romanian')} value="ro" /> */}
-                  </Picker>
+              <View style={languageStyle.container}>
+                <View style={languageStyle.flagContainer}>
+                  <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
+                    <Image
+                      style={languageStyle.flag}
+                      source={
+                        i18n.language === 'el'
+                          ? require('../images/greece.png')
+                          : require('../images/england.png')
+                      }
+                    />
+                  </TouchableOpacity>
+                  <View style={languageStyle.pickerContainer}>
+                    <Picker
+                      style={languageStyle.picker}
+                      selectedValue={selectedLanguage}
+                      onValueChange={handleLanguageChange}>
+                      <Picker.Item label={t('greek')} value="el" />
+                      <Picker.Item label={t('english')} value="en" />
+                      {/* <Picker.Item label={t('romanian')} value="ro" /> */}
+                    </Picker>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
         )}
       </SafeAreaView>
     </ImageBackground>
