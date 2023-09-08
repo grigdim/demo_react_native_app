@@ -1,5 +1,10 @@
 {
     "translation": {
+        // Login Credentials
+        "usernameProvided": "Όνομα Χρήστη",
+        "passwordProvided": "Κωδικός",
+        "domainProvided": "Domain (Διεύθυνση Διαδυκτίου)",
+        "storeIdProvided": "Id Καταστήματος",
         // Drawer
         "intaleStatistics": "Στατιστικά Intale",
         "homeDrawer": "Αρχική",

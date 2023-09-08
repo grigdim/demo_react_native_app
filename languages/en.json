@@ -1,5 +1,10 @@
 {
     "translation": {
+        // Login Credentials
+        "usernameProvided": "Username",
+        "passwordProvided": "Password",
+        "domainProvided": "Domain",
+        "storeIdProvided": "Store Id",
         // Drawer
         "intaleStatistics": "Intale Statistics",
         "homeDrawer": "Home",
