@@ -110,6 +110,8 @@
         "brandHelpScreen": "ΕΠΩΝΥΜΙΑ",
         "storeHelpScreen": "ΚΑΤΑΣΤΗΜΑ",
         "posHelpScreen": "ΤΑΜΕΙΟ",
+        "storeIdHelpScreen": "ID ΚΑΤΑΣΤΗΜΑΤΟΣ",
+        "domainHelpScreen": "ΔΙΕΥΘΥΝΗΣΗ ΔΙΑΔΥΚΤΙΟΥ",
         // About Screen
         "yourDigitalGuideAboutScreen": "Ο ψηφιακός σου οδηγός",
         "smallRetailAboutScreen": "Η μικρή λιανική είναι μία μεγάλη μάχη.",

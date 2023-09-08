@@ -3,19 +3,19 @@ import React, { createContext, useContext, useState } from 'react';
 const InfoContext = createContext();
 
 export const InfoProvider = ({ children }) => {
-  const [vatNumber, setVatNumber] = useState('');
-  const [primaryEmail, setPrimaryEmail] = useState('');
+  const [domain, setDomain] = useState('');
+  const [storeId, setStoreId] = useState('');
 
-  const setInfoVat = (vat) => {
-    setVatNumber(vat);
+  const setInfoDomain = (domain) => {
+    setDomain(domain);
   };
 
-  const setInfoPrimaryEmail = (vat) => {
-    setPrimaryEmail(vat);
+  const setInfoStoreId = (storeId) => {
+    setStoreId(storeId);
   };
 
   return (
-    <InfoContext.Provider value={{ vatNumber, setInfoVat, primaryEmail, setInfoPrimaryEmail }}>
+    <InfoContext.Provider value={{ domain, setDomain, storeId, setStoreId }}>
       {children}
     </InfoContext.Provider>
   );

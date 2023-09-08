@@ -41,9 +41,8 @@ const LoginScreen = () => {
   const options = [
     { label: 'Ελληνικά', value: 'el' },
     { label: 'English', value: 'en' },
-    { label: 'Românesc', value: 'ro' },
   ];
-  const { setInfoVat, setInfoPrimaryEmail } = useInfo();
+  const { setInfoVat, setInfoDomain, setInfoStoreId } = useInfo();
   const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
@@ -269,42 +268,18 @@ const LoginScreen = () => {
 
   const handleChangeUsername = async (inputText) => {
     setUsername(inputText);
-    setPrivacyPolicyAccepted(true);
-    try {
-      await AsyncStorage.setItem('@usernameProvided', 'true');
-    } catch (error) {
-      console.error('Error accepting Username:', error); // Never seen
-    }
   };
 
   const handleChangePassword = async (inputText) => {
     setPassword(inputText);
-    setPrivacyPolicyAccepted(true);
-    try {
-      await AsyncStorage.setItem('@passwordProvided', 'true');
-    } catch (error) {
-      console.error('Error accepting Password:', error); // Never seen
-    }
   };
 
   const handleChangeDomain = async (inputText) => {
     setDomain(inputText);
-    setPrivacyPolicyAccepted(true);
-    try {
-      await AsyncStorage.setItem('@domainProvided', 'true');
-    } catch (error) {
-      console.error('Error accepting Domain:', error); // Never seen
-    }
   };
 
   const handleChangeStoreId = async (inputText) => {
     setStoreId(inputText);
-    setPrivacyPolicyAccepted(true);
-    try {
-      await AsyncStorage.setItem('@storeIdProvided', 'true');
-    } catch (error) {
-      console.error('Error accepting Store Id:', error); // Never seen
-    }
   };
 
   const handleChangeVat = inputText => {
@@ -368,6 +343,8 @@ const LoginScreen = () => {
   //   }
   // };
 
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const handleLogin = async () => {
     setLoading(true);
     var myHeaders = new Headers();
@@ -408,45 +385,54 @@ const LoginScreen = () => {
       ]);
     } else {
       dispatch(setToken(data));
+      await AsyncStorage.setItem('@userToken', data);
+      await AsyncStorage.setItem('@username', username);
+      await AsyncStorage.setItem('@password', password);
+      await AsyncStorage.setItem('@domain', domain);
+      await AsyncStorage.setItem('@storeId', storeId);
+      setLoggedIn(true);
     }
     setLoading(false);
   };
 
-  useEffect(() => {
-    const loginTermsProvided = async () => {
-      try {
-        const [
-          usernameAccepted,
-          passwordAccepted,
-          domainAccepted,
-          storeIdAccepted,
-        ] = await Promise.all([
-          AsyncStorage.getItem('@usernameProvided'),
-          AsyncStorage.getItem('@passwordProvided'),
-          AsyncStorage.getItem('@domainProvided'),
-          AsyncStorage.getItem('@storeIdProvided'),
-        ]);
-  
-        if (
-          usernameAccepted === 'true' &&
-          passwordAccepted === 'true' &&
-          domainAccepted === 'true' &&
-          storeIdAccepted === 'true'
-        ) {
-          setUserInputObject({
-            username: username,
-            password: password,
-            domain: domain,
-            storeId: storeId,
-          });
-        }
-      } catch (error) {
-        console.error('Error accepting Login:', error);
+  const checkLoginStatus = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('@userToken');
+      if (userToken) {
+        // User is logged in, retrieve stored credentials
+        const storedUsername = await AsyncStorage.getItem('@username');
+        const storedPassword = await AsyncStorage.getItem('@password');
+        const storedDomain = await AsyncStorage.getItem('@domain');
+        const storedStoreId = await AsyncStorage.getItem('@storeId');
+
+        // Set the input field values with the stored credentials
+        setUsername(storedUsername);
+        setPassword(storedPassword);
+        setDomain(storedDomain);
+        setStoreId(storedStoreId);
+
+        setLoggedIn(true); // Set the logged-in state to true
       }
-    };
-    loginTermsProvided();
+    } catch (error) {
+      console.error('Error checking login status:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    {
+      setUserInputObject({
+        username: username,
+        password: password,
+        domain: domain,
+        storeId: storeId,
+      });
+    }
   }, [username, password, domain, storeId]);
-  
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   useEffect(() => {
     console.log(userInputObject);
@@ -584,7 +570,7 @@ const LoginScreen = () => {
             style={{ height: height / 1.33 }}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
-        ) : !token ? (
+        ) : !loggedIn ? (
           <View
             className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
             style={{
@@ -614,6 +600,7 @@ const LoginScreen = () => {
               onChangeText={handleChangePassword}
               style={input}
               placeholder={t("passwordProvided")}
+              // onTextInput="AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A=="
               placeholderTextColor={'white'}
               keyboardType="visible-password"
               clearButtonMode={'always'}
@@ -642,14 +629,14 @@ const LoginScreen = () => {
             </TouchableOpacity>
           </View>
         ) : (
-          <ScrollView className="flex-1 w-full h-full">
-            <TouchableOpacity>
-              <DrawerHeader />
-            </TouchableOpacity>
-            <View
-              className="justify-center items-center"
-              style={{ height: height / 1.33 }}>
-              {/* <TouchableOpacity
+        <ScrollView className="flex-1 w-full h-full">
+          <TouchableOpacity>
+            <DrawerHeader />
+          </TouchableOpacity>
+          <View
+            className="justify-center items-center"
+            style={{ height: height / 1.33 }}>
+            {/* <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('LineChartScreen');
@@ -682,14 +669,14 @@ const LoginScreen = () => {
                 </Text>
               </TouchableOpacity> */}
 
-              {/* Correctly fetches the VAT (console.log) */}
-              {/* <TouchableOpacity
+            {/* Correctly fetches the VAT (console.log) */}
+            {/* <TouchableOpacity
                 className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
                 onPress={() => fetchVATbyEmail()}>
                 <Text className="text-center text-lg text-white">Fetch VAT</Text>
               </TouchableOpacity> */}
 
-              {/* <TouchableOpacity
+            {/* <TouchableOpacity
                 className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
                 onPress={() => {
                   navigation.navigate('ProductSalesScreen');
@@ -726,34 +713,34 @@ const LoginScreen = () => {
                 </Text>
               </TouchableOpacity> */}
 
-              {/* Attribute "Freepik" for rounded language flags */}
+            {/* Attribute "Freepik" for rounded language flags */}
 
-              <View style={languageStyle.container}>
-                <View style={languageStyle.flagContainer}>
-                  <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
-                    <Image
-                      style={languageStyle.flag}
-                      source={
-                        i18n.language === 'el'
-                          ? require('../images/greece.png')
-                          : require('../images/england.png')
-                      }
-                    />
-                  </TouchableOpacity>
-                  <View style={languageStyle.pickerContainer}>
-                    <Picker
-                      style={languageStyle.picker}
-                      selectedValue={selectedLanguage}
-                      onValueChange={handleLanguageChange}>
-                      <Picker.Item label={t('greek')} value="el" />
-                      <Picker.Item label={t('english')} value="en" />
-                      {/* <Picker.Item label={t('romanian')} value="ro" /> */}
-                    </Picker>
-                  </View>
+            <View style={languageStyle.container}>
+              <View style={languageStyle.flagContainer}>
+                <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
+                  <Image
+                    style={languageStyle.flag}
+                    source={
+                      i18n.language === 'el'
+                        ? require('../images/greece.png')
+                        : require('../images/england.png')
+                    }
+                  />
+                </TouchableOpacity>
+                <View style={languageStyle.pickerContainer}>
+                  <Picker
+                    style={languageStyle.picker}
+                    selectedValue={selectedLanguage}
+                    onValueChange={handleLanguageChange}>
+                    <Picker.Item label={t('greek')} value="el" />
+                    <Picker.Item label={t('english')} value="en" />
+                    {/* <Picker.Item label={t('romanian')} value="ro" /> */}
+                  </Picker>
                 </View>
               </View>
             </View>
-          </ScrollView>
+          </View>
+        </ScrollView>
         )}
       </SafeAreaView>
     </ImageBackground>

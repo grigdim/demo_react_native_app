@@ -110,6 +110,8 @@
         "brandHelpScreen": "BRAND NAME",
         "storeHelpScreen": "STORE",
         "posHelpScreen": "POS",
+        "storeIdHelpScreen": "STORE ID",
+        "domainHelpScreen": "DOMAIN",
         // About Screen
         "yourDigitalGuideAboutScreen": "Your digital guide",
         "smallRetailAboutScreen": "Small retail is a daily battle.",

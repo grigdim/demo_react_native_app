@@ -5,15 +5,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import { useInfo } from '../components/PersonalInfoTaken';
 
-const hardCodedBrandName = 'SAKE A.E'
-// const hardCodedVAT = '123456789'
-// const hardCodedPrimaryEmail = 'dasasd@hotmail.com'
-const hardCodedStoreId = '55589'
-const hardCodedPos = '2'
-
 const HelpScreen = () => {
   const { t, i18n } = useTranslation();
-  const {vatNumber, primaryEmail}  = useInfo();
+  const {domain, storeId}  = useInfo();
 
   return (
     <View style={{ flex: 1 }}>
@@ -75,26 +69,16 @@ const HelpScreen = () => {
               {hardCodedBrandName}
             </Text>
           </Text> */}
-          <Text style={styles.infoText}>{t("vatHelpScreen")}:{'  '}
+          <Text style={styles.infoText}>{t("domainHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
-              {vatNumber} 
+              {domain} 
             </Text>
           </Text>
-          <Text style={styles.infoText}>{t("primaryEmailHelpScreen")}:{'  '}
+          <Text style={styles.infoText}>{t("storeIdHelpScreen")}:{'  '}
             <Text style={{ color: 'black' }}>
-              {primaryEmail} 
+              {storeId} 
             </Text>
           </Text>
-          {/* <Text style={styles.infoText}>{t("storeHelpScreen")}:{'  '}
-            <Text style={{ color: 'black' }}>
-              {hardCodedStoreId}
-            </Text>
-          </Text>
-          <Text style={styles.infoText}>{t("posHelpScreen")}:{'  '}
-            <Text style={{ color: 'black' }}>
-              {hardCodedPos}
-            </Text>
-          </Text> */}
         </View>
       </View>
     </View>
