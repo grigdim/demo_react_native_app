@@ -18,33 +18,33 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useInfo} from '../components/PersonalInfoTaken';
-import {store} from '../store';
+import { useInfo } from '../components/PersonalInfoTaken';
+import { store } from '../store';
 
 const LoginScreen = () => {
   const options = [
-    {label: 'Ελληνικά', value: 'el'},
-    {label: 'English', value: 'en'},
+    { label: 'Ελληνικά', value: 'el' },
+    { label: 'English', value: 'en' },
   ];
-  const {setInfoDomain, setInfoStoreId} = useInfo();
-  const {t, i18n} = useTranslation();
+  const { setInfoDomain, setInfoStoreId } = useInfo();
+  const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -229,7 +229,7 @@ const LoginScreen = () => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
+      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
     }
   }, [isTermsOfServiceAccepted, scrollViewRef]);
 
@@ -244,8 +244,8 @@ const LoginScreen = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const {height, width} = Dimensions.get('screen');
-  const {input, buttonText, disabledButton} = style;
+  const { height, width } = Dimensions.get('screen');
+  const { input, buttonText, disabledButton } = style;
   // const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -388,7 +388,7 @@ const LoginScreen = () => {
       Alert.alert(t('warning'), t('validCredentials'), [
         {
           text: 'OK',
-          onPress: () => {},
+          onPress: () => { },
         },
       ]);
     } else {
@@ -427,7 +427,8 @@ const LoginScreen = () => {
         console.log('no user object');
       }
     } catch (error) {
-      console.error('Error checking login status:', error);
+      // Always a log when the user hasn't logged in, doesn't matter at all.
+      // console.error('Error checking login status:', error);
     }
   };
 
@@ -474,7 +475,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -517,7 +518,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -564,7 +565,7 @@ const LoginScreen = () => {
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{height: height / 1.33}}>
+            style={{ height: height / 1.33 }}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !loggedIn ? (
@@ -578,7 +579,7 @@ const LoginScreen = () => {
                 name="user"
                 size={75}
                 color="white"
-                // color="rgb(59 130 246)"
+              // color="rgb(59 130 246)"
               />
               <Text className="text-white text-3xl">
                 {t('helloIntalerLoginScreen')}
@@ -591,7 +592,7 @@ const LoginScreen = () => {
               placeholderTextColor={'white'}
               // keyboardType="email-address"
               clearButtonMode={'always'}
-              // ref={inputRef}
+            // ref={inputRef}
             />
             <TextInput
               onChangeText={handleChangePassword}
@@ -634,86 +635,67 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{height: height / 1.33}}>
-              {/* <TouchableOpacity
-                className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
-                onPress={() => {
-                  navigation.navigate('LineChartScreen');
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('goToLineChartScreen')}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                className="bg-cyan-300 mx-auto my-2 p-2 rounded-2xl"
-                onPress={() => {
-                  navigation.navigate('AuditScreen');
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('goToAuditScreen')}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                className="bg-indigo-300 my-2 mx-auto p-2 rounded-2xl"
-                onPress={() => {
-                  navigation.navigate('StoreScreen');
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('goToStoreScreen')}
-                </Text>
-              </TouchableOpacity> */}
-
-              {/* Correctly fetches the VAT (console.log) */}
-              {/* <TouchableOpacity
-                className="bg-gray-600 justify-center align-center my-2 p-2 rounded-lg"
-                onPress={() => fetchVATbyEmail()}>
-                <Text className="text-center text-lg text-white">Fetch VAT</Text>
-              </TouchableOpacity> */}
-
-              {/* <TouchableOpacity
-                className="bg-orange-300 my-2 mx-auto p-2 rounded-2xl"
-                onPress={() => {
-                  navigation.navigate('ProductSalesScreen');
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('goToProductSalesScreen')}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                className="bg-blue-900 mx-auto my-2 p-2 rounded-2xl"
-                onPress={() => {
-                  navigation.navigate('SalesTabsScreen');
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('goToSalesTabsScreen')}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                className="bg-red-300 mx-auto my-2 p-2 rounded-2xl"
-                onPress={() => {
-                  dispatch(setToken(null));
-                  setPassword('');
-                  setEmail('');
-                  setVat('');
-                  setLogin(true);
-                }}
-                style={{ elevation: 20 }}>
-                <Text className="text-center text-xl text-bold text-white">
-                  {t('deleteTokenAndLoginAgain')}
-                </Text>
-              </TouchableOpacity> */}
+              style={{ height: height / 1.33 }}>
+              <ScrollView
+                ref={scrollViewRef}
+                className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+                style={{ width: '80%', height: '75%' }}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0, 180, 243, 0.9)',
+                    padding: 20,
+                    borderRadius: 10,
+                    elevation: 40,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      marginBottom: 20,
+                      marginTop: 10,
+                      textAlign: 'center',
+                    }}>
+                    {t('intaleStatisticsTitle')}
+                  </Text>
+                  <Text style={{
+                    color: 'white',
+                  }}>{t('intaleStatisticsContent')}</Text>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      marginBottom: 20,
+                      marginTop: 10,
+                      textAlign: 'center',
+                    }}>
+                    {t('intaleNews')}
+                  </Text>
+                  <Text style={{
+                    color: 'white',
+                  }}>{t('intaleNews1')}</Text>
+                  <Text style={{
+                    color: 'white',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>{t('downloadLatestIntalePoint')}{'   '}
+                    <TouchableOpacity onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US')}>
+                      <View style={{ borderRadius: 24, overflow: 'hidden' }}>
+                        <Image
+                          source={require('../images/intalePoint.png')}
+                          style={{ width: 48, height: 48 }}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  </Text>
+                  {/* AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A== */}
+                </View>
+              </ScrollView>
 
               {/* Attribute "Freepik" for rounded language flags */}
-
               <View style={languageStyle.container}>
                 <View style={languageStyle.flagContainer}>
                   <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
@@ -788,7 +770,7 @@ const style = StyleSheet.create({
 const languageStyle = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 10,
     elevation: 30,
   },
   picker: {
