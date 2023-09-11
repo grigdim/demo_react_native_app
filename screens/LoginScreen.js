@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
@@ -17,33 +18,33 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { selectBox } from '../features/bootstrap';
-import { selectToken } from '../features/bootstrap';
+import {Picker} from '@react-native-picker/picker';
+import React, {useState, useEffect, useRef} from 'react';
+import {useSelector} from 'react-redux';
+import {selectBox} from '../features/bootstrap';
+import {selectToken} from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
-import { setToken } from '../features/bootstrap';
-import { useNavigation } from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setToken} from '../features/bootstrap';
+import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useInfo } from '../components/PersonalInfoTaken';
-import { store } from '../store';
+import {useInfo} from '../components/PersonalInfoTaken';
+import {store} from '../store';
 
 const LoginScreen = () => {
   const options = [
-    { label: 'Ελληνικά', value: 'el' },
-    { label: 'English', value: 'en' },
+    {label: 'Ελληνικά', value: 'el'},
+    {label: 'English', value: 'en'},
   ];
-  const { setInfoDomain, setInfoStoreId } = useInfo();
-  const { t, i18n } = useTranslation();
+  const {setInfoDomain, setInfoStoreId} = useInfo();
+  const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -228,7 +229,7 @@ const LoginScreen = () => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
+      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
     }
   }, [isTermsOfServiceAccepted, scrollViewRef]);
 
@@ -243,43 +244,43 @@ const LoginScreen = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const { height, width } = Dimensions.get('screen');
-  const { input, buttonText, disabledButton } = style;
-  const [email, setEmail] = useState('');
+  const {height, width} = Dimensions.get('screen');
+  const {input, buttonText, disabledButton} = style;
+  // const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [domain, setDomain] = useState('');
   const [storeId, setStoreId] = useState('');
-  const [userInputObject, setUserInputObject] = useState(null);
+  // const [userInputObject, setUserInputObject] = useState(null);
   const [vat, setVat] = useState('');
   const [loading, setLoading] = useState(false);
   const [emulator, setEmulator] = useState(null);
   // const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
   // const [softKeys, setSoftKeys] = useState(null);
-  const [login, setLogin] = useState(true);
+  // const [login, setLogin] = useState(true);
   const [registeredEmail, setRegisteredEmail] = useState(false);
 
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const box = useSelector(selectBox);
-  const token = useSelector(selectToken);
+  // const navigation = useNavigation();
+  // const box = useSelector(selectBox);
+  // const token = useSelector(selectToken);
 
   // const inputRef = useRef(null);
 
-  const handleChangeUsername = async (inputText) => {
+  const handleChangeUsername = async inputText => {
     setUsername(inputText);
   };
 
-  const handleChangePassword = async (inputText) => {
+  const handleChangePassword = async inputText => {
     setPassword(inputText);
   };
 
-  const handleChangeDomain = async (inputText) => {
+  const handleChangeDomain = async inputText => {
     setDomain(inputText);
     setInfoDomain(inputText);
   };
 
-  const handleChangeStoreId = async (inputText) => {
+  const handleChangeStoreId = async inputText => {
     setStoreId(inputText);
     setInfoStoreId(inputText);
   };
@@ -303,7 +304,7 @@ const LoginScreen = () => {
     }
   };
 
-  const isEmailDisabled = email === '' || email === null;
+  // const isEmailDisabled = email === '' || email === null;
   const isInputDisabled =
     username === '' ||
     username === null ||
@@ -313,13 +314,13 @@ const LoginScreen = () => {
     domain === null ||
     storeId === '' ||
     storeId === null;
-  const isPasswordDisabled = password === '' || password === null;
-  const isVatDisabled = vat === '' || vat === null;
+  // const isPasswordDisabled = password === '' || password === null;
+  // const isVatDisabled = vat === '' || vat === null;
 
-  const isValidEmail = () => {
-    const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-    return regex.test(email);
-  };
+  // const isValidEmail = () => {
+  //   const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+  //   return regex.test(email);
+  // };
 
   // const handleCheckEmail = () => {
   //   const valid = isValidEmail();
@@ -346,7 +347,12 @@ const LoginScreen = () => {
 
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (
+    retrievedUsername,
+    retrievedPassword,
+    retrievedDomain,
+    retrievedStoreId,
+  ) => {
     setLoading(true);
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
@@ -358,11 +364,12 @@ const LoginScreen = () => {
       //   'AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A==',
       // domain: 'jzois',
       // storeId: 4043,
-      username: username,
-      password: password,
-      domain: domain,
-      storeId: storeId,
+      username: retrievedUsername,
+      password: retrievedPassword,
+      domain: retrievedDomain,
+      storeId: retrievedStoreId,
     });
+    console.log('raw', raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -381,17 +388,20 @@ const LoginScreen = () => {
       Alert.alert(t('warning'), t('validCredentials'), [
         {
           text: 'OK',
-          onPress: () => { },
+          onPress: () => {},
         },
       ]);
     } else {
       dispatch(setToken(data));
-      await AsyncStorage.setItem('@userToken', data); // Needed
-      // Rest are for storing purposes
-      await AsyncStorage.setItem('@username', username);
-      await AsyncStorage.setItem('@password', password);
-      await AsyncStorage.setItem('@domain', domain);
-      await AsyncStorage.setItem('@storeId', storeId);
+      await AsyncStorage.setItem(
+        '@userObject',
+        JSON.stringify({
+          username: username,
+          password: password,
+          domain: domain,
+          storeId: storeId,
+        }),
+      );
       setLoggedIn(true);
     }
     setLoading(false);
@@ -399,46 +409,31 @@ const LoginScreen = () => {
 
   const checkLoginStatus = async () => {
     try {
-      const userToken = await AsyncStorage.getItem('@userToken');
-      if (userToken) {
-        // User is logged in, retrieve stored credentials
-        const storedUsername = await AsyncStorage.getItem('@username');
-        const storedPassword = await AsyncStorage.getItem('@password');
-        const storedDomain = await AsyncStorage.getItem('@domain');
-        const storedStoreId = await AsyncStorage.getItem('@storeId');
+      const retrievedUserString = await AsyncStorage.getItem('@userObject');
+      const retrievedUserObject = JSON.parse(retrievedUserString);
+      if (
+        retrievedUserObject.username !== '' &&
+        retrievedUserObject.username !== null
+      ) {
+        console.log('we are logging in', retrievedUserObject);
 
-        // Set the input field values with the stored credentials
-        setUsername(storedUsername);
-        setPassword(storedPassword);
-        setDomain(storedDomain);
-        setStoreId(storedStoreId);
-
-        setLoggedIn(true); // Set the logged-in state to true
+        await handleLogin(
+          retrievedUserObject.username,
+          retrievedUserObject.password,
+          retrievedUserObject.domain,
+          retrievedUserObject.storeId,
+        );
+      } else {
+        console.log('no user object');
       }
     } catch (error) {
       console.error('Error checking login status:', error);
     }
   };
 
-
-  useEffect(() => {
-    {
-      setUserInputObject({
-        username: username,
-        password: password,
-        domain: domain,
-        storeId: storeId,
-      });
-    }
-  }, [username, password, domain, storeId]);
-
   useEffect(() => {
     checkLoginStatus();
   }, []);
-
-  useEffect(() => {
-    console.log(userInputObject);
-  }, [userInputObject]);
 
   const isRunningOnEmulator = async () => {
     setEmulator(await DeviceInfo.isEmulator());
@@ -479,7 +474,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ width: '85%', height: '75%' }}
+              style={{width: '85%', height: '75%'}}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -522,7 +517,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ width: '85%', height: '75%' }}
+              style={{width: '85%', height: '75%'}}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -569,7 +564,7 @@ const LoginScreen = () => {
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{ height: height / 1.33 }}>
+            style={{height: height / 1.33}}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !loggedIn ? (
@@ -583,7 +578,7 @@ const LoginScreen = () => {
                 name="user"
                 size={75}
                 color="white"
-              // color="rgb(59 130 246)"
+                // color="rgb(59 130 246)"
               />
               <Text className="text-white text-3xl">
                 {t('helloIntalerLoginScreen')}
@@ -592,16 +587,16 @@ const LoginScreen = () => {
             <TextInput
               onChangeText={handleChangeUsername}
               style={input}
-              placeholder={t("usernameProvided")}
+              placeholder={t('usernameProvided')}
               placeholderTextColor={'white'}
               // keyboardType="email-address"
               clearButtonMode={'always'}
-            // ref={inputRef}
+              // ref={inputRef}
             />
             <TextInput
               onChangeText={handleChangePassword}
               style={input}
-              placeholder={t("passwordProvided")}
+              placeholder={t('passwordProvided')}
               // onTextInput="AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A=="
               placeholderTextColor={'white'}
               keyboardType="visible-password"
@@ -610,21 +605,23 @@ const LoginScreen = () => {
             <TextInput
               onChangeText={handleChangeDomain}
               style={input}
-              placeholder={t("domainProvided")}
+              placeholder={t('domainProvided')}
               placeholderTextColor={'white'}
               clearButtonMode={'always'}
             />
             <TextInput
               onChangeText={handleChangeStoreId}
               style={input}
-              placeholder={t("storeIdProvided")}
+              placeholder={t('storeIdProvided')}
               placeholderTextColor={'white'}
               keyboardType="numeric"
               clearButtonMode={'always'}
             />
             <TouchableOpacity
               style={[isInputDisabled && disabledButton]}
-              onPress={handleLogin}
+              onPress={() => {
+                handleLogin(username, password, domain, storeId);
+              }}
               disabled={isInputDisabled}
               className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
               <Text style={buttonText}>{t('submit')}</Text>
@@ -637,7 +634,7 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{ height: height / 1.33 }}>
+              style={{height: height / 1.33}}>
               {/* <TouchableOpacity
                 className="bg-emerald-900 my-2 mx-auto p-2 mt-5 rounded-2xl"
                 onPress={() => {
