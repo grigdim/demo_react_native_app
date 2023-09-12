@@ -143,6 +143,8 @@
         "moreDetails": "More Details",
         "Week": "Week",
         "of": "of",
+        // Language Screen
+        "chooseLanguageTitle": "CHOOSE LANGUAGE",
         // Product Details
         "chooseProduct": "CHOOSE A PRODUCT",
         "productPlaceHolder": "Search by Name, Barcode, Supplier Code or Internal Code",

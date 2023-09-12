@@ -143,6 +143,8 @@
         "moreDetails": "Λεπτομέρειες",
         "WeekAbbr": "Εβδ",
         "of": "του",
+        // Language Screen
+        "chooseLanguageTitle": "ΕΠΙΛΟΓΗ ΓΛΩΣΣΑΣ",
         // Product Details 
         "chooseProduct": "ΕΠΙΛΟΓΗ ΠΡΟΪΟΝΤΟΣ",
         "productPlaceHolder": "Αναζήτηση με Όνομα, Barcode, κωδικό Προμηθευτή ή Εσωτερικό κωδικό",
