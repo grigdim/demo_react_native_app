@@ -18,33 +18,33 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectBox } from '../features/bootstrap';
+import { selectToken } from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
-import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/bootstrap';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useInfo} from '../components/PersonalInfoTaken';
-import {store} from '../store';
+import { useInfo } from '../components/PersonalInfoTaken';
+import { store } from '../store';
 
 const LoginScreen = () => {
   const options = [
-    {label: 'Ελληνικά', value: 'el'},
-    {label: 'English', value: 'en'},
+    { label: 'Ελληνικά', value: 'el' },
+    { label: 'English', value: 'en' },
   ];
-  const {setInfoDomain, setInfoStoreId} = useInfo();
-  const {t, i18n} = useTranslation();
+  const { setInfoDomain, setInfoStoreId } = useInfo();
+  const { t, i18n } = useTranslation();
   const scrollViewRef = useRef(null);
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -165,11 +165,6 @@ const LoginScreen = () => {
     }
   };
 
-  // New ToS to be added
-  // const handleTermsOfServiceLink = () => {
-  //   Linking.openURL('https://www.intale.com/terms');
-  // };
-
   // Scroll
 
   const handleScroll = event => {
@@ -217,35 +212,54 @@ const LoginScreen = () => {
     loadPrivacyPolicyAcceptedState();
   }, []);
 
-  // useEffect(() => {
-  //   // Check if the Terms of Service has been accepted
-  //   if (isTermsOfServiceAccepted) {
-  //     // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-  //     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
-  //   }
-  // }, [isTermsOfServiceAccepted]);
+  useEffect(() => {
+    const loadLanguageProvidedState = async () => {
+      try {
+        const storedlanguageChoice = await AsyncStorage.getItem(
+          '@languageSelectionProvided',
+        );
+        if (storedlanguageChoice === 'true') {
+          setLanguagePicked(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Language Selection:', error); // Never seen
+      }
+    };
+    loadLanguageProvidedState();
+  }, []);
 
   useEffect(() => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
+      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
     }
   }, [isTermsOfServiceAccepted, scrollViewRef]);
 
   // Localization
+
+  const [isLanguagePicked, setLanguagePicked] = useState(false);
 
   const handleLanguageChange = newLanguage => {
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
   };
 
+  const handleLanguageSelection = async () => {
+    setLanguagePicked(true);
+    try {
+      await AsyncStorage.setItem('@languageSelectionProvided', 'true');
+    } catch (error) {
+      console.error('Error accepting Language Selection:', error); // Never seen
+    }
+  };
+
   const togglePicker = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const {height, width} = Dimensions.get('screen');
-  const {input, buttonText, disabledButton} = style;
+  const { height, width } = Dimensions.get('screen');
+  const { input, buttonText, disabledButton } = style;
   // const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -388,7 +402,7 @@ const LoginScreen = () => {
       Alert.alert(t('warning'), t('validCredentials'), [
         {
           text: 'OK',
-          onPress: () => {},
+          onPress: () => { },
         },
       ]);
     } else {
@@ -459,8 +473,40 @@ const LoginScreen = () => {
       className="flex-1 w-full h-full"
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
-        {/* RERENDERED SCREEN FOR LANGUAGE CHANGE */}
-        {isRenderVisible ? (
+        {/* Attribute "Freepik" for rounded language flags */}
+        {!isLanguagePicked ? (
+          <View style={languageStyle.container}>
+            <View style={languageStyle.flagContainer}>
+              <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
+                <Image
+                  style={languageStyle.flag}
+                  source={
+                    i18n.language === 'el'
+                      ? require('../images/greece.png')
+                      : require('../images/england.png')
+                  }
+                />
+              </TouchableOpacity>
+              <View style={languageStyle.pickerContainer}>
+                <Picker
+                  style={languageStyle.picker}
+                  selectedValue={selectedLanguage}
+                  onValueChange={handleLanguageChange}>
+                  <Picker.Item label={t('greek')} value="el" />
+                  <Picker.Item label={t('english')} value="en" />
+                </Picker>
+              </View>
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={languageStyle.languageButton}
+                onPress={handleLanguageSelection}
+                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>{t('submit')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : !isLanguagePicked ? (
           <ScrollView
             ref={scrollViewRef}
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
@@ -475,7 +521,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -497,9 +543,6 @@ const LoginScreen = () => {
                   {t('termsOfService')}
                 </Text>
                 <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                  {/* <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
-                    {t("intaleTermsOfServiceLink")}
-                  </Text> */}
                 </TouchableOpacity>
                 <Text>{t('termsOfServiceContent')}</Text>
               </View>
@@ -518,7 +561,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
+              style={{ width: '85%', height: '75%' }}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -565,94 +608,68 @@ const LoginScreen = () => {
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{height: height / 1.33}}>
+            style={{ height: height / 1.33 }}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !loggedIn ? (
-          <View className="w-full justify-center items-center space-y-2">
-            <View
-              className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              }}>
-              <View className="items-center">
-                <Icon
-                  name="user"
-                  size={75}
-                  color="white"
-                  // color="rgb(59 130 246)"
-                />
-                <Text className="text-white text-3xl">
-                  {t('helloIntalerLoginScreen')}
-                </Text>
-              </View>
-              <TextInput
-                onChangeText={handleChangeUsername}
-                style={input}
-                placeholder={t('usernameProvided')}
-                placeholderTextColor={'white'}
-                // keyboardType="email-address"
-                clearButtonMode={'always'}
-                // ref={inputRef}
+          <View
+            className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            }}>
+            <View className="items-center">
+              <Icon
+                name="user"
+                size={75}
+                color="white"
+              // color="rgb(59 130 246)"
               />
-              <TextInput
-                onChangeText={handleChangePassword}
-                style={input}
-                placeholder={t('passwordProvided')}
-                // onTextInput="AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A=="
-                placeholderTextColor={'white'}
-                keyboardType="visible-password"
-                clearButtonMode={'always'}
-              />
-              <TextInput
-                onChangeText={handleChangeDomain}
-                style={input}
-                placeholder={t('domainProvided')}
-                placeholderTextColor={'white'}
-                clearButtonMode={'always'}
-              />
-              <TextInput
-                onChangeText={handleChangeStoreId}
-                style={input}
-                placeholder={t('storeIdProvided')}
-                placeholderTextColor={'white'}
-                keyboardType="numeric"
-                clearButtonMode={'always'}
-              />
-              <TouchableOpacity
-                style={[isInputDisabled && disabledButton]}
-                onPress={() => {
-                  handleLogin(username, password, domain, storeId);
-                }}
-                disabled={isInputDisabled}
-                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t('submit')}</Text>
-              </TouchableOpacity>
+              <Text className="text-white text-3xl">
+                {t('helloIntalerLoginScreen')}
+              </Text>
             </View>
-            <View style={languageStyle.container}>
-              <View style={languageStyle.flagContainer}>
-                <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
-                  <Image
-                    style={languageStyle.flag}
-                    source={
-                      i18n.language === 'el'
-                        ? require('../images/greece.png')
-                        : require('../images/england.png')
-                    }
-                  />
-                </TouchableOpacity>
-                <View style={languageStyle.pickerContainer}>
-                  <Picker
-                    style={languageStyle.picker}
-                    selectedValue={selectedLanguage}
-                    onValueChange={handleLanguageChange}>
-                    <Picker.Item label={t('greek')} value="el" />
-                    <Picker.Item label={t('english')} value="en" />
-                    {/* <Picker.Item label={t('romanian')} value="ro" /> */}
-                  </Picker>
-                </View>
-              </View>
-            </View>
+            <TextInput
+              onChangeText={handleChangeUsername}
+              style={input}
+              placeholder={t('usernameProvided')}
+              placeholderTextColor={'white'}
+              // keyboardType="email-address"
+              clearButtonMode={'always'}
+            // ref={inputRef}
+            />
+            <TextInput
+              onChangeText={handleChangePassword}
+              style={input}
+              placeholder={t('passwordProvided')}
+              // onTextInput="AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A=="
+              placeholderTextColor={'white'}
+              keyboardType="visible-password"
+              clearButtonMode={'always'}
+            />
+            <TextInput
+              onChangeText={handleChangeDomain}
+              style={input}
+              placeholder={t('domainProvided')}
+              placeholderTextColor={'white'}
+              clearButtonMode={'always'}
+            />
+            <TextInput
+              onChangeText={handleChangeStoreId}
+              style={input}
+              placeholder={t('storeIdProvided')}
+              placeholderTextColor={'white'}
+              keyboardType="numeric"
+              clearButtonMode={'always'}
+            />
+            <TouchableOpacity
+              style={[isInputDisabled && disabledButton]}
+              onPress={() => {
+                handleLogin(username, password, domain, storeId);
+              }}
+              disabled={isInputDisabled}
+              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+              <Text style={buttonText}>{t('submit')}</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <ScrollView className="flex-1 w-full h-full">
@@ -661,11 +678,11 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{height: height / 1.33}}>
+              style={{ height: height / 1.33 }}>
               <ScrollView
                 ref={scrollViewRef}
                 className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                style={{width: '80%', height: '75%'}}
+                style={{ width: '80%', height: '75%' }}
                 onScroll={handleScroll}
                 scrollEventThrottle={16}>
                 <View
@@ -686,12 +703,9 @@ const LoginScreen = () => {
                     }}>
                     {t('intaleStatisticsTitle')}
                   </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                    }}>
-                    {t('intaleStatisticsContent')}
-                  </Text>
+                  <Text style={{
+                    color: 'white',
+                  }}>{t('intaleStatisticsContent')}</Text>
                   <Text
                     style={{
                       fontSize: 20,
@@ -703,30 +717,19 @@ const LoginScreen = () => {
                     }}>
                     {t('intaleNews')}
                   </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                    }}>
-                    {t('intaleNews1')}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    {t('downloadLatestIntalePoint')}
-                    {'   '}
-                    <TouchableOpacity
-                      onPress={() =>
-                        Linking.openURL(
-                          'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
-                        )
-                      }>
-                      <View style={{borderRadius: 24, overflow: 'hidden'}}>
+                  <Text style={{
+                    color: 'white',
+                  }}>{t('intaleNews1')}</Text>
+                  <Text style={{
+                    color: 'white',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>{t('downloadLatestIntalePoint')}{'   '}
+                    <TouchableOpacity onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US')}>
+                      <View style={{ borderRadius: 24, overflow: 'hidden' }}>
                         <Image
                           source={require('../images/intalePoint.png')}
-                          style={{width: 48, height: 48}}
+                          style={{ width: 48, height: 48 }}
                         />
                       </View>
                     </TouchableOpacity>
@@ -734,8 +737,6 @@ const LoginScreen = () => {
                   {/* AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A== */}
                 </View>
               </ScrollView>
-
-              {/* Attribute "Freepik" for rounded language flags */}
             </View>
           </ScrollView>
         )}
@@ -785,8 +786,15 @@ const style = StyleSheet.create({
 
 const languageStyle = StyleSheet.create({
   container: {
-    // position: 'absolute',
-    // bottom: 10,
+    zIndex: 1,
+    position: 'absolute',
+    alignContent: 'center',
+    elevation: 30,
+  },
+  languageButton: {
+    position: 'relative',
+    alignContent: 'center',
+    marginTop: 30,
     elevation: 30,
   },
   picker: {
