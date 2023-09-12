@@ -18,35 +18,35 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { selectBox } from '../features/bootstrap';
-import { selectToken } from '../features/bootstrap';
+import {Picker} from '@react-native-picker/picker';
+import React, {useState, useEffect, useRef} from 'react';
+import {useSelector} from 'react-redux';
+import {selectBox} from '../features/bootstrap';
+import {selectToken} from '../features/bootstrap';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
-import { setToken } from '../features/bootstrap';
-import { useNavigation } from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setToken} from '../features/bootstrap';
+import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useInfo } from '../components/PersonalInfoTaken';
-import { store } from '../store';
+import {useInfo} from '../components/PersonalInfoTaken';
+import {store} from '../store';
 
 const LoginScreen = () => {
   const options = [
-    { label: 'Ελληνικά', value: 'el' },
-    { label: 'English', value: 'en' },
+    {label: 'Ελληνικά', value: 'el'},
+    {label: 'English', value: 'en'},
   ];
-  const { setInfoDomain, setInfoStoreId } = useInfo();
-  const { t, i18n } = useTranslation();
+  const {setInfoDomain, setInfoStoreId} = useInfo();
+  const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [selectedLanguage, setSelectedLanguage] = useState();
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [isScrolledToEnd, setScrolledToEnd] = useState(false);
   const acceptButtonStyle = isScrolledToEnd
@@ -128,29 +128,36 @@ const LoginScreen = () => {
     };
     loadPrivacyPolicyAcceptedState();
   }, []);
+  useEffect(() => {
+    console.log('====================================');
+    console.log(selectedLanguage);
+    console.log('====================================');
+  }, [selectedLanguage]);
+
+  const loadSelectedLanguage = async () => {
+    try {
+      const storedSelectedLanguage = await AsyncStorage.getItem(
+        '@selectedLanguage',
+      );
+      if (storedSelectedLanguage) {
+        setSelectedLanguage(storedSelectedLanguage);
+        i18n.changeLanguage(storedSelectedLanguage);
+        setLanguagePicked(true);
+      }
+    } catch (error) {
+      console.error('Error loading selected language:', error);
+    }
+  };
 
   useEffect(() => {
-    const loadSelectedLanguage = async () => {
-      try {
-        const storedSelectedLanguage = await AsyncStorage.getItem('@selectedLanguage');
-        if (storedSelectedLanguage) {
-          setSelectedLanguage(storedSelectedLanguage);
-          setLanguagePicked(true);
-        }
-      } catch (error) {
-        console.error('Error loading selected language:', error);
-      }
-    };
-
     loadSelectedLanguage();
   }, []);
-
 
   useEffect(() => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
       // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
+      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
     }
   }, [isTermsOfServiceAccepted, scrollViewRef]);
 
@@ -158,11 +165,12 @@ const LoginScreen = () => {
 
   const [isLanguagePicked, setLanguagePicked] = useState(false);
 
-  const handleLanguageChange = async (newLanguage) => {
-    setSelectedLanguage(newLanguage);
-    i18n.changeLanguage(newLanguage);
+  const handleLanguageChange = async newLanguage => {
     try {
+      console.log(newLanguage);
       await AsyncStorage.setItem('@selectedLanguage', newLanguage);
+      setSelectedLanguage(newLanguage);
+      i18n.changeLanguage(newLanguage);
       setLanguagePicked(true);
     } catch (error) {
       console.error('Error accepting Language Selection:', error);
@@ -173,8 +181,8 @@ const LoginScreen = () => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const { height, width } = Dimensions.get('screen');
-  const { input, buttonText, disabledButton } = style;
+  const {height, width} = Dimensions.get('screen');
+  const {input, buttonText, disabledButton} = style;
   // const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -298,7 +306,6 @@ const LoginScreen = () => {
       domain: retrievedDomain,
       storeId: retrievedStoreId,
     });
-    console.log('raw', raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -310,14 +317,13 @@ const LoginScreen = () => {
       requestOptions,
     );
     const data = await response.text();
-    console.log(data);
     const wordToFind = 'message';
     const regex = new RegExp(`\\b${wordToFind}\\b`, 'i');
     if (regex.test(data)) {
       Alert.alert(t('warning'), t('validCredentials'), [
         {
           text: 'OK',
-          onPress: () => { },
+          onPress: () => {},
         },
       ]);
     } else {
@@ -344,8 +350,6 @@ const LoginScreen = () => {
         retrievedUserObject.username !== '' &&
         retrievedUserObject.username !== null
       ) {
-        console.log('we are logging in', retrievedUserObject);
-
         await handleLogin(
           retrievedUserObject.username,
           retrievedUserObject.password,
@@ -421,7 +425,7 @@ const LoginScreen = () => {
                 </Picker>
               </View>
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <TouchableOpacity
                 style={languageStyle.languageButton}
                 onPress={handleLanguageChange}
@@ -445,7 +449,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ width: '85%', height: '75%' }}
+              style={{width: '85%', height: '75%'}}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -466,8 +470,8 @@ const LoginScreen = () => {
                   }}>
                   {t('termsOfService')}
                 </Text>
-                <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handlePrivacyPolicyLink}></TouchableOpacity>
                 <Text>{t('termsOfServiceContent')}</Text>
               </View>
             </ScrollView>
@@ -485,7 +489,7 @@ const LoginScreen = () => {
             <ScrollView
               ref={scrollViewRef}
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ width: '85%', height: '75%' }}
+              style={{width: '85%', height: '75%'}}
               onScroll={handleScroll}
               scrollEventThrottle={16}>
               <View
@@ -532,7 +536,7 @@ const LoginScreen = () => {
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
-            style={{ height: height / 1.33 }}>
+            style={{height: height / 1.33}}>
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !loggedIn ? (
@@ -546,7 +550,7 @@ const LoginScreen = () => {
                 name="user"
                 size={75}
                 color="white"
-              // color="rgb(59 130 246)"
+                // color="rgb(59 130 246)"
               />
               <Text className="text-white text-3xl">
                 {t('helloIntalerLoginScreen')}
@@ -559,7 +563,7 @@ const LoginScreen = () => {
               placeholderTextColor={'white'}
               // keyboardType="email-address"
               clearButtonMode={'always'}
-            // ref={inputRef}
+              // ref={inputRef}
             />
             <TextInput
               onChangeText={handleChangePassword}
@@ -602,11 +606,11 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               className="justify-center items-center"
-              style={{ height: height / 1.33 }}>
+              style={{height: height / 1.33}}>
               <ScrollView
                 ref={scrollViewRef}
                 className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                style={{ width: '80%', height: '75%' }}
+                style={{width: '80%', height: '75%'}}
                 onScroll={handleScroll}
                 scrollEventThrottle={16}>
                 <View
@@ -627,9 +631,12 @@ const LoginScreen = () => {
                     }}>
                     {t('intaleStatisticsTitle')}
                   </Text>
-                  <Text style={{
-                    color: 'white',
-                  }}>{t('intaleStatisticsContent')}</Text>
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}>
+                    {t('intaleStatisticsContent')}
+                  </Text>
                   <Text
                     style={{
                       fontSize: 20,
@@ -641,19 +648,30 @@ const LoginScreen = () => {
                     }}>
                     {t('intaleNews')}
                   </Text>
-                  <Text style={{
-                    color: 'white',
-                  }}>{t('intaleNews1')}</Text>
-                  <Text style={{
-                    color: 'white',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>{t('downloadLatestIntalePoint')}{'   '}
-                    <TouchableOpacity onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US')}>
-                      <View style={{ borderRadius: 24, overflow: 'hidden' }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}>
+                    {t('intaleNews1')}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'white',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    {t('downloadLatestIntalePoint')}
+                    {'   '}
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
+                        )
+                      }>
+                      <View style={{borderRadius: 24, overflow: 'hidden'}}>
                         <Image
                           source={require('../images/intalePoint.png')}
-                          style={{ width: 48, height: 48 }}
+                          style={{width: 48, height: 48}}
                         />
                       </View>
                     </TouchableOpacity>
