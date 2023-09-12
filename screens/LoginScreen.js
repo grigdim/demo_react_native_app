@@ -165,11 +165,6 @@ const LoginScreen = () => {
     }
   };
 
-  // New ToS to be added
-  // const handleTermsOfServiceLink = () => {
-  //   Linking.openURL('https://www.intale.com/terms');
-  // };
-
   // Scroll
 
   const handleScroll = event => {
@@ -217,13 +212,21 @@ const LoginScreen = () => {
     loadPrivacyPolicyAcceptedState();
   }, []);
 
-  // useEffect(() => {
-  //   // Check if the Terms of Service has been accepted
-  //   if (isTermsOfServiceAccepted) {
-  //     // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-  //     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: false });
-  //   }
-  // }, [isTermsOfServiceAccepted]);
+  useEffect(() => {
+    const loadLanguageProvidedState = async () => {
+      try {
+        const storedlanguageChoice = await AsyncStorage.getItem(
+          '@languageSelectionProvided',
+        );
+        if (storedlanguageChoice === 'true') {
+          setLanguagePicked(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Language Selection:', error); // Never seen
+      }
+    };
+    loadLanguageProvidedState();
+  }, []);
 
   useEffect(() => {
     // Check if the Terms of Service has been accepted
@@ -235,9 +238,20 @@ const LoginScreen = () => {
 
   // Localization
 
+  const [isLanguagePicked, setLanguagePicked] = useState(false);
+
   const handleLanguageChange = newLanguage => {
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
+  };
+
+  const handleLanguageSelection = async () => {
+    setLanguagePicked(true);
+    try {
+      await AsyncStorage.setItem('@languageSelectionProvided', 'true');
+    } catch (error) {
+      console.error('Error accepting Language Selection:', error); // Never seen
+    }
   };
 
   const togglePicker = () => {
@@ -459,8 +473,40 @@ const LoginScreen = () => {
       className="flex-1 w-full h-full"
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
-        {/* RERENDERED SCREEN FOR LANGUAGE CHANGE */}
-        {isRenderVisible ? (
+        {/* Attribute "Freepik" for rounded language flags */}
+        {!isLanguagePicked ? (
+          <View style={languageStyle.container}>
+            <View style={languageStyle.flagContainer}>
+              <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
+                <Image
+                  style={languageStyle.flag}
+                  source={
+                    i18n.language === 'el'
+                      ? require('../images/greece.png')
+                      : require('../images/england.png')
+                  }
+                />
+              </TouchableOpacity>
+              <View style={languageStyle.pickerContainer}>
+                <Picker
+                  style={languageStyle.picker}
+                  selectedValue={selectedLanguage}
+                  onValueChange={handleLanguageChange}>
+                  <Picker.Item label={t('greek')} value="el" />
+                  <Picker.Item label={t('english')} value="en" />
+                </Picker>
+              </View>
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={languageStyle.languageButton}
+                onPress={handleLanguageSelection}
+                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+                <Text style={buttonText}>{t('submit')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : !isLanguagePicked ? (
           <ScrollView
             ref={scrollViewRef}
             className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
@@ -497,9 +543,6 @@ const LoginScreen = () => {
                   {t('termsOfService')}
                 </Text>
                 <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                  {/* <Text style={{ fontSize: 16, color: 'blue', marginTop: 10, marginBottom: 20 }}>
-                    {t("intaleTermsOfServiceLink")}
-                  </Text> */}
                 </TouchableOpacity>
                 <Text>{t('termsOfServiceContent')}</Text>
               </View>
@@ -694,32 +737,6 @@ const LoginScreen = () => {
                   {/* AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A== */}
                 </View>
               </ScrollView>
-
-              {/* Attribute "Freepik" for rounded language flags */}
-              <View style={languageStyle.container}>
-                <View style={languageStyle.flagContainer}>
-                  <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
-                    <Image
-                      style={languageStyle.flag}
-                      source={
-                        i18n.language === 'el'
-                          ? require('../images/greece.png')
-                          : require('../images/england.png')
-                      }
-                    />
-                  </TouchableOpacity>
-                  <View style={languageStyle.pickerContainer}>
-                    <Picker
-                      style={languageStyle.picker}
-                      selectedValue={selectedLanguage}
-                      onValueChange={handleLanguageChange}>
-                      <Picker.Item label={t('greek')} value="el" />
-                      <Picker.Item label={t('english')} value="en" />
-                      {/* <Picker.Item label={t('romanian')} value="ro" /> */}
-                    </Picker>
-                  </View>
-                </View>
-              </View>
             </View>
           </ScrollView>
         )}
@@ -769,8 +786,15 @@ const style = StyleSheet.create({
 
 const languageStyle = StyleSheet.create({
   container: {
+    zIndex: 1,
     position: 'absolute',
-    bottom: 10,
+    alignContent: 'center',
+    elevation: 30,
+  },
+  languageButton: {
+    position: 'relative',
+    alignContent: 'center',
+    marginTop: 30,
     elevation: 30,
   },
   picker: {
