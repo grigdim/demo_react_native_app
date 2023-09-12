@@ -4,6 +4,7 @@ import DrawerHeader from './DrawerHeader';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Picker } from '@react-native-picker/picker';
 import { useTranslation } from 'react-i18next';
+import { TextSize } from 'victory-native';
 
 const LanguageScreen = () => {
     const { t, i18n } = useTranslation();
@@ -28,6 +29,9 @@ const LanguageScreen = () => {
             </TouchableOpacity>
             <View className="flex-1 justify-center items-center">
                 <View style={languageStyle.container}>
+                    <View className="justify-center items-center py-3">
+                        <Text style={{ fontSize: 16 }}>{t("chooseLanguageTitle")}</Text>
+                    </View>
                     <View style={languageStyle.flagContainer}>
                         <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
                             <Image
@@ -80,7 +84,7 @@ const languageStyle = StyleSheet.create({
         zIndex: 1,
         position: 'absolute',
         alignContent: 'center',
-        elevation: 30,
+        elevation: 60,
     },
     picker: {
         height: 30,
