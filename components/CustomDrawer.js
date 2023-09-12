@@ -16,8 +16,8 @@ const CustomDrawer = (props) => {
 
     const exitAlert = () => {
         Alert.alert(
-            t("exitApp"),
-            t("areYouSureExitApp") + "\n\n" + t("mustLogInAgain"),
+            t("logoutApp"),
+            t("areYouSureLogoutApp") + "\n\n" + t("mustLogInAgain"),
         [
         {
             text: t("no"),
@@ -52,7 +52,7 @@ const CustomDrawer = (props) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Ionicons name="exit-outline" size={22} color='#217BCC' />
                         <Text style={{ fontSize: 15, fontFamily: 'Roboto-Medium', marginLeft: 5, color: '#217BCC' }}>
-                            {t("exitAppDrawer")}
+                            {t("logoutDrawer")}
                         </Text>
                     </View>
                 </TouchableOpacity>

@@ -14,6 +14,7 @@ import HelpScreen from './screens/HelpScreen';
 import AboutScreen from './screens/AboutScreen';
 import TestingScreen from './screens/TestingScreen';
 import ReportsScreen from './screens/ReportsScreen';
+import LanguageScreen from './screens/LanguageScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -69,46 +70,6 @@ function Root() {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name={t('turnoverDrawer')}
-        // name="Turnover"
-        component={TurnoverScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="wallet-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name={t('totalProfitDrawer')}
-        // name="Total Profit"
-        component={TotalProfitScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="cash-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name={t('reportsDrawer')}
-        // name="Reports"
-        component={ReportsScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="document-text-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name={t('chartsDrawer')}
-        // name="Charts"
-        component={BarChartScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="stats-chart-outline" size={22} color={color} />
-          ),
-        }}
-      /> */}
       <Drawer.Screen
         name={t('salesDrawer')}
         // name="Sales"
@@ -119,16 +80,6 @@ function Root() {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name={t('testingDrawer')}
-        // name="Testing"
-        component={TestingScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="bulb-outline" size={22} color={color} />
-          ),
-        }}
-      /> */}
       <Drawer.Screen
         name={t('helpDrawer')}
         // name="Help"
@@ -136,6 +87,16 @@ function Root() {
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name="headset-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name={t('languageDrawer')}
+        // name="Language"
+        component={LanguageScreen}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="flag-outline" size={22} color={color} />
           ),
         }}
       />

@@ -53,89 +53,6 @@ const LoginScreen = () => {
     ? acceptButtonStyles.buttonEnabled
     : acceptButtonStyles.buttonDisabled;
 
-  // // TO BE IMPLEMENTED - START
-
-  // const [VATbyEmailFromBoApi, setVATbyEmailFromBoApi] = useState();
-  // const [allVATsbyEmailFromBoApi, setAllVATsByEmailFromBoApi] = useState();
-  // const [infoByVATfromBoApi, setInfoByVATfromBoApi] = useState();
-
-  // // Correctly brings back the VAT (tested with button Fetch VAT)
-  // const fetchVATbyEmail = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-
-  //     const response = await fetch(
-  //       `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailassignedvats/${email}`,
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setVATbyEmailFromBoApi(data);
-  //   }
-  //   setLoading(false);
-  // };
-
-  // const fetchAllVATsbyEmail = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-
-  //     const response = await fetch(
-  //       `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/emailserverassignedvats/inkat`, // HARD CODED ATM
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setAllVATsByEmailFromBoApi(data);
-  //   }
-  //   setLoading(false);
-  // };
-
-  // const fetchInfoByVAT = async () => {
-  //   setLoading(true);
-  //   if (__DEV__ && token) {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append('Token', token);
-  //     myHeaders.append('Content-Type', 'application/json');
-  //     var requestOptions = {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     };
-  //     const queryParams = new URLSearchParams({
-  //       // Needed to get the data for now
-  //       loadDwStageInfo: false,
-  //       loadPmiInfo: false,
-  //     });
-
-  //     const response = await fetch(
-  //       `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/vat/038588921/intaleInfo?${queryParams}`, // HARD CODED ATM
-  //       requestOptions,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setInfoByVATfromBoApi(data);
-  //   }
-  //   setLoading(false);
-  // };
-
-  // // TO BE IMPLEMENTED - END
-
   // Privacy Policy
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
@@ -436,6 +353,15 @@ const LoginScreen = () => {
           retrievedUserObject.password,
           retrievedUserObject.domain,
           retrievedUserObject.storeId,
+        );
+        await AsyncStorage.setItem(
+          '@userObject',
+          JSON.stringify({
+            username: retrievedUserObject.username,
+            password: retrievedUserObject.password,
+            domain: retrievedUserObject.domain,
+            storeId: retrievedUserObject.storeId,
+          }),
         );
       } else {
         console.log('no user object');
