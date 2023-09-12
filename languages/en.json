@@ -41,7 +41,8 @@
         "accept": "Accept",
         // Exit App
         "logoutApp": "Logout App",
-        "areYouSureExitApp": "Are you sure you want to logout from the app?",
+        "areYouSureExitApp": "Are you sure you want to logout?",
+        "areYouSureLogoutApp": "Are you sure you want to logout?",
         "mustLogInAgain": "You must log in again.",
         // Demo Go To
         "goToLineChartScreen": "Go to line chart screen",
