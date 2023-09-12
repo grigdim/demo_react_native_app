@@ -130,20 +130,21 @@ const LoginScreen = () => {
   }, []);
 
   useEffect(() => {
-    const loadLanguageProvidedState = async () => {
+    const loadSelectedLanguage = async () => {
       try {
-        const storedlanguageChoice = await AsyncStorage.getItem(
-          '@languageSelectionProvided',
-        );
-        if (storedlanguageChoice === 'true') {
+        const storedSelectedLanguage = await AsyncStorage.getItem('@selectedLanguage');
+        if (storedSelectedLanguage) {
+          setSelectedLanguage(storedSelectedLanguage);
           setLanguagePicked(true);
         }
       } catch (error) {
-        console.error('Error accepting Language Selection:', error); // Never seen
+        console.error('Error loading selected language:', error);
       }
     };
-    loadLanguageProvidedState();
+
+    loadSelectedLanguage();
   }, []);
+
 
   useEffect(() => {
     // Check if the Terms of Service has been accepted
@@ -157,17 +158,14 @@ const LoginScreen = () => {
 
   const [isLanguagePicked, setLanguagePicked] = useState(false);
 
-  const handleLanguageChange = newLanguage => {
+  const handleLanguageChange = async (newLanguage) => {
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
-  };
-
-  const handleLanguageSelection = async () => {
-    setLanguagePicked(true);
     try {
-      await AsyncStorage.setItem('@languageSelectionProvided', 'true');
+      await AsyncStorage.setItem('@selectedLanguage', newLanguage);
+      setLanguagePicked(true);
     } catch (error) {
-      console.error('Error accepting Language Selection:', error); // Never seen
+      console.error('Error accepting Language Selection:', error);
     }
   };
 
@@ -426,7 +424,7 @@ const LoginScreen = () => {
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <TouchableOpacity
                 style={languageStyle.languageButton}
-                onPress={handleLanguageSelection}
+                onPress={handleLanguageChange}
                 className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
                 <Text style={buttonText}>{t('submit')}</Text>
               </TouchableOpacity>

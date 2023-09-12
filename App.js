@@ -47,7 +47,7 @@ function Root() {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
-        swipeEdgeWidth: 0, // Not swipeable
+        // swipeEdgeWidth: 0, // Not swipeable
         headerShown: false, // Show or hide app button for drawer
         headerTintColor: '#3885E0',
         drawerActiveBackgroundColor: '#217BCC',
