@@ -8,25 +8,40 @@ import {
   BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import React from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import RNExitApp from 'react-native-exit-app';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = props => {
   const navigation = useNavigation();
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  const exitAlert = () => {
+  const handleClearLoginStorage = async () => {
+    try {
+      // Keep language / Terms Of Service / Privacy Policy
+      await AsyncStorage.removeItem('@userObject');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Root' }],
+        })
+      );
+      console.log('AsyncStorage data cleared successfully.');
+    } catch (error) {
+      console.error('Error clearing AsyncStorage data:', error);
+    }
+  };
+
+  const logoutAlert = () => {
     Alert.alert(
       t('logoutApp'),
       t('areYouSureLogoutApp'),
-      //  + "\n\n" + t("mustLogInAgain")
       [
         {
           text: t('no'),
@@ -35,18 +50,18 @@ const CustomDrawer = props => {
         },
         {
           text: t('yes'),
-          onPress: () => RNExitApp.exitApp(),
+          onPress: handleClearLoginStorage,
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{backgroundColor: '#3885E0'}}>
+        contentContainerStyle={{ backgroundColor: '#3885E0' }}>
         <Image
           source={require('../images/intale_statistics.png')}
           style={{
@@ -67,7 +82,7 @@ const CustomDrawer = props => {
           }}>
           {t('intaleStatistics')}
         </Text>
-        <View style={{flex: 1, backgroundColor: '#FFFFFF', paddingTop: 10}}>
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF', paddingTop: 10 }}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
@@ -78,8 +93,8 @@ const CustomDrawer = props => {
           borderTopColor: '#217BCC',
           marginLeft: -5,
         }}>
-        <TouchableOpacity onPress={exitAlert} style={{paddingVertical: 15}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <TouchableOpacity onPress={logoutAlert} style={{ paddingVertical: 15 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name="exit-outline" size={22} color="#217BCC" />
             <Text
               style={{
