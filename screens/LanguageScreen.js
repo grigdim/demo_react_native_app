@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
 import {
   View,
   Text,
@@ -18,15 +20,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LanguageScreen = () => {
   const {t, i18n} = useTranslation();
   const [isPickerVisible, setPickerVisible] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [selectedLanguage, setSelectedLanguage] = useState();
   const {height, width} = Dimensions.get('screen');
   const {input, buttonText, disabledButton} = style;
 
+  useEffect(() => {
+    const storedLanguage = async () => {
+      try {
+        const storedSelectedLanguage = await AsyncStorage.getItem(
+          '@selectedLanguage',
+        );
+
+        setSelectedLanguage(storedSelectedLanguage);
+      } catch (error) {}
+    };
+    setSelectedLanguage(storedLanguage);
+  }, []);
+
   const handleLanguageChange = async newLanguage => {
+    console.log('type of new language is', typeof newLanguage);
     await AsyncStorage.setItem('@selectedLanguage', newLanguage);
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
-    console.log(i18n.getResource(newLanguage));
   };
 
   const togglePicker = () => {

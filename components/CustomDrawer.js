@@ -1,3 +1,5 @@
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable react-native/no-inline-styles */
 import {
   View,
   Text,
@@ -8,19 +10,19 @@ import {
   BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import React from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = props => {
   const navigation = useNavigation();
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const handleClearLoginStorage = async () => {
     try {
@@ -29,8 +31,8 @@ const CustomDrawer = props => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'Root' }],
-        })
+          routes: [{name: 'Root'}],
+        }),
       );
       console.log('AsyncStorage data cleared successfully.');
     } catch (error) {
@@ -53,15 +55,15 @@ const CustomDrawer = props => {
           onPress: handleClearLoginStorage,
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{ backgroundColor: '#3885E0' }}>
+        contentContainerStyle={{backgroundColor: '#3885E0'}}>
         <Image
           source={require('../images/intale_statistics.png')}
           style={{
@@ -82,7 +84,7 @@ const CustomDrawer = props => {
           }}>
           {t('intaleStatistics')}
         </Text>
-        <View style={{ flex: 1, backgroundColor: '#FFFFFF', paddingTop: 10 }}>
+        <View style={{flex: 1, backgroundColor: '#FFFFFF', paddingTop: 10}}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
@@ -93,8 +95,8 @@ const CustomDrawer = props => {
           borderTopColor: '#217BCC',
           marginLeft: -5,
         }}>
-        <TouchableOpacity onPress={logoutAlert} style={{ paddingVertical: 15 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity onPress={logoutAlert} style={{paddingVertical: 15}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Ionicons name="exit-outline" size={22} color="#217BCC" />
             <Text
               style={{

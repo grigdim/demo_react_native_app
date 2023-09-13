@@ -44,13 +44,38 @@ const LoginScreen = () => {
   const {setInfoDomain, setInfoStoreId} = useInfo();
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState('el');
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [isScrolledToEnd, setScrolledToEnd] = useState(false);
   const acceptButtonStyle = isScrolledToEnd
     ? acceptButtonStyles.buttonEnabled
     : acceptButtonStyles.buttonDisabled;
 
+  const loadSelectedLanguage = async () => {
+    try {
+      const storedSelectedLanguage = await AsyncStorage.getItem(
+        '@selectedLanguage',
+      );
+      console.log('====================================');
+      console.log(storedSelectedLanguage);
+      console.log('====================================');
+
+      if (storedSelectedLanguage) {
+        setSelectedLanguage(storedSelectedLanguage);
+        i18n.changeLanguage(storedSelectedLanguage);
+        setLanguagePicked(true);
+      } else {
+        setSelectedLanguage('el');
+        i18n.changeLanguage('el');
+      }
+    } catch (error) {
+      console.error('Error loading selected language:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadSelectedLanguage();
+  }, []);
   // Privacy Policy
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
@@ -127,25 +152,6 @@ const LoginScreen = () => {
     loadPrivacyPolicyAcceptedState();
   }, []);
 
-  const loadSelectedLanguage = async () => {
-    try {
-      const storedSelectedLanguage = await AsyncStorage.getItem(
-        '@selectedLanguage',
-      );
-      if (storedSelectedLanguage) {
-        setSelectedLanguage(storedSelectedLanguage);
-        i18n.changeLanguage(storedSelectedLanguage);
-        setLanguagePicked(true);
-      }
-    } catch (error) {
-      console.error('Error loading selected language:', error);
-    }
-  };
-
-  useEffect(() => {
-    loadSelectedLanguage();
-  }, []);
-
   useEffect(() => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
@@ -158,9 +164,11 @@ const LoginScreen = () => {
 
   const [isLanguagePicked, setLanguagePicked] = useState(false);
 
-  const handleLanguageChange = async newLanguage => {
+  const handleLanguageChange = async (newLanguage = 'el') => {
+    console.log('====================================');
+    console.log(newLanguage);
+    console.log('====================================');
     try {
-      console.log(newLanguage);
       await AsyncStorage.setItem('@selectedLanguage', newLanguage);
       setSelectedLanguage(newLanguage);
       i18n.changeLanguage(newLanguage);
