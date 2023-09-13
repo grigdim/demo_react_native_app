@@ -81,7 +81,10 @@ const SalesInsightsTransactionsScreen = () => {
 
   const fetchTransactionsWeeks = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -114,7 +117,10 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   const fetchTopTransactionsHours = async () => {
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -136,7 +142,10 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   const fetchTopTransactionsDays = async () => {
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -158,7 +167,10 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   const fetchTransactionsPerHour = async () => {
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -180,7 +192,10 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   const fetchTransactionsPerDay = async () => {
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -202,7 +217,10 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   const fetchAnalysisWeekHourlyTransactions = async () => {
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');

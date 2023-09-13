@@ -32,7 +32,10 @@ const TotalProfitScreen = () => {
 
   const fetchTotalProfitDataFromBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');

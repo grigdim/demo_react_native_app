@@ -39,7 +39,10 @@ const SalesInsightsTopProductsScreen = () => {
 
   const fetchProductCategoryNames = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -70,7 +73,10 @@ const SalesInsightsTopProductsScreen = () => {
 
   const fetchProductSubCategoryNamesFromTopProducts = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -113,7 +119,10 @@ const SalesInsightsTopProductsScreen = () => {
 
   const fetchTopProductsInItemSalesFromTopProducts = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -165,7 +174,10 @@ const SalesInsightsTopProductsScreen = () => {
 
   const fetchTopProductsInItemSalesPerStoreFromTopProducts = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');

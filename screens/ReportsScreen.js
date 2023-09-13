@@ -227,7 +227,10 @@ const ReportsScreen = () => {
 
   const fetchProductCategoryNamesFromBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -252,7 +255,10 @@ const ReportsScreen = () => {
 
   const fetchProductSubCategoryNamesFromTopProductsBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -277,7 +283,10 @@ const ReportsScreen = () => {
 
   const fetchTopProductsInItemSalesFromTopProductsBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -302,7 +311,10 @@ const ReportsScreen = () => {
 
   const fetchTopProductsInItemSalesPerStoreFromTopProductsBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -327,7 +339,10 @@ const ReportsScreen = () => {
 
   const fetchProductCategoryNamesFromSeasonalityBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -352,7 +367,10 @@ const ReportsScreen = () => {
 
   const fetchSeasonalityBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -377,7 +395,10 @@ const ReportsScreen = () => {
 
   const fetchSeasonalityDetailsBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -402,7 +423,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionsWeeksBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -473,7 +497,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionsStoreNamesBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -498,7 +525,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionAnalysisTopHourBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -523,7 +553,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionAnalysisTopDayBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -548,7 +581,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionsPerHoursBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -573,7 +609,10 @@ const ReportsScreen = () => {
 
   const fetchTransactionsPerDayBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -598,7 +637,10 @@ const ReportsScreen = () => {
 
   const fetchAnalysisWeekHourlyTransactionsBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__&&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');

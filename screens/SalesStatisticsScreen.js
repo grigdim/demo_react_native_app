@@ -136,7 +136,10 @@ const SalesStatisticsScreen = () => {
     // token,
     // );
 
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -631,7 +634,10 @@ const SalesStatisticsScreen = () => {
 
   const fetchProductSalesDetailsDataFromBoApi = async () => {
     setChartLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');

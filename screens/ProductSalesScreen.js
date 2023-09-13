@@ -59,7 +59,10 @@ const ProductSalesScreen = () => {
 
   const fetchProductSalesDataFromBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -84,7 +87,10 @@ const ProductSalesScreen = () => {
 
   const fetchProductSalesDetailsDataFromBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -109,7 +115,10 @@ const ProductSalesScreen = () => {
 
   const fetchProductByCategoryDataFromBoApi = async () => {
     setLoading(true);
-    if (__DEV__ && token) {
+    if (
+      // __DEV__ &&
+      token
+    ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
