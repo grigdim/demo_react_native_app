@@ -20,12 +20,11 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, {useState, useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {selectBox} from '../features/bootstrap';
-import {selectToken} from '../features/bootstrap';
+import {useSelector, useDispatch} from 'react-redux';
+import {selectBox, selectToken} from '../features/bootstrap';
+import {setToken, setStoreId} from '../features/bootstrap';
+import {store} from '../store';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
-import {setToken} from '../features/bootstrap';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import Tabs from './SalesTabsScreen';
@@ -36,7 +35,6 @@ import {useTranslation} from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useInfo} from '../components/PersonalInfoTaken';
-import {store} from '../store';
 
 const LoginScreen = () => {
   const options = [
@@ -128,11 +126,6 @@ const LoginScreen = () => {
     };
     loadPrivacyPolicyAcceptedState();
   }, []);
-  useEffect(() => {
-    console.log('====================================');
-    console.log(selectedLanguage);
-    console.log('====================================');
-  }, [selectedLanguage]);
 
   const loadSelectedLanguage = async () => {
     try {
@@ -187,7 +180,7 @@ const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [domain, setDomain] = useState('');
-  const [storeId, setStoreId] = useState('');
+  const [storeId, setComponentStoreId] = useState('');
   // const [userInputObject, setUserInputObject] = useState(null);
   const [vat, setVat] = useState('');
   const [loading, setLoading] = useState(false);
@@ -218,7 +211,7 @@ const LoginScreen = () => {
   };
 
   const handleChangeStoreId = async inputText => {
-    setStoreId(inputText);
+    setComponentStoreId(inputText);
     setInfoStoreId(inputText);
   };
 
@@ -328,6 +321,7 @@ const LoginScreen = () => {
       ]);
     } else {
       dispatch(setToken(data));
+      dispatch(setStoreId(storeId));
       await AsyncStorage.setItem(
         '@userObject',
         JSON.stringify({

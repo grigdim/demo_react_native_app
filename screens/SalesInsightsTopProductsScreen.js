@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -49,7 +50,8 @@ const SalesInsightsTopProductsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromTopProducts`,
+        // `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromTopProducts`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductCategoryNamesFromTopProducts`,
         requestOptions,
       );
       const data = await response.json();
@@ -80,7 +82,8 @@ const SalesInsightsTopProductsScreen = () => {
       try {
         const promises = selectedCategories.map(async category => {
           const response = await fetch(
-            `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${category}`,
+            // `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${category}`,
+            `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${category}`,
             requestOptions,
           );
           const data = await response.json();
@@ -131,7 +134,8 @@ const SalesInsightsTopProductsScreen = () => {
         for (const category of subCategories) {
           for (const subCategory of category.subCategories) {
             if (subCategory.isChecked) {
-              const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              // const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
               promises.push(
                 (async () => {
                   const response = await fetch(url, requestOptions);
@@ -182,7 +186,8 @@ const SalesInsightsTopProductsScreen = () => {
         for (const category of subCategories) {
           for (const subCategory of category.subCategories) {
             if (subCategory.isChecked) {
-              const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              // const url = `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
+              const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${category.categoryName}&productSubCategoryName=${subCategory.subCategoryName}`;
               promises.push(
                 (async () => {
                   const response = await fetch(url, requestOptions);

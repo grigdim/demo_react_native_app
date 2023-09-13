@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,16 +10,16 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { selectToken } from '../features/bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {selectToken} from '../features/bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import { ip } from '@env';
+import {ip} from '@env';
 import DrawerHeader from './DrawerHeader';
 
 const TotalProfitScreen = () => {
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get('screen');
+  const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const [storesFromBoApi, setStoresFromBoApi] = useState();
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,8 @@ const TotalProfitScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&storesIds=1`,
+        // `http://${ip}:3000/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&storesIds=1`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetTotalProfitDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();
@@ -60,15 +61,19 @@ const TotalProfitScreen = () => {
 
   return (
     <SafeAreaView className=" bg-gray-100 justify-center items-center">
-      <TouchableOpacity style={{ width: width, zIndex: 1 }}>
+      <TouchableOpacity style={{width: width, zIndex: 1}}>
         <DrawerHeader />
       </TouchableOpacity>
       {loading ? (
-        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+        <View
+          className="w-8/12 justify-center items-center mt-2"
+          style={{height: height / 1.33}}>
           <ActivityIndicator color="rgb(34 211 238)" size="large" />
         </View>
       ) : (
-        <View className="w-8/12 justify-center items-center mt-2" style={{ height: height / 1.33 }}>
+        <View
+          className="w-8/12 justify-center items-center mt-2"
+          style={{height: height / 1.33}}>
           <TouchableOpacity
             onPress={() => {
               setOpen(false);
@@ -76,14 +81,14 @@ const TotalProfitScreen = () => {
               setStoresFromBoApi();
             }}
             className="p-2 my-5 bg-gray-200 border border-solid border-green-200 rounded-xl"
-            style={{ elevation: 50 }}>
+            style={{elevation: 50}}>
             <Text className="text-green-400 text-center font-bold text-3xl">
               {storesFromBoApi ? 'New search' : 'Search for total profit data'}
             </Text>
           </TouchableOpacity>
 
           {!storesFromBoApi ? (
-            <View >
+            <View>
               <TouchableOpacity
                 className="bg-cyan-300 rounded-xl my-2 p-2"
                 onPress={() => setOpen(true)}>
@@ -151,10 +156,12 @@ const TotalProfitScreen = () => {
           {storesFromBoApi && (
             <ScrollView
               className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{ elevation: 50, height: height / 1.5, marginTop: 20 }}>
+              style={{elevation: 50, height: height / 1.5, marginTop: 20}}>
               {storesFromBoApi?.map(x => (
                 <View className="p-2 bg-gray-200" key={x.Level}>
-                  <Text className="m-1 text-xl text-black">Level: {x.Level}</Text>
+                  <Text className="m-1 text-xl text-black">
+                    Level: {x.Level}
+                  </Text>
                   <Text className="m-1 text-xl text-black">
                     VAT: {x.TotalProfitVat}
                   </Text>

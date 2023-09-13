@@ -70,7 +70,8 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetProductSalesPropertiesServerSide?fromDate=${fromDate2}&toDate=${toDate2}&productId=${productId}&groupByDate=${groupByDate}&storesIds=1`,
+        // `http://${ip}:3000/bo/Invoices/GetProductSalesPropertiesServerSide?fromDate=${fromDate2}&toDate=${toDate2}&productId=${productId}&groupByDate=${groupByDate}&storesIds=1`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesPropertiesServerSide?fromDate=${fromDate2}&toDate=${toDate2}&productId=${productId}&groupByDate=${groupByDate}&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();
@@ -94,7 +95,8 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&dateGroupBy=${groupByDate}&storeIds=1&prodID=${prodId}`,
+        // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&dateGroupBy=${groupByDate}&storeIds=1&prodID=${prodId}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDate2}&toDate=${toDate2}&dateGroupBy=${groupByDate}&storeIds=1&prodID=${prodId}`,
         requestOptions,
       );
       const data = await response.json();
@@ -118,7 +120,8 @@ const ProductSalesScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Invoices/GetProductsByCategoryServerSide?fromDate=${fromDate2}&toDate=${toDate2}&categoryId=${categoryId}&storesIds=1`,
+        // `http://${ip}:3000/bo/Invoices/GetProductsByCategoryServerSide?fromDate=${fromDate2}&toDate=${toDate2}&categoryId=${categoryId}&storesIds=1`,
+        `https://dev-bo-api-gr.azurewebsites.net/Invoices/GetProductsByCategoryServerSide?fromDate=${fromDate2}&toDate=${toDate2}&categoryId=${categoryId}&storesIds=1`,
         requestOptions,
       );
       const data = await response.json();

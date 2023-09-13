@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-unused-vars */
@@ -13,7 +14,7 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStoreId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -35,6 +36,7 @@ const SalesInsightsTransactionsScreen = () => {
   const {t, i18n} = useTranslation();
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
+  const storeId = useSelector(selectStoreId);
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
   const [selectedTransactionsWeek, setSelectedTransactionsWeek] =
@@ -90,7 +92,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsWeeks?storeIds=${storeId}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -98,7 +101,8 @@ const SalesInsightsTransactionsScreen = () => {
       setTransactionsWeeks(data);
 
       const response2 = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=4043`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=4043`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsStoresNames?storeIds=${storeId}`,
         requestOptions,
       );
       const data2 = await response2.json();
@@ -121,7 +125,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -142,7 +147,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -163,7 +169,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerHours?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -184,7 +191,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -205,7 +213,8 @@ const SalesInsightsTransactionsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();

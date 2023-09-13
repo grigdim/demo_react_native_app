@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
@@ -154,7 +155,8 @@ const SalesStatisticsScreen = () => {
       };
       try {
         const response = await fetch(
-          `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+          // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+          `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
           requestOptions,
         );
         const data = await response.json();
@@ -318,7 +320,8 @@ const SalesStatisticsScreen = () => {
               body: raw2,
             };
             const response2 = await fetch(
-              `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+              // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+              `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
               requestOptions2,
             );
             const data2 = await response2.json();
@@ -348,7 +351,8 @@ const SalesStatisticsScreen = () => {
               body: raw3,
             };
             const response3 = await fetch(
-              `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+              // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+              `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
               requestOptions3,
             );
             const data3 = await response3.json();
@@ -647,7 +651,8 @@ const SalesStatisticsScreen = () => {
             .slice(0, 10)
             .concat(' 23:59:59');
           const response1 = await fetch(
-            `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const dateFromFormatted = new Date(
@@ -659,7 +664,8 @@ const SalesStatisticsScreen = () => {
             .slice(0, 10)
             .concat(' 00:00:00');
           const response2 = await fetch(
-            `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const data1 = await response1.json();
@@ -680,7 +686,8 @@ const SalesStatisticsScreen = () => {
           data = [...data1Formatted, ...data2Formatted];
         } else {
           const response = await fetch(
-            `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const dataUnformatted = await response.json();
@@ -693,7 +700,8 @@ const SalesStatisticsScreen = () => {
         }
       } else {
         const response = await fetch(
-          `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+          // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+          `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
           requestOptions,
         );
         data = await response.json();

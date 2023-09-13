@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable no-dupe-keys */
 /* eslint-disable curly */
 /* eslint-disable react/self-closing-comp */
@@ -114,7 +115,8 @@ const TestingScreen = () => {
       };
       try {
         const response = await fetch(
-          `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+          // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+          `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
           requestOptions,
         );
         const data = await response.json();

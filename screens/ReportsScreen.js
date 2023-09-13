@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
@@ -16,7 +17,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStoreId} from '../features/bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import {debounce} from 'lodash';
@@ -35,6 +36,7 @@ const ReportsScreen = () => {
   const [open, setOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState('GetSeasonality');
   const token = useSelector(selectToken);
+  const storeId = useSelector(selectStoreId);
 
   // Products
   const [
@@ -236,7 +238,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromTopProducts`,
+        // `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromTopProducts`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductCategoryNamesFromTopProducts`,
         requestOptions,
       );
       const data = await response.json();
@@ -260,7 +263,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${selectedCategory}`,
+        // `http://${ip}:3000/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${selectedCategory}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductSubCategoryNamesFromTopProducts?productCategoryName=${selectedCategory}`,
         requestOptions,
       );
       const data = await response.json();
@@ -284,7 +288,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
+        // `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTopProductsInItemSalesFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
         requestOptions,
       );
       const data = await response.json();
@@ -308,7 +313,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
+        // `http://${ip}:3000/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTopProductsInItemSalesPerStoreFromTopProducts?productCategoryName=${selectedCategory}&productSubCategoryName=${selectedSubCategory}`,
         requestOptions,
       );
       const data = await response.json();
@@ -332,7 +338,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        // `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductCategoryNamesFromSeasonality`,
         requestOptions,
       );
       const data = await response.json();
@@ -356,7 +363,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${productCategoryNameForSeasonality}`,
+        // `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${productCategoryNameForSeasonality}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonality?productCategoryName=${productCategoryNameForSeasonality}`,
         requestOptions,
       );
       const data = await response.json();
@@ -380,7 +388,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${productCategoryNameForSeasonalityDetails}`,
+        // `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${productCategoryNameForSeasonalityDetails}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonalityDetails?productCategoryName=${productCategoryNameForSeasonalityDetails}`,
         requestOptions,
       );
       const data = await response.json();
@@ -405,7 +414,8 @@ const ReportsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=${storeIdsForTransactionWeeks}`,
-        `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
+        // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsWeeks?storeIds=${storeId}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -474,7 +484,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=${storeIdsForTransactionStoresNames}`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=${storeIdsForTransactionStoresNames}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsStoresNames?storeIds=${storeIdsForTransactionStoresNames}`,
         requestOptions,
       );
       const data = await response.json();
@@ -498,7 +509,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}&weekDescription=${selectedWeek}`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}&weekDescription=${selectedWeek}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeIdsForTransactionAnalysisTopHour}&weekDescription=${selectedWeek}`,
         requestOptions,
       );
       const data = await response.json();
@@ -522,7 +534,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}&weekDescription=${selectedWeek}`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}&weekDescription=${selectedWeek}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeIdsForTransactionAnalysisTopDay}&weekDescription=${selectedWeek}`,
         requestOptions,
       );
       const data = await response.json();
@@ -546,7 +559,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}&weekDescription=${selectedWeek}`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}&weekDescription=${selectedWeek}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerHours?storeIds=${storeIdsForTransactionsPerHours}&weekDescription=${selectedWeek}`,
         requestOptions,
       );
       const data = await response.json();
@@ -570,7 +584,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}&weekDescription=${selectedWeek}`,
+        // `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}&weekDescription=${selectedWeek}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerDay?storeIds=${storeIdsForTransactionsPerDay}&weekDescription=${selectedWeek}`,
         requestOptions,
       );
       const data = await response.json();
@@ -594,7 +609,8 @@ const ReportsScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${selectedWeek}`,
+        // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${selectedWeek}`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeIdsForAnalysisWeekHourlyTransactions}&weekDescription=${selectedWeek}`,
         requestOptions,
       );
       const data = await response.json();

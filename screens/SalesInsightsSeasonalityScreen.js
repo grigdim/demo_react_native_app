@@ -82,7 +82,8 @@ const SalesInsightsSeasonalityScreen = () => {
       };
 
       const response = await fetch(
-        `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        // `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductCategoryNamesFromSeasonality`,
         requestOptions,
       );
       const data = await response.json();
@@ -94,7 +95,8 @@ const SalesInsightsSeasonalityScreen = () => {
         ignorePunctuation: true,
       });
       data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${item}`;
+        // const url = `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${item}`;
+        const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonality?productCategoryName=${item}`;
         promises.push(async () => {
           const response2 = await fetch(url, requestOptions);
           const data2 = await response2.json();
@@ -130,7 +132,8 @@ const SalesInsightsSeasonalityScreen = () => {
       let seasonalityDetailsPerCategoryArr = [];
       const promises2 = [];
       data.map(item => {
-        const url = `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
+        // const url = `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
+        const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
         promises2.push(async () => {
           const response2 = await fetch(url, requestOptions);
           const data2 = await response2.json();
