@@ -56,7 +56,9 @@ const LanguageScreen = () => {
       <View className="flex-1 justify-center items-center">
         <View style={languageStyle.container}>
           <View className="justify-center items-center py-3">
-            <Text style={{fontSize: 16}}>{t('chooseLanguageTitle')}</Text>
+            <Text style={{fontSize: 16, color: 'black'}}>
+              {t('chooseLanguageTitle')}
+            </Text>
           </View>
           <View style={languageStyle.flagContainer}>
             <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>

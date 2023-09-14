@@ -70,9 +70,9 @@
         "password": "password",
         "newSearch": "New Search",
         "selectAnOption": "Select an option",
-        "warning": "Warning",
+        "warning": "Error",
         "validVatNumber": "Please enter a valid VAT number",
-        "validCredentials": "Please enter valid credentials",
+        "validCredentials": "Something went wrong. Please try again",
         // Dates
         "day": "DAY",
         "week": "WEEK",
