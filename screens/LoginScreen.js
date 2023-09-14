@@ -54,7 +54,7 @@ const LoginScreen = () => {
   const loadSelectedLanguage = async () => {
     try {
       const storedSelectedLanguage = await AsyncStorage.getItem(
-        '@selectedLanguage',
+        '@selectedLanguage', 
       );
       console.log('====================================');
       console.log(storedSelectedLanguage);
@@ -471,10 +471,17 @@ const LoginScreen = () => {
                     textAlign: 'center',
                   }}>
                   {t('termsOfService')}
+                <Text style={{
+                    fontSize: 15,
+                    color: 'black',
+                    fontWeight: '400',
+                    marginBottom: 20,
+                    marginTop: 10,
+                    textAlign: 'center',
+                  }}>{t('termsOfServiceContent')}</Text>
                 </Text>
                 <TouchableOpacity
                   onPress={handlePrivacyPolicyLink}></TouchableOpacity>
-                <Text>{t('termsOfServiceContent')}</Text>
               </View>
             </ScrollView>
 
@@ -519,11 +526,19 @@ const LoginScreen = () => {
                       color: 'blue',
                       marginTop: 10,
                       marginBottom: 20,
+                      textAlign: 'center',
                     }}>
                     {t('intalePrivacyPolicyLink')}
                   </Text>
+                  <Text style={{
+                    fontSize: 15,
+                    color: 'black',
+                    fontWeight: '400',
+                    marginBottom: 20,
+                    marginTop: 10,
+                    textAlign: 'center',
+                  }}>{t('privacyPolicyContent')}</Text>
                 </TouchableOpacity>
-                <Text>{t('privacyPolicyContent')}</Text>
               </View>
             </ScrollView>
 
