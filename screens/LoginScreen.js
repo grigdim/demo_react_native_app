@@ -37,6 +37,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useInfo} from '../components/PersonalInfoTaken';
 
 const LoginScreen = () => {
+  const [innerToken, setInnerToken] = useState();
   const options = [
     {label: 'Ελληνικά', value: 'el'},
     {label: 'English', value: 'en'},
@@ -59,10 +60,6 @@ const LoginScreen = () => {
       const languageConfirmed = await AsyncStorage.getItem(
         '@languageConfirmed',
       );
-      console.log('====================================');
-      console.log(storedSelectedLanguage);
-      console.log(languageConfirmed);
-      console.log('====================================');
 
       if (storedSelectedLanguage !== null) {
         setSelectedLanguage(storedSelectedLanguage);
@@ -71,7 +68,6 @@ const LoginScreen = () => {
           ? setLanguagePicked(true)
           : setLanguagePicked(false);
       } else {
-        console.log('in the else statement', 'el');
         await AsyncStorage.setItem('@selectedLanguage', 'el');
         setSelectedLanguage('el');
         i18n.changeLanguage('el');
@@ -329,10 +325,11 @@ const LoginScreen = () => {
       redirect: 'follow',
     };
     const response = await fetch(
-      'https://dev-bo-api-gr.azurewebsites.net/bo/account/authenticate',
+      'https://bo-api-gr.intalepoint.com/bo/account/authenticate',
       requestOptions,
     );
     const data = await response.text();
+    console.log(data);
     const wordToFind = 'message';
     const regex = new RegExp(`\\b${wordToFind}\\b`, 'i');
     if (regex.test(data)) {
@@ -343,6 +340,7 @@ const LoginScreen = () => {
         },
       ]);
     } else {
+      setInnerToken(data);
       dispatch(setToken(data));
       dispatch(setStoreId(storeId));
       await AsyncStorage.setItem(

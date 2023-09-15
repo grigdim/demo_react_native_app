@@ -1,10 +1,11 @@
 const http = require('http');
 const https = require('https');
 const options = {
-  // hostname: "dev-bo-api-gr.azurewebsites.net",
-  // port: 443,
-  hostname: 'localhost',
-  port: 7001,
+  // hostname: 'dev-bo-api-gr.azurewebsites.net',
+  hostname: 'bo-api-gr.intalepoint.com',
+  port: 443,
+  // hostname: 'localhost',
+  // port: 7001,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*', // Allow all origins

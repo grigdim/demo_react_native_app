@@ -96,7 +96,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionsWeeks?storeIds=4043`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsWeeks?storeIds=${storeId}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionsWeeks?storeIds=${storeId}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -105,7 +105,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response2 = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionsStoresNames?storeIds=4043`,
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsStoresNames?storeIds=${storeId}`,
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionsStoresNames?storeIds=${storeId}`,
         requestOptions,
       );
       const data2 = await response2.json();
@@ -132,7 +132,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopHour?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionAnalysisTopHour?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -157,7 +157,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionAnalysisTopDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionAnalysisTopDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -182,7 +182,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionsPerHours?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerHours?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionsPerHours?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -207,7 +207,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetTransactionsPerDay?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetTransactionsPerDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetTransactionsPerDay?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();
@@ -232,7 +232,7 @@ const SalesInsightsTransactionsScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=4043&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetAnalysisWeekHourlyTransactions?storeIds=${storeId}&weekDescription=${selectedTransactionsWeek}`, // Hard coded since we don't initialize the store at the moment
         requestOptions,
       );
       const data = await response.json();

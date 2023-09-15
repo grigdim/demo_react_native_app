@@ -156,10 +156,11 @@ const SalesStatisticsScreen = () => {
         redirect: 'follow',
         body: raw,
       };
+      console.log(raw);
       try {
         const response = await fetch(
           // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-          `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
           requestOptions,
         );
         const data = await response.json();
@@ -324,7 +325,7 @@ const SalesStatisticsScreen = () => {
             };
             const response2 = await fetch(
               // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-              `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
+              `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
               requestOptions2,
             );
             const data2 = await response2.json();
@@ -355,7 +356,7 @@ const SalesStatisticsScreen = () => {
             };
             const response3 = await fetch(
               // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-              `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/FetchSalesDataServerSide`,
+              `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
               requestOptions3,
             );
             const data3 = await response3.json();
@@ -658,7 +659,7 @@ const SalesStatisticsScreen = () => {
             .concat(' 23:59:59');
           const response1 = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const dateFromFormatted = new Date(
@@ -671,7 +672,7 @@ const SalesStatisticsScreen = () => {
             .concat(' 00:00:00');
           const response2 = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const data1 = await response1.json();
@@ -693,7 +694,7 @@ const SalesStatisticsScreen = () => {
         } else {
           const response = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
             requestOptions,
           );
           const dataUnformatted = await response.json();
@@ -707,7 +708,7 @@ const SalesStatisticsScreen = () => {
       } else {
         const response = await fetch(
           // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-          `https://dev-bo-api-gr.azurewebsites.net/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
           requestOptions,
         );
         data = await response.json();

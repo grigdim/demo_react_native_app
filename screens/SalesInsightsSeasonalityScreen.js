@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
 /* eslint-disable dot-notation */
 /* eslint-disable react-native/no-inline-styles */
@@ -86,7 +87,7 @@ const SalesInsightsSeasonalityScreen = () => {
 
       const response = await fetch(
         // `http://${ip}:3000/bo/Reports/GetProductCategoryNamesFromSeasonality`,
-        `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetProductCategoryNamesFromSeasonality`,
+        `https://bo-api-gr.intalepoint.com/bo/Reports/GetProductCategoryNamesFromSeasonality`,
         requestOptions,
       );
       const data = await response.json();
@@ -99,7 +100,7 @@ const SalesInsightsSeasonalityScreen = () => {
       });
       data.map(item => {
         // const url = `http://${ip}:3000/bo/Reports/GetSeasonality?productCategoryName=${item}`;
-        const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonality?productCategoryName=${item}`;
+        const url = `https://bo-api-gr.intalepoint.com/bo/Reports/GetSeasonality?productCategoryName=${item}`;
         promises.push(async () => {
           const response2 = await fetch(url, requestOptions);
           const data2 = await response2.json();
@@ -136,7 +137,7 @@ const SalesInsightsSeasonalityScreen = () => {
       const promises2 = [];
       data.map(item => {
         // const url = `http://${ip}:3000/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
-        const url = `https://dev-bo-api-gr.azurewebsites.net/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
+        const url = `https://bo-api-gr.intalepoint.com/bo/Reports/GetSeasonalityDetails?productCategoryName=${item}`;
         promises2.push(async () => {
           const response2 = await fetch(url, requestOptions);
           const data2 = await response2.json();
@@ -214,7 +215,9 @@ const SalesInsightsSeasonalityScreen = () => {
                 style={{elevation: 10}}>
                 {seasonalityPerCategory.map(item => (
                   <View className="flex-row space-x-4 p-1 mr-0 rounded-md">
-                    <Text className="">{item.Category}</Text>
+                    <Text style={{color: 'rgb(86, 113, 144)'}}>
+                      {item.Category}
+                    </Text>
                     <Text className="bg-slate-600 rounded-md px-2 text-white ">
                       {item.currentMonth.MonthName}
                     </Text>
@@ -259,14 +262,18 @@ const SalesInsightsSeasonalityScreen = () => {
                 style={{elevation: 10}}>
                 {seasonalityDetailsPerCategory.map(item => (
                   <View className="space-x-4 p-1 flex-row">
-                    <Text className="w-1/4 text-left font-bold">
+                    <Text
+                      className="w-1/4 text-left font-bold"
+                      style={{color: 'rgb(86, 113, 144)'}}>
                       {item.Category}
                     </Text>
                     <View className="space-y-2 divide-y divide-gray-300">
                       {item.SeasonalityDetailsPerSubCategory.map(obj => {
                         return (
                           <View className="flex-row space-x-2 py-1 justify-between items-center">
-                            <Text className="">{obj.Subcategory}</Text>
+                            <Text style={{color: 'rgb(86, 113, 144)'}}>
+                              {obj.Subcategory}
+                            </Text>
                             <View className="flex-row space-x-2">
                               <Text className="bg-slate-600 text-white px-2 rounded-md text-left">
                                 {obj.Details[0].MonthName}

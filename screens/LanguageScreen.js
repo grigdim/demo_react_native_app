@@ -38,8 +38,8 @@ const LanguageScreen = () => {
   }, []);
 
   const handleLanguageChange = async newLanguage => {
-    console.log('type of new language is', typeof newLanguage);
     await AsyncStorage.setItem('@selectedLanguage', newLanguage);
+    await AsyncStorage.setItem('@languageConfirmed', 'true');
     setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
   };
