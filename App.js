@@ -1,19 +1,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
-import StoreScreen from './screens/StoreScreen';
-import AuditScreen from './screens/AuditScreen';
 import CustomDrawer from './components/CustomDrawer';
 import LoginScreen from './screens/LoginScreen';
-import TotalProfitScreen from './screens/TotalProfitScreen';
-import TurnoverScreen from './screens/TurnoverScreen';
-import ProductSalesScreen from './screens/ProductSalesScreen';
 import LineChartScreen from './screens/LineChartScreen';
 import BarChartScreen from './screens/BarChart';
 import HelpScreen from './screens/HelpScreen';
 import AboutScreen from './screens/AboutScreen';
-import TestingScreen from './screens/TestingScreen';
-import ReportsScreen from './screens/ReportsScreen';
 import LanguageScreen from './screens/LanguageScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -150,31 +143,6 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="AuditScreen"
-              component={AuditScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="StoreScreen"
-              component={StoreScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="TurnoverScreen"
-              component={TurnoverScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ProductSalesScreen"
-              component={ProductSalesScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="TotalProfitScreen"
-              component={TotalProfitScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="SalesTabsScreen"
               component={SalesTabsScreen}
               options={{ headerShown: false }}
@@ -182,16 +150,6 @@ export default function App() {
             <Stack.Screen
               name="SalesStatisticsScreen"
               component={SalesStatisticsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="TestingScreen"
-              component={TestingScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ReportsScreen"
-              component={ReportsScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

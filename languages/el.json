@@ -13,11 +13,10 @@
         "reportsDrawer": "Αναφορές",
         "chartsDrawer": "Διαγράμματα",
         "salesDrawer": "Πωλήσεις",
-        "testingDrawer": "Τεστ Πωλήσεις",
         "helpDrawer": "Υποστήριξη",
         "languageDrawer": "Γλώσσα",
         "aboutDrawer": "Σχετικά με Εμάς",
-        "logoutDrawer": "Αποσύνδεση από την Εφαρμογή",
+        "logoutDrawer": "Αποσύνδεση",
         // Tabs (in caps no intonation)
         "TopProductsTabs": "Κορυφαια Προϊοντα",
         "SeasonalityTabs": "Εποχικοτητα",

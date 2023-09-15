@@ -1824,19 +1824,6 @@ const SalesStatisticsScreen = () => {
                       <Text className="text-white underline ml-3 mt-1">
                         {t('categoryDetails')}
                       </Text>
-                      <TouchableOpacity
-                        className="flex-row space-x-2 justify-center items-center rounded-b-md"
-                        onPress={() => {}}>
-                        <Text
-                          className="text-xs font-bold border border-white p-1 mr-2"
-                          style={{
-                            color: 'rgb(255, 255, 255)',
-                            borderRadius: 20,
-                            fontSize: 11,
-                          }}>
-                          {t('exportToExcel')}
-                        </Text>
-                      </TouchableOpacity>
                     </View>
                     <View className="flex-1 divide-y divide-gray-200">
                       <ScrollView horizontal className="rounded-b-md">

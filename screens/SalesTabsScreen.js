@@ -22,7 +22,7 @@ const SalesTabsScreen = () => {
           backgroundColor: 'rgb(37, 99, 235)',
         },
         headerStyle: {backgroundColor: 'rgb(37, 99, 235)'},
-        headerTitleStyle: {fontSize: 25, color: 'white'},
+        headerTitleStyle: {fontSize: 23, color: 'white'},
         headerTitleAlign: 'center',
       }}>
       <Tab.Screen
