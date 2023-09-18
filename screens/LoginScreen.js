@@ -199,7 +199,7 @@ const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [domain, setDomain] = useState('');
-  const [storeId, setComponentStoreId] = useState('');
+  const [componentStoreId, setComponentStoreId] = useState('');
   // const [userInputObject, setUserInputObject] = useState(null);
   const [vat, setVat] = useState('');
   const [loading, setLoading] = useState(false);
@@ -261,8 +261,8 @@ const LoginScreen = () => {
     password === null ||
     domain === '' ||
     domain === null ||
-    storeId === '' ||
-    storeId === null;
+    componentStoreId === '' ||
+    componentStoreId === null;
   // const isPasswordDisabled = password === '' || password === null;
   // const isVatDisabled = vat === '' || vat === null;
 
@@ -329,7 +329,6 @@ const LoginScreen = () => {
       requestOptions,
     );
     const data = await response.text();
-    console.log(data);
     const wordToFind = 'message';
     const regex = new RegExp(`\\b${wordToFind}\\b`, 'i');
     if (regex.test(data)) {
@@ -342,14 +341,14 @@ const LoginScreen = () => {
     } else {
       setInnerToken(data);
       dispatch(setToken(data));
-      dispatch(setStoreId(storeId));
+      dispatch(setStoreId(componentStoreId));
       await AsyncStorage.setItem(
         '@userObject',
         JSON.stringify({
           username: username,
           password: password,
           domain: domain,
-          storeId: storeId,
+          storeId: componentStoreId,
         }),
       );
       setLoggedIn(true);
@@ -631,7 +630,7 @@ const LoginScreen = () => {
             <TouchableOpacity
               style={[isInputDisabled && disabledButton]}
               onPress={() => {
-                handleLogin(username, password, domain, storeId);
+                handleLogin(username, password, domain, componentStoreId);
               }}
               disabled={isInputDisabled}
               className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">

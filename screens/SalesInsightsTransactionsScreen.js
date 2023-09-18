@@ -37,6 +37,11 @@ const SalesInsightsTransactionsScreen = () => {
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const storeId = useSelector(selectStoreId);
+
+  useEffect(() => {
+    console.log('store id', storeId);
+  }, [storeId]);
+
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
   const [selectedTransactionsWeek, setSelectedTransactionsWeek] =
