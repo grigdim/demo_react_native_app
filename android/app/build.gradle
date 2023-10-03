@@ -86,11 +86,6 @@ def reactNativeArchitectures() {
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
-def getIncrementedVC() {
-    def currentVersionCode = android.defaultConfig.versionCode
-    return currentVersionCode + 1
-}
-
 android {
 
     compileOptions {
@@ -106,7 +101,7 @@ android {
         applicationId "com.reactnativewithcustomjavademo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode getIncrementedVC()
+        versionCode 3
         versionName "1.0"
     }
 
