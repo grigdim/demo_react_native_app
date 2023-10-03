@@ -153,8 +153,8 @@
         "ProfitWithVat": "κέρδος με Φ.Π.Α.",
         "ProfitWithoutVat": "κέρδος χωρίς Φ.Π.Α.",
         "ProfitOnTurnOverPercentage": "κέρδος επί του τζίρου",
-        "TurnOverWithoutVat": "τζίρος με Φ.Π.Α",
-        "TurnOverWithVat": "τζίρος χωρίς Φ.Π.Α",
+        "TurnOverWithoutVat": "τζίρος χωρίς Φ.Π.Α",
+        "TurnOverWithVat": "τζίρος με Φ.Π.Α",
         "TotalProfitVat": "ΦΠΑ", // TotalProfit API
         "TotalProfitWithoutVat": "ΚΕΡΔΟΣ ΜΕ ΦΠΑ", // TotalProfit API
         "TotalProfitWithVat": "ΚΕΡΔΟΣ ΧΩΡΙΣ ΦΠΑ", // TotalProfit API
