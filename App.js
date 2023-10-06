@@ -26,6 +26,7 @@ import {
 import SalesTabsScreen from './screens/SalesTabsScreen';
 import SplashScreen from 'react-native-splash-screen';
 import GestureHandlerRootView from 'react-native-gesture-handler';
+import ProcurementsScreen from './screens/ProcurementsScreen';
 import SalesStatisticsScreen from './screens/SalesStatisticsScreen';
 import { useTranslation } from 'react-i18next';
 
@@ -67,6 +68,16 @@ function Root() {
         name={t('salesDrawer')}
         // name="Sales"
         component={SalesTabsScreen} // So it corresponds with the tab navigation
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="cash-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name={t('procurementsDrawer')}
+        // name="Sales"
+        component={ProcurementsScreen}
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name="card-outline" size={22} color={color} />
