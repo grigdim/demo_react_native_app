@@ -29,10 +29,8 @@ import {
   VictoryLegend,
   VictoryChart,
   VictoryTheme,
-  VictoryLabel,
   VictoryAxis,
   VictoryArea,
-  VictoryTooltip,
 } from 'victory-native';
 import {useTranslation} from 'react-i18next';
 import i18next from '../languages/i18n';
@@ -295,96 +293,162 @@ const SalesStatisticsScreen = () => {
         });
         setDailyTransactionsAverage(data.TransactionsSalesDto);
         let totalSalesChartData;
-        if (groupByDate !== 'days') {
-          totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
-            if (a.Year === b.Year) {
-              return a.Hour - b.Hour;
-            }
-            return a.Year - b.Year;
-          });
-        } else {
-          if (toDate.getMonth() !== fromDate.getMonth()) {
-            var myHeaders2 = new Headers();
-            myHeaders2.append('Token', token);
-            myHeaders2.append('Content-Type', 'application/json');
-            var raw2 = JSON.stringify({
-              fromDate: fromDateFormatted,
-              toDate: new Date(fromDate.getFullYear(), fromDate.getMonth() + 1)
-                .toISOString()
-                .slice(0, 10)
-                .concat(' 23:59:59'),
-              sftId: sftId,
-              groupByDate: groupByDate,
-              storesIds: storesIds,
-            });
-            var requestOptions2 = {
-              method: 'POST',
-              headers: myHeaders2,
-              redirect: 'follow',
-              body: raw2,
-            };
-            const response2 = await fetch(
-              // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-              `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
-              requestOptions2,
-            );
-            const data2 = await response2.json();
-            const data2Formatted = data2.TotalSalesChartDtos.map(item => ({
-              ...item,
-              Hour: `${item.Hour}/${
-                fromDate.getMonth() + 1
-              }/${fromDate.getFullYear()}`,
-            }));
-            var myHeaders3 = new Headers();
-            myHeaders3.append('Token', token);
-            myHeaders3.append('Content-Type', 'application/json');
-            var raw3 = JSON.stringify({
-              fromDate: new Date(toDate.getFullYear(), toDate.getMonth(), 2)
-                .toISOString()
-                .slice(0, 10)
-                .concat(' 00:00:00'),
-              toDate: toDateFormatted,
-              sftId: sftId,
-              groupByDate: groupByDate,
-              storesIds: storesIds,
-            });
-            var requestOptions3 = {
-              method: 'POST',
-              headers: myHeaders3,
-              redirect: 'follow',
-              body: raw3,
-            };
-            const response3 = await fetch(
-              // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-              `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
-              requestOptions3,
-            );
-            const data3 = await response3.json();
-            const data3Formatted = data3.TotalSalesChartDtos.map(item => ({
-              ...item,
-              Hour: `${item.Hour}/${
-                toDate.getMonth() + 1
-              }/${toDate.getFullYear()}`,
-            }));
+        // if (groupByDate !== 'days') {
+        //   totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
+        //     if (a.Year === b.Year) {
+        //       return a.Hour - b.Hour;
+        //     }
+        //     return a.Year - b.Year;
+        //   });
+        // } else {
+        //   if (toDate.getMonth() !== fromDate.getMonth()) {
+        //     var myHeaders2 = new Headers();
+        //     myHeaders2.append('Token', token);
+        //     myHeaders2.append('Content-Type', 'application/json');
+        //     var raw2 = JSON.stringify({
+        //       fromDate: fromDateFormatted,
+        //       toDate: new Date(fromDate.getFullYear(), fromDate.getMonth() + 1)
+        //         .toISOString()
+        //         .slice(0, 10)
+        //         .concat(' 23:59:59'),
+        //       sftId: sftId,
+        //       groupByDate: groupByDate,
+        //       storesIds: storesIds,
+        //     });
+        //     var requestOptions2 = {
+        //       method: 'POST',
+        //       headers: myHeaders2,
+        //       redirect: 'follow',
+        //       body: raw2,
+        //     };
+        //     const response2 = await fetch(
+        //       // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+        //       `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
+        //       requestOptions2,
+        //     );
+        //     const data2 = await response2.json();
+        //     const data2Formatted = data2.TotalSalesChartDtos.map(item => ({
+        //       ...item,
+        //       Hour: `${item.Hour}/${
+        //         fromDate.getMonth() + 1
+        //       }/${fromDate.getFullYear()}`,
+        //     }));
+        //     var myHeaders3 = new Headers();
+        //     myHeaders3.append('Token', token);
+        //     myHeaders3.append('Content-Type', 'application/json');
+        //     var raw3 = JSON.stringify({
+        //       fromDate: new Date(toDate.getFullYear(), toDate.getMonth(), 2)
+        //         .toISOString()
+        //         .slice(0, 10)
+        //         .concat(' 00:00:00'),
+        //       toDate: toDateFormatted,
+        //       sftId: sftId,
+        //       groupByDate: groupByDate,
+        //       storesIds: storesIds,
+        //     });
+        //     var requestOptions3 = {
+        //       method: 'POST',
+        //       headers: myHeaders3,
+        //       redirect: 'follow',
+        //       body: raw3,
+        //     };
+        //     const response3 = await fetch(
+        //       // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
+        //       `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
+        //       requestOptions3,
+        //     );
+        //     const data3 = await response3.json();
+        //     const data3Formatted = data3.TotalSalesChartDtos.map(item => ({
+        //       ...item,
+        //       Hour: `${item.Hour}/${
+        //         toDate.getMonth() + 1
+        //       }/${toDate.getFullYear()}`,
+        //     }));
 
-            totalSalesChartData = [...data2Formatted, ...data3Formatted];
-          } else {
-            totalSalesChartData = data.TotalSalesChartDtos.map(item => ({
-              ...item,
-              Hour: `${item.Hour}/${
-                toDate.getMonth() + 1
-              }/${toDate.getFullYear()}`,
-            }));
-          }
-        }
-
+        //     totalSalesChartData = [...data2Formatted, ...data3Formatted];
+        //   } else {
+        //     totalSalesChartData = data.TotalSalesChartDtos.map(item => ({
+        //       ...item,
+        //       Hour: `${item.Hour}/${
+        //         toDate.getMonth() + 1
+        //       }/${toDate.getFullYear()}`,
+        //     }));
+        //   }
+        // }
+        totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
+          const dateA = new Date(a.InvoiceDateTime);
+          const dateB = new Date(b.InvoiceDateTime);
+          return dateA - dateB;
+        });
+        let groupedData = {};
+        let summedGroupedData = [];
+        let keys;
         switch (groupByDate) {
           case 'hours':
+            groupedData = totalSalesChartData.reduce((groups, item) => {
+              const datePart = item.InvoiceDateTime.substring(0, 10);
+              if (!groups[datePart]) {
+                groups[datePart] = [];
+              }
+              groups[datePart].push(item);
+              return groups;
+            }, {});
+            keys = Object.keys(groupedData);
+            // console.log(groupedData[keys[0]]);
+            let groupedDataByHour = groupedData[keys[0]].reduce(
+              (groups, item) => {
+                const datePart = item.InvoiceDateTime.substring(11, 13);
+                if (!groups[datePart]) {
+                  groups[datePart] = [];
+                }
+                groups[datePart].push(item);
+                return groups;
+              },
+              {},
+            );
+
+            summedGroupedData = Object.keys(groupedDataByHour).map(key => {
+              const group = groupedDataByHour[key];
+              const datePart = group[0].InvoiceDateTime.substring(11, 13);
+
+              const totals2 = group.reduce(
+                (acc, item) => {
+                  acc.TotalProfit += item.TotalProfit;
+                  acc.TotalProfitMerged += item.TotalProfitMerged;
+                  acc.TurnOver += item.TurnOver;
+                  acc.TurnOverWithoutVAT += item.TurnOverWithoutVAT;
+                  return acc;
+                },
+                {
+                  TotalProfit: 0,
+                  TotalProfitMerged: 0,
+                  TurnOver: 0,
+                  TurnOverWithoutVAT: 0,
+                },
+              );
+
+              return {
+                date: datePart,
+                TotalProfit: parseFloat(totals2.TotalProfit.toFixed(2)),
+                TotalProfitMerged: parseFloat(
+                  totals2.TotalProfitMerged.toFixed(2),
+                ),
+                TurnOver: parseFloat(totals2.TurnOver.toFixed(2)),
+                TurnOverWithoutVAT: parseFloat(
+                  totals2.TurnOverWithoutVAT.toFixed(2),
+                ),
+              };
+            });
+
+            summedGroupedData.sort((a, b) => {
+              return parseInt(a.date, 10) - parseInt(b.date, 10);
+            });
+
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour.toString()}:00`,
+                  x: `${item.date}:00`,
                   y: item.TurnOver,
                 });
               });
@@ -392,9 +456,9 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartTurnoverWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour.toString()}:00`,
+                  x: `${item.date}:00`,
                   y: item.TurnOverWithoutVAT,
                 });
               });
@@ -402,9 +466,9 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour.toString()}:00`,
+                  x: `${item.date}:00`,
                   y: item.TotalProfitMerged,
                 });
               });
@@ -412,9 +476,9 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour.toString()}:00`,
+                  x: `${item.date}:00`,
                   y: item.TotalProfit,
                 });
               });
@@ -422,127 +486,252 @@ const SalesStatisticsScreen = () => {
             });
             break;
           case 'days':
+            groupedData = totalSalesChartData.reduce((groups, item) => {
+              const datePart = item.InvoiceDateTime.substring(0, 10);
+              if (!groups[datePart]) {
+                groups[datePart] = [];
+              }
+              groups[datePart].push(item);
+              return groups;
+            }, {});
+
+            summedGroupedData = Object.keys(groupedData).map(key => {
+              const group = groupedData[key];
+              const datePart = group[0].InvoiceDateTime.substring(0, 10);
+
+              const totals2 = group.reduce(
+                (acc, item) => {
+                  acc.TotalProfit += item.TotalProfit;
+                  acc.TotalProfitMerged += item.TotalProfitMerged;
+                  acc.TurnOver += item.TurnOver;
+                  acc.TurnOverWithoutVAT += item.TurnOverWithoutVAT;
+                  return acc;
+                },
+                {
+                  TotalProfit: 0,
+                  TotalProfitMerged: 0,
+                  TurnOver: 0,
+                  TurnOverWithoutVAT: 0,
+                },
+              );
+
+              return {
+                date: datePart,
+                TotalProfit: totals2.TotalProfit.toFixed(2),
+                TotalProfitMerged: totals2.TotalProfitMerged.toFixed(2),
+                TurnOver: totals2.TurnOver.toFixed(2),
+                TurnOverWithoutVAT: totals2.TurnOverWithoutVAT.toFixed(2),
+              };
+            });
+
+            // console.log(summedGroupedData);
+
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour}`,
-                  y: item.TurnOver,
+                  // x: `${item.Hour}`,
+                  x: item.date,
+                  y: parseFloat(item.TurnOver),
                 });
               });
               return arr;
             });
             setSalesChartTurnoverWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour}`,
-                  y: item.TurnOverWithoutVAT,
+                  // x: `${item.Hour}`,
+                  x: item.date,
+                  y: parseFloat(item.TurnOverWithoutVAT),
                 });
               });
               return arr;
             });
             setSalesChartProfitWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour}`,
-                  y: item.TotalProfitMerged,
+                  // x: `${item.Hour}`,
+                  x: item.date,
+                  y: parseFloat(item.TotalProfitMerged),
                 });
               });
               return arr;
             });
             setSalesChartProfitWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
                 arr.push({
-                  x: `${item.Hour}`,
-                  y: item.TotalProfit,
+                  // x: `${item.Hour}`,
+                  x: item.date,
+                  y: parseFloat(item.TotalProfit),
                 });
               });
               return arr;
             });
             break;
           case 'weeks':
+            groupedData = totalSalesChartData.reduce((groups, item) => {
+              const year = item.Year;
+              const week = item.Hour;
+
+              if (!groups[year]) {
+                groups[year] = {};
+              }
+              if (!groups[year][week]) {
+                groups[year][week] = [];
+              }
+              groups[year][week].push(item);
+              return groups;
+            }, {});
+
+            keys = Object.keys(groupedData);
+            let innerKeys = Object.keys(groupedData[keys[0]]);
+            // console.log(keys, innerKeys);
+            // console.log(groupedData[keys[0]][innerKeys[0]]);
+
+            summedGroupedData = Object.keys(groupedData).map(yearKey => {
+              const accumulatorYear = Object.keys(groupedData[yearKey]).map(
+                weekKey => {
+                  const accumulatorWeek = {
+                    date: groupedData[yearKey][
+                      weekKey
+                    ][0].InvoiceDateTime.substring(0, 10),
+                    TotalProfit: 0,
+                    TotalProfitMerged: 0,
+                    TurnOver: 0,
+                    TurnOverWithoutVAT: 0,
+                  };
+
+                  groupedData[yearKey][weekKey].forEach(dayData => {
+                    accumulatorWeek.TotalProfit += parseFloat(
+                      dayData.TotalProfit.toFixed(2),
+                    );
+                    accumulatorWeek.TotalProfitMerged += parseFloat(
+                      dayData.TotalProfitMerged.toFixed(2),
+                    );
+                    accumulatorWeek.TurnOver += parseFloat(
+                      dayData.TurnOver.toFixed(2),
+                    );
+                    accumulatorWeek.TurnOverWithoutVAT += parseFloat(
+                      dayData.TurnOverWithoutVAT.toFixed(2),
+                    );
+                  });
+
+                  return accumulatorWeek;
+                },
+              );
+
+              return {year: yearKey, data: accumulatorYear};
+            });
+
+            // console.log(summedGroupedData[0].data[0]);
+
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
-                arr.push({
-                  x:
-                    t('WeekAbbr') +
-                    ' ' +
-                    item.Hour +
-                    ' ' +
-                    t('of') +
-                    ' ' +
-                    item.Year,
-                  // x: `Week ${item.Hour} of ${item.Year}`,
-                  y: item.TurnOver,
+              summedGroupedData.map(year => {
+                year.data.map(week => {
+                  arr.push({
+                    x: week.date,
+                    y: week.TurnOver,
+                  });
                 });
               });
               return arr;
             });
             setSalesChartTurnoverWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
-                arr.push({
-                  x:
-                    t('WeekAbbr') +
-                    ' ' +
-                    item.Hour +
-                    ' ' +
-                    t('of') +
-                    ' ' +
-                    item.Year,
-                  // x: `Week ${item.Hour} of ${item.Year}`,
-                  y: item.TurnOverWithoutVAT,
+              summedGroupedData.map(year => {
+                year.data.map(week => {
+                  arr.push({
+                    x: week.date,
+                    y: week.TurnOverWithoutVAT,
+                  });
                 });
               });
               return arr;
             });
             setSalesChartProfitWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
-                arr.push({
-                  x:
-                    t('WeekAbbr') +
-                    ' ' +
-                    item.Hour +
-                    ' ' +
-                    t('of') +
-                    ' ' +
-                    item.Year,
-                  // x: `Week ${item.Hour} of ${item.Year}`,
-                  y: item.TotalProfitMerged,
+              summedGroupedData.map(year => {
+                year.data.map(week => {
+                  arr.push({
+                    x: week.date,
+                    y: week.TotalProfitMerged,
+                  });
                 });
               });
               return arr;
             });
             setSalesChartProfitWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
-                arr.push({
-                  x:
-                    t('WeekAbbr') +
-                    ' ' +
-                    item.Hour +
-                    ' ' +
-                    t('of') +
-                    ' ' +
-                    item.Year,
-                  // x: `Week ${item.Hour} of ${item.Year}`,
-                  y: item.TotalProfit,
+              summedGroupedData.map(year => {
+                year.data.map(week => {
+                  arr.push({
+                    x: week.date,
+                    y: week.TotalProfit,
+                  });
                 });
               });
               return arr;
             });
             break;
           case 'months':
+            totalSalesChartData.forEach(item => {
+              // Extract year and month from InvoiceDateTime
+              const date = new Date(item.InvoiceDateTime);
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1; // Month is 0-indexed, so add 1.
+
+              // Create year-level grouping if it doesn't exist
+              if (!groupedData[year]) {
+                groupedData[year] = {};
+              }
+
+              // Create month-level grouping if it doesn't exist
+              if (!groupedData[year][month]) {
+                groupedData[year][month] = [];
+              }
+
+              // Push the item to the month-level grouping
+              groupedData[year][month].push(item);
+            });
+
+            Object.keys(groupedData).forEach(year => {
+              Object.keys(groupedData[year]).forEach(month => {
+                const date = groupedData[year][month][0].InvoiceDateTime;
+                const monthlyData = {
+                  date: date,
+                  TurnOver: 0,
+                  TurnOverWithoutVAT: 0,
+                  TotalProfit: 0,
+                  TotalProfitMerged: 0,
+                };
+                groupedData[year][month].forEach(invoice => {
+                  monthlyData.TotalProfit += parseFloat(
+                    invoice.TotalProfit.toFixed(2),
+                  );
+                  monthlyData.TotalProfitMerged += parseFloat(
+                    invoice.TotalProfitMerged.toFixed(2),
+                  );
+                  monthlyData.TurnOver += parseFloat(
+                    invoice.TurnOver.toFixed(2),
+                  );
+                  monthlyData.TurnOverWithoutVAT += parseFloat(
+                    invoice.TurnOverWithoutVAT.toFixed(2),
+                  );
+                });
+                summedGroupedData.push(monthlyData);
+              });
+            });
+
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Hour}/${item.Year}`,
+                  x: `${date.getMonth() + 1}/${date.getFullYear()}`,
                   y: item.TurnOver,
                 });
               });
@@ -550,9 +739,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartTurnoverWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Hour}/${item.Year}`,
+                  x: `${date.getMonth() + 1}/${date.getFullYear()}`,
                   y: item.TurnOverWithoutVAT,
                 });
               });
@@ -560,9 +750,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Hour}/${item.Year}`,
+                  x: `${date.getMonth() + 1}/${date.getFullYear()}`,
                   y: item.TotalProfitMerged,
                 });
               });
@@ -570,9 +761,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Hour}/${item.Year}`,
+                  x: `${date.getMonth() + 1}/${date.getFullYear()}`,
                   y: item.TotalProfit,
                 });
               });
@@ -580,11 +772,50 @@ const SalesStatisticsScreen = () => {
             });
             break;
           case 'years':
+            totalSalesChartData.forEach(item => {
+              // Extract year and month from InvoiceDateTime
+              const date = new Date(item.InvoiceDateTime);
+              const year = date.getFullYear();
+
+              // Create year-level grouping if it doesn't exist
+              if (!groupedData[year]) {
+                groupedData[year] = [];
+              }
+
+              // Push the item to the month-level grouping
+              groupedData[year].push(item);
+            });
+
+            Object.keys(groupedData).forEach(year => {
+              const date = groupedData[year][0].InvoiceDateTime;
+              const annualData = {
+                date: date,
+                TurnOver: 0,
+                TurnOverWithoutVAT: 0,
+                TotalProfit: 0,
+                TotalProfitMerged: 0,
+              };
+              groupedData[year].forEach(invoice => {
+                annualData.TotalProfit += parseFloat(
+                  invoice.TotalProfit.toFixed(2),
+                );
+                annualData.TotalProfitMerged += parseFloat(
+                  invoice.TotalProfitMerged.toFixed(2),
+                );
+                annualData.TurnOver += parseFloat(invoice.TurnOver.toFixed(2));
+                annualData.TurnOverWithoutVAT += parseFloat(
+                  invoice.TurnOverWithoutVAT.toFixed(2),
+                );
+              });
+              summedGroupedData.push(annualData);
+            });
+
             setSalesChartTurnoverWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Year}`,
+                  x: `${date.getFullYear()}`,
                   y: item.TurnOver,
                 });
               });
@@ -592,9 +823,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartTurnoverWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Year}`,
+                  x: `${date.getFullYear()}`,
                   y: item.TurnOverWithoutVAT,
                 });
               });
@@ -602,9 +834,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Year}`,
+                  x: `${date.getFullYear()}`,
                   y: item.TotalProfitMerged,
                 });
               });
@@ -612,9 +845,10 @@ const SalesStatisticsScreen = () => {
             });
             setSalesChartProfitWithoutVatData(() => {
               let arr = [];
-              totalSalesChartData.map(item => {
+              summedGroupedData.map(item => {
+                let date = new Date(item.date);
                 arr.push({
-                  x: `${item.Year}`,
+                  x: `${date.getFullYear()}`,
                   y: item.TotalProfit,
                 });
               });
