@@ -85,7 +85,6 @@ const ProcurementsScreen = () => {
   const [selectedSupplierTableData, setSelectedSupplierTableData] = useState(
     [],
   );
-  const [chartLoading, setChartLoading] = useState(false);
   const {t} = useTranslation();
 
   const fetchDataFromProcurementExpenditure = async () => {
@@ -381,9 +380,6 @@ const ProcurementsScreen = () => {
           requestOptions,
         );
         const data = await response.json();
-        console.log('====================================');
-        console.log(data);
-        console.log('====================================');
         setOrdersSummary(data);
         setLoading(false);
       } catch (e) {
