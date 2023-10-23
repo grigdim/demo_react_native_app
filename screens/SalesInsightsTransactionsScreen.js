@@ -20,6 +20,7 @@ import {ip} from '@env';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useTranslation} from 'react-i18next';
 import SelectDropdown from 'react-native-select-dropdown';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   VictoryChart,
@@ -36,11 +37,8 @@ const SalesInsightsTransactionsScreen = () => {
   const {t, i18n} = useTranslation();
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
-  const storeId = useSelector(selectStoreId);
-
-  useEffect(() => {
-    console.log('store id', storeId);
-  }, [storeId]);
+  // const storeId = useSelector(selectStoreId);
+  const [storeId, setStoreId] = useState();
 
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
@@ -84,11 +82,28 @@ const SalesInsightsTransactionsScreen = () => {
     }
   };
 
+  const loadSelectedLanguage = async () => {
+    try {
+      const retrievedStoreId = await AsyncStorage.getItem('@storeId');
+      console.log('====================================');
+      console.log(retrievedStoreId);
+      console.log('====================================');
+      setStoreId(retrievedStoreId);
+    } catch (error) {
+      console.error('Error loading selected language:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadSelectedLanguage();
+  }, [storeId]);
+
   const fetchTransactionsWeeks = async () => {
     setLoading(true);
     if (
       // __DEV__ &&
-      token
+      token &&
+      storeId !== undefined
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -105,7 +120,7 @@ const SalesInsightsTransactionsScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      // console.log('transaction weeks', data);
+      console.log('transaction weeks', data);
       setTransactionsWeeks(data);
 
       const response2 = await fetch(
@@ -124,7 +139,8 @@ const SalesInsightsTransactionsScreen = () => {
   const fetchTopTransactionsHours = async () => {
     if (
       // __DEV__ &&
-      token
+      token &&
+      storeId !== undefined
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -174,7 +190,8 @@ const SalesInsightsTransactionsScreen = () => {
   const fetchTransactionsPerHour = async () => {
     if (
       // __DEV__ &&
-      token
+      token &&
+      storeId !== undefined
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -199,7 +216,8 @@ const SalesInsightsTransactionsScreen = () => {
   const fetchTransactionsPerDay = async () => {
     if (
       // __DEV__ &&
-      token
+      token &&
+      storeId !== undefined
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -224,7 +242,8 @@ const SalesInsightsTransactionsScreen = () => {
   const fetchAnalysisWeekHourlyTransactions = async () => {
     if (
       // __DEV__ &&
-      token
+      token &&
+      storeId !== undefined
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
