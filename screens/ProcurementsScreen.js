@@ -6,9 +6,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
   Dimensions,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect, useMemo} from 'react';
 import DatePicker from 'react-native-date-picker';
@@ -28,13 +28,15 @@ import {
   VictoryTheme,
   VictoryAxis,
   VictoryBar,
+  VictoryArea,
 } from 'victory-native';
 
 const ProcurementsScreen = () => {
   const {height} = Dimensions.get('screen');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const token = useSelector(selectToken);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('WEEK');
+  const [groupBy, setGroupBy] = useState('week');
   const [fromDate, setFromDate] = useState(() => {
     const today = new Date();
     today.setDate(today.getDate() - 7);
@@ -85,10 +87,82 @@ const ProcurementsScreen = () => {
   const [selectedSupplierTableData, setSelectedSupplierTableData] = useState(
     [],
   );
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
+  // Default day value
+  const defaultSelectedGroupByDateValue = useMemo(() => {
+    switch (selectedGroupByDateValue) {
+      case t('day'):
+        return t('day');
+      case t('week'):
+        return t('week');
+      case t('month'):
+        return t('month');
+      default:
+        return t('week');
+    }
+  }, [selectedGroupByDateValue]);
+
+  const handleGroupByChange = value => {
+    let date = new Date();
+    switch (value) {
+      case t('day'):
+        setFromDate(date);
+        setFromDateFormatted(() => {
+          return date.toISOString().slice(0, 10).concat(' 00:00:00');
+        });
+        setToDate(date);
+        setToDateFormatted(() => {
+          return date.toISOString().slice(0, 10).concat(' 23:59:59');
+        });
+        break;
+      case t('week'):
+        let oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        setFromDate(oneWeekAgo);
+        setFromDateFormatted(() => {
+          return oneWeekAgo.toISOString().slice(0, 10).concat(' 00:00:00');
+        });
+        setToDate(date);
+        setToDateFormatted(() => {
+          return date.toISOString().slice(0, 10).concat(' 23:59:59');
+        });
+        break;
+      case t('month'):
+        let oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        setFromDate(oneMonthAgo);
+        setFromDateFormatted(() => {
+          return oneMonthAgo.toISOString().slice(0, 10).concat(' 00:00:00');
+        });
+        setToDate(date);
+        setToDateFormatted(() => {
+          return date.toISOString().slice(0, 10).concat(' 23:59:59');
+        });
+        break;
+      default:
+        console.log('Value is not "a", "b", or "c"');
+        break;
+    }
+  };
 
   const fetchDataFromProcurementExpenditure = async () => {
     setLoading(true);
+    let groupByDate;
+    let dayDiff = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+
+    if (dayDiff === 0) {
+      groupByDate = 'hours';
+    } else if (dayDiff >= 60 && dayDiff < 420) {
+      groupByDate = 'weeks';
+    } else if (dayDiff >= 420 && dayDiff < 730) {
+      groupByDate = 'months';
+    } else if (dayDiff >= 730) {
+      groupByDate = 'years';
+    } else {
+      groupByDate = 'days';
+    }
+
+    setGroupBy(groupByDate);
 
     if (
       // __DEV__ &&
@@ -108,85 +182,255 @@ const ProcurementsScreen = () => {
           requestOptions,
         );
         const data = await response.json();
-        // console.log(data);
+        // console.log(data.ChartExpenditures);
         setTopSuppliers(data.TopSuppliers);
         setTotalExpenditures(data.TotalExpenditures);
 
         let sortedData = data.ChartExpenditures.sort(
           (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
         );
-        let groupedData = {};
-        let summedGroupedData = [];
-        groupedData = sortedData.reduce((groups, item) => {
-          const datePart = item.Inv_DateTime.substring(0, 10);
-          if (!groups[datePart]) {
-            groups[datePart] = [];
-          }
-          groups[datePart].push(item);
-          return groups;
-        }, {});
 
-        summedGroupedData = Object.keys(groupedData).map(key => {
-          const group = groupedData[key];
-          const datePart = group[0].Inv_DateTime.substring(0, 10);
-
-          const totals2 = group.reduce(
-            (acc, item) => {
-              acc.GrossValue += item.GrossValue;
-              acc.NetValue += item.NetValue;
-              acc.VAT += item.VAT;
-              return acc;
-            },
-            {
-              GrossValue: 0,
-              NetValue: 0,
-              VAT: 0,
-            },
-          );
-
-          return {
-            date: datePart,
-            GrossValue: parseFloat(totals2.GrossValue.toFixed(2)),
-            NetValue: parseFloat(totals2.NetValue.toFixed(2)),
-            VAT: parseFloat(totals2.VAT.toFixed(2)),
-          };
-        });
-
-        summedGroupedData.sort((a, b) => {
-          return parseInt(a.date, 10) - parseInt(b.date, 10);
-        });
-
-        setTotalExpenditureChartVAT(() => {
-          let arr = [];
-          summedGroupedData.map(item => {
-            arr.push({
-              x: `${item.date}`,
-              y: item.VAT,
+        switch (groupByDate) {
+          case 'hours':
+            // console.log(groupByDate);
+            setTotalExpenditureChartVAT(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(11, 16)}`,
+                  y: item.VAT,
+                });
+              });
+              return arr;
             });
-          });
-          return arr;
-        });
-        setTotalExpenditureChartNetValue(() => {
-          let arr = [];
-          summedGroupedData.map(item => {
-            arr.push({
-              x: `${item.date}`,
-              y: item.NetValue,
+            setTotalExpenditureChartNetValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(11, 16)}`,
+                  y: item.NetValue,
+                });
+              });
+              return arr;
             });
-          });
-          return arr;
-        });
-        setTotalExpenditureChartGrossValue(() => {
-          let arr = [];
-          summedGroupedData.map(item => {
-            arr.push({
-              x: `${item.date}`,
-              y: item.GrossValue,
+            setTotalExpenditureChartGrossValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(11, 16)}`,
+                  y: item.GrossValue,
+                });
+              });
+              return arr;
             });
-          });
-          return arr;
-        });
-
+            break;
+          case 'days':
+            // console.log(groupByDate);
+            setTotalExpenditureChartVAT(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.VAT,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartNetValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.NetValue,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartGrossValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.GrossValue,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'weeks':
+            // console.log(groupByDate);
+            setTotalExpenditureChartVAT(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.VAT,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartNetValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.NetValue,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartGrossValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.GrossValue,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'months':
+            // console.log(groupByDate);
+            setTotalExpenditureChartVAT(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.VAT,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartNetValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.NetValue,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartGrossValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.GrossValue,
+                });
+              });
+              return arr;
+            });
+            break;
+          case 'years':
+            // console.log(groupByDate);
+            setTotalExpenditureChartVAT(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.VAT,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartNetValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.NetValue,
+                });
+              });
+              return arr;
+            });
+            setTotalExpenditureChartGrossValue(() => {
+              let arr = [];
+              sortedData.map(item => {
+                arr.push({
+                  x: `${item.Inv_DateTime.slice(
+                    8,
+                    10,
+                  )}/${item.Inv_DateTime.slice(5, 7)}/${item.Inv_DateTime.slice(
+                    2,
+                    4,
+                  )}`,
+                  y: item.GrossValue,
+                });
+              });
+              return arr;
+            });
+            break;
+          default:
+            break;
+        }
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -244,9 +488,35 @@ const ProcurementsScreen = () => {
     }
   };
 
-  const fetchDataFromGetSuppliersModal = async () => {
+  const fetchDataFromGetOrderSummaries = async () => {
     setLoading(true);
     if (token) {
+      var myHeaders = new Headers();
+      myHeaders.append('Token', token);
+      myHeaders.append('Content-Type', 'application/json');
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+      try {
+        const response = await fetch(
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetOrderSummaries?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1`,
+          requestOptions,
+        );
+        const data = await response.json();
+        setOrdersSummary(data);
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      }
+    }
+  };
+
+  const fetchDataFromGetSuppliersModal = async () => {
+    setLoading(true);
+    if (token && supplierID) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -261,52 +531,55 @@ const ProcurementsScreen = () => {
           requestOptions,
         );
         const data = await response.json();
-        setSupplierTotalExpenditures(data.TotalExpenditures);
-        setSupplierChartGrossValue(() => {
-          let supplierChartGrossValueArray = [];
-          let sortedData = data.ChartExpenditures.sort(
-            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-          );
-          sortedData.map(item => {
-            supplierChartGrossValueArray.push({
-              y: item.GrossValue,
-              x: `${new Date(item.Inv_DateTime).getDate()}/${
-                new Date(item.Inv_DateTime).getMonth() + 1
-              }/${new Date(item.Inv_DateTime).getFullYear()}`,
-            });
-          });
-          return supplierChartGrossValueArray;
-        });
-        setSupplierChartNetValue(() => {
-          let supplierChartNetValueArray = [];
-          let sortedData = data.ChartExpenditures.sort(
-            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-          );
-          sortedData.map(item => {
-            supplierChartNetValueArray.push({
-              y: item.NetValue,
-              x: `${new Date(item.Inv_DateTime).getDate()}/${
-                new Date(item.Inv_DateTime).getMonth() + 1
-              }/${new Date(item.Inv_DateTime).getFullYear()}`,
-            });
-          });
-          return supplierChartNetValueArray;
-        });
-        setSupplierChartVAT(() => {
-          let supplierChartVATArray = [];
-          let sortedData = data.ChartExpenditures.sort(
-            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-          );
-          sortedData.map(item => {
-            supplierChartVATArray.push({
-              y: item.VAT,
-              x: `${new Date(item.Inv_DateTime).getDate()}/${
-                new Date(item.Inv_DateTime).getMonth() + 1
-              }/${new Date(item.Inv_DateTime).getFullYear()}`,
-            });
-          });
-          return supplierChartVATArray;
-        });
+        console.log('====================================');
+        console.log(data);
+        console.log('====================================');
+        // setSupplierTotalExpenditures(data.TotalExpenditures);
+        // setSupplierChartGrossValue(() => {
+        //   let supplierChartGrossValueArray = [];
+        //   let sortedData = data.ChartExpenditures.sort(
+        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+        //   );
+        //   sortedData.map(item => {
+        //     supplierChartGrossValueArray.push({
+        //       y: item.GrossValue,
+        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
+        //         new Date(item.Inv_DateTime).getMonth() + 1
+        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
+        //     });
+        //   });
+        //   return supplierChartGrossValueArray;
+        // });
+        // setSupplierChartNetValue(() => {
+        //   let supplierChartNetValueArray = [];
+        //   let sortedData = data.ChartExpenditures.sort(
+        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+        //   );
+        //   sortedData.map(item => {
+        //     supplierChartNetValueArray.push({
+        //       y: item.NetValue,
+        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
+        //         new Date(item.Inv_DateTime).getMonth() + 1
+        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
+        //     });
+        //   });
+        //   return supplierChartNetValueArray;
+        // });
+        // setSupplierChartVAT(() => {
+        //   let supplierChartVATArray = [];
+        //   let sortedData = data.ChartExpenditures.sort(
+        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+        //   );
+        //   sortedData.map(item => {
+        //     supplierChartVATArray.push({
+        //       y: item.VAT,
+        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
+        //         new Date(item.Inv_DateTime).getMonth() + 1
+        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
+        //     });
+        //   });
+        //   return supplierChartVATArray;
+        // });
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -317,7 +590,7 @@ const ProcurementsScreen = () => {
 
   const fetchDataFromGetSupplierOrder = async () => {
     setLoading(true);
-    if (token) {
+    if (token && supplierID) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
       myHeaders.append('Content-Type', 'application/json');
@@ -363,32 +636,6 @@ const ProcurementsScreen = () => {
     }
   };
 
-  const fetchDataFromGetOrderSummaries = async () => {
-    setLoading(true);
-    if (token) {
-      var myHeaders = new Headers();
-      myHeaders.append('Token', token);
-      myHeaders.append('Content-Type', 'application/json');
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-      try {
-        const response = await fetch(
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetOrderSummaries?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1`,
-          requestOptions,
-        );
-        const data = await response.json();
-        setOrdersSummary(data);
-        setLoading(false);
-      } catch (e) {
-        console.log(e);
-        setLoading(false);
-      }
-    }
-  };
-
   useEffect(() => {
     fetchDataFromProcurementExpenditure();
     fetchDataFromProcurementExpenditureDetails();
@@ -400,62 +647,6 @@ const ProcurementsScreen = () => {
     fetchDataFromGetSupplierOrder();
   }, [supplierID]);
 
-  // Default day value
-  const defaultSelectedGroupByDateValue = useMemo(() => {
-    switch (selectedGroupByDateValue) {
-      case t('day'):
-        return t('day');
-      case t('week'):
-        return t('week');
-      case t('month'):
-        return t('month');
-      default:
-        return t('week');
-    }
-  }, [selectedGroupByDateValue]);
-
-  const handleGroupByChange = value => {
-    let date = new Date();
-    switch (value) {
-      case t('day'):
-        setFromDate(date);
-        setFromDateFormatted(() => {
-          return date.toISOString().slice(0, 10).concat(' 00:00:00');
-        });
-        setToDate(date);
-        setToDateFormatted(() => {
-          return date.toISOString().slice(0, 10).concat(' 23:59:59');
-        });
-        break;
-      case t('week'):
-        let oneWeekAgo = new Date();
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        setFromDate(oneWeekAgo);
-        setFromDateFormatted(() => {
-          return oneWeekAgo.toISOString().slice(0, 10).concat(' 00:00:00');
-        });
-        setToDate(date);
-        setToDateFormatted(() => {
-          return date.toISOString().slice(0, 10).concat(' 23:59:59');
-        });
-        break;
-      case t('month'):
-        let oneMonthAgo = new Date();
-        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-        setFromDate(oneMonthAgo);
-        setFromDateFormatted(() => {
-          return oneMonthAgo.toISOString().slice(0, 10).concat(' 00:00:00');
-        });
-        setToDate(date);
-        setToDateFormatted(() => {
-          return date.toISOString().slice(0, 10).concat(' 23:59:59');
-        });
-        break;
-      default:
-        console.log('Value is not "a", "b", or "c"');
-        break;
-    }
-  };
   return (
     <View style={{flex: 1}}>
       <TouchableOpacity>
@@ -564,7 +755,6 @@ const ProcurementsScreen = () => {
                 </TouchableOpacity>
               </View>
               {/*Date picker end*/}
-
               {/*Future spend start*/}
               <View className="mb-2 mx-4 space-y-4">
                 <View
@@ -739,7 +929,6 @@ const ProcurementsScreen = () => {
                       className="py-3 rounded-t-md"
                       style={{
                         backgroundColor: 'rgb(86, 113, 144)',
-                        elevation: 50,
                       }}>
                       <Text className="text-center text-white underline">
                         {t('topSuppliers')}
@@ -1060,8 +1249,8 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*y axis end*/}
                                       {/*gross value chart start*/}
-                                      <VictoryBar
-                                        // interpolation="natural"
+                                      <VictoryArea
+                                        interpolation="natural"
                                         data={supplierChartGrossValue}
                                         style={{
                                           data: {fill: 'orange'},
@@ -1073,8 +1262,8 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*gross value chart end*/}
                                       {/*net value chart start*/}
-                                      <VictoryBar
-                                        // interpolation="natural"
+                                      <VictoryArea
+                                        interpolation="natural"
                                         data={supplierChartNetValue}
                                         style={{
                                           data: {fill: 'rgb(96 165 250)'},
@@ -1086,8 +1275,8 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*net value chart end*/}
                                       {/*vat chart start*/}
-                                      <VictoryBar
-                                        // interpolation="natural"
+                                      <VictoryArea
+                                        interpolation="natural"
                                         data={supplierChartVAT}
                                         style={{
                                           data: {fill: 'red'},
@@ -1170,133 +1359,135 @@ const ProcurementsScreen = () => {
                     </View>
                   </View>
                   {/*Top suppliers end*/}
-                  {/*Total expenditure chart start*/}
-                  <View
-                    className="rounded-lg flex-1 justify-center items-center bg-white"
-                    style={{
-                      //   backgroundColor: 'rgb(105, 133, 165)',
-                      elevation: 50,
-                    }}>
-                    <ScrollView horizontal className="w-full">
-                      <VictoryChart
-                        theme={VictoryTheme.material}
-                        height={height / 2}
-                        padding={{
-                          top: 75,
-                          left: 50,
-                          bottom: 50,
-                          right: 25,
-                        }}
-                        domainPadding={{y: 50, x: 50}}>
-                        <VictoryLegend
-                          orientation="horizontal"
-                          x={75}
-                          y={10}
-                          gutter={20}
-                          style={{
-                            title: {fontSize: 20},
-                            labels: {fill: 'rgb(100 116 139)'},
-                          }}
-                          data={[
-                            {
-                              name: t('NetValue'),
-                              symbol: {fill: 'rgb(96 165 250)'},
-                            },
-                            {
-                              name: t('VAT'),
-                              symbol: {fill: 'red'},
-                            },
-                            {
-                              name: t('GrossValue'),
-                              symbol: {fill: 'orange'},
-                            },
-                          ]}
-                        />
-                        {/*x axis start*/}
-                        <VictoryAxis
-                          fixLabelOverlap={true}
-                          style={{
-                            grid: {
-                              stroke: 'rgb(100 116 139)',
-                              strokeDasharray: 'none',
-                            },
-                            axis: {stroke: 'rgb(100 116 139)'},
-                            ticks: {stroke: 'rgb(100 116 139)'},
-                            tickLabels: {
-                              fill: 'rgb(100 116 139)',
-                            },
-                          }}
-                        />
-                        {/*x axis end*/}
-                        {/*y axis start*/}
-                        <VictoryAxis
-                          dependentAxis
-                          tickFormat={tick => {
-                            const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
-                            const magnitude = Math.floor(Math.log10(tick) / 3);
-                            const scaledNumber =
-                              tick / Math.pow(10, magnitude * 3);
-                            const formattedNumber = scaledNumber.toFixed(0);
-                            return formattedNumber + suffixes[magnitude] + '€';
-                          }}
-                          style={{
-                            grid: {
-                              stroke: 'rgb(100 116 139)',
-                              strokeDasharray: 'none',
-                            },
-                            axis: {stroke: 'rgb(100 116 139)'},
-                            ticks: {stroke: 'rgb(100 116 139)'},
-                            tickLabels: {
-                              fill: 'rgb(100 116 139)',
-                            },
-                          }}
-                        />
-                        {/*y axis end*/}
-                        {/*gross value chart start*/}
-                        <VictoryBar
-                          // interpolation="natural"
-                          data={totalExpenditureChartGrossValue}
-                          style={{
-                            data: {fill: 'orange'},
-                          }}
-                          animate={{
-                            duration: 1000,
-                            onLoad: {duration: 1000},
-                          }}
-                        />
-                        {/*gross value chart end*/}
-                        {/*net value chart start*/}
-                        <VictoryBar
-                          // interpolation="natural"
-                          data={totalExpenditureChartNetValue}
-                          style={{
-                            data: {fill: 'rgb(96 165 250)'},
-                          }}
-                          animate={{
-                            duration: 2000,
-                            onLoad: {duration: 2000},
-                          }}
-                        />
-                        {/*net value chart end*/}
-                        {/*vat chart start*/}
-                        <VictoryBar
-                          // interpolation="natural"
-                          data={totalExpenditureChartVAT}
-                          style={{
-                            data: {fill: 'red'},
-                          }}
-                          animate={{
-                            duration: 3000,
-                            onLoad: {duration: 3000},
-                          }}
-                        />
-                        {/*vat chart end*/}
-                      </VictoryChart>
-                    </ScrollView>
-                  </View>
-                  {/*Total expenditure chart end*/}
                 </View>
               )}
+              {/*Total expenditure chart start*/}
+              {totalExpenditureChartGrossValue && !loading && (
+                <View
+                  className="rounded-lg flex-1 mx-4 justify-center items-center bg-white"
+                  style={{
+                    //   backgroundColor: 'rgb(105, 133, 165)',
+                    elevation: 50,
+                  }}>
+                  <ScrollView horizontal className="w-full">
+                    <VictoryChart
+                      theme={VictoryTheme.material}
+                      height={height / 2}
+                      padding={{
+                        top: 75,
+                        left: 50,
+                        bottom: 50,
+                        right: 25,
+                      }}
+                      domainPadding={{y: 50}}>
+                      <VictoryLegend
+                        orientation="horizontal"
+                        x={75}
+                        y={10}
+                        gutter={20}
+                        style={{
+                          title: {fontSize: 20},
+                          labels: {fill: 'rgb(100 116 139)'},
+                        }}
+                        data={[
+                          {
+                            name: t('NetValue'),
+                            symbol: {fill: 'rgb(96 165 250)'},
+                          },
+                          {
+                            name: t('VAT'),
+                            symbol: {fill: 'red'},
+                          },
+                          {
+                            name: t('GrossValue'),
+                            symbol: {fill: 'orange'},
+                          },
+                        ]}
+                      />
+                      {/*x axis start*/}
+                      <VictoryAxis
+                        fixLabelOverlap={true}
+                        style={{
+                          grid: {
+                            stroke: 'rgb(229 231 235)',
+                            strokeDasharray: 'none',
+                          },
+                          axis: {stroke: 'rgb(100 116 139)'},
+                          ticks: {stroke: 'rgb(229 231 235)'},
+                          tickLabels: {
+                            fill: 'rgb(100 116 139)',
+                          },
+                        }}
+                      />
+                      {/*x axis end*/}
+                      {/*y axis start*/}
+                      <VictoryAxis
+                        dependentAxis
+                        tickFormat={tick => {
+                          const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes as needed
+                          const magnitude = Math.floor(Math.log10(tick) / 3);
+                          const scaledNumber =
+                            tick / Math.pow(10, magnitude * 3);
+                          const formattedNumber = scaledNumber.toFixed(0);
+                          return formattedNumber + suffixes[magnitude];
+                        }}
+                        style={{
+                          grid: {
+                            stroke: 'rgb(229 231 235)',
+                            strokeDasharray: 'none',
+                          },
+                          axis: {stroke: 'rgb(100 116 139)'},
+                          ticks: {stroke: 'rgb(100 116 139)'},
+                          tickLabels: {
+                            fill: 'rgb(100 116 139)',
+                          },
+                        }}
+                      />
+                      {/*y axis end*/}
+                      {/*gross value chart start*/}
+                      <VictoryArea
+                        interpolation="natural"
+                        data={totalExpenditureChartGrossValue}
+                        style={{
+                          data: {fill: 'orange'},
+                        }}
+                        animate={{
+                          duration: 1000,
+                          onLoad: {duration: 1000},
+                        }}
+                      />
+                      {/*gross value chart end*/}
+                      {/*net value chart start*/}
+                      <VictoryArea
+                        interpolation="natural"
+                        data={totalExpenditureChartNetValue}
+                        style={{
+                          data: {fill: 'rgb(96 165 250)'},
+                        }}
+                        animate={{
+                          duration: 2000,
+                          onLoad: {duration: 2000},
+                        }}
+                      />
+                      {/*net value chart end*/}
+                      {/*vat chart start*/}
+                      <VictoryArea
+                        interpolation="natural"
+                        data={totalExpenditureChartVAT}
+                        style={{
+                          data: {fill: 'red'},
+                        }}
+                        animate={{
+                          duration: 3000,
+                          onLoad: {duration: 3000},
+                        }}
+                      />
+                      {/*vat chart end*/}
+                    </VictoryChart>
+                  </ScrollView>
+                </View>
+              )}
+              {/*Total expenditure chart end*/}
             </ScrollView>
           </View>
         )}
