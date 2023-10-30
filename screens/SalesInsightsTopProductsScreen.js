@@ -634,7 +634,7 @@ const SalesInsightsTopProductsScreen = () => {
                         setSelectAllCategories(false);
                         setSelectedCategories([]);
                       }}
-                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      className="border border-gray-500 bg-gray-500 rounded-md p-2"
                       style={{elevation: 25}}>
                       <Text className="text-white text-lg">
                         {t('unselectAll')}
@@ -656,7 +656,7 @@ const SalesInsightsTopProductsScreen = () => {
                         });
                         setSelectAllCategories(true);
                       }}
-                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      className="border border-gray-500 bg-gray-500 rounded-md p-2"
                       style={{elevation: 25}}>
                       <Text className="text-white text-lg">
                         {t('selectAll')}
@@ -864,7 +864,7 @@ const SalesInsightsTopProductsScreen = () => {
                         });
                         setSelectAllSubCategories(false);
                       }}
-                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      className="border border-gray-500 bg-gray-500 rounded-md p-2"
                       style={{elevation: 25}}>
                       <Text className="text-white text-lg">
                         {t('unselectAll')}
@@ -899,7 +899,7 @@ const SalesInsightsTopProductsScreen = () => {
                         });
                         setSelectAllSubCategories(true);
                       }}
-                      className="border border-gray-500 bg-gray-500 rounded-xl p-2"
+                      className="border border-gray-500 bg-gray-500 rounded-md p-2"
                       style={{elevation: 25}}>
                       <Text className="text-white text-lg">
                         {t('selectAll')}

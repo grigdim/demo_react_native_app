@@ -27,14 +27,13 @@ import {store} from '../store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
-import Tabs from './SalesTabsScreen';
 import {ScrollView} from 'react-native-gesture-handler';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DrawerHeader from './DrawerHeader';
 import {useTranslation} from 'react-i18next';
 import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useInfo} from '../components/PersonalInfoTaken';
+import TabsScreen from './TabsScreen';
 
 const LoginScreen = () => {
   const [innerToken, setInnerToken] = useState();
@@ -210,7 +209,7 @@ const LoginScreen = () => {
   const [registeredEmail, setRegisteredEmail] = useState(false);
 
   const dispatch = useDispatch();
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   // const box = useSelector(selectBox);
   // const token = useSelector(selectToken);
 
@@ -352,6 +351,7 @@ const LoginScreen = () => {
         }),
       );
       setLoggedIn(true);
+      navigation.navigate(t('statistics'));
     }
     setLoading(false);
   };

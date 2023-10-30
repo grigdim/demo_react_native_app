@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import CustomDrawer from './components/CustomDrawer';
 import LoginScreen from './screens/LoginScreen';
 import LineChartScreen from './screens/LineChartScreen';
@@ -9,12 +9,13 @@ import HelpScreen from './screens/HelpScreen';
 import AboutScreen from './screens/AboutScreen';
 import LanguageScreen from './screens/LanguageScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Provider } from 'react-redux';
-import { store } from './store';
-import { InfoProvider } from './components/PersonalInfoTaken';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {Provider} from 'react-redux';
+import {store} from './store';
+import {InfoProvider} from './components/PersonalInfoTaken';
 import {
   SafeAreaView,
   View,
@@ -23,19 +24,18 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import SalesTabsScreen from './screens/SalesTabsScreen';
+import TabsScreen from './screens/TabsScreen';
 import SplashScreen from 'react-native-splash-screen';
 import GestureHandlerRootView from 'react-native-gesture-handler';
 import ProcurementsScreen from './screens/ProcurementsScreen';
 import SalesStatisticsScreen from './screens/SalesStatisticsScreen';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Root() {
-
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
   return (
     <Drawer.Navigator
@@ -59,22 +59,22 @@ function Root() {
         // name="Home"
         component={LoginScreen}
         options={{
-          drawerIcon: ({ color }) => (
+          drawerIcon: ({color}) => (
             <Ionicons name="home-outline" size={22} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name={t('salesDrawer')}
+        name={t('statistics')}
         // name="Sales"
-        component={SalesTabsScreen} // So it corresponds with the tab navigation
+        component={TabsScreen} // So it corresponds with the tab navigation
         options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="cash-outline" size={22} color={color} />
+          drawerIcon: ({color}) => (
+            <Ionicons name="stats-chart-outline" size={22} color={color} />
           ),
         }}
       />
-      <Drawer.Screen
+      {/*      <Drawer.Screen
         name={t('procurementsDrawer')}
         // name="Sales"
         component={ProcurementsScreen}
@@ -83,13 +83,13 @@ function Root() {
             <Ionicons name="card-outline" size={22} color={color} />
           ),
         }}
-      />
+      />*/}
       <Drawer.Screen
         name={t('helpDrawer')}
         // name="Help"
         component={HelpScreen}
         options={{
-          drawerIcon: ({ color }) => (
+          drawerIcon: ({color}) => (
             <Ionicons name="headset-outline" size={22} color={color} />
           ),
         }}
@@ -99,7 +99,7 @@ function Root() {
         // name="Language"
         component={LanguageScreen}
         options={{
-          drawerIcon: ({ color }) => (
+          drawerIcon: ({color}) => (
             <Ionicons name="flag-outline" size={22} color={color} />
           ),
         }}
@@ -109,7 +109,7 @@ function Root() {
         // name="About"
         component={AboutScreen}
         options={{
-          drawerIcon: ({ color }) => (
+          drawerIcon: ({color}) => (
             <Ionicons
               name="information-circle-outline"
               size={22}
@@ -123,7 +123,6 @@ function Root() {
 }
 
 export default function App() {
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -136,33 +135,35 @@ export default function App() {
             <Stack.Screen
               name="Root"
               component={Root}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
+            {/*
             <Stack.Screen
               name="LoginScreen"
               component={LoginScreen}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
-            <Stack.Screen
+                      <Stack.Screen
               name="LineChartScreen"
               component={LineChartScreen}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="BarChartScreen"
               component={BarChartScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SalesTabsScreen"
-              component={SalesTabsScreen}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="SalesStatisticsScreen"
               component={SalesStatisticsScreen}
-              options={{ headerShown: false }}
-            />
+              options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="TabsScreen"
+                component={TabsScreen}
+                options={{headerShown: false}}
+              />
+          */}
           </Stack.Navigator>
         </Provider>
       </NavigationContainer>

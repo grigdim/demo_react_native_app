@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -15,14 +16,13 @@ import React from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = props => {
   const navigation = useNavigation();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const handleClearLoginStorage = async () => {
     try {

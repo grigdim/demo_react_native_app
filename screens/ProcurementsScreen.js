@@ -531,9 +531,7 @@ const ProcurementsScreen = () => {
           requestOptions,
         );
         const data = await response.json();
-        console.log('====================================');
         console.log(data);
-        console.log('====================================');
         // setSupplierTotalExpenditures(data.TotalExpenditures);
         // setSupplierChartGrossValue(() => {
         //   let supplierChartGrossValueArray = [];
@@ -582,7 +580,7 @@ const ProcurementsScreen = () => {
         // });
         setLoading(false);
       } catch (e) {
-        console.log(e);
+        console.log(e, 'supplierModal');
         setLoading(false);
       }
     }
@@ -630,7 +628,7 @@ const ProcurementsScreen = () => {
         }
         setLoading(false);
       } catch (e) {
-        console.log(e);
+        console.log(e, 'supplierOrder');
         setLoading(false);
       }
     }
@@ -981,8 +979,8 @@ const ProcurementsScreen = () => {
                         visible={supplierModalVisible}
                         onRequestClose={() => {
                           setSupplierModalVisible(!supplierModalVisible);
-                          setSelectedSupplier(null);
-                          setSupplierID(null);
+                          // setSelectedSupplier();
+                          // setSupplierID();
                         }}>
                         <ScrollView className="bg-gray-200">
                           <View className="flex-row justify-center items-center border-b border-gray-200">
@@ -992,8 +990,8 @@ const ProcurementsScreen = () => {
                             <TouchableOpacity
                               onPress={() => {
                                 setSupplierModalVisible(false);
-                                setSelectedSupplier(null);
-                                setSupplierID(null);
+                                // setSelectedSupplier();
+                                // setSupplierID();
                               }}>
                               <Icon
                                 name="close"

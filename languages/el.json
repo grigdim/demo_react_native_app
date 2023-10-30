@@ -7,13 +7,14 @@
     "storeIdProvided": "Id Καταστήματος",
     // Drawer
     "intaleStatistics": "Στατιστικά Intale",
+    "statistics": "Στατιστικά",
     "Menu": "Μενού Εφαρμογής",
     "homeDrawer": "Αρχική",
     "turnoverDrawer": "Τζίρος",
     "totalProfitDrawer": "Συνολικό Κέρδος",
     "reportsDrawer": "Αναφορές",
     "chartsDrawer": "Διαγράμματα",
-    "salesDrawer": "Πωλήσεις",
+    // "salesDrawer": "Πωλήσεις",
     "procurementsDrawer": "Αγορές",
     "helpDrawer": "Υποστήριξη",
     "languageDrawer": "Γλώσσα",
@@ -201,8 +202,11 @@
     "ProfitPercentage": "% ΚΕΡΔΟΣ", // Category Details API
     "TotalTurnoverAndProfit": "Σύνολο Τζίρου και Κέρδους",
     // Sales Tabs
-    "SalesStatistics": "Στατιστικά Πωλήσεων",
-    "SalesInsights": "Πληροφορίες Πωλήσεων",
+    "SalesStatistics": "Πωλήσεις",
+    "SalesInsights": "Insights",
+    "Procurements": "Αγορές",
+    "Personnel": "Προσωπικό",
+    "Activity": "Δραστηριότητα",
     // Sales Insights
     "TopProductsInItemsSales": "Κορυφαία προϊόντα σε πωλήσεις ειδών",
     "TopProductsInItemsSalesPerStore": "Κορυφαία προϊόντα σε πωλήσεις ειδών ανά κατάστημα",

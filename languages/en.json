@@ -7,13 +7,14 @@
     "storeIdProvided": "Store Id",
     // Drawer
     "intaleStatistics": "Intale Statistics",
+    "statistics": "Statistics",
     "Menu": "App Menu",
     "homeDrawer": "Home",
     "turnoverDrawer": "Turnover",
     "totalProfitDrawer": "Total Profit",
     "reportsDrawer": "Reports",
     "chartsDrawer": "Charts",
-    "salesDrawer": "Sales",
+    // "salesDrawer": "Sales",
     "procurementsDrawer": "Procurements",
     "helpDrawer": "Help",
     "aboutDrawer": "About",
@@ -202,8 +203,11 @@
     "ProfitPercentage": "% PROFIT", // Category Details API
     "TotalTurnoverAndProfit": "Total Turnover and Profit",
     // Sales Tabs
-    "SalesStatistics": "Sales Statistics",
-    "SalesInsights": "Sales Insights",
+    "SalesStatistics": "Sales",
+    "SalesInsights": "Insights",
+    "Procurements": "Procurements",
+    "Personnel": "Personnel",
+    "Activity": "Activity",
     // Sales Insights
     "TopProductsInItemsSales": "Top products in items sales",
     "TopProductsInItemsSalesPerStore": "Top products in items sales per store",
