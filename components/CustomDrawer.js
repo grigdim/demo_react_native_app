@@ -64,6 +64,7 @@ const CustomDrawer = props => {
       <DrawerContentScrollView
         {...props}
         contentContainerStyle={{backgroundColor: '#3885E0'}}>
+        {/*
         <Image
           source={require('../images/intale_statistics.png')}
           style={{
@@ -74,6 +75,7 @@ const CustomDrawer = props => {
             marginTop: 5,
             marginLeft: 10,
           }}></Image>
+      */}
         <Text
           style={{
             color: '#FFFFFF',
