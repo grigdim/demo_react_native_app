@@ -536,52 +536,52 @@ const ProcurementsScreen = () => {
         );
         const data = await response.json();
         console.log(data);
-        // setSupplierTotalExpenditures(data.TotalExpenditures);
-        // setSupplierChartGrossValue(() => {
-        //   let supplierChartGrossValueArray = [];
-        //   let sortedData = data.ChartExpenditures.sort(
-        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-        //   );
-        //   sortedData.map(item => {
-        //     supplierChartGrossValueArray.push({
-        //       y: item.GrossValue,
-        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
-        //         new Date(item.Inv_DateTime).getMonth() + 1
-        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
-        //     });
-        //   });
-        //   return supplierChartGrossValueArray;
-        // });
-        // setSupplierChartNetValue(() => {
-        //   let supplierChartNetValueArray = [];
-        //   let sortedData = data.ChartExpenditures.sort(
-        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-        //   );
-        //   sortedData.map(item => {
-        //     supplierChartNetValueArray.push({
-        //       y: item.NetValue,
-        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
-        //         new Date(item.Inv_DateTime).getMonth() + 1
-        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
-        //     });
-        //   });
-        //   return supplierChartNetValueArray;
-        // });
-        // setSupplierChartVAT(() => {
-        //   let supplierChartVATArray = [];
-        //   let sortedData = data.ChartExpenditures.sort(
-        //     (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
-        //   );
-        //   sortedData.map(item => {
-        //     supplierChartVATArray.push({
-        //       y: item.VAT,
-        //       x: `${new Date(item.Inv_DateTime).getDate()}/${
-        //         new Date(item.Inv_DateTime).getMonth() + 1
-        //       }/${new Date(item.Inv_DateTime).getFullYear()}`,
-        //     });
-        //   });
-        //   return supplierChartVATArray;
-        // });
+        setSupplierTotalExpenditures(data.TotalExpenditures);
+        setSupplierChartGrossValue(() => {
+          let supplierChartGrossValueArray = [];
+          let sortedData = data.ChartExpenditures.sort(
+            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+          );
+          sortedData.map(item => {
+            supplierChartGrossValueArray.push({
+              y: item.GrossValue,
+              x: `${new Date(item.Inv_DateTime).getDate()}/${
+                new Date(item.Inv_DateTime).getMonth() + 1
+              }/${new Date(item.Inv_DateTime).getFullYear()}`,
+            });
+          });
+          return supplierChartGrossValueArray;
+        });
+        setSupplierChartNetValue(() => {
+          let supplierChartNetValueArray = [];
+          let sortedData = data.ChartExpenditures.sort(
+            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+          );
+          sortedData.map(item => {
+            supplierChartNetValueArray.push({
+              y: item.NetValue,
+              x: `${new Date(item.Inv_DateTime).getDate()}/${
+                new Date(item.Inv_DateTime).getMonth() + 1
+              }/${new Date(item.Inv_DateTime).getFullYear()}`,
+            });
+          });
+          return supplierChartNetValueArray;
+        });
+        setSupplierChartVAT(() => {
+          let supplierChartVATArray = [];
+          let sortedData = data.ChartExpenditures.sort(
+            (a, b) => new Date(a.Inv_DateTime) - new Date(b.Inv_DateTime),
+          );
+          sortedData.map(item => {
+            supplierChartVATArray.push({
+              y: item.VAT,
+              x: `${new Date(item.Inv_DateTime).getDate()}/${
+                new Date(item.Inv_DateTime).getMonth() + 1
+              }/${new Date(item.Inv_DateTime).getFullYear()}`,
+            });
+          });
+          return supplierChartVATArray;
+        });
         setLoading(false);
       } catch (e) {
         console.log(e, 'supplierModal');
@@ -647,7 +647,7 @@ const ProcurementsScreen = () => {
   useEffect(() => {
     fetchDataFromGetSuppliersModal();
     fetchDataFromGetSupplierOrder();
-  }, [supplierID]);
+  }, [supplierID, fromDateFormatted, toDateFormatted]);
 
   // useEffect(() => {
   //   console.log(fromDate, fromDateFormatted, toDate, toDateFormatted);
@@ -815,7 +815,6 @@ const ProcurementsScreen = () => {
                 </View>
               </View>
               {/*Future spend end*/}
-
               {topSuppliers && topSuppliers.length > 0 && (
                 <View className="mb-2 mx-4 space-y-4">
                   {/*Total expenditure widget start*/}
@@ -1009,7 +1008,7 @@ const ProcurementsScreen = () => {
                           // setSupplierID();
                         }}>
                         <ScrollView className="bg-gray-200">
-                          <View className="flex-row justify-center items-center border-b border-gray-200">
+                          <View className="flex-row justify-center items-center border-b border-gray-200 mt-4 mx-6">
                             <Text className="flex-1 text-center text-lg text-slate-500">
                               {t('supplierDetails')}
                             </Text>
@@ -1187,7 +1186,7 @@ const ProcurementsScreen = () => {
                                         top: 75,
                                         left: 50,
                                         bottom: 50,
-                                        right: 25,
+                                        // right: 25,
                                       }}
                                       domainPadding={{y: 50, x: 50}}>
                                       <VictoryLegend
@@ -1273,7 +1272,7 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*y axis end*/}
                                       {/*gross value chart start*/}
-                                      <VictoryArea
+                                      <VictoryBar
                                         interpolation="natural"
                                         data={supplierChartGrossValue}
                                         style={{
@@ -1286,7 +1285,7 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*gross value chart end*/}
                                       {/*net value chart start*/}
-                                      <VictoryArea
+                                      <VictoryBar
                                         interpolation="natural"
                                         data={supplierChartNetValue}
                                         style={{
@@ -1299,7 +1298,7 @@ const ProcurementsScreen = () => {
                                       />
                                       {/*net value chart end*/}
                                       {/*vat chart start*/}
-                                      <VictoryArea
+                                      <VictoryBar
                                         interpolation="natural"
                                         data={supplierChartVAT}
                                         style={{
@@ -1322,58 +1321,60 @@ const ProcurementsScreen = () => {
                                       {t('orders')}
                                     </Text>
                                   </View>
-                                  <Table
-                                    style={{
-                                      flex: 1,
-                                      backgroundColor: '#fff',
-                                      borderRadius: 5,
-                                      elevation: 10,
-                                    }}>
-                                    <Row
-                                      data={selectedSupplierTableHeaders.map(
-                                        item => {
-                                          return t(item);
-                                        },
-                                      )}
+                                  <ScrollView horizontal>
+                                    <Table
                                       style={{
-                                        alignContent: 'center',
-                                        backgroundColor: 'rgb(96 165 250)',
-                                        paddingRight: 2,
-                                        paddingLeft: 2,
-                                        borderTopLeftRadius: 5,
-                                        borderTopRightRadius: 5,
-                                      }}
-                                      textStyle={{
-                                        textAlign: 'center',
-                                        color: 'white',
-                                        fontSize: 14,
-                                      }}
-                                      widthArr={[100, 100, 100, 100]}
-                                    />
-                                    <View className="divide-y divide-gray-200 rounded-b-md">
-                                      {selectedSupplierTableData.map(
-                                        (row, index) => (
-                                          <Row
-                                            key={index}
-                                            style={{
-                                              alignContent: 'center',
-                                              paddingTop: 4,
-                                              paddingBottom: 4,
-                                              paddingLeft: 2,
-                                              paddingRight: 2,
-                                            }}
-                                            textStyle={{
-                                              textAlign: 'center',
-                                              fontSize: 14,
-                                              color: 'black',
-                                            }}
-                                            widthArr={[100, 100, 100, 100]}
-                                            data={row}
-                                          />
-                                        ),
-                                      )}
-                                    </View>
-                                  </Table>
+                                        flex: 1,
+                                        backgroundColor: '#fff',
+                                        borderRadius: 5,
+                                        elevation: 10,
+                                      }}>
+                                      <Row
+                                        data={selectedSupplierTableHeaders.map(
+                                          item => {
+                                            return t(item);
+                                          },
+                                        )}
+                                        style={{
+                                          alignContent: 'center',
+                                          backgroundColor: 'rgb(96 165 250)',
+                                          paddingRight: 2,
+                                          paddingLeft: 2,
+                                          borderTopLeftRadius: 5,
+                                          borderTopRightRadius: 5,
+                                        }}
+                                        textStyle={{
+                                          textAlign: 'center',
+                                          color: 'white',
+                                          fontSize: 14,
+                                        }}
+                                        widthArr={[100, 100, 100, 100]}
+                                      />
+                                      <View className="divide-y divide-gray-200 rounded-b-md">
+                                        {selectedSupplierTableData.map(
+                                          (row, index) => (
+                                            <Row
+                                              key={index}
+                                              style={{
+                                                alignContent: 'center',
+                                                paddingTop: 4,
+                                                paddingBottom: 4,
+                                                paddingLeft: 2,
+                                                paddingRight: 2,
+                                              }}
+                                              textStyle={{
+                                                textAlign: 'center',
+                                                fontSize: 14,
+                                                color: 'black',
+                                              }}
+                                              widthArr={[100, 100, 100, 100]}
+                                              data={row}
+                                            />
+                                          ),
+                                        )}
+                                      </View>
+                                    </Table>
+                                  </ScrollView>
                                 </View>
                               </View>
                             </View>
@@ -1469,7 +1470,7 @@ const ProcurementsScreen = () => {
                       />
                       {/*y axis end*/}
                       {/*gross value chart start*/}
-                      <VictoryArea
+                      <VictoryBar
                         interpolation="natural"
                         data={totalExpenditureChartGrossValue}
                         style={{
@@ -1482,7 +1483,7 @@ const ProcurementsScreen = () => {
                       />
                       {/*gross value chart end*/}
                       {/*net value chart start*/}
-                      <VictoryArea
+                      <VictoryBar
                         interpolation="natural"
                         data={totalExpenditureChartNetValue}
                         style={{
@@ -1495,7 +1496,7 @@ const ProcurementsScreen = () => {
                       />
                       {/*net value chart end*/}
                       {/*vat chart start*/}
-                      <VictoryArea
+                      <VictoryBar
                         interpolation="natural"
                         data={totalExpenditureChartVAT}
                         style={{
