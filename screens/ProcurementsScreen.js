@@ -30,6 +30,7 @@ import {
   VictoryBar,
   VictoryArea,
 } from 'victory-native';
+import {format, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
 
 const ProcurementsScreen = () => {
   const {height} = Dimensions.get('screen');
@@ -148,7 +149,10 @@ const ProcurementsScreen = () => {
   const fetchDataFromProcurementExpenditure = async () => {
     setLoading(true);
     let groupByDate;
-    let dayDiff = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+    let dayDiff = Math.ceil(
+      (toDate.setHours(0, 0, 0, 0) - fromDate.setHours(0, 0, 0, 0)) /
+        (1000 * 60 * 60 * 24),
+    );
 
     if (dayDiff === 0) {
       groupByDate = 'hours';
@@ -645,6 +649,10 @@ const ProcurementsScreen = () => {
     fetchDataFromGetSupplierOrder();
   }, [supplierID]);
 
+  // useEffect(() => {
+  //   console.log(fromDate, fromDateFormatted, toDate, toDateFormatted);
+  // }, [fromDate, toDate]);
+
   return (
     <View style={{flex: 1}}>
       <TouchableOpacity>
@@ -699,6 +707,15 @@ const ProcurementsScreen = () => {
                     date={fromDate}
                     mode={'date'}
                     onConfirm={date => {
+                      const startRange1 = new Date(date.getFullYear(), 9, 29); // October 29th
+                      const endRange1 = new Date(date.getFullYear() + 1, 2, 26); // March 26th of the following year
+
+                      // Check if the date is within the first range (29 October to 26 March)
+                      if (date >= startRange1 && date <= endRange1) {
+                        date.setHours(date.getHours() + 2); // Add 3 hours
+                      } else {
+                        date.setHours(date.getHours() + 3); // Add 2 hours
+                      }
                       setOpenFromDate(false);
                       setFromDate(date);
                       setFromDateFormatted(
@@ -732,10 +749,19 @@ const ProcurementsScreen = () => {
                     date={toDate}
                     mode={'date'}
                     onConfirm={date => {
+                      const startRange1 = new Date(date.getFullYear(), 9, 29); // October 29th
+                      const endRange1 = new Date(date.getFullYear() + 1, 2, 26); // March 26th of the following year
+
+                      // Check if the date is within the first range (29 October to 26 March)
+                      if (date >= startRange1 && date <= endRange1) {
+                        date.setHours(date.getHours() + 2); // Add 3 hours
+                      } else {
+                        date.setHours(date.getHours() + 3); // Add 2 hours
+                      }
                       setOpenToDate(false);
                       setToDate(date);
                       setToDateFormatted(
-                        date.toISOString().slice(0, 10).concat(' 23:59:59'),
+                        date.toISOString().slice(0, 10).concat(' 00:00:00'),
                       );
                     }}
                     onCancel={() => {

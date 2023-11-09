@@ -13,6 +13,8 @@ import i18next from '../languages/i18n';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ProcurementsScreen from './ProcurementsScreen';
+import PersonnelScreen from './PersonnelScreen';
+import StoreActivityScreen from './StoreActivityScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -78,10 +80,11 @@ const TabsScreen = () => {
           ),
         }}
       />
+
       <Tab.Screen
         // name={'Sales insights'}
         name={t('Personnel')}
-        component={SalesInsightsScreen}
+        component={PersonnelScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -96,7 +99,7 @@ const TabsScreen = () => {
       <Tab.Screen
         // name={'Sales insights'}
         name={t('Activity')}
-        component={SalesInsightsScreen}
+        component={StoreActivityScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (

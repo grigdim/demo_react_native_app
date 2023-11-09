@@ -58,7 +58,7 @@ const SalesInsightsTopProductsScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       setCategories(() => {
         let arr = [];
         data.map(item => {

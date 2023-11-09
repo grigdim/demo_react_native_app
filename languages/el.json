@@ -224,6 +224,17 @@
     "TransactionsPerHour": "Συναλλαγές ανά ώρα",
     "TransactionsPerDay": "Συναλλαγές ανά ημέρα",
     "WeeklyAnalysisOfHourlyTransactions": "Εβδομαδιαία Ανάλυση ωριαίων συναλλαγών",
+    //Personel
+    "username": "ΧΡΗΣΤΗΣ",
+    "date": "ΗΜΕΡΟΜΗΝΙΑ",
+    "duration": "ΔΙΑΡΚΕΙΑ",
+    "sft_start": "ΕΝΑΡΞΗ",
+    "handover": "ΠΑΡΑΔΟΣΗ",
+    "user_close": "ΚΛ. ΧΡΤΗΣΤΗ",
+    "system_close": "ΚΛ. ΣΥΣΤΗΜΑΤΟΣ",
+    "discrepancy": "ΔΙΑΦΟΡΑ",
+    "attempts": "ΠΡΠΟΣΠΑΘΕΙΕΣ",
+    "environment": "ΠΕΡΙΒΑΛΛΟΝ",
     // All Arrays
     "months": {
       "january": "Ιανουάριος",

@@ -82,12 +82,9 @@ const SalesInsightsTransactionsScreen = () => {
     }
   };
 
-  const loadSelectedLanguage = async () => {
+  const retrieveStoreId = async () => {
     try {
       const retrievedStoreId = await AsyncStorage.getItem('@storeId');
-      console.log('====================================');
-      console.log(retrievedStoreId);
-      console.log('====================================');
       setStoreId(retrievedStoreId);
     } catch (error) {
       console.error('Error loading selected language:', error);
@@ -95,7 +92,7 @@ const SalesInsightsTransactionsScreen = () => {
   };
 
   useEffect(() => {
-    loadSelectedLanguage();
+    retrieveStoreId();
   }, [storeId]);
 
   const fetchTransactionsWeeks = async () => {
@@ -120,7 +117,7 @@ const SalesInsightsTransactionsScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      console.log('transaction weeks', data);
+      // console.log('transaction weeks', data);
       setTransactionsWeeks(data);
 
       const response2 = await fetch(
@@ -277,7 +274,7 @@ const SalesInsightsTransactionsScreen = () => {
 
   useEffect(() => {
     fetchTransactionsWeeks();
-  }, []);
+  }, [storeId]);
 
   useEffect(() => {
     setLoading(true);

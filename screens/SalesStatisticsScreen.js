@@ -107,11 +107,18 @@ const SalesStatisticsScreen = () => {
     setSftId(inputText);
   };
 
+  // useEffect(() => {
+  //   console.log(fromDateFormatted, toDateFormatted);
+  // }, [fromDateFormatted, toDateFormatted]);
+
   const fetchDataFromBoApi = async () => {
     setLoading(true);
 
     let groupByDate;
-    let dayDiff = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+    let dayDiff = Math.ceil(
+      (toDate.setHours(0, 0, 0, 0) - fromDate.setHours(0, 0, 0, 0)) /
+        (1000 * 60 * 60 * 24),
+    );
 
     if (dayDiff === 0) {
       groupByDate = 'hours';
@@ -154,7 +161,7 @@ const SalesStatisticsScreen = () => {
         redirect: 'follow',
         body: raw,
       };
-      console.log(raw);
+      // console.log(raw);
       try {
         const response = await fetch(
           // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
@@ -293,88 +300,6 @@ const SalesStatisticsScreen = () => {
         });
         setDailyTransactionsAverage(data.TransactionsSalesDto);
         let totalSalesChartData;
-        // if (groupByDate !== 'days') {
-        //   totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
-        //     if (a.Year === b.Year) {
-        //       return a.Hour - b.Hour;
-        //     }
-        //     return a.Year - b.Year;
-        //   });
-        // } else {
-        //   if (toDate.getMonth() !== fromDate.getMonth()) {
-        //     var myHeaders2 = new Headers();
-        //     myHeaders2.append('Token', token);
-        //     myHeaders2.append('Content-Type', 'application/json');
-        //     var raw2 = JSON.stringify({
-        //       fromDate: fromDateFormatted,
-        //       toDate: new Date(fromDate.getFullYear(), fromDate.getMonth() + 1)
-        //         .toISOString()
-        //         .slice(0, 10)
-        //         .concat(' 23:59:59'),
-        //       sftId: sftId,
-        //       groupByDate: groupByDate,
-        //       storesIds: storesIds,
-        //     });
-        //     var requestOptions2 = {
-        //       method: 'POST',
-        //       headers: myHeaders2,
-        //       redirect: 'follow',
-        //       body: raw2,
-        //     };
-        //     const response2 = await fetch(
-        //       // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-        //       `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
-        //       requestOptions2,
-        //     );
-        //     const data2 = await response2.json();
-        //     const data2Formatted = data2.TotalSalesChartDtos.map(item => ({
-        //       ...item,
-        //       Hour: `${item.Hour}/${
-        //         fromDate.getMonth() + 1
-        //       }/${fromDate.getFullYear()}`,
-        //     }));
-        //     var myHeaders3 = new Headers();
-        //     myHeaders3.append('Token', token);
-        //     myHeaders3.append('Content-Type', 'application/json');
-        //     var raw3 = JSON.stringify({
-        //       fromDate: new Date(toDate.getFullYear(), toDate.getMonth(), 2)
-        //         .toISOString()
-        //         .slice(0, 10)
-        //         .concat(' 00:00:00'),
-        //       toDate: toDateFormatted,
-        //       sftId: sftId,
-        //       groupByDate: groupByDate,
-        //       storesIds: storesIds,
-        //     });
-        //     var requestOptions3 = {
-        //       method: 'POST',
-        //       headers: myHeaders3,
-        //       redirect: 'follow',
-        //       body: raw3,
-        //     };
-        //     const response3 = await fetch(
-        //       // `http://${ip}:3000/bo/Invoices/FetchSalesDataServerSide`,
-        //       `https://bo-api-gr.intalepoint.com/bo/Invoices/FetchSalesDataServerSide`,
-        //       requestOptions3,
-        //     );
-        //     const data3 = await response3.json();
-        //     const data3Formatted = data3.TotalSalesChartDtos.map(item => ({
-        //       ...item,
-        //       Hour: `${item.Hour}/${
-        //         toDate.getMonth() + 1
-        //       }/${toDate.getFullYear()}`,
-        //     }));
-
-        //     totalSalesChartData = [...data2Formatted, ...data3Formatted];
-        //   } else {
-        //     totalSalesChartData = data.TotalSalesChartDtos.map(item => ({
-        //       ...item,
-        //       Hour: `${item.Hour}/${
-        //         toDate.getMonth() + 1
-        //       }/${toDate.getFullYear()}`,
-        //     }));
-        //   }
-        // }
         totalSalesChartData = data.TotalSalesChartDtos.sort((a, b) => {
           const dateA = new Date(a.InvoiceDateTime);
           const dateB = new Date(b.InvoiceDateTime);
@@ -1307,6 +1232,19 @@ const SalesStatisticsScreen = () => {
                       date={fromDate}
                       mode={'date'}
                       onConfirm={date => {
+                        const startRange1 = new Date(date.getFullYear(), 9, 29); // October 29th
+                        const endRange1 = new Date(
+                          date.getFullYear() + 1,
+                          2,
+                          26,
+                        ); // March 26th of the following year
+
+                        // Check if the date is within the first range (29 October to 26 March)
+                        if (date >= startRange1 && date <= endRange1) {
+                          date.setHours(date.getHours() + 2); // Add 3 hours
+                        } else {
+                          date.setHours(date.getHours() + 3); // Add 2 hours
+                        }
                         setOpenFromDate(false);
                         setFromDate(date);
                         setFromDateFormatted(
@@ -1340,10 +1278,23 @@ const SalesStatisticsScreen = () => {
                       date={toDate}
                       mode={'date'}
                       onConfirm={date => {
+                        const startRange1 = new Date(date.getFullYear(), 9, 29); // October 29th
+                        const endRange1 = new Date(
+                          date.getFullYear() + 1,
+                          2,
+                          26,
+                        ); // March 26th of the following year
+
+                        // Check if the date is within the first range (29 October to 26 March)
+                        if (date >= startRange1 && date <= endRange1) {
+                          date.setHours(date.getHours() + 2); // Add 3 hours
+                        } else {
+                          date.setHours(date.getHours() + 3); // Add 2 hours
+                        }
                         setOpenToDate(false);
                         setToDate(date);
                         setToDateFormatted(
-                          date.toISOString().slice(0, 10).concat(' 23:59:59'),
+                          date.toISOString().slice(0, 10).concat(' 00:00:00'),
                         );
                       }}
                       onCancel={() => {

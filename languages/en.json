@@ -225,6 +225,17 @@
     "TransactionsPerHour": "Transaction Per Hour",
     "TransactionsPerDay": "Transaction Per Day",
     "WeeklyAnalysisOfHourlyTransactions": "Weekly Analysis of Hourly Transactions",
+    //Personel
+    "username": "Username",
+    "date": "Shift date",
+    "duration": "Shift Duration",
+    "sft_start": "Cash on start",
+    "handover": "Handover",
+    "user_close": "User close",
+    "system_close": "System Close",
+    "discrepancy": "Discrepancy",
+    "attempts": "Loggout attempts",
+    "environment": "Environment",
     // All Arrays
     "months": {
       "january": "January",

@@ -2,6 +2,7 @@
     "cSpell.words": [
         "arrowright",
         "azurewebsites",
+        "Backoffice",
         "Bleu",
         "chainstore",
         "Coef",
@@ -29,7 +30,12 @@
         "Românesc",
         "tailwindcss",
         "zeroconf",
-        "Ελληνικά"
+        "ΔΙΑΦΟΡΑ",
+        "ΕΚΚΑΘΑΡΙΣΗ",
+        "Ελληνικά",
+        "ΠΑΝΩ",
+        "ΠΡΟΣΠΑΘΕΙΑ",
+        "ΦΙΛΤΡΩΝ"
     ],
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive"
