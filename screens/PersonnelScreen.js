@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -11,7 +12,7 @@ import {
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
 import React, {useState, useEffect, useMemo} from 'react';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStoreId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useTranslation} from 'react-i18next';
@@ -19,11 +20,15 @@ import i18next from '../languages/i18n';
 import DatePicker from 'react-native-date-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Table, Row} from 'react-native-table-component';
+import {ip} from '@env';
 
 const PersonnelScreen = () => {
   const {t, i18n} = useTranslation();
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
+  const storeId = useSelector(selectStoreId);
+  const [userId, setUserId] = useState('');
+  const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState(() => {
     const today = new Date();
@@ -45,9 +50,9 @@ const PersonnelScreen = () => {
   const [withDifferenceSelected, setWithDifferenceSelected] = useState(false);
   const [withMoreThanOneTriesSelected, setWithMoreThanOneTriesSelected] =
     useState(false);
-  const [filterByUser, setFilterByUser] = useState('');
-  const [filterByDeviceArray, setFilterByDeviceArray] = useState([]);
-  const [filterByDevice, setFilterByDevice] = useState(1);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [deviceArray, setDeviceArray] = useState([]);
+  const [selectedDevice, setSelectedDevice] = useState(1);
 
   const handleGroupByChange = value => {
     let date = new Date();
@@ -108,36 +113,6 @@ const PersonnelScreen = () => {
     }
   }, [selectedGroupByDateValue]);
 
-  const defaultFilterByUserValue = useMemo(() => {
-    switch (selectedGroupByDateValue) {
-      case '':
-        return '';
-      case t('day'):
-        return t('day');
-      case t('week'):
-        return t('week');
-      case t('month'):
-        return t('month');
-      default:
-        return t('week');
-    }
-  }, [filterByUser]);
-
-  // const defaultFilterByDeviceValue = useMemo(() => {
-  //   switch (selectedGroupByDateValue) {
-  //     case '':
-  //       return '';
-  //     case t('day'):
-  //       return t('day');
-  //     case t('week'):
-  //       return t('week');
-  //     case t('month'):
-  //       return t('month');
-  //     default:
-  //       return t('week');
-  //   }
-  // }, [filterByDevice]);
-
   const fetchDataFromApi = async () => {
     setLoading(true);
 
@@ -152,7 +127,7 @@ const PersonnelScreen = () => {
       };
 
       const response = await fetch(
-        `https://bo-api-gr.intalepoint.com/bo/Shifts?filter=POSSystems%2FPOS_StrID%20in%20%281%29 and Sft_Start ge ${fromDate
+        `https://bo-api-gr.intalepoint.com/bo/Shifts?filter=POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and Sft_Start ge ${fromDate
           .toISOString()
           .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and Sft_Start le ${toDate
           .toISOString()
@@ -207,7 +182,12 @@ const PersonnelScreen = () => {
                 ? '-'
                 : item.Sft_TillCash - item.Sft_CashCheck,
             logoutAttempts: item.Sft_LogoutAttempts,
-            environment: item.Sft_External_Device_ID,
+            environment: (() => {
+              let environmentDevice = deviceArray.filter(
+                device => device.Pos_StrID === selectedDevice,
+              );
+              return environmentDevice[0].POS_Name;
+            })(),
           });
           // console.log(array);
         });
@@ -235,24 +215,75 @@ const PersonnelScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      console.log(data);
-      setFilterByDeviceArray(data.value);
+      setDeviceArray(data.value);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getUserIdFromToken = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append('token', token);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(`http://${ip}:3000/bo/account/GetUserIdFromToken`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        // console.log(result);
+        setUserId(result);
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  const fetchStoreUsersList = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append('token', token);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `http://${ip}:3000/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result);
+        setUsersList(() =>
+          result.map(user => ({userId: user.UserId, username: user.UserName})),
+        );
+      })
+      .catch(error => console.log('error', error));
+  };
+
   useEffect(() => {
     fetchPOSSystems();
+    getUserIdFromToken();
   }, []);
 
   useEffect(() => {
-    fetchDataFromApi();
-  }, [fromDateFormatted, toDateFormatted, filterByDevice]);
+    fetchStoreUsersList();
+  }, [userId]);
 
   useEffect(() => {
-    console.log(filterByDevice);
-  }, [filterByDevice]);
+    deviceArray.length > 0 && fetchDataFromApi();
+  }, [fromDateFormatted, toDateFormatted, selectedDevice, deviceArray]);
+
+  // useEffect(() => {
+  //   console.log('filter by user', filterByUser);
+  // }, [filterByUser]);
+
+  // useEffect(() => {
+  //   console.log('filter by device', filterByDevice);
+  // }, [filterByDevice]);
 
   return (
     <View className="flex-1 bg-gray-300">
@@ -381,24 +412,22 @@ const PersonnelScreen = () => {
             <View
               className="items-center space-y-5 py-5 mx-4 rounded-md"
               style={{backgroundColor: 'rgb(36, 48, 61)'}}>
-              {/*
               <View>
                 <SelectDropdown
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
-                  data={[t('day'), t('week'), t('month')]}
-                  defaultValue={defaultFilterByUserValue}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem);
-                    setFilterByUser(selectedItem);
-                    // handleGroupByChange(selectedItem);
-                    // setSelectedGroupByDate(selectedItem);
+                  data={
+                    usersList.length > 0 &&
+                    usersList.map(user => `${user.userId} || ${user.username}`)
+                  }
+                  onSelect={selectedItem => {
+                    setSelectedUser(selectedItem);
                   }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
+                  buttonTextAfterSelection={selectedItem => {
                     return selectedItem;
                   }}
-                  rowTextForSelection={(item, index) => {
+                  rowTextForSelection={item => {
                     return item;
                   }}
                   buttonStyle={{
@@ -411,32 +440,25 @@ const PersonnelScreen = () => {
                   buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
                 />
               </View>
-            */}
+
               <View>
                 <SelectDropdown
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
-                  data={filterByDeviceArray.map(item => {
-                    return item.POS_Name;
-                  })}
-                  // defaultValue={defaultFilterByDeviceValue}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem);
-                    setFilterByDevice(() => {
-                      let system = filterByDeviceArray.filter(
+                  data={deviceArray.map(item => item.POS_Name)}
+                  onSelect={selectedItem => {
+                    setSelectedDevice(() => {
+                      const devices = deviceArray.filter(
                         item => item.POS_Name === selectedItem,
                       );
-                      console.log(system[0].Pos_StrID);
-                      return system.Pos_StrID;
+                      return devices[0].Pos_StrID;
                     });
-                    // handleGroupByChange(selectedItem);
-                    // setSelectedGroupByDate(selectedItem);
                   }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
+                  buttonTextAfterSelection={selectedItem => {
                     return selectedItem;
                   }}
-                  rowTextForSelection={(item, index) => {
+                  rowTextForSelection={item => {
                     return item;
                   }}
                   buttonStyle={{
@@ -510,8 +532,8 @@ const PersonnelScreen = () => {
               <TouchableOpacity
                 className="flex-row space-x-2 items-center border p-2 rounded-full border-red-500"
                 onPress={() => {
-                  setFilterByUser('');
-                  setFilterByDevice('');
+                  setSelectedUser('');
+                  setSelectedDevice(1);
                   setWithDifferenceSelected(false);
                   setWithMoreThanOneTriesSelected(false);
                 }}>

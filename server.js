@@ -2,10 +2,10 @@ const http = require('http');
 const https = require('https');
 const options = {
   // hostname: 'dev-bo-api-gr.azurewebsites.net',
-  hostname: 'bo-api-gr.intalepoint.com',
-  port: 443,
-  // hostname: 'localhost',
-  // port: 7001,
+  // hostname: 'bo-api-gr.intalepoint.com',
+  // port: 443,
+  hostname: 'localhost',
+  port: 7001,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*', // Allow all origins
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
             'X-Requested-With,content-type,Token',
           );
           if (options.path === '/bo/Invoices/FetchSalesDataServerSide') {
-            options.headers['Token'] = req.headers.token;
+            options.headers.Token = req.headers.token;
             // console.log(options.headers);
           }
           res.setHeader('Access-Control-Allow-Credentials', true);
@@ -75,7 +75,7 @@ const server = http.createServer((req, res) => {
     options.method = req.method;
     options.path = req.url;
     // console.log(options.headers);
-    options.headers['Token'] = req.headers.token;
+    options.headers.Token = req.headers.token;
     // console.log(options);
 
     const proxyReq = https.request(options, proxyRes => {

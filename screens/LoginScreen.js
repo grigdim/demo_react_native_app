@@ -14,33 +14,35 @@ import {
   Alert,
   ImageBackground,
   Image,
-  Modal,
-  TouchableWithoutFeedback,
+  // Modal,
+  // TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, {useState, useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {selectBox, selectToken} from '../features/bootstrap';
+// import {selectBox, selectToken} from '../features/bootstrap';
 import {setToken, setStoreId} from '../features/bootstrap';
-import {store} from '../store';
+// import {store} from '../store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
 import DrawerHeader from './DrawerHeader';
 import {useTranslation} from 'react-i18next';
-import SwitchSelector from 'react-native-switch-selector';
+// import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useInfo} from '../components/PersonalInfoTaken';
-import TabsScreen from './TabsScreen';
+// import TabsScreen from './TabsScreen';
+import {ip} from '@env';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const LoginScreen = () => {
   const [innerToken, setInnerToken] = useState();
-  const options = [
-    {label: 'Ελληνικά', value: 'el'},
-    {label: 'English', value: 'en'},
-  ];
+  // const options = [
+  //   {label: 'Ελληνικά', value: 'el'},
+  //   {label: 'English', value: 'en'},
+  // ];
   const {setInfoDomain, setInfoStoreId} = useInfo();
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
@@ -50,6 +52,32 @@ const LoginScreen = () => {
   const acceptButtonStyle = isScrolledToEnd
     ? acceptButtonStyles.buttonEnabled
     : acceptButtonStyles.buttonDisabled;
+  const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
+  const [isTermsOfServiceAccepted, setTermsOfServiceAccepted] = useState(false);
+  const [isLanguagePicked, setLanguagePicked] = useState(false);
+  const {height, width} = Dimensions.get('screen');
+  const {input, buttonText, disabledButton} = style;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [domain, setDomain] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userStoreData, setUserStoreData] = useState([]);
+  const [selectedStoreId, setSelectedStoreId] = useState('');
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const isInputDisabled =
+    username === '' ||
+    username === null ||
+    password === '' ||
+    password === null ||
+    domain === '' ||
+    domain === null;
+  // ||
+  // componentStoreId === '' ||
+  // componentStoreId === null
+  // ;
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const loadSelectedLanguage = async () => {
     try {
@@ -76,13 +104,6 @@ const LoginScreen = () => {
     }
   };
 
-  useEffect(() => {
-    loadSelectedLanguage();
-  }, []);
-
-  // Privacy Policy
-  const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
-
   const handlePrivacyPolicy = async () => {
     setPrivacyPolicyAccepted(true);
     try {
@@ -91,15 +112,9 @@ const LoginScreen = () => {
       console.error('Error accepting Privacy Policy:', error); // Never seen
     }
   };
-
   const handlePrivacyPolicyLink = () => {
     Linking.openURL('https://www.intale.com/privacy');
   };
-
-  // Terms of Service
-
-  const [isTermsOfServiceAccepted, setTermsOfServiceAccepted] = useState(false);
-
   const handleTermsOfService = async () => {
     setTermsOfServiceAccepted(true);
     try {
@@ -108,9 +123,6 @@ const LoginScreen = () => {
       console.error('Error accepting Terms of Service:', error); // Never seen
     }
   };
-
-  // Scroll
-
   const handleScroll = event => {
     const contentHeight = event.nativeEvent.contentSize.height;
     const scrollOffset = event.nativeEvent.contentOffset.y;
@@ -121,53 +133,6 @@ const LoginScreen = () => {
       setScrolledToEnd(false);
     }
   };
-
-  // Use Effects
-
-  useEffect(() => {
-    const loadTermsOfServiceAcceptedState = async () => {
-      try {
-        const storedTermsOfServiceAccepted = await AsyncStorage.getItem(
-          '@termsOfServiceAccepted',
-        );
-        if (storedTermsOfServiceAccepted === 'true') {
-          setTermsOfServiceAccepted(true);
-        }
-      } catch (error) {
-        console.error('Error accepting Terms of Service:', error); // Never seen
-      }
-    };
-    loadTermsOfServiceAcceptedState();
-  }, []);
-
-  useEffect(() => {
-    const loadPrivacyPolicyAcceptedState = async () => {
-      try {
-        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
-          '@privacyPolicyAccepted',
-        );
-        if (storedPrivacyPolicyAccepted === 'true') {
-          setPrivacyPolicyAccepted(true);
-        }
-      } catch (error) {
-        console.error('Error accepting Privacy Policy:', error); // Never seen
-      }
-    };
-    loadPrivacyPolicyAcceptedState();
-  }, []);
-
-  useEffect(() => {
-    // Check if the Terms of Service has been accepted
-    if (isTermsOfServiceAccepted && scrollViewRef.current) {
-      // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
-      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
-    }
-  }, [isTermsOfServiceAccepted, scrollViewRef]);
-
-  // Localization
-
-  const [isLanguagePicked, setLanguagePicked] = useState(false);
-
   const handleLanguageChange = async lang => {
     try {
       await AsyncStorage.setItem('@selectedLanguage', lang);
@@ -178,7 +143,6 @@ const LoginScreen = () => {
       console.error('Error accepting Language Selection:', error);
     }
   };
-
   const handleConfirmLanguage = async () => {
     try {
       await AsyncStorage.setItem('@languageConfirmed', 'true');
@@ -187,119 +151,56 @@ const LoginScreen = () => {
     }
     setLanguagePicked(true);
   };
-
   const togglePicker = () => {
     setPickerVisible(!isPickerVisible);
   };
-
-  const {height, width} = Dimensions.get('screen');
-  const {input, buttonText, disabledButton} = style;
-  // const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [domain, setDomain] = useState('');
-  const [componentStoreId, setComponentStoreId] = useState('');
-  // const [userInputObject, setUserInputObject] = useState(null);
-  const [vat, setVat] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [emulator, setEmulator] = useState(null);
-  // const [softKeysEnabled, setSoftKeysEnabled] = useState(false);
-  // const [softKeys, setSoftKeys] = useState(null);
-  // const [login, setLogin] = useState(true);
-  const [registeredEmail, setRegisteredEmail] = useState(false);
-
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  // const box = useSelector(selectBox);
-  // const token = useSelector(selectToken);
-
-  // const inputRef = useRef(null);
-
   const handleChangeUsername = async inputText => {
     setUsername(inputText);
   };
-
   const handleChangePassword = async inputText => {
     setPassword(inputText);
   };
-
   const handleChangeDomain = async inputText => {
     setDomain(inputText);
     setInfoDomain(inputText);
   };
-
-  const handleChangeStoreId = async inputText => {
-    setComponentStoreId(inputText);
-    setInfoStoreId(inputText);
-  };
-
-  const handleChangeVat = inputText => {
-    setVat(inputText);
-  };
-
-  const handleSubmitVat = () => {
-    if (vat.length === 9 && /^\d+$/.test(vat)) {
-      setRegisteredEmail(true);
-    } else {
-      Alert.alert(t('warning'), t('validVatNumber'), [
-        {
-          text: 'OK',
-          onPress: () => {
-            setVat('');
-          },
-        },
-      ]);
+  const checkLoginStatus = async () => {
+    try {
+      const retrievedUserString = await AsyncStorage.getItem('@userObject');
+      const retrievedUserObject = JSON.parse(retrievedUserString);
+      if (
+        retrievedUserObject.username !== '' &&
+        retrievedUserObject.username !== null
+      ) {
+        await handleLogin(
+          retrievedUserObject.username,
+          retrievedUserObject.password,
+          retrievedUserObject.domain,
+          // retrievedUserObject.storeId,
+        );
+        await AsyncStorage.setItem(
+          '@userObject',
+          JSON.stringify({
+            username: retrievedUserObject.username,
+            password: retrievedUserObject.password,
+            domain: retrievedUserObject.domain,
+            // storeId: retrievedUserObject.storeId,
+          }),
+        );
+        // dispatch(setStoreId(retrievedUserObject.storeId));
+      } else {
+        console.log('no user object');
+      }
+    } catch (error) {
+      // Always a log when the user hasn't logged in, doesn't matter at all.
+      // console.error('Error checking login status:', error);
     }
   };
-
-  // const isEmailDisabled = email === '' || email === null;
-  const isInputDisabled =
-    username === '' ||
-    username === null ||
-    password === '' ||
-    password === null ||
-    domain === '' ||
-    domain === null ||
-    componentStoreId === '' ||
-    componentStoreId === null;
-  // const isPasswordDisabled = password === '' || password === null;
-  // const isVatDisabled = vat === '' || vat === null;
-
-  // const isValidEmail = () => {
-  //   const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-  //   return regex.test(email);
-  // };
-
-  // const handleCheckEmail = () => {
-  //   const valid = isValidEmail();
-  //   if (valid === true) {
-  //     email === 'dgrigoriadis@intale.com' ||
-  //     email === 'gsakellaropoulos@intale.com'
-  //       ? setRegisteredEmail(true)
-  //       : setRegisteredEmail(false);
-  //     setInfoPrimaryEmail(email);
-  //     // fetchVATbyEmail();
-  //     setLogin(false);
-  //   } else {
-  //     Alert.alert(t('warning'), t('validEmail'), [
-  //       {
-  //         text: 'OK',
-  //         onPress: () => {
-  //           setEmail('');
-  //           inputRef.current.clear();
-  //         },
-  //       },
-  //     ]);
-  //   }
-  // };
-
-  const [loggedIn, setLoggedIn] = useState(false);
-
   const handleLogin = async (
     retrievedUsername,
     retrievedPassword,
     retrievedDomain,
-    retrievedStoreId,
+    // retrievedStoreId,
   ) => {
     setLoading(true);
     var myHeaders = new Headers();
@@ -315,7 +216,7 @@ const LoginScreen = () => {
       username: retrievedUsername,
       password: retrievedPassword,
       domain: retrievedDomain,
-      storeId: retrievedStoreId,
+      // storeId: retrievedStoreId,
     });
     var requestOptions = {
       method: 'POST',
@@ -324,7 +225,8 @@ const LoginScreen = () => {
       redirect: 'follow',
     };
     const response = await fetch(
-      'https://bo-api-gr.intalepoint.com/bo/account/authenticate',
+      // 'https://bo-api-gr.intalepoint.com/bo/account/authenticate',
+      'https://bo-api-gr.intalepoint.com/bo/account/authenticatewithoutstoreid',
       requestOptions,
     );
     const data = await response.text();
@@ -340,74 +242,436 @@ const LoginScreen = () => {
     } else {
       setInnerToken(data);
       dispatch(setToken(data));
-      dispatch(setStoreId(componentStoreId));
+      // dispatch(setStoreId(componentStoreId));
       await AsyncStorage.setItem(
         '@userObject',
         JSON.stringify({
           username: username,
           password: password,
           domain: domain,
-          storeId: componentStoreId,
+          // storeId: componentStoreId,
         }),
       );
       setLoggedIn(true);
-      navigation.navigate(t('statistics'));
+      // navigation.navigate(t('statistics'));
     }
     setLoading(false);
   };
-
-  const checkLoginStatus = async () => {
-    try {
-      const retrievedUserString = await AsyncStorage.getItem('@userObject');
-      const retrievedUserObject = JSON.parse(retrievedUserString);
-      if (
-        retrievedUserObject.username !== '' &&
-        retrievedUserObject.username !== null
-      ) {
-        await handleLogin(
-          retrievedUserObject.username,
-          retrievedUserObject.password,
-          retrievedUserObject.domain,
-          retrievedUserObject.storeId,
-        );
-        await AsyncStorage.setItem(
-          '@userObject',
-          JSON.stringify({
-            username: retrievedUserObject.username,
-            password: retrievedUserObject.password,
-            domain: retrievedUserObject.domain,
-            storeId: retrievedUserObject.storeId,
-          }),
-        );
-      } else {
-        console.log('no user object');
-      }
-    } catch (error) {
-      // Always a log when the user hasn't logged in, doesn't matter at all.
-      // console.error('Error checking login status:', error);
-    }
+  const getUserIdFromToken = async token => {
+    var myHeaders = new Headers();
+    myHeaders.append('Token', token);
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    const data = await fetch(
+      `http://${ip}:3000/bo/account/GetUserIdFromToken`,
+      requestOptions,
+    );
+    const userIdFromToken = await data.text();
+    setUserId(userIdFromToken);
+  };
+  const getUserStoreData = async (token, id) => {
+    var myHeaders = new Headers();
+    myHeaders.append('Token', token);
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    const response = await fetch(
+      `http://${ip}:3000/bo/account/GetUserStoreData/?userId=${id}`,
+      requestOptions,
+    );
+    const data = await response.json();
+    setUserStoreData(data);
   };
 
+  useEffect(() => {
+    loadSelectedLanguage();
+  }, []);
+  useEffect(() => {
+    const loadTermsOfServiceAcceptedState = async () => {
+      try {
+        const storedTermsOfServiceAccepted = await AsyncStorage.getItem(
+          '@termsOfServiceAccepted',
+        );
+        if (storedTermsOfServiceAccepted === 'true') {
+          setTermsOfServiceAccepted(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Terms of Service:', error); // Never seen
+      }
+    };
+    loadTermsOfServiceAcceptedState();
+  }, []);
+  useEffect(() => {
+    const loadPrivacyPolicyAcceptedState = async () => {
+      try {
+        const storedPrivacyPolicyAccepted = await AsyncStorage.getItem(
+          '@privacyPolicyAccepted',
+        );
+        if (storedPrivacyPolicyAccepted === 'true') {
+          setPrivacyPolicyAccepted(true);
+        }
+      } catch (error) {
+        console.error('Error accepting Privacy Policy:', error); // Never seen
+      }
+    };
+    loadPrivacyPolicyAcceptedState();
+  }, []);
+  useEffect(() => {
+    // Check if the Terms of Service has been accepted
+    if (isTermsOfServiceAccepted && scrollViewRef.current) {
+      // If accepted, scroll to the top of the ScrollView for PrivacyPolicy
+      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
+    }
+  }, [isTermsOfServiceAccepted, scrollViewRef]);
   useEffect(() => {
     checkLoginStatus();
   }, []);
-
-  const isRunningOnEmulator = async () => {
-    setEmulator(await DeviceInfo.isEmulator());
-  };
   useEffect(() => {
-    isRunningOnEmulator();
-  }, [emulator]);
-  const [isRenderVisible, setIsRenderVisible] = useState(true);
-
+    getUserIdFromToken(innerToken);
+  }, [innerToken]);
   useEffect(() => {
-    // Using it since the language picker rerenders the screen to show the change
-    const timeoutId = setTimeout(() => {
-      setIsRenderVisible(false);
-    }, 100);
-    // Cleanup function to clear the timeout if the component unmounts before the delay finishes
-    return () => clearTimeout(timeoutId);
-  }, []);
+    getUserStoreData(innerToken, userId);
+  }, [userId]);
+  useEffect(() => {
+    dispatch(setStoreId(selectedStoreId));
+    navigation.navigate(t('statistics'));
+  }, [selectedStoreId]);
+
+  const renderLanguagePicker = () => (
+    <View style={languageStyle.container}>
+      <View style={languageStyle.flagContainer}>
+        <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
+          <Image
+            style={languageStyle.flag}
+            source={
+              i18n.language === 'el'
+                ? require('../images/greece.png')
+                : require('../images/england.png')
+            }
+          />
+        </TouchableOpacity>
+        <View style={languageStyle.pickerContainer}>
+          <Picker
+            style={languageStyle.picker}
+            selectedValue={selectedLanguage}
+            onValueChange={newValue => {
+              handleLanguageChange(newValue);
+            }}>
+            <Picker.Item label={t('greek')} value="el" />
+            <Picker.Item label={t('english')} value="en" />
+          </Picker>
+        </View>
+      </View>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity
+          style={languageStyle.languageButton}
+          onPress={() => {
+            handleConfirmLanguage(selectedLanguage);
+          }}
+          className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+          <Text style={buttonText}>{t('submit')}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const renderTermsOfService = () => (
+    <View className="justify-center items-center w-10/12">
+      <ScrollView
+        ref={scrollViewRef}
+        className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+        style={{width: '85%', height: '75%'}}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            padding: 20,
+            borderRadius: 10,
+            elevation: 40,
+          }}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: 'black',
+              fontWeight: 'bold',
+              marginBottom: 20,
+              marginTop: 10,
+              textAlign: 'center',
+            }}>
+            {t('termsOfService')}
+            <Text
+              style={{
+                fontSize: 15,
+                color: 'black',
+                fontWeight: '400',
+                marginBottom: 20,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+              {t('termsOfServiceContent')}
+            </Text>
+          </Text>
+          <TouchableOpacity
+            onPress={handlePrivacyPolicyLink}></TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <TouchableOpacity
+        style={acceptButtonStyle}
+        onPress={handleTermsOfService}
+        disabled={!isScrolledToEnd}
+        className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+        <Text style={buttonText}>{t('accept')}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderPrivacyPolicy = () => (
+    <View className="justify-center items-center w-10/12">
+      <ScrollView
+        ref={scrollViewRef}
+        className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+        style={{width: '85%', height: '75%'}}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            padding: 20,
+            borderRadius: 10,
+            elevation: 40,
+          }}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: 'black',
+              fontWeight: 'bold',
+              marginBottom: 20,
+              marginTop: 10,
+              textAlign: 'center',
+            }}>
+            {t('privacyPolicy')}
+          </Text>
+          <TouchableOpacity onPress={handlePrivacyPolicyLink}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: 'blue',
+                marginTop: 10,
+                marginBottom: 20,
+                textAlign: 'center',
+              }}>
+              {t('intalePrivacyPolicyLink')}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                color: 'black',
+                fontWeight: '400',
+                marginBottom: 20,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+              {t('privacyPolicyContent')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <TouchableOpacity
+        style={acceptButtonStyle}
+        onPress={handlePrivacyPolicy}
+        disabled={!isScrolledToEnd}
+        className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+        <Text style={buttonText}>{t('accept')}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderLogin = () => (
+    <View
+      className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      }}>
+      <View className="items-center">
+        <Icon
+          name="user"
+          size={75}
+          color="white"
+          // color="rgb(59 130 246)"
+        />
+        <Text className="text-white text-3xl">
+          {t('helloIntalerLoginScreen')}
+        </Text>
+      </View>
+      <TextInput
+        onChangeText={handleChangeUsername}
+        style={input}
+        placeholder={t('usernameProvided')}
+        placeholderTextColor={'white'}
+        // keyboardType="email-address"
+        clearButtonMode={'always'}
+        // ref={inputRef}
+      />
+      <TextInput
+        onChangeText={handleChangePassword}
+        style={input}
+        placeholder={t('passwordProvided')}
+        placeholderTextColor={'white'}
+        keyboardType="visible-password"
+        clearButtonMode={'always'}
+      />
+      <TextInput
+        onChangeText={handleChangeDomain}
+        style={input}
+        placeholder={t('domainProvided')}
+        placeholderTextColor={'white'}
+        clearButtonMode={'always'}
+      />
+      {/*          
+    <TextInput
+      onChangeText={handleChangeStoreId}
+      style={input}
+      placeholder={t('storeIdProvided')}
+      placeholderTextColor={'white'}
+      keyboardType="numeric"
+      clearButtonMode={'always'}
+    />
+  */}
+      <TouchableOpacity
+        style={[isInputDisabled && disabledButton]}
+        onPress={() => {
+          handleLogin(username, password, domain);
+        }}
+        disabled={isInputDisabled}
+        className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
+        <Text style={buttonText}>{t('submit')}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderLoggedInContent = () => (
+    <ScrollView className="flex-1 w-full h-full">
+      <TouchableOpacity>
+        <DrawerHeader />
+      </TouchableOpacity>
+      <View
+        className="justify-center items-center"
+        style={{height: height / 1.33}}>
+        <ScrollView
+          ref={scrollViewRef}
+          className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+          style={{width: '80%', height: '75%'}}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}>
+          <View
+            style={{
+              backgroundColor: 'rgba(0, 180, 243, 0.9)',
+              padding: 20,
+              borderRadius: 10,
+              elevation: 40,
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: 'white',
+                fontWeight: 'bold',
+                marginBottom: 20,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+              {t('intaleStatisticsTitle')}
+            </Text>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              {t('intaleStatisticsContent')}
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                color: 'white',
+                fontWeight: 'bold',
+                marginBottom: 20,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+              {t('intaleNews')}
+            </Text>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              {t('intaleNews1')}
+            </Text>
+            <Text
+              style={{
+                color: 'white',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {t('downloadLatestIntalePoint')}
+              {'   '}
+              <TouchableOpacity
+                onPress={() =>
+                  Linking.openURL(
+                    'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
+                  )
+                }>
+                <View style={{borderRadius: 24, overflow: 'hidden'}}>
+                  <Image
+                    source={require('../images/intalePoint.png')}
+                    style={{width: 48, height: 48}}
+                  />
+                </View>
+              </TouchableOpacity>
+            </Text>
+          </View>
+        </ScrollView>
+      </View>
+    </ScrollView>
+  );
+
+  const renderStorePicker = () => (
+    <View>
+      <SelectDropdown
+        dropdownStyle={{
+          backgroundColor: 'lightgray',
+        }}
+        data={userStoreData.map(item => item.CompanyDescription)}
+        onSelect={selectedItem => {
+          setSelectedStoreId(() => {
+            const devices = userStoreData.filter(
+              item => item.CompanyDescription === selectedItem,
+            );
+            return devices[0].StoreId;
+          });
+        }}
+        buttonTextAfterSelection={selectedItem => {
+          return selectedItem;
+        }}
+        rowTextForSelection={item => {
+          return item;
+        }}
+        buttonStyle={{
+          backgroundColor: 'rgb(36, 48, 61)',
+          borderWidth: 1,
+          borderRadius: 5,
+          borderColor: 'rgb(0, 182, 240)',
+          width: '75%',
+        }}
+        buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
+      />
+    </View>
+  );
 
   return (
     <ImageBackground
@@ -415,163 +679,12 @@ const LoginScreen = () => {
       className="flex-1 w-full h-full"
       resizeMode="stretch">
       <SafeAreaView className="flex-1 justify-center items-center">
-        {/* Attribute "Freepik" for rounded language flags */}
         {!isLanguagePicked ? (
-          <View style={languageStyle.container}>
-            <View style={languageStyle.flagContainer}>
-              <TouchableOpacity onPress={togglePicker} activeOpacity={0.7}>
-                <Image
-                  style={languageStyle.flag}
-                  source={
-                    i18n.language === 'el'
-                      ? require('../images/greece.png')
-                      : require('../images/england.png')
-                  }
-                />
-              </TouchableOpacity>
-              <View style={languageStyle.pickerContainer}>
-                <Picker
-                  style={languageStyle.picker}
-                  selectedValue={selectedLanguage}
-                  onValueChange={newValue => {
-                    handleLanguageChange(newValue);
-                  }}>
-                  <Picker.Item label={t('greek')} value="el" />
-                  <Picker.Item label={t('english')} value="en" />
-                </Picker>
-              </View>
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <TouchableOpacity
-                style={languageStyle.languageButton}
-                onPress={() => {
-                  handleConfirmLanguage(selectedLanguage);
-                }}
-                className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-                <Text style={buttonText}>{t('submit')}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : !isLanguagePicked ? (
-          <ScrollView
-            ref={scrollViewRef}
-            className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'white',
-              opacity: 0.1,
-            }}></ScrollView>
+          renderLanguagePicker()
         ) : !isTermsOfServiceAccepted ? (
-          <View className="justify-center items-center w-10/12">
-            <ScrollView
-              ref={scrollViewRef}
-              className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  padding: 20,
-                  borderRadius: 10,
-                  elevation: 40,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: 'black',
-                    fontWeight: 'bold',
-                    marginBottom: 20,
-                    marginTop: 10,
-                    textAlign: 'center',
-                  }}>
-                  {t('termsOfService')}
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'black',
-                      fontWeight: '400',
-                      marginBottom: 20,
-                      marginTop: 10,
-                      textAlign: 'center',
-                    }}>
-                    {t('termsOfServiceContent')}
-                  </Text>
-                </Text>
-                <TouchableOpacity
-                  onPress={handlePrivacyPolicyLink}></TouchableOpacity>
-              </View>
-            </ScrollView>
-
-            <TouchableOpacity
-              style={acceptButtonStyle}
-              onPress={handleTermsOfService}
-              disabled={!isScrolledToEnd}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t('accept')}</Text>
-            </TouchableOpacity>
-          </View>
+          renderTermsOfService()
         ) : !isPrivacyPolicyAccepted ? (
-          <View className="justify-center items-center w-10/12">
-            <ScrollView
-              ref={scrollViewRef}
-              className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-              style={{width: '85%', height: '75%'}}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  padding: 20,
-                  borderRadius: 10,
-                  elevation: 40,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: 'black',
-                    fontWeight: 'bold',
-                    marginBottom: 20,
-                    marginTop: 10,
-                    textAlign: 'center',
-                  }}>
-                  {t('privacyPolicy')}
-                </Text>
-                <TouchableOpacity onPress={handlePrivacyPolicyLink}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: 'blue',
-                      marginTop: 10,
-                      marginBottom: 20,
-                      textAlign: 'center',
-                    }}>
-                    {t('intalePrivacyPolicyLink')}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'black',
-                      fontWeight: '400',
-                      marginBottom: 20,
-                      marginTop: 10,
-                      textAlign: 'center',
-                    }}>
-                    {t('privacyPolicyContent')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-
-            <TouchableOpacity
-              style={acceptButtonStyle}
-              onPress={handlePrivacyPolicy}
-              disabled={!isScrolledToEnd}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t('accept')}</Text>
-            </TouchableOpacity>
-          </View>
+          renderPrivacyPolicy()
         ) : loading ? (
           <View
             className="w-8/12 justify-center items-center mt-2"
@@ -579,145 +692,9 @@ const LoginScreen = () => {
             <ActivityIndicator color="#00CCBB" size="large" />
           </View>
         ) : !loggedIn ? (
-          <View
-            className="justify-center items-center space-y-6 w-10/12 rounded-lg py-10"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            }}>
-            <View className="items-center">
-              <Icon
-                name="user"
-                size={75}
-                color="white"
-                // color="rgb(59 130 246)"
-              />
-              <Text className="text-white text-3xl">
-                {t('helloIntalerLoginScreen')}
-              </Text>
-            </View>
-            <TextInput
-              onChangeText={handleChangeUsername}
-              style={input}
-              placeholder={t('usernameProvided')}
-              placeholderTextColor={'white'}
-              // keyboardType="email-address"
-              clearButtonMode={'always'}
-              // ref={inputRef}
-            />
-            <TextInput
-              onChangeText={handleChangePassword}
-              style={input}
-              placeholder={t('passwordProvided')}
-              placeholderTextColor={'white'}
-              keyboardType="visible-password"
-              clearButtonMode={'always'}
-            />
-            <TextInput
-              onChangeText={handleChangeDomain}
-              style={input}
-              placeholder={t('domainProvided')}
-              placeholderTextColor={'white'}
-              clearButtonMode={'always'}
-            />
-            <TextInput
-              onChangeText={handleChangeStoreId}
-              style={input}
-              placeholder={t('storeIdProvided')}
-              placeholderTextColor={'white'}
-              keyboardType="numeric"
-              clearButtonMode={'always'}
-            />
-            <TouchableOpacity
-              style={[isInputDisabled && disabledButton]}
-              onPress={() => {
-                handleLogin(username, password, domain, componentStoreId);
-              }}
-              disabled={isInputDisabled}
-              className="rounded-2xl bg-blue-500 justify-center items-center w-2/5 h-10">
-              <Text style={buttonText}>{t('submit')}</Text>
-            </TouchableOpacity>
-          </View>
+          renderLogin()
         ) : (
-          <ScrollView className="flex-1 w-full h-full">
-            <TouchableOpacity>
-              <DrawerHeader />
-            </TouchableOpacity>
-            <View
-              className="justify-center items-center"
-              style={{height: height / 1.33}}>
-              <ScrollView
-                ref={scrollViewRef}
-                className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-                style={{width: '80%', height: '75%'}}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(0, 180, 243, 0.9)',
-                    padding: 20,
-                    borderRadius: 10,
-                    elevation: 40,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      marginBottom: 20,
-                      marginTop: 10,
-                      textAlign: 'center',
-                    }}>
-                    {t('intaleStatisticsTitle')}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                    }}>
-                    {t('intaleStatisticsContent')}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      marginBottom: 20,
-                      marginTop: 10,
-                      textAlign: 'center',
-                    }}>
-                    {t('intaleNews')}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                    }}>
-                    {t('intaleNews1')}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    {t('downloadLatestIntalePoint')}
-                    {'   '}
-                    <TouchableOpacity
-                      onPress={() =>
-                        Linking.openURL(
-                          'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
-                        )
-                      }>
-                      <View style={{borderRadius: 24, overflow: 'hidden'}}>
-                        <Image
-                          source={require('../images/intalePoint.png')}
-                          style={{width: 48, height: 48}}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  </Text>
-                </View>
-              </ScrollView>
-            </View>
-          </ScrollView>
+          renderStorePicker()
         )}
       </SafeAreaView>
     </ImageBackground>
@@ -801,3 +778,41 @@ const languageStyle = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+// const isRunningOnEmulator = async () => {
+//   setEmulator(await DeviceInfo.isEmulator());
+// };
+// useEffect(() => {
+//   isRunningOnEmulator();
+// }, [emulator]);
+// const [isRenderVisible, setIsRenderVisible] = useState(true);
+
+// useEffect(() => {
+//   // Using it since the language picker rerenders the screen to show the change
+//   const timeoutId = setTimeout(() => {
+//     setIsRenderVisible(false);
+//   }, 100);
+//   // Cleanup function to clear the timeout if the component unmounts before the delay finishes
+//   return () => clearTimeout(timeoutId);
+// }, []);
+// const handleChangeStoreId = async inputText => {
+//   setComponentStoreId(inputText);
+//   setInfoStoreId(inputText);
+// };
+// const handleChangeVat = inputText => {
+//   setVat(inputText);
+// };
+// const handleSubmitVat = () => {
+//   if (vat.length === 9 && /^\d+$/.test(vat)) {
+//     setRegisteredEmail(true);
+//   } else {
+//     Alert.alert(t('warning'), t('validVatNumber'), [
+//       {
+//         text: 'OK',
+//         onPress: () => {
+//           setVat('');
+//         },
+//       },
+//     ]);
+//   }
+// };

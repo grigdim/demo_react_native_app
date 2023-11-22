@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
 import React, {useState, useEffect, useMemo} from 'react';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStoreId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useTranslation} from 'react-i18next';
@@ -19,11 +19,15 @@ import i18next from '../languages/i18n';
 import DatePicker from 'react-native-date-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Table, Row} from 'react-native-table-component';
+import {ip} from '@env';
 
 const StoreActivityScreen = () => {
   const {t, i18n} = useTranslation();
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
+  const storeId = useSelector(selectStoreId);
+  const [userId, setUserId] = useState('');
+  const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState(() => {
     const today = new Date();
@@ -48,8 +52,13 @@ const StoreActivityScreen = () => {
   // Calculate the range of items to display based on the current page and items per page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, tableData.length);
-
   const itemsToDisplay = tableData.reverse().slice(startIndex, endIndex);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [deviceArray, setDeviceArray] = useState([]);
+  const [selectedDevice, setSelectedDevice] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [intaleBackOfficeSelected, setIntaleBackOfficeSelected] =
+    useState(false);
 
   const handleGroupByChange = value => {
     let date = new Date();
@@ -147,7 +156,14 @@ const StoreActivityScreen = () => {
       };
 
       const response = await fetch(
-        'https://bo-api-gr.intalepoint.com/bo/ActivityLog?$select=ActLog_ID,ActLog_AttrValue,ActLog_AttrName,ActLog_Datetime,ActLog_UserID,ActLog_UserName,ActLog_SftID,ActLog_TypeID,ActLog_ActionID,ActLog_Description,ActLog_Platform,ActLog_ClientIP&$expand=ActivityLogType($select=ActLogTyp_ID,ActlogTyp_Name),ActivityLogAction($select=ActLogAct_ID,ActLogAct_Name),POSSystems($select=POS_Id,POS_StrID,POS_Name)&$filter=ActLog_Datetime ge 2023-10-30T00%3A00%3A00%2B03%3A00 and ActLog_Datetime le 2023-11-06T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%281%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc',
+        `https://bo-api-gr.intalepoint.com/bo/ActivityLog?$select=ActLog_ID,ActLog_AttrValue,ActLog_AttrName,ActLog_Datetime,ActLog_UserID,ActLog_UserName,ActLog_SftID,ActLog_TypeID,ActLog_ActionID,ActLog_Description,ActLog_Platform,ActLog_ClientIP&$expand=ActivityLogType($select=ActLogTyp_ID,ActlogTyp_Name),ActivityLogAction($select=ActLogAct_ID,ActLogAct_Name),POSSystems($select=POS_Id,POS_StrID,POS_Name)&$filter=ActLog_Datetime ge ${fromDate
+          .toISOString()
+          .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and ActLog_Datetime le ${toDate
+          .toISOString()
+          .slice(
+            0,
+            10,
+          )}T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc`,
         requestOptions,
       );
       const data = await response.json();
@@ -178,13 +194,104 @@ const StoreActivityScreen = () => {
     }
   };
 
+  const fetchPOSSystems = async () => {
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('token', token);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        "https://bo-api-gr.intalepoint.com/bo/POSSystems?$filter=POS_IsVisible eq true and POS_StrID eq 1 and POS_Name ne 'Backoffice'&$orderby=POS_Name desc",
+        requestOptions,
+      );
+      const data = await response.json();
+      setDeviceArray(data.value);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserIdFromToken = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append('token', token);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(`http://${ip}:3000/bo/account/GetUserIdFromToken`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        // console.log(result);
+        setUserId(result);
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  const fetchStoreUsersList = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append('token', token);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `http://${ip}:3000/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result);
+        setUsersList(() =>
+          result.map(user => ({userId: user.UserId, username: user.UserName})),
+        );
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  useEffect(() => {
+    fetchPOSSystems();
+    getUserIdFromToken();
+  }, []);
+
+  useEffect(() => {
+    fetchStoreUsersList();
+  }, [userId]);
+
   useEffect(() => {
     fetchActivityCategories();
   }, []);
 
   useEffect(() => {
     fetchDataFromApi();
-  }, [fromDateFormatted, toDateFormatted]);
+  }, [fromDateFormatted, toDateFormatted, selectedDevice]);
+
+  useEffect(() => {
+    setTableData(prev =>
+      prev.filter(item => item.category === selectedCategory),
+    );
+  }, [
+    selectedCategory,
+    selectedUser,
+    selectedDevice,
+    // intaleBackOfficeSelected,
+  ]);
+
+  useEffect(() => {
+    setTableData(prev =>
+      prev.filter(item => item.environment === 'Backoffice'),
+    );
+  }, [intaleBackOfficeSelected]);
 
   return (
     <View className="flex-1 bg-gray-300">
@@ -314,6 +421,9 @@ const StoreActivityScreen = () => {
               className="items-center space-y-5 py-5 mx-4 rounded-md"
               style={{backgroundColor: 'rgb(36, 48, 61)'}}>
               <View>
+                <Text className="text-center text-white p-2">
+                  Select a category
+                </Text>
                 <SelectDropdown
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
@@ -322,9 +432,7 @@ const StoreActivityScreen = () => {
                   defaultValue={'Week'}
                   onSelect={(selectedItem, index) => {
                     console.log(selectedItem);
-
-                    // handleGroupByChange(selectedItem);
-                    // setSelectedGroupByDate(selectedItem);
+                    setSelectedCategory(selectedItem);
                   }}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
@@ -342,10 +450,104 @@ const StoreActivityScreen = () => {
                   buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
                 />
               </View>
-
+              <View>
+                <Text className="text-center text-white p-2">
+                  Select a user
+                </Text>
+                <SelectDropdown
+                  dropdownStyle={{
+                    backgroundColor: 'lightgray',
+                  }}
+                  data={
+                    usersList.length > 0 &&
+                    usersList.map(user => `${user.userId} || ${user.username}`)
+                  }
+                  onSelect={selectedItem => {
+                    setSelectedUser(selectedItem);
+                  }}
+                  buttonTextAfterSelection={selectedItem => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={item => {
+                    return item;
+                  }}
+                  buttonStyle={{
+                    backgroundColor: 'rgb(36, 48, 61)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    borderColor: 'rgb(0, 182, 240)',
+                    width: '75%',
+                  }}
+                  buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
+                />
+              </View>
+              <View>
+                <Text className="text-center text-white p-2">
+                  Select a device
+                </Text>
+                <SelectDropdown
+                  dropdownStyle={{
+                    backgroundColor: 'lightgray',
+                  }}
+                  data={deviceArray.map(item => item.POS_Name)}
+                  onSelect={selectedItem => {
+                    setSelectedDevice(() => {
+                      const devices = deviceArray.filter(
+                        item => item.POS_Name === selectedItem,
+                      );
+                      return devices[0].Pos_StrID;
+                    });
+                  }}
+                  buttonTextAfterSelection={selectedItem => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={item => {
+                    return item;
+                  }}
+                  buttonStyle={{
+                    backgroundColor: 'rgb(36, 48, 61)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    borderColor: 'rgb(0, 182, 240)',
+                    width: '75%',
+                  }}
+                  buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
+                />
+              </View>
+              <TouchableOpacity
+                className="flex-row space-x-2 items-center border p-2 rounded-full"
+                style={{
+                  borderColor: intaleBackOfficeSelected
+                    ? 'rgb(0, 182, 240)'
+                    : 'rgba(0, 182, 240, 0.6)',
+                }}
+                onPress={() => {
+                  setIntaleBackOfficeSelected(!intaleBackOfficeSelected);
+                }}>
+                <Ionicons
+                  name={intaleBackOfficeSelected ? 'eye' : 'eye-off'}
+                  size={22}
+                  color={
+                    intaleBackOfficeSelected
+                      ? 'rgb(0, 182, 240)'
+                      : 'rgba(0, 182, 240, 0.6)'
+                  }
+                />
+                <Text
+                  style={{
+                    color: intaleBackOfficeSelected
+                      ? 'rgb(0, 182, 240)'
+                      : 'rgba(0, 182, 240, 0.6)',
+                  }}>
+                  INTALE BACK OFFICE
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 className="flex-row space-x-2 items-center border p-2 rounded-full border-red-500"
-                onPress={() => {}}>
+                onPress={() => {
+                  setSelectedDevice(1);
+                  setSelectedUser('');
+                }}>
                 <Text className="color-red-500">ΕΚΚΑΘΑΡΙΣΗ ΦΙΛΤΡΩΝ</Text>
               </TouchableOpacity>
             </View>

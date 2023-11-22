@@ -169,6 +169,7 @@ const SalesStatisticsScreen = () => {
           requestOptions,
         );
         const data = await response.json();
+        // console.log(data);
         setSalesData(data);
         setTotals(() => {
           return data.TotalSalesDtos.filter(d => d.Level === 'Total');
