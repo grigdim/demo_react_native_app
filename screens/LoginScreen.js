@@ -103,7 +103,6 @@ const LoginScreen = () => {
       console.error('Error loading selected language:', error);
     }
   };
-
   const handlePrivacyPolicy = async () => {
     setPrivacyPolicyAccepted(true);
     try {
@@ -176,7 +175,6 @@ const LoginScreen = () => {
           retrievedUserObject.username,
           retrievedUserObject.password,
           retrievedUserObject.domain,
-          // retrievedUserObject.storeId,
         );
         await AsyncStorage.setItem(
           '@userObject',
@@ -184,39 +182,26 @@ const LoginScreen = () => {
             username: retrievedUserObject.username,
             password: retrievedUserObject.password,
             domain: retrievedUserObject.domain,
-            // storeId: retrievedUserObject.storeId,
           }),
         );
-        // dispatch(setStoreId(retrievedUserObject.storeId));
       } else {
         console.log('no user object');
       }
     } catch (error) {
       // Always a log when the user hasn't logged in, doesn't matter at all.
-      // console.error('Error checking login status:', error);
+      console.error('Error checking login status:', error);
     }
   };
-  const handleLogin = async (
-    retrievedUsername,
-    retrievedPassword,
-    retrievedDomain,
-    // retrievedStoreId,
-  ) => {
+  const handleLogin = async (inputUsername, inputPassword, inputDomain) => {
     setLoading(true);
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
       // username: 'intaleadmin',
       // password: '2NJDtm2w#nUh$+Hm',
-      // username: 'admin',
-      // password:
-      //   'AHS1YZXT4mQ8fjpgbpoEd079DIs5KAmSNGTw7diWYhWLzzIh/SzOoF5T6zghQ4x95A==',
-      // domain: 'jzois',
-      // storeId: 4043,
-      username: retrievedUsername,
-      password: retrievedPassword,
-      domain: retrievedDomain,
-      // storeId: retrievedStoreId,
+      username: inputUsername,
+      password: inputPassword,
+      domain: inputDomain,
     });
     var requestOptions = {
       method: 'POST',
@@ -242,46 +227,43 @@ const LoginScreen = () => {
     } else {
       setInnerToken(data);
       dispatch(setToken(data));
-      // dispatch(setStoreId(componentStoreId));
       await AsyncStorage.setItem(
         '@userObject',
         JSON.stringify({
           username: username,
           password: password,
           domain: domain,
-          // storeId: componentStoreId,
         }),
       );
       setLoggedIn(true);
-      // navigation.navigate(t('statistics'));
     }
     setLoading(false);
   };
-  const getUserIdFromToken = async token => {
+  const getUserIdFromToken = async () => {
     var myHeaders = new Headers();
-    myHeaders.append('Token', token);
+    myHeaders.append('Token', innerToken);
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
     };
     const data = await fetch(
-      `http://${ip}:3000/bo/account/GetUserIdFromToken`,
+      'https://bo-api-gr.intalepoint.com/bo/account/GetUserIdFromToken',
       requestOptions,
     );
     const userIdFromToken = await data.text();
     setUserId(userIdFromToken);
   };
-  const getUserStoreData = async (token, id) => {
+  const getUserStoreData = async () => {
     var myHeaders = new Headers();
-    myHeaders.append('Token', token);
+    myHeaders.append('Token', innerToken);
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
     };
     const response = await fetch(
-      `http://${ip}:3000/bo/account/GetUserStoreData/?userId=${id}`,
+      `https://bo-api-gr.intalepoint.com/bo/account/GetUserStoreData/?userId=${userId}`,
       requestOptions,
     );
     const data = await response.json();
@@ -332,15 +314,11 @@ const LoginScreen = () => {
     checkLoginStatus();
   }, []);
   useEffect(() => {
-    getUserIdFromToken(innerToken);
+    getUserIdFromToken();
   }, [innerToken]);
   useEffect(() => {
-    getUserStoreData(innerToken, userId);
+    getUserStoreData();
   }, [userId]);
-  useEffect(() => {
-    dispatch(setStoreId(selectedStoreId));
-    navigation.navigate(t('statistics'));
-  }, [selectedStoreId]);
 
   const renderLanguagePicker = () => (
     <View style={languageStyle.container}>
@@ -535,7 +513,7 @@ const LoginScreen = () => {
         placeholderTextColor={'white'}
         clearButtonMode={'always'}
       />
-      {/*          
+      {/*
     <TextInput
       onChangeText={handleChangeStoreId}
       style={input}
@@ -557,89 +535,6 @@ const LoginScreen = () => {
     </View>
   );
 
-  const renderLoggedInContent = () => (
-    <ScrollView className="flex-1 w-full h-full">
-      <TouchableOpacity>
-        <DrawerHeader />
-      </TouchableOpacity>
-      <View
-        className="justify-center items-center"
-        style={{height: height / 1.33}}>
-        <ScrollView
-          ref={scrollViewRef}
-          className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
-          style={{width: '80%', height: '75%'}}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}>
-          <View
-            style={{
-              backgroundColor: 'rgba(0, 180, 243, 0.9)',
-              padding: 20,
-              borderRadius: 10,
-              elevation: 40,
-            }}>
-            <Text
-              style={{
-                fontSize: 20,
-                color: 'white',
-                fontWeight: 'bold',
-                marginBottom: 20,
-                marginTop: 10,
-                textAlign: 'center',
-              }}>
-              {t('intaleStatisticsTitle')}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              {t('intaleStatisticsContent')}
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                color: 'white',
-                fontWeight: 'bold',
-                marginBottom: 20,
-                marginTop: 10,
-                textAlign: 'center',
-              }}>
-              {t('intaleNews')}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              {t('intaleNews1')}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              {t('downloadLatestIntalePoint')}
-              {'   '}
-              <TouchableOpacity
-                onPress={() =>
-                  Linking.openURL(
-                    'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
-                  )
-                }>
-                <View style={{borderRadius: 24, overflow: 'hidden'}}>
-                  <Image
-                    source={require('../images/intalePoint.png')}
-                    style={{width: 48, height: 48}}
-                  />
-                </View>
-              </TouchableOpacity>
-            </Text>
-          </View>
-        </ScrollView>
-      </View>
-    </ScrollView>
-  );
-
   const renderStorePicker = () => (
     <View>
       <SelectDropdown
@@ -648,12 +543,11 @@ const LoginScreen = () => {
         }}
         data={userStoreData.map(item => item.CompanyDescription)}
         onSelect={selectedItem => {
-          setSelectedStoreId(() => {
-            const devices = userStoreData.filter(
-              item => item.CompanyDescription === selectedItem,
-            );
-            return devices[0].StoreId;
-          });
+          const devices = userStoreData.filter(
+            item => item.CompanyDescription === selectedItem,
+          );
+          dispatch(setStoreId(devices[0].StoreId));
+          navigation.navigate(t('statistics'));
         }}
         buttonTextAfterSelection={selectedItem => {
           return selectedItem;
@@ -669,6 +563,7 @@ const LoginScreen = () => {
           width: '75%',
         }}
         buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
+        defaultButtonText="Select a store to proceed"
       />
     </View>
   );
@@ -816,3 +711,84 @@ export default LoginScreen;
 //     ]);
 //   }
 // };
+//   <ScrollView className="flex-1 w-full h-full">
+//     <TouchableOpacity>
+//       <DrawerHeader />
+//     </TouchableOpacity>
+//     <View
+//       className="justify-center items-center"
+//       style={{height: height / 1.33}}>
+//       <ScrollView
+//         ref={scrollViewRef}
+//         className="grow-0 divide-y-2 divide-cyan-400 rounded-2xl"
+//         style={{width: '80%', height: '75%'}}
+//         onScroll={handleScroll}
+//         scrollEventThrottle={16}>
+//         <View
+//           style={{
+//             backgroundColor: 'rgba(0, 180, 243, 0.9)',
+//             padding: 20,
+//             borderRadius: 10,
+//             elevation: 40,
+//           }}>
+//           <Text
+//             style={{
+//               fontSize: 20,
+//               color: 'white',
+//               fontWeight: 'bold',
+//               marginBottom: 20,
+//               marginTop: 10,
+//               textAlign: 'center',
+//             }}>
+//             {t('intaleStatisticsTitle')}
+//           </Text>
+//           <Text
+//             style={{
+//               color: 'white',
+//             }}>
+//             {t('intaleStatisticsContent')}
+//           </Text>
+//           <Text
+//             style={{
+//               fontSize: 20,
+//               color: 'white',
+//               fontWeight: 'bold',
+//               marginBottom: 20,
+//               marginTop: 10,
+//               textAlign: 'center',
+//             }}>
+//             {t('intaleNews')}
+//           </Text>
+//           <Text
+//             style={{
+//               color: 'white',
+//             }}>
+//             {t('intaleNews1')}
+//           </Text>
+//           <Text
+//             style={{
+//               color: 'white',
+//               justifyContent: 'center',
+//               alignItems: 'center',
+//             }}>
+//             {t('downloadLatestIntalePoint')}
+//             {'   '}
+//             <TouchableOpacity
+//               onPress={() =>
+//                 Linking.openURL(
+//                   'https://play.google.com/store/apps/details?id=ikiosk.com.intale&hl=el&gl=US',
+//                 )
+//               }>
+//               <View style={{borderRadius: 24, overflow: 'hidden'}}>
+//                 <Image
+//                   source={require('../images/intalePoint.png')}
+//                   style={{width: 48, height: 48}}
+//                 />
+//               </View>
+//             </TouchableOpacity>
+//           </Text>
+//         </View>
+//       </ScrollView>
+//     </View>
+//   </ScrollView>
+// );

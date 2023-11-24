@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
 import {selectToken, selectStoreId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -19,11 +19,11 @@ import i18next from '../languages/i18n';
 import DatePicker from 'react-native-date-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Table, Row} from 'react-native-table-component';
-import {ip} from '@env';
+// import {ip} from '@env';
 
 const StoreActivityScreen = () => {
-  const {t, i18n} = useTranslation();
-  const {width, height} = Dimensions.get('screen');
+  const {t} = useTranslation();
+  const {width} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const storeId = useSelector(selectStoreId);
   const [userId, setUserId] = useState('');
@@ -52,13 +52,22 @@ const StoreActivityScreen = () => {
   // Calculate the range of items to display based on the current page and items per page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, tableData.length);
-  const itemsToDisplay = tableData.reverse().slice(startIndex, endIndex);
+  const [itemsToDisplay, setItemsToDisplay] = useState(tableData.slice(0, 10));
   const [selectedUser, setSelectedUser] = useState('');
   const [deviceArray, setDeviceArray] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState();
   const [intaleBackOfficeSelected, setIntaleBackOfficeSelected] =
     useState(false);
+  const [filters, setFilters] = useState({
+    category: undefined,
+    user: undefined,
+    device: 1,
+    backOffice: false,
+  });
+  const [filteredData, setFilteredData] = useState([]);
+  const categoryDropdownRef = useRef();
+  const userDropdownRef = useRef();
+  const deviceDropdownRef = useRef();
 
   const handleGroupByChange = value => {
     let date = new Date();
@@ -135,60 +144,8 @@ const StoreActivityScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      // console.log(data);
-      setActivityCategoryArray(data.value);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchDataFromApi = async () => {
-    setLoading(true);
-
-    try {
-      var myHeaders = new Headers();
-      myHeaders.append('token', token);
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-
-      const response = await fetch(
-        `https://bo-api-gr.intalepoint.com/bo/ActivityLog?$select=ActLog_ID,ActLog_AttrValue,ActLog_AttrName,ActLog_Datetime,ActLog_UserID,ActLog_UserName,ActLog_SftID,ActLog_TypeID,ActLog_ActionID,ActLog_Description,ActLog_Platform,ActLog_ClientIP&$expand=ActivityLogType($select=ActLogTyp_ID,ActlogTyp_Name),ActivityLogAction($select=ActLogAct_ID,ActLogAct_Name),POSSystems($select=POS_Id,POS_StrID,POS_Name)&$filter=ActLog_Datetime ge ${fromDate
-          .toISOString()
-          .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and ActLog_Datetime le ${toDate
-          .toISOString()
-          .slice(
-            0,
-            10,
-          )}T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc`,
-        requestOptions,
-      );
-      const data = await response.json();
-      // console.log(data.value.filter(item => item.ActLog_ID === 306604));
-      setDataFromApi(data.value);
-      setTableData(() => {
-        let array = [];
-        data.value.reverse().map(item => {
-          array.push({
-            username: item.ActLog_UserName,
-            date: (() => {
-              let date = new Date(item.ActLog_Datetime);
-              return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}`;
-            })(),
-            environment: item.POSSystems.POS_Name,
-            category: item.ActivityLogType.ActlogTyp_Name,
-            action: item.ActivityLogAction.ActLogAct_Name,
-            description: item.ActLog_AttrValue,
-          });
-        });
-        // console.log(array);
-        return array;
-      });
-
-      setLoading(false);
+      // console.log(data.value.map(item => item.ActlogTyp_Name));
+      setActivityCategoryArray(data.value.map(item => item.ActlogTyp_Name));
     } catch (error) {
       console.log(error);
     }
@@ -226,7 +183,10 @@ const StoreActivityScreen = () => {
       redirect: 'follow',
     };
 
-    fetch(`http://${ip}:3000/bo/account/GetUserIdFromToken`, requestOptions)
+    fetch(
+      'https://bo-api-gr.intalepoint.com/bo/account/GetUserIdFromToken',
+      requestOptions,
+    )
       .then(response => response.text())
       .then(result => {
         // console.log(result);
@@ -246,7 +206,7 @@ const StoreActivityScreen = () => {
     };
 
     fetch(
-      `http://${ip}:3000/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
+      `https://bo-api-gr.intalepoint.com/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
       requestOptions,
     )
       .then(response => response.json())
@@ -257,6 +217,60 @@ const StoreActivityScreen = () => {
         );
       })
       .catch(error => console.log('error', error));
+  };
+
+  const fetchDataFromApi = async () => {
+    setLoading(true);
+
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('token', token);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `https://bo-api-gr.intalepoint.com/bo/ActivityLog?$select=ActLog_ID,ActLog_AttrValue,ActLog_AttrName,ActLog_Datetime,ActLog_UserID,ActLog_UserName,ActLog_SftID,ActLog_TypeID,ActLog_ActionID,ActLog_Description,ActLog_Platform,ActLog_ClientIP&$expand=ActivityLogType($select=ActLogTyp_ID,ActlogTyp_Name),ActivityLogAction($select=ActLogAct_ID,ActLogAct_Name),POSSystems($select=POS_Id,POS_StrID,POS_Name)&$filter=ActLog_Datetime ge ${fromDate
+          .toISOString()
+          .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and ActLog_Datetime le ${toDate
+          .toISOString()
+          .slice(
+            0,
+            10,
+          )}T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc`,
+        requestOptions,
+      );
+      const data = await response.json();
+      // console.log(data.value.filter(item => item.ActLog_ID === 306604));
+      setDataFromApi(data.value);
+      setTableData(() => {
+        let array = [];
+        data.value.reverse().map(item => {
+          array.push({
+            username: item.ActLog_UserName,
+            date: (() => {
+              let date = new Date(item.ActLog_Datetime);
+              return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} @ ${date.getHours()}:${
+                date.getMinutes() < 10 ? '0' : ''
+              }${date.getMinutes()}`;
+            })(),
+            environment: item.POSSystems.POS_Name,
+            category: item.ActivityLogType.ActlogTyp_Name,
+            action: item.ActivityLogAction.ActLogAct_Name,
+            description: item.ActLog_AttrValue,
+          });
+        });
+        // console.log(array);
+        return array;
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -277,21 +291,53 @@ const StoreActivityScreen = () => {
   }, [fromDateFormatted, toDateFormatted, selectedDevice]);
 
   useEffect(() => {
-    setTableData(prev =>
-      prev.filter(item => item.category === selectedCategory),
-    );
-  }, [
-    selectedCategory,
-    selectedUser,
-    selectedDevice,
-    // intaleBackOfficeSelected,
-  ]);
+    setFilteredData([...tableData]);
+  }, [tableData]);
 
   useEffect(() => {
-    setTableData(prev =>
-      prev.filter(item => item.environment === 'Backoffice'),
-    );
-  }, [intaleBackOfficeSelected]);
+    setItemsToDisplay(filteredData.slice(startIndex, endIndex));
+  }, [startIndex, endIndex, filteredData]);
+
+  useEffect(() => {
+    if (
+      filters.user === undefined &&
+      filters.backOffice === false &&
+      filters.category === undefined &&
+      filters.device === 1
+    ) {
+      setFilteredData([...tableData]);
+    } else {
+      for (const key in filters) {
+        switch (key) {
+          case 'backOffice':
+            filters[key] === true
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.environment === 'Backoffice'),
+                )
+              : null;
+            break;
+          case 'category':
+            filters[key] !== undefined
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.category === filters[key]),
+                )
+              : null;
+            break;
+          case 'device':
+            break;
+          case 'user':
+            filters[key] !== undefined
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.user === filters[key]),
+                )
+              : null;
+            break;
+          default:
+            console.log(`Unknown filter: ${key}`);
+        }
+      }
+    }
+  }, [filters]);
 
   return (
     <View className="flex-1 bg-gray-300">
@@ -425,19 +471,24 @@ const StoreActivityScreen = () => {
                   Select a category
                 </Text>
                 <SelectDropdown
+                  ref={categoryDropdownRef}
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
-                  data={activityCategoryArray.map(item => item.ActlogTyp_Name)}
-                  defaultValue={'Week'}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem);
-                    setSelectedCategory(selectedItem);
+                  data={activityCategoryArray}
+                  defaultValue={undefined}
+                  defaultButtonText="Select a category"
+                  onSelect={selectedItem => {
+                    setFilters(prev => {
+                      const newFilters = {...prev};
+                      newFilters.category = selectedItem;
+                      return newFilters;
+                    });
                   }}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}
-                  rowTextForSelection={(item, index) => {
+                  rowTextForSelection={item => {
                     return item;
                   }}
                   buttonStyle={{
@@ -455,6 +506,7 @@ const StoreActivityScreen = () => {
                   Select a user
                 </Text>
                 <SelectDropdown
+                  ref={userDropdownRef}
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
@@ -462,8 +514,14 @@ const StoreActivityScreen = () => {
                     usersList.length > 0 &&
                     usersList.map(user => `${user.userId} || ${user.username}`)
                   }
+                  defaultValue={undefined}
+                  defaultButtonText="Select a user"
                   onSelect={selectedItem => {
-                    setSelectedUser(selectedItem);
+                    setFilters(prev => {
+                      const newFilters = {...prev};
+                      newFilters.user = selectedItem.split('||')[1].trim();
+                      return newFilters;
+                    });
                   }}
                   buttonTextAfterSelection={selectedItem => {
                     return selectedItem;
@@ -489,7 +547,10 @@ const StoreActivityScreen = () => {
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
+                  ref={deviceDropdownRef}
                   data={deviceArray.map(item => item.POS_Name)}
+                  defaultValue={1}
+                  defaultButtonText="Select a device"
                   onSelect={selectedItem => {
                     setSelectedDevice(() => {
                       const devices = deviceArray.filter(
@@ -522,6 +583,11 @@ const StoreActivityScreen = () => {
                     : 'rgba(0, 182, 240, 0.6)',
                 }}
                 onPress={() => {
+                  setFilters(prev => {
+                    const newFilters = {...prev};
+                    newFilters.backOffice = !newFilters.backOffice;
+                    return newFilters;
+                  });
                   setIntaleBackOfficeSelected(!intaleBackOfficeSelected);
                 }}>
                 <Ionicons
@@ -546,7 +612,16 @@ const StoreActivityScreen = () => {
                 className="flex-row space-x-2 items-center border p-2 rounded-full border-red-500"
                 onPress={() => {
                   setSelectedDevice(1);
-                  setSelectedUser('');
+                  setFilters({
+                    category: undefined,
+                    user: undefined,
+                    device: 1,
+                    backOffice: false,
+                  });
+                  categoryDropdownRef.current.reset();
+                  userDropdownRef.current.reset();
+                  deviceDropdownRef.current.reset();
+                  setIntaleBackOfficeSelected(false);
                 }}>
                 <Text className="color-red-500">ΕΚΚΑΘΑΡΙΣΗ ΦΙΛΤΡΩΝ</Text>
               </TouchableOpacity>
@@ -577,8 +652,6 @@ const StoreActivityScreen = () => {
                         style={{
                           alignContent: 'center',
                           backgroundColor: 'rgb(0, 182, 240)',
-                          // paddingRight: 2,
-                          // paddingLeft: 2,
                           borderTopLeftRadius: 5,
                           borderTopRightRadius: 5,
                         }}
@@ -607,16 +680,8 @@ const StoreActivityScreen = () => {
                               fontSize: 12,
                               color: 'black',
                             }}
-                            widthArr={Object.entries(item).map(
-                              entry => 150,
-                              150,
-                              150,
-                              150,
-                              150,
-                              150,
-                            )}
+                            widthArr={Object.entries(item).map(entry => 150)}
                             data={Object.entries(item).map(entry => {
-                              // console.log(entry);
                               return entry[1];
                             })}
                           />

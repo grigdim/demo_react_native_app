@@ -231,7 +231,10 @@ const PersonnelScreen = () => {
       redirect: 'follow',
     };
 
-    fetch(`http://${ip}:3000/bo/account/GetUserIdFromToken`, requestOptions)
+    fetch(
+      'https://bo-api-gr.intalepoint.com/bo/account/GetUserIdFromToken',
+      requestOptions,
+    )
       .then(response => response.text())
       .then(result => {
         // console.log(result);
@@ -243,7 +246,6 @@ const PersonnelScreen = () => {
   const fetchStoreUsersList = async () => {
     var myHeaders = new Headers();
     myHeaders.append('token', token);
-
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
@@ -251,12 +253,11 @@ const PersonnelScreen = () => {
     };
 
     fetch(
-      `http://${ip}:3000/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
+      `https://bo-api-gr.intalepoint.com/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
         setUsersList(() =>
           result.map(user => ({userId: user.UserId, username: user.UserName})),
         );

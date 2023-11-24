@@ -1,5 +1,3 @@
-/* eslint-disable quotes */
-/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -37,8 +35,8 @@ const SalesInsightsTransactionsScreen = () => {
   const {t, i18n} = useTranslation();
   const {width, height} = Dimensions.get('screen');
   const token = useSelector(selectToken);
-  // const storeId = useSelector(selectStoreId);
-  const [storeId, setStoreId] = useState();
+  const storeId = useSelector(selectStoreId);
+  // const [storeId, setStoreId] = useState();
 
   const [loading, setLoading] = useState(false);
   const [transactionsWeeks, setTransactionsWeeks] = useState([]);
@@ -82,18 +80,18 @@ const SalesInsightsTransactionsScreen = () => {
     }
   };
 
-  const retrieveStoreId = async () => {
-    try {
-      const retrievedStoreId = await AsyncStorage.getItem('@storeId');
-      setStoreId(retrievedStoreId);
-    } catch (error) {
-      console.error('Error loading selected language:', error);
-    }
-  };
+  // const retrieveStoreId = async () => {
+  //   try {
+  //     const retrievedStoreId = await AsyncStorage.getItem('@storeId');
+  //     setStoreId(retrievedStoreId);
+  //   } catch (error) {
+  //     console.error('Error loading selected language:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    retrieveStoreId();
-  }, [storeId]);
+  // useEffect(() => {
+  //   retrieveStoreId();
+  // }, [storeId]);
 
   const fetchTransactionsWeeks = async () => {
     setLoading(true);
@@ -416,7 +414,7 @@ const SalesInsightsTransactionsScreen = () => {
                     {/*y axis end*/}
 
                     <VictoryBar
-                      alignment="center"
+                      // alignment="center"
                       data={transactionsPerDay.map(item => {
                         return {
                           x: item.DayName,
