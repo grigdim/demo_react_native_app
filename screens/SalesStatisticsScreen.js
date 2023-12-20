@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
 import React, {useEffect, useState, useMemo} from 'react';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStoreId, selectStrId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import {ip} from '@env';
@@ -38,6 +38,8 @@ import i18next from '../languages/i18n';
 const SalesStatisticsScreen = () => {
   const {t, i18n} = useTranslation();
   const token = useSelector(selectToken);
+  const storeId = useSelector(selectStoreId);
+  const strId = useSelector(selectStrId);
   const {width, height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
@@ -56,7 +58,7 @@ const SalesStatisticsScreen = () => {
   const [toDateFormatted, setToDateFormatted] = useState(
     toDate.toISOString().slice(0, 10).concat(' 23:59:59'),
   );
-  const [storesIds, setStoresIds] = useState([1]);
+  const [storesIds, setStoresIds] = useState([]);
   const [openFromDate, setOpenFromDate] = useState(false);
   const [openToDate, setOpenToDate] = useState(false);
   const [sftId, setSftId] = useState(1);
@@ -107,9 +109,13 @@ const SalesStatisticsScreen = () => {
     setSftId(inputText);
   };
 
-  // useEffect(() => {
-  //   console.log(fromDateFormatted, toDateFormatted);
-  // }, [fromDateFormatted, toDateFormatted]);
+  useEffect(() => {
+    setStoresIds(() => {
+      let arr = [];
+      arr.push(strId);
+      return arr;
+    });
+  }, [strId]);
 
   const fetchDataFromBoApi = async () => {
     setLoading(true);
@@ -143,7 +149,8 @@ const SalesStatisticsScreen = () => {
 
     if (
       // __DEV__ &&
-      token
+      token &&
+      storesIds.length > 0
     ) {
       var myHeaders = new Headers();
       myHeaders.append('Token', token);
@@ -819,7 +826,7 @@ const SalesStatisticsScreen = () => {
             .concat(' 23:59:59');
           const response1 = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${dateToFormatted}&dateGroupBy=${groupBy}&storeIds=${strId}&prodID=${prodID}`,
             requestOptions,
           );
           const dateFromFormatted = new Date(
@@ -832,7 +839,7 @@ const SalesStatisticsScreen = () => {
             .concat(' 00:00:00');
           const response2 = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${dateFromFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=${strId}&prodID=${prodID}`,
             requestOptions,
           );
           const data1 = await response1.json();
@@ -854,7 +861,7 @@ const SalesStatisticsScreen = () => {
         } else {
           const response = await fetch(
             // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+            `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=${strId}&prodID=${prodID}`,
             requestOptions,
           );
           const dataUnformatted = await response.json();
@@ -868,7 +875,7 @@ const SalesStatisticsScreen = () => {
       } else {
         const response = await fetch(
           // `http://${ip}:3000/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=1&prodID=${prodID}`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProductSalesDetailsServerSide?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&dateGroupBy=${groupBy}&storeIds=${strId}&prodID=${prodID}`,
           requestOptions,
         );
         data = await response.json();
@@ -1174,7 +1181,7 @@ const SalesStatisticsScreen = () => {
 
   useEffect(() => {
     fetchDataFromBoApi();
-  }, [fromDateFormatted, toDateFormatted]);
+  }, [fromDateFormatted, toDateFormatted, storesIds]);
 
   return (
     <View className="flex-1 bg-gray-300">

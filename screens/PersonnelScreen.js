@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -11,8 +10,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
-import React, {useState, useEffect, useMemo} from 'react';
-import {selectToken, selectStoreId} from '../features/bootstrap';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {selectToken, selectStoreId, selectStrId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useTranslation} from 'react-i18next';
@@ -20,16 +19,17 @@ import i18next from '../languages/i18n';
 import DatePicker from 'react-native-date-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Table, Row} from 'react-native-table-component';
-import {ip} from '@env';
+// import {ip} from '@env';
 
 const PersonnelScreen = () => {
-  const {t, i18n} = useTranslation();
-  const {width, height} = Dimensions.get('screen');
+  const {t} = useTranslation();
+  const {width} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const storeId = useSelector(selectStoreId);
+  const strId = useSelector(selectStrId);
   const [userId, setUserId] = useState('');
   const [usersList, setUsersList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState(() => {
     const today = new Date();
     today.setDate(today.getDate() - 7);
@@ -46,13 +46,28 @@ const PersonnelScreen = () => {
   const [openToDate, setOpenToDate] = useState(false);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('WEEK');
   const [dataFromApi, setDataFromApi] = useState([]);
-  const [tableData, setTableData] = useState([]);
+
   const [withDifferenceSelected, setWithDifferenceSelected] = useState(false);
   const [withMoreThanOneTriesSelected, setWithMoreThanOneTriesSelected] =
     useState(false);
-  const [selectedUser, setSelectedUser] = useState('');
+
   const [deviceArray, setDeviceArray] = useState([]);
-  const [selectedDevice, setSelectedDevice] = useState(1);
+
+  const [itemsToDisplay, setItemsToDisplay] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Adjust as needed
+  // Calculate the range of items to display based on the current page and items per page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, dataFromApi.length);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filters, setFilters] = useState({
+    discrepancy: false,
+    user: undefined,
+    device: undefined,
+    moreThanOneAttempts: false,
+  });
+  const userDropdownRef = useRef();
+  const deviceDropdownRef = useRef();
 
   const handleGroupByChange = value => {
     let date = new Date();
@@ -113,92 +128,6 @@ const PersonnelScreen = () => {
     }
   }, [selectedGroupByDateValue]);
 
-  const fetchDataFromApi = async () => {
-    setLoading(true);
-
-    try {
-      var myHeaders = new Headers();
-      myHeaders.append('token', token);
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-
-      const response = await fetch(
-        `https://bo-api-gr.intalepoint.com/bo/Shifts?filter=POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and Sft_Start ge ${fromDate
-          .toISOString()
-          .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and Sft_Start le ${toDate
-          .toISOString()
-          .slice(0, 10)}T23%3A59%3A59%2B02%3A00`,
-        requestOptions,
-      );
-      const data = await response.json();
-      // console.log(data);
-      setDataFromApi(data.value.reverse());
-      setTableData(() => {
-        let array = [];
-        data.value.reverse().map(item => {
-          array.push({
-            username: item.Sft_Username,
-            date: (() => {
-              let date = new Date(item.Sft_Start);
-              date.setHours(
-                date.getHours() + parseInt(item.Sft_Start.slice(21, 22), 10),
-              );
-              return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date
-                .toISOString()
-                .slice(11, 16)}`;
-            })(),
-            duration:
-              item.Sft_End === null
-                ? 'Active'
-                : (() => {
-                    let startDate = new Date(item.Sft_Start).getTime();
-                    let endDate = new Date(item.Sft_End).getTime();
-                    // Calculate the duration in milliseconds
-                    let durationInMilliseconds = endDate - startDate;
-
-                    // Convert milliseconds to hours and minutes
-                    let hours = Math.floor(
-                      durationInMilliseconds / (1000 * 60 * 60),
-                    );
-                    let minutes = Math.floor(
-                      (durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60),
-                    );
-
-                    // Format the result as HH:MM
-                    return `${String(hours).padStart(2, '0')}:${String(
-                      minutes,
-                    ).padStart(2, '0')}`;
-                  })(),
-            sftStart: item.Sft_CashStart,
-            handover: item.Sft_CashHandOver,
-            userClose: item.Sft_End === null ? '-' : item.Sft_TillCash,
-            systemClose: item.Sft_End === null ? '-' : item.Sft_CashCheck,
-            discrepancy:
-              item.Sft_End === null
-                ? '-'
-                : item.Sft_TillCash - item.Sft_CashCheck,
-            logoutAttempts: item.Sft_LogoutAttempts,
-            environment: (() => {
-              let environmentDevice = deviceArray.filter(
-                device => device.Pos_StrID === selectedDevice,
-              );
-              return environmentDevice[0].POS_Name;
-            })(),
-          });
-          // console.log(array);
-        });
-        return array;
-      });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchPOSSystems = async () => {
     try {
       var myHeaders = new Headers();
@@ -211,10 +140,11 @@ const PersonnelScreen = () => {
       };
 
       const response = await fetch(
-        "https://bo-api-gr.intalepoint.com/bo/POSSystems?$filter=POS_IsVisible eq true and POS_StrID eq 1 and POS_Name ne 'Backoffice'&$orderby=POS_Name desc",
+        `https://bo-api-gr.intalepoint.com/bo/POSSystems?$filter=POS_IsVisible eq true and POS_StrID eq ${strId} and POS_Name ne 'Backoffice'&$orderby=POS_Name desc`,
         requestOptions,
       );
       const data = await response.json();
+      console.log(data.value);
       setDeviceArray(data.value);
     } catch (error) {
       console.log(error);
@@ -251,18 +181,164 @@ const PersonnelScreen = () => {
       headers: myHeaders,
       redirect: 'follow',
     };
-
     fetch(
       `https://bo-api-gr.intalepoint.com/bo/account/GetStoreUsersListForSearch?userID=${userId}&storeID=${storeId}&includeCurrentUser=true`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
+        // console.log(result);
         setUsersList(() =>
-          result.map(user => ({userId: user.UserId, username: user.UserName})),
+          result.map(user => ({
+            userId: user.UserId,
+            username: user.UserName,
+            firstName: user.FirstName,
+            lastName: user.LastName,
+          })),
         );
       })
       .catch(error => console.log('error', error));
+  };
+
+  const fetchDataFromApi = async () => {
+    setLoading(true);
+
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('token', token);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `https://bo-api-gr.intalepoint.com/bo/Shifts?filter=POSSystems%2FPOS_StrID%20in%20%28${strId}%29 and Sft_Start ge ${fromDate
+          .toISOString()
+          .slice(0, 10)}T00%3A00%3A00%2B03%3A00 and Sft_Start le ${toDate
+          .toISOString()
+          .slice(0, 10)}T23%3A59%3A59%2B02%3A00`,
+        requestOptions,
+      );
+      const data = await response.json();
+      console.log(data.value);
+      setDataFromApi(() => {
+        let array = [];
+        data.value.reverse().map(item => {
+          array.push({
+            username: item.Sft_Username,
+            date: (() => {
+              let date = new Date(item.Sft_Start);
+              date.setHours(
+                date.getHours() + parseInt(item.Sft_Start.slice(21, 22), 10),
+              );
+              return `${date.getDate()}/${
+                date.getMonth() + 1
+              }/${date.getFullYear()} ${date.toISOString().slice(11, 16)}`;
+            })(),
+            duration:
+              item.Sft_End === null
+                ? 'Active'
+                : (() => {
+                    let startDate = new Date(item.Sft_Start).getTime();
+                    let endDate = new Date(item.Sft_End).getTime();
+                    // Calculate the duration in milliseconds
+                    let durationInMilliseconds = endDate - startDate;
+
+                    // Convert milliseconds to hours and minutes
+                    let hours = Math.floor(
+                      durationInMilliseconds / (1000 * 60 * 60),
+                    );
+                    let minutes = Math.floor(
+                      (durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60),
+                    );
+
+                    // Format the result as HH:MM
+                    return `${String(hours).padStart(2, '0')}:${String(
+                      minutes,
+                    ).padStart(2, '0')}`;
+                  })(),
+            sftStart: item.Sft_CashStart,
+            handover: item.Sft_CashHandOver === 0 ? '-' : item.Sft_CashHandOver,
+            userClose: item.Sft_End === null ? '-' : item.Sft_CashCheck,
+            systemClose: item.Sft_End === null ? '-' : item.Sft_TillCash,
+            discrepancy:
+              item.Sft_End === null
+                ? '-'
+                : (item.Sft_CashCheck - item.Sft_TillCash).toFixed(2),
+            logoutAttempts: item.Sft_LogoutAttempts,
+            environment: (() => {
+              let environmentDevice = deviceArray.filter(
+                device => device.Pos_StrID === strId,
+              );
+              return environmentDevice[0].POS_Name;
+            })(),
+          });
+          // console.log(array);
+        });
+        return array;
+      });
+      // setTableData(() => {
+      //   let array = [];
+      //   data.value.reverse().map(item => {
+      //     array.push({
+      //       username: item.Sft_Username,
+      //       date: (() => {
+      //         let date = new Date(item.Sft_Start);
+      //         date.setHours(
+      //           date.getHours() + parseInt(item.Sft_Start.slice(21, 22), 10),
+      //         );
+      //         return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date
+      //           .toISOString()
+      //           .slice(11, 16)}`;
+      //       })(),
+      //       duration:
+      //         item.Sft_End === null
+      //           ? 'Active'
+      //           : (() => {
+      //               let startDate = new Date(item.Sft_Start).getTime();
+      //               let endDate = new Date(item.Sft_End).getTime();
+      //               // Calculate the duration in milliseconds
+      //               let durationInMilliseconds = endDate - startDate;
+
+      //               // Convert milliseconds to hours and minutes
+      //               let hours = Math.floor(
+      //                 durationInMilliseconds / (1000 * 60 * 60),
+      //               );
+      //               let minutes = Math.floor(
+      //                 (durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60),
+      //               );
+
+      //               // Format the result as HH:MM
+      //               return `${String(hours).padStart(2, '0')}:${String(
+      //                 minutes,
+      //               ).padStart(2, '0')}`;
+      //             })(),
+      //       sftStart: item.Sft_CashStart,
+      //       handover: item.Sft_CashHandOver === 0 ? '-' : item.Sft_CashHandOver,
+      //       userClose: item.Sft_End === null ? '-' : item.Sft_CashCheck,
+      //       systemClose: item.Sft_End === null ? '-' : item.Sft_TillCash,
+      //       discrepancy:
+      //         item.Sft_End === null
+      //           ? '-'
+      //           : (item.Sft_CashCheck - item.Sft_TillCash).toFixed(2),
+      //       logoutAttempts: item.Sft_LogoutAttempts,
+      //       environment: (() => {
+      //         let environmentDevice = deviceArray.filter(
+      //           device => device.Pos_StrID === strId,
+      //         );
+      //         return environmentDevice[0].POS_Name;
+      //       })(),
+      //     });
+      //     // console.log(array);
+      //   });
+      //   return array;
+      // });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -276,15 +352,69 @@ const PersonnelScreen = () => {
 
   useEffect(() => {
     deviceArray.length > 0 && fetchDataFromApi();
-  }, [fromDateFormatted, toDateFormatted, selectedDevice, deviceArray]);
+  }, [fromDateFormatted, toDateFormatted, deviceArray]);
+
+  useEffect(() => {
+    setFilteredData([...dataFromApi]);
+  }, [dataFromApi]);
+
+  useEffect(() => {
+    setItemsToDisplay(filteredData.slice(startIndex, endIndex));
+  }, [startIndex, endIndex, filteredData]);
+
+  useEffect(() => {
+    if (
+      filters.user === undefined &&
+      filters.discrepancy === false &&
+      filters.moreThanOneAttempts === false &&
+      filters.device === undefined
+    ) {
+      setFilteredData([...dataFromApi]);
+    } else {
+      for (const key in filters) {
+        switch (key) {
+          case 'discrepancy':
+            filters[key] === true
+              ? setFilteredData(prev =>
+                  prev.filter(
+                    item =>
+                      item.discrepancy !== '-' &&
+                      (item.discrepancy > 0 || item.discrepancy < 0),
+                  ),
+                )
+              : null;
+            break;
+          case 'moreThanOneAttempts':
+            filters[key] === true
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.logoutAttempts > 1),
+                )
+              : null;
+            break;
+          case 'device':
+            filters[key] !== undefined
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.environment === filters[key]),
+                )
+              : null;
+            break;
+          case 'user':
+            filters[key] !== undefined
+              ? setFilteredData(prev =>
+                  prev.filter(item => item.username === filters[key]),
+                )
+              : null;
+            break;
+          default:
+            console.log(`Unknown filter: ${key}`);
+        }
+      }
+    }
+  }, [filters]);
 
   // useEffect(() => {
-  //   console.log('filter by user', filterByUser);
-  // }, [filterByUser]);
-
-  // useEffect(() => {
-  //   console.log('filter by device', filterByDevice);
-  // }, [filterByDevice]);
+  //   console.log(filters);
+  // }, [filters]);
 
   return (
     <View className="flex-1 bg-gray-300">
@@ -418,12 +548,23 @@ const PersonnelScreen = () => {
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
+                  ref={userDropdownRef}
                   data={
                     usersList.length > 0 &&
-                    usersList.map(user => `${user.userId} || ${user.username}`)
+                    usersList.map(
+                      user =>
+                        `${user.userId} | ${user.username} | ${
+                          user.lastName !== null ? user.lastName : ''
+                        } ${user.firstName !== null ? user.firstName : ''} `,
+                    )
                   }
                   onSelect={selectedItem => {
-                    setSelectedUser(selectedItem);
+                    // console.log(selectedItem.split('|')[1].trim());
+                    setFilters(prev => {
+                      const newFilters = {...prev};
+                      newFilters.user = selectedItem.split('|')[1].trim();
+                      return newFilters;
+                    });
                   }}
                   buttonTextAfterSelection={selectedItem => {
                     return selectedItem;
@@ -447,13 +588,13 @@ const PersonnelScreen = () => {
                   dropdownStyle={{
                     backgroundColor: 'lightgray',
                   }}
+                  ref={deviceDropdownRef}
                   data={deviceArray.map(item => item.POS_Name)}
                   onSelect={selectedItem => {
-                    setSelectedDevice(() => {
-                      const devices = deviceArray.filter(
-                        item => item.POS_Name === selectedItem,
-                      );
-                      return devices[0].Pos_StrID;
+                    setFilters(prev => {
+                      const newFilters = {...prev};
+                      newFilters.device = selectedItem;
+                      return newFilters;
                     });
                   }}
                   buttonTextAfterSelection={selectedItem => {
@@ -472,6 +613,7 @@ const PersonnelScreen = () => {
                   buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
                 />
               </View>
+
               <TouchableOpacity
                 className="flex-row space-x-2 items-center border p-2 rounded-full"
                 style={{
@@ -481,6 +623,11 @@ const PersonnelScreen = () => {
                 }}
                 onPress={() => {
                   setWithDifferenceSelected(!withDifferenceSelected);
+                  setFilters(prev => {
+                    const newFilters = {...prev};
+                    newFilters.discrepancy = !prev.discrepancy;
+                    return newFilters;
+                  });
                 }}>
                 <Ionicons
                   name={withDifferenceSelected ? 'eye' : 'eye-off'}
@@ -500,6 +647,7 @@ const PersonnelScreen = () => {
                   ΜΕ ΔΙΑΦΟΡΑ
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 className="flex-row space-x-2 items-center border p-2 rounded-full"
                 style={{
@@ -511,6 +659,11 @@ const PersonnelScreen = () => {
                   setWithMoreThanOneTriesSelected(
                     !withMoreThanOneTriesSelected,
                   );
+                  setFilters(prev => {
+                    const newFilters = {...prev};
+                    newFilters.moreThanOneAttempts = !prev.moreThanOneAttempts;
+                    return newFilters;
+                  });
                 }}>
                 <Ionicons
                   name={withMoreThanOneTriesSelected ? 'eye' : 'eye-off'}
@@ -530,13 +683,20 @@ const PersonnelScreen = () => {
                   ΜΕ ΠΑΝΩ ΑΠΟ ΜΙΑ ΠΡΟΣΠΑΘΕΙΑ
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 className="flex-row space-x-2 items-center border p-2 rounded-full border-red-500"
                 onPress={() => {
-                  setSelectedUser('');
-                  setSelectedDevice(1);
                   setWithDifferenceSelected(false);
                   setWithMoreThanOneTriesSelected(false);
+                  setFilters({
+                    discrepancy: false,
+                    user: undefined,
+                    device: undefined,
+                    moreThanOneAttempts: false,
+                  });
+                  userDropdownRef.current.reset();
+                  deviceDropdownRef.current.reset();
                 }}>
                 <Text className="color-red-500">ΕΚΚΑΘΑΡΙΣΗ ΦΙΛΤΡΩΝ</Text>
               </TouchableOpacity>
@@ -587,7 +747,7 @@ const PersonnelScreen = () => {
                         ]}
                       />
                       <View className="divide-y divide-gray-200 rounded-b-md">
-                        {tableData.reverse().map((item, index) => (
+                        {itemsToDisplay.map((item, index) => (
                           <Row
                             key={index}
                             style={{
@@ -613,6 +773,23 @@ const PersonnelScreen = () => {
                       </View>
                     </Table>
                   </ScrollView>
+                  <View className="flex flex-row space-x-4 justify-center">
+                    <TouchableOpacity
+                      className="bg-slate-600 px-2 py-1 rounded-md color-white"
+                      onPress={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}>
+                      <Text className="color-white">Previous</Text>
+                    </TouchableOpacity>
+                    <Text className="bg-slate-600 px-2 py-1 rounded-full color-white">
+                      {currentPage}
+                    </Text>
+                    <TouchableOpacity
+                      className="bg-slate-600 px-2 py-1 rounded-md color-white"
+                      onPress={() => setCurrentPage(currentPage + 1)}
+                      disabled={endIndex >= filteredData.length}>
+                      <Text className="color-white">Next</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )
             )}

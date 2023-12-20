@@ -15,7 +15,7 @@ import DatePicker from 'react-native-date-picker';
 import DrawerHeader from './DrawerHeader';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useTranslation} from 'react-i18next';
-import {selectToken} from '../features/bootstrap';
+import {selectToken, selectStrId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import {Table, Row} from 'react-native-table-component';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -28,14 +28,15 @@ import {
   VictoryTheme,
   VictoryAxis,
   VictoryBar,
-  VictoryArea,
+  // VictoryArea,
 } from 'victory-native';
-import {format, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
+// import {format, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz';
 
 const ProcurementsScreen = () => {
   const {height} = Dimensions.get('screen');
   const [loading, setLoading] = useState(true);
   const token = useSelector(selectToken);
+  const strId = useSelector(selectStrId);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('WEEK');
   const [groupBy, setGroupBy] = useState('week');
   const [fromDate, setFromDate] = useState(() => {
@@ -182,7 +183,7 @@ const ProcurementsScreen = () => {
       };
       try {
         const response = await fetch(
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProcurementExpenditures?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1&traId=0`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProcurementExpenditures?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=${strId}&traId=0`,
           requestOptions,
         );
         const data = await response.json();
@@ -458,7 +459,7 @@ const ProcurementsScreen = () => {
       };
       try {
         const response = await fetch(
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProcurementExpendituresDetails?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1&traId=0`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetProcurementExpendituresDetails?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=${strId}&traId=0`,
           requestOptions,
         );
         const data = await response.json();
@@ -505,7 +506,7 @@ const ProcurementsScreen = () => {
       };
       try {
         const response = await fetch(
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetOrderSummaries?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetOrderSummaries?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=${strId}`,
           requestOptions,
         );
         const data = await response.json();
@@ -531,7 +532,7 @@ const ProcurementsScreen = () => {
       };
       try {
         const response = await fetch(
-          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetSuppliersModal?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=1&traId=${supplierID}`,
+          `https://bo-api-gr.intalepoint.com/bo/Invoices/GetSuppliersModal?fromDate=${fromDateFormatted}&toDate=${toDateFormatted}&storesIds=${strId}&traId=${supplierID}`,
           requestOptions,
         );
         const data = await response.json();

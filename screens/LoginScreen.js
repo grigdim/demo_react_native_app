@@ -20,21 +20,21 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, {useState, useEffect, useRef} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 // import {selectBox, selectToken} from '../features/bootstrap';
-import {setToken, setStoreId} from '../features/bootstrap';
+import {setToken, setStoreId, setStrId} from '../features/bootstrap';
 // import {store} from '../store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
-import DeviceInfo from 'react-native-device-info';
+// import DeviceInfo from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
-import DrawerHeader from './DrawerHeader';
+// import DrawerHeader from './DrawerHeader';
 import {useTranslation} from 'react-i18next';
 // import SwitchSelector from 'react-native-switch-selector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useInfo} from '../components/PersonalInfoTaken';
 // import TabsScreen from './TabsScreen';
-import {ip} from '@env';
+// import {ip} from '@env';
 import SelectDropdown from 'react-native-select-dropdown';
 
 const LoginScreen = () => {
@@ -55,7 +55,7 @@ const LoginScreen = () => {
   const [isPrivacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
   const [isTermsOfServiceAccepted, setTermsOfServiceAccepted] = useState(false);
   const [isLanguagePicked, setLanguagePicked] = useState(false);
-  const {height, width} = Dimensions.get('screen');
+  const {height} = Dimensions.get('screen');
   const {input, buttonText, disabledButton} = style;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,9 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
   const [userStoreData, setUserStoreData] = useState([]);
-  const [selectedStoreId, setSelectedStoreId] = useState('');
+  const [userStoreData2, setUserStoreData2] = useState([]);
+  const [storesArray, setStoresArray] = useState([]);
+  // const [selectedStoreId, setSelectedStoreId] = useState('');
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isInputDisabled =
@@ -212,6 +214,7 @@ const LoginScreen = () => {
     const response = await fetch(
       // 'https://bo-api-gr.intalepoint.com/bo/account/authenticate',
       'https://bo-api-gr.intalepoint.com/bo/account/authenticatewithoutstoreid',
+      // `http://${ip}:4000/bo/account/authenticatewithoutstoreid`,
       requestOptions,
     );
     const data = await response.text();
@@ -254,7 +257,25 @@ const LoginScreen = () => {
     const userIdFromToken = await data.text();
     setUserId(userIdFromToken);
   };
+
   const getUserStoreData = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Token', innerToken);
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    const response = await fetch(
+      `https://bo-api-gr.intalepoint.com/bo/Stores?$filter=Str_Active eq true and Str_Visible eq true&$expand=StoreUsers($filter=Stu_UserID eq ${userId})`,
+      requestOptions,
+    );
+    const data = await response.json();
+    // console.log('userStoreData1', data.value);
+    setUserStoreData(data.value);
+  };
+
+  const getUserStoreData2 = async () => {
     var myHeaders = new Headers();
     myHeaders.append('Token', innerToken);
     var requestOptions = {
@@ -267,7 +288,8 @@ const LoginScreen = () => {
       requestOptions,
     );
     const data = await response.json();
-    setUserStoreData(data);
+    // console.log('userStoreData2', data);
+    setUserStoreData2(data);
   };
 
   useEffect(() => {
@@ -318,7 +340,24 @@ const LoginScreen = () => {
   }, [innerToken]);
   useEffect(() => {
     getUserStoreData();
+    getUserStoreData2();
   }, [userId]);
+
+  useEffect(() => {
+    let array = [];
+    userStoreData.forEach(item => {
+      userStoreData2.map(item2 => {
+        if (item2.CompanyDescription === item.Str_Name) {
+          array.push({
+            CompanyDescription: item2.CompanyDescription,
+            Str_ID: item.Str_ID,
+            StoreId: item2.StoreId,
+          });
+        }
+      });
+    });
+    setStoresArray(array);
+  }, [userStoreData, userStoreData2]);
 
   const renderLanguagePicker = () => (
     <View style={languageStyle.container}>
@@ -541,12 +580,14 @@ const LoginScreen = () => {
         dropdownStyle={{
           backgroundColor: 'lightgray',
         }}
-        data={userStoreData.map(item => item.CompanyDescription)}
+        data={storesArray.map(item => item.CompanyDescription)}
         onSelect={selectedItem => {
-          const devices = userStoreData.filter(
+          const devices = storesArray.filter(
             item => item.CompanyDescription === selectedItem,
           );
-          dispatch(setStoreId(devices[0].StoreId));
+          // console.log(devices);
+          dispatch(setStoreId(parseInt(devices[0].StoreId, 10)));
+          dispatch(setStrId(parseInt(devices[0].Str_ID, 10)));
           navigation.navigate(t('statistics'));
         }}
         buttonTextAfterSelection={selectedItem => {

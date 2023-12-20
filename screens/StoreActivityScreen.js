@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import DrawerHeader from './DrawerHeader';
 import React, {useState, useEffect, useMemo, useRef} from 'react';
-import {selectToken, selectStoreId} from '../features/bootstrap';
+import {selectToken, selectStoreId, selectStrId} from '../features/bootstrap';
 import {useSelector} from 'react-redux';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useTranslation} from 'react-i18next';
@@ -26,6 +26,7 @@ const StoreActivityScreen = () => {
   const {width} = Dimensions.get('screen');
   const token = useSelector(selectToken);
   const storeId = useSelector(selectStoreId);
+  const strId = useSelector(selectStrId);
   const [userId, setUserId] = useState('');
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,6 @@ const StoreActivityScreen = () => {
   const [openFromDate, setOpenFromDate] = useState(false);
   const [openToDate, setOpenToDate] = useState(false);
   const [selectedGroupByDateValue, setSelectedGroupByDate] = useState('WEEK');
-  const [dataFromApi, setDataFromApi] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [activityCategoryArray, setActivityCategoryArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,7 +53,6 @@ const StoreActivityScreen = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, tableData.length);
   const [itemsToDisplay, setItemsToDisplay] = useState(tableData.slice(0, 10));
-  const [selectedUser, setSelectedUser] = useState('');
   const [deviceArray, setDeviceArray] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(1);
   const [intaleBackOfficeSelected, setIntaleBackOfficeSelected] =
@@ -61,8 +60,8 @@ const StoreActivityScreen = () => {
   const [filters, setFilters] = useState({
     category: undefined,
     user: undefined,
-    device: 1,
-    backOffice: false,
+    // device: 1,
+    environment: undefined,
   });
   const [filteredData, setFilteredData] = useState([]);
   const categoryDropdownRef = useRef();
@@ -163,7 +162,7 @@ const StoreActivityScreen = () => {
       };
 
       const response = await fetch(
-        "https://bo-api-gr.intalepoint.com/bo/POSSystems?$filter=POS_IsVisible eq true and POS_StrID eq 1 and POS_Name ne 'Backoffice'&$orderby=POS_Name desc",
+        `https://bo-api-gr.intalepoint.com/bo/POSSystems?$filter=POS_IsVisible eq true and POS_StrID eq ${strId} and POS_Name ne 'Backoffice'&$orderby=POS_Name desc`,
         requestOptions,
       );
       const data = await response.json();
@@ -221,7 +220,6 @@ const StoreActivityScreen = () => {
 
   const fetchDataFromApi = async () => {
     setLoading(true);
-
     try {
       var myHeaders = new Headers();
       myHeaders.append('token', token);
@@ -240,12 +238,12 @@ const StoreActivityScreen = () => {
           .slice(
             0,
             10,
-          )}T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%28${selectedDevice}%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc`,
+          )}T23%3A59%3A59%2B02%3A00 and POSSystems%2FPOS_StrID%20in%20%28${strId}%29 and POSSystems%2FPOS_Id%20gt%200&$orderby=ActLog_ID asc`,
         requestOptions,
       );
       const data = await response.json();
-      // console.log(data.value.filter(item => item.ActLog_ID === 306604));
-      setDataFromApi(data.value);
+      // console.log(data.value);
+
       setTableData(() => {
         let array = [];
         data.value.reverse().map(item => {
@@ -253,7 +251,9 @@ const StoreActivityScreen = () => {
             username: item.ActLog_UserName,
             date: (() => {
               let date = new Date(item.ActLog_Datetime);
-              return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} @ ${date.getHours()}:${
+              return `${date.getDate()}/${
+                date.getMonth() + 1
+              }/${date.getFullYear()} @ ${date.getHours()}:${
                 date.getMinutes() < 10 ? '0' : ''
               }${date.getMinutes()}`;
             })(),
@@ -301,18 +301,18 @@ const StoreActivityScreen = () => {
   useEffect(() => {
     if (
       filters.user === undefined &&
-      filters.backOffice === false &&
-      filters.category === undefined &&
-      filters.device === 1
+      filters.environment === undefined &&
+      filters.category === undefined
+      // filters.device === undefined
     ) {
       setFilteredData([...tableData]);
     } else {
       for (const key in filters) {
         switch (key) {
-          case 'backOffice':
-            filters[key] === true
-              ? setFilteredData(prev =>
-                  prev.filter(item => item.environment === 'Backoffice'),
+          case 'environment':
+            filters[key] !== undefined
+              ? setFilteredData(() =>
+                  tableData.filter(item => item.environment === filters[key]),
                 )
               : null;
             break;
@@ -323,8 +323,13 @@ const StoreActivityScreen = () => {
                 )
               : null;
             break;
-          case 'device':
-            break;
+          // case 'device':
+          //   filters[key] !== undefined
+          //     ? setFilteredData(prev =>
+          //         prev.filter(item => item.environment === filters[key]),
+          //       )
+          //     : null;
+          //   break;
           case 'user':
             filters[key] !== undefined
               ? setFilteredData(prev =>
@@ -552,12 +557,12 @@ const StoreActivityScreen = () => {
                   defaultValue={1}
                   defaultButtonText="Select a device"
                   onSelect={selectedItem => {
-                    setSelectedDevice(() => {
-                      const devices = deviceArray.filter(
-                        item => item.POS_Name === selectedItem,
-                      );
-                      return devices[0].Pos_StrID;
+                    setFilters(prev => {
+                      const newFilters = {...prev};
+                      newFilters.environment = selectedItem;
+                      return newFilters;
                     });
+                    setIntaleBackOfficeSelected(false);
                   }}
                   buttonTextAfterSelection={selectedItem => {
                     return selectedItem;
@@ -576,6 +581,7 @@ const StoreActivityScreen = () => {
                 />
               </View>
               <TouchableOpacity
+                disabled={intaleBackOfficeSelected}
                 className="flex-row space-x-2 items-center border p-2 rounded-full"
                 style={{
                   borderColor: intaleBackOfficeSelected
@@ -585,9 +591,10 @@ const StoreActivityScreen = () => {
                 onPress={() => {
                   setFilters(prev => {
                     const newFilters = {...prev};
-                    newFilters.backOffice = !newFilters.backOffice;
+                    newFilters.environment = 'Backoffice';
                     return newFilters;
                   });
+                  deviceDropdownRef.current.reset();
                   setIntaleBackOfficeSelected(!intaleBackOfficeSelected);
                 }}>
                 <Ionicons
@@ -615,8 +622,7 @@ const StoreActivityScreen = () => {
                   setFilters({
                     category: undefined,
                     user: undefined,
-                    device: 1,
-                    backOffice: false,
+                    environment: undefined,
                   });
                   categoryDropdownRef.current.reset();
                   userDropdownRef.current.reset();
@@ -631,7 +637,7 @@ const StoreActivityScreen = () => {
             {loading ? (
               <ActivityIndicator color="rgb(34 211 238)" size="large" />
             ) : (
-              dataFromApi.length > 0 && (
+              tableData.length > 0 && (
                 <View className="space-y-2 px-2 mx-2">
                   <ScrollView horizontal className="pb-1">
                     <Table
@@ -702,7 +708,7 @@ const StoreActivityScreen = () => {
                     <TouchableOpacity
                       className="bg-slate-600 px-2 py-1 rounded-md color-white"
                       onPress={() => setCurrentPage(currentPage + 1)}
-                      disabled={endIndex >= tableData.length}>
+                      disabled={endIndex >= filteredData.length}>
                       <Text className="color-white">Next</Text>
                     </TouchableOpacity>
                   </View>
