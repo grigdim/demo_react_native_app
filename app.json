@@ -1,4 +1,9 @@
 {
   "name": "reactNativeWithCustomJavaDemo",
-  "displayName": "reactNativeWithCustomJavaDemo"
+  "displayName": "reactNativeWithCustomJavaDemo",
+  "extra": {
+    "eas": {
+      "projectId": "040291ce-eada-4c53-96c8-71541867d019"
+    }
+  }
 }
