@@ -144,7 +144,7 @@ const PersonnelScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      console.log(data.value);
+      // console.log(data.value);
       setDeviceArray(data.value);
     } catch (error) {
       console.log(error);
@@ -222,7 +222,7 @@ const PersonnelScreen = () => {
         requestOptions,
       );
       const data = await response.json();
-      console.log(data.value);
+      // console.log(data.value);
       setDataFromApi(() => {
         let array = [];
         data.value.reverse().map(item => {

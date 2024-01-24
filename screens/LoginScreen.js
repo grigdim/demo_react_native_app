@@ -36,6 +36,7 @@ import {useInfo} from '../components/PersonalInfoTaken';
 // import TabsScreen from './TabsScreen';
 // import {ip} from '@env';
 import SelectDropdown from 'react-native-select-dropdown';
+// import axios from 'axios';
 
 const LoginScreen = () => {
   const [innerToken, setInnerToken] = useState();
@@ -65,7 +66,11 @@ const LoginScreen = () => {
   const [userStoreData, setUserStoreData] = useState([]);
   const [userStoreData2, setUserStoreData2] = useState([]);
   const [storesArray, setStoresArray] = useState([]);
-  // const [selectedStoreId, setSelectedStoreId] = useState('');
+  const [storesToDisplay, setStoresToDisplay] = useState([]);
+  const [
+    storesArrayWithMasterIdAndStoreLocalId,
+    setStoresArrayWithMasterIdAndStoreLocalId,
+  ] = useState([]);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isInputDisabled =
@@ -75,10 +80,6 @@ const LoginScreen = () => {
     password === null ||
     domain === '' ||
     domain === null;
-  // ||
-  // componentStoreId === '' ||
-  // componentStoreId === null
-  // ;
   const [loggedIn, setLoggedIn] = useState(false);
 
   const loadSelectedLanguage = async () => {
@@ -105,6 +106,7 @@ const LoginScreen = () => {
       console.error('Error loading selected language:', error);
     }
   };
+
   const handlePrivacyPolicy = async () => {
     setPrivacyPolicyAccepted(true);
     try {
@@ -113,9 +115,11 @@ const LoginScreen = () => {
       console.error('Error accepting Privacy Policy:', error); // Never seen
     }
   };
+
   const handlePrivacyPolicyLink = () => {
     Linking.openURL('https://www.intale.com/privacy');
   };
+
   const handleTermsOfService = async () => {
     setTermsOfServiceAccepted(true);
     try {
@@ -124,6 +128,7 @@ const LoginScreen = () => {
       console.error('Error accepting Terms of Service:', error); // Never seen
     }
   };
+
   const handleScroll = event => {
     const contentHeight = event.nativeEvent.contentSize.height;
     const scrollOffset = event.nativeEvent.contentOffset.y;
@@ -134,6 +139,7 @@ const LoginScreen = () => {
       setScrolledToEnd(false);
     }
   };
+
   const handleLanguageChange = async lang => {
     try {
       await AsyncStorage.setItem('@selectedLanguage', lang);
@@ -144,6 +150,7 @@ const LoginScreen = () => {
       console.error('Error accepting Language Selection:', error);
     }
   };
+
   const handleConfirmLanguage = async () => {
     try {
       await AsyncStorage.setItem('@languageConfirmed', 'true');
@@ -152,19 +159,24 @@ const LoginScreen = () => {
     }
     setLanguagePicked(true);
   };
+
   const togglePicker = () => {
     setPickerVisible(!isPickerVisible);
   };
+
   const handleChangeUsername = async inputText => {
     setUsername(inputText);
   };
+
   const handleChangePassword = async inputText => {
     setPassword(inputText);
   };
+
   const handleChangeDomain = async inputText => {
     setDomain(inputText);
     setInfoDomain(inputText);
   };
+
   const checkLoginStatus = async () => {
     try {
       const retrievedUserString = await AsyncStorage.getItem('@userObject');
@@ -173,6 +185,7 @@ const LoginScreen = () => {
         retrievedUserObject.username !== '' &&
         retrievedUserObject.username !== null
       ) {
+        setDomain(retrievedUserObject.domain);
         await handleLogin(
           retrievedUserObject.username,
           retrievedUserObject.password,
@@ -194,13 +207,12 @@ const LoginScreen = () => {
       console.error('Error checking login status:', error);
     }
   };
+
   const handleLogin = async (inputUsername, inputPassword, inputDomain) => {
     setLoading(true);
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
-      // username: 'intaleadmin',
-      // password: '2NJDtm2w#nUh$+Hm',
       username: inputUsername,
       password: inputPassword,
       domain: inputDomain,
@@ -213,6 +225,7 @@ const LoginScreen = () => {
     };
     const response = await fetch(
       // 'https://bo-api-gr.intalepoint.com/bo/account/authenticate',
+      // `https://${inputDomain}.intalepoint.com/bo/account/authenticatewithoutstoreid`,
       'https://bo-api-gr.intalepoint.com/bo/account/authenticatewithoutstoreid',
       // `http://${ip}:4000/bo/account/authenticatewithoutstoreid`,
       requestOptions,
@@ -242,6 +255,7 @@ const LoginScreen = () => {
     }
     setLoading(false);
   };
+
   const getUserIdFromToken = async () => {
     var myHeaders = new Headers();
     myHeaders.append('Token', innerToken);
@@ -251,10 +265,12 @@ const LoginScreen = () => {
       redirect: 'follow',
     };
     const data = await fetch(
+      // `https://${domain}.intalepoint.com/bo/account/GetUserIdFromToken`,
       'https://bo-api-gr.intalepoint.com/bo/account/GetUserIdFromToken',
       requestOptions,
     );
     const userIdFromToken = await data.text();
+    // console.log(userIdFromToken);
     setUserId(userIdFromToken);
   };
 
@@ -292,9 +308,53 @@ const LoginScreen = () => {
     setUserStoreData2(data);
   };
 
+  const getStoreIDs = async () => {
+    let array = [];
+    try {
+      const fetchPromises = userStoreData.map(async item => {
+        const storeIp = item.Str_Code.replace('ip', '');
+
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        const requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow',
+        };
+
+        const response = await fetch(
+          `https://schemas.dev.cb.intalepoint.com/api/v1/schemas/intalecustomers/universalstore/${storeIp}/intaleInfo`,
+          requestOptions,
+        );
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        // console.log(result);
+        array.push({
+          ArRetailPointId: result.ArRetailPointId,
+          StoreLocalId: result.StoreLocalId,
+          MasterId: result.MasterId,
+        });
+      });
+
+      await Promise.all(fetchPromises);
+      // Continue with any additional logic after all requests are complete
+    } catch (error) {
+      console.error('Error during fetch:', error);
+      // Handle the error as needed
+    }
+    // console.log(array);
+    setStoresArrayWithMasterIdAndStoreLocalId(array);
+  };
+
   useEffect(() => {
     loadSelectedLanguage();
   }, []);
+
   useEffect(() => {
     const loadTermsOfServiceAcceptedState = async () => {
       try {
@@ -310,6 +370,7 @@ const LoginScreen = () => {
     };
     loadTermsOfServiceAcceptedState();
   }, []);
+
   useEffect(() => {
     const loadPrivacyPolicyAcceptedState = async () => {
       try {
@@ -325,6 +386,7 @@ const LoginScreen = () => {
     };
     loadPrivacyPolicyAcceptedState();
   }, []);
+
   useEffect(() => {
     // Check if the Terms of Service has been accepted
     if (isTermsOfServiceAccepted && scrollViewRef.current) {
@@ -332,32 +394,42 @@ const LoginScreen = () => {
       scrollViewRef.current.scrollTo({x: 0, y: 0, animated: false});
     }
   }, [isTermsOfServiceAccepted, scrollViewRef]);
+
   useEffect(() => {
     checkLoginStatus();
   }, []);
+
   useEffect(() => {
     getUserIdFromToken();
   }, [innerToken]);
+
   useEffect(() => {
     getUserStoreData();
     getUserStoreData2();
   }, [userId]);
 
   useEffect(() => {
+    userStoreData.length > 0 && getStoreIDs();
+  }, [userStoreData]);
+
+  useEffect(() => {
     let array = [];
-    userStoreData.forEach(item => {
-      userStoreData2.map(item2 => {
-        if (item2.CompanyDescription === item.Str_Name) {
-          array.push({
-            CompanyDescription: item2.CompanyDescription,
-            Str_ID: item.Str_ID,
-            StoreId: item2.StoreId,
-          });
+    userStoreData2.map(item => {
+      storesArrayWithMasterIdAndStoreLocalId.filter(entry => {
+        if (entry.MasterId === item.StoreId) {
+          array.push({CompanyDescription: item.CompanyDescription, ...entry});
         }
       });
     });
     setStoresArray(array);
-  }, [userStoreData, userStoreData2]);
+  }, [storesArrayWithMasterIdAndStoreLocalId]);
+
+  useEffect(() => {
+    setLoading(true);
+    let array = storesArray.map(item => item.CompanyDescription);
+    setStoresToDisplay(array);
+    setLoading(false);
+  }, [storesArray]);
 
   const renderLanguagePicker = () => (
     <View style={languageStyle.container}>
@@ -518,12 +590,7 @@ const LoginScreen = () => {
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
       }}>
       <View className="items-center">
-        <Icon
-          name="user"
-          size={75}
-          color="white"
-          // color="rgb(59 130 246)"
-        />
+        <Icon name="user" size={75} color="white" />
         <Text className="text-white text-3xl">
           {t('helloIntalerLoginScreen')}
         </Text>
@@ -533,17 +600,15 @@ const LoginScreen = () => {
         style={input}
         placeholder={t('usernameProvided')}
         placeholderTextColor={'white'}
-        // keyboardType="email-address"
         clearButtonMode={'always'}
-        // ref={inputRef}
       />
       <TextInput
         onChangeText={handleChangePassword}
         style={input}
         placeholder={t('passwordProvided')}
         placeholderTextColor={'white'}
-        keyboardType="visible-password"
         clearButtonMode={'always'}
+        secureTextEntry={true}
       />
       <TextInput
         onChangeText={handleChangeDomain}
@@ -552,16 +617,6 @@ const LoginScreen = () => {
         placeholderTextColor={'white'}
         clearButtonMode={'always'}
       />
-      {/*
-    <TextInput
-      onChangeText={handleChangeStoreId}
-      style={input}
-      placeholder={t('storeIdProvided')}
-      placeholderTextColor={'white'}
-      keyboardType="numeric"
-      clearButtonMode={'always'}
-    />
-  */}
       <TouchableOpacity
         style={[isInputDisabled && disabledButton]}
         onPress={() => {
@@ -574,40 +629,42 @@ const LoginScreen = () => {
     </View>
   );
 
-  const renderStorePicker = () => (
-    <View>
-      <SelectDropdown
-        dropdownStyle={{
-          backgroundColor: 'lightgray',
-        }}
-        data={storesArray.map(item => item.CompanyDescription)}
-        onSelect={selectedItem => {
-          const devices = storesArray.filter(
-            item => item.CompanyDescription === selectedItem,
-          );
-          // console.log(devices);
-          dispatch(setStoreId(parseInt(devices[0].StoreId, 10)));
-          dispatch(setStrId(parseInt(devices[0].Str_ID, 10)));
-          navigation.navigate(t('statistics'));
-        }}
-        buttonTextAfterSelection={selectedItem => {
-          return selectedItem;
-        }}
-        rowTextForSelection={item => {
-          return item;
-        }}
-        buttonStyle={{
-          backgroundColor: 'rgb(36, 48, 61)',
-          borderWidth: 1,
-          borderRadius: 5,
-          borderColor: 'rgb(0, 182, 240)',
-          width: '75%',
-        }}
-        buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
-        defaultButtonText="Select a store to proceed"
-      />
-    </View>
-  );
+  const renderStorePicker = () =>
+    !storesToDisplay.length > 0 ? (
+      <ActivityIndicator color="#00CCBB" size="large" />
+    ) : (
+      <View>
+        <SelectDropdown
+          dropdownStyle={{
+            backgroundColor: 'lightgray',
+          }}
+          data={storesToDisplay}
+          onSelect={selectedItem => {
+            const device = storesArray.filter(
+              item => item.CompanyDescription === selectedItem,
+            )[0];
+            dispatch(setStoreId(parseInt(device.MasterId, 10)));
+            dispatch(setStrId(parseInt(device.StoreLocalId, 10)));
+            navigation.navigate(t('statistics'));
+          }}
+          buttonTextAfterSelection={selectedItem => {
+            return selectedItem;
+          }}
+          rowTextForSelection={item => {
+            return item;
+          }}
+          buttonStyle={{
+            backgroundColor: 'rgb(36, 48, 61)',
+            borderWidth: 1,
+            borderRadius: 5,
+            borderColor: 'rgb(0, 182, 240)',
+            width: '75%',
+          }}
+          buttonTextStyle={{color: 'rgb(0, 182, 240)'}}
+          defaultButtonText="Select a store to proceed"
+        />
+      </View>
+    );
 
   return (
     <ImageBackground
